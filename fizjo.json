@@ -1,0 +1,25 @@
+{
+  "human": {
+    "upperLimb": {
+      "hand": {
+        "side": "right",
+        "parts": [
+          { "forearm": ["radial", "ulnar"] },
+          { "wrist": ["radial", "ulnar"] },
+          { "palm": ["thenar", "hypothenar", "midpalm"] },
+          { "elbow": ["olecranon", "medial epicondyle", "lateral epicondyle"] },
+          { "fingers": ["thumb", "index", "middle", "ring", "pinky"] },
+          { "shoulder": ["deltoid", "bicep", "tricep", "rotator cuff"] }
+        ],
+        "fingers": ["thumb", "index", "middle", "ring", "pinky"]
+      }
+    },
+    "lowerLimb": {
+      "foot": {
+        "side": "left",
+        "parts": ["toes", "heel", "ankle", "sole"],
+        "toes": ["big", "index", "middle", "ring", "pinky"]
+      }
+    }
+  }
+}
