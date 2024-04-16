@@ -1,0 +1,53 @@
+{
+  "czlowiek": {
+    "konczyna_gorna": {
+      "reka": {
+        "strona": "right",
+        "czesci_konczyny": [
+          {
+            "bark": {
+              "miesnie": [
+                "naramienny",
+                "czworoboczny",
+                "równoległoboczny mniejszy",
+                "równoległoboczny większy"
+              ],
+              "stawy": ["ramienny"]
+            },
+            "ramie": {
+              "miesnie": [
+                "dwugłowy ramienia",
+                "trójgłowy ramienia",
+                "prostownik nadgarstka",
+                "zginacz nadgarstka"
+              ],
+              "stawy": ["łokciowy"]
+            },
+            "przedramie": {
+              "miesnie": [
+                "zginacz nadgarstka",
+                "zginacz palców",
+                "zginacz kciuka",
+                "prostownik nadgarstka",
+                "prostownik palców",
+                "prostownik kciuka"
+              ],
+              "stawy": ["promieniowy nadgarstkowy", "śródręczno-paliczkowe"]
+            },
+            "dłoń": {
+              "miesnie": [
+                "zginacz nadgarstka",
+                "zginacz palców",
+                "zginacz kciuka",
+                "prostownik nadgarstka",
+                "prostownik palców",
+                "prostownik kciuka"
+              ],
+              "stawy": ["śródręczno-paliczkowe"]
+            }
+          }
+        ]
+      }
+    }
+  }
+}
