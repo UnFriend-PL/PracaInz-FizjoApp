@@ -1,61 +1,63 @@
 {
-  "czlowiek": {
-    "konczyna_gorna": {
-      "reka": {
-        "strona": "prawa/lewa",
-        "przod": {
-          "czesci_konczyny": [
-            {
-              "bark": {
-                "miesnie": [
-                  "naramienny",
-                  "czworoboczny",
-                  "równoległoboczny mniejszy",
-                  "równoległoboczny większy"
-                ],
-                "stawy": ["ramienny"]
-              },
-              "ramie": {
-                "miesnie": [
-                  "dwugłowy ramienia",
-                  "trójgłowy ramienia",
-                  "prostownik nadgarstka",
-                  "zginacz nadgarstka"
-                ],
-                "stawy": ["łokciowy"]
-              },
-              "przedramie": {
-                "miesnie": [
-                  "zginacz nadgarstka",
-                  "zginacz palców",
-                  "zginacz kciuka",
-                  "prostownik nadgarstka",
-                  "prostownik palców",
-                  "prostownik kciuka"
-                ],
-                "stawy": ["promieniowy nadgarstkowy", "śródręczno-paliczkowe"]
-              },
-              "dłoń": {
-                "miesnie": [
-                  "zginacz nadgarstka",
-                  "zginacz palców",
-                  "zginacz kciuka",
-                  "prostownik nadgarstka",
-                  "prostownik palców",
-                  "prostownik kciuka"
-                ],
-                "stawy": ["śródręczno-paliczkowe"]
-              }
-            }
-          ]
+  "Czlowiek": {
+    "Przod": {
+      "Glowa": {
+        "Miesnie": ["szyja (miesnie)", "trwarz (miesnie)"],
+        "Stawy": []
+      },
+      "Tulow": {
+        "Miesnie": [],
+        "Stawy": []
+      },
+      "Konczyna_Gorna": {
+        "Obręcz_Konczyny_Gornej": {
+          "Miesnie": [],
+          "Stawy": []
         },
-        "tyl": {
-          "czesci_konczyny": [{}]
+        "Staw_ramienny": {
+          "Miesnie": [],
+          "Stawy": []
         },
-        "bok": {
-          "czesci_konczyny": [{}]
+        "Ramie": {
+          "Miesnie": [],
+          "Stawy": []
+        },
+        "Staw_Lokciowy": {
+          "Miesnie": [],
+          "Stawy": []
+        },
+        "Przedramie": {
+          "Miesnie": [],
+          "Stawy": []
+        },
+        "Staw_Promieniowo_Nadgarstkowy": {
+          "Miesnie": [],
+          "Stawy": []
+        },
+        "Dlon": {
+          "Miesnie": [],
+          "Stawy": []
+        }
+      },
+      "Konczyna_Dolna": {
+        "Obrecz_konczyny_dolnej": {
+          "Miesnie": [],
+          "Stawy": []
+        },
+        "Udo": {
+          "Miesnie": [],
+          "Stawy": []
+        },
+        "Golen": {
+          "Miesnie": [],
+          "Stawy": []
+        },
+        "Stopa": {
+          "Miesnie": [],
+          "Stawy": []
         }
       }
-    }
+    },
+    "Tył": {}
   }
 }
