@@ -2,59 +2,131 @@
   "Czlowiek": {
     "Przod": {
       "Glowa": {
-        "Miesnie": ["szyja (miesnie)", "trwarz (miesnie)"],
-        "Stawy": []
+        "Muscles": ["szyja (Muscles)", "trwarz (Muscles)"],
+        "Joints": []
       },
       "Tulow": {
-        "Miesnie": [],
-        "Stawy": []
+        "Muscles": {
+          "PL": [],
+          "ENG": []
+        },
+        "Joints": {
+          "PL": [],
+          "ENG": []
+        }
       },
       "Konczyna_Gorna": {
         "Obręcz_Konczyny_Gornej": {
-          "Miesnie": [],
-          "Stawy": []
+          "Muscles": {
+            "PL": [],
+            "ENG": []
+          },
+          "Joints": {
+            "PL": [],
+            "ENG": []
+          }
         },
         "Staw_ramienny": {
-          "Miesnie": [],
-          "Stawy": []
+          "Muscles": {
+            "PL": [],
+            "ENG": []
+          },
+          "Joints": {
+            "PL": [],
+            "ENG": []
+          }
         },
         "Ramie": {
-          "Miesnie": [],
-          "Stawy": []
+          "Muscles": {
+            "PL": [],
+            "ENG": []
+          },
+          "Joints": {
+            "PL": [],
+            "ENG": []
+          }
         },
         "Staw_Lokciowy": {
-          "Miesnie": [],
-          "Stawy": []
+          "Muscles": {
+            "PL": [],
+            "ENG": []
+          },
+          "Joints": {
+            "PL": [],
+            "ENG": []
+          }
         },
         "Przedramie": {
-          "Miesnie": [],
-          "Stawy": []
+          "Muscles": {
+            "PL": [],
+            "ENG": []
+          },
+          "Joints": {
+            "PL": [],
+            "ENG": []
+          }
         },
         "Staw_Promieniowo_Nadgarstkowy": {
-          "Miesnie": [],
-          "Stawy": []
+          "Muscles": {
+            "PL": [],
+            "ENG": []
+          },
+          "Joints": {
+            "PL": [],
+            "ENG": []
+          }
         },
         "Dlon": {
-          "Miesnie": [],
-          "Stawy": []
+          "Muscles": {
+            "PL": [],
+            "ENG": []
+          },
+          "Joints": {
+            "PL": [],
+            "ENG": []
+          }
         }
       },
       "Konczyna_Dolna": {
         "Obrecz_konczyny_dolnej": {
-          "Miesnie": [],
-          "Stawy": []
+          "Muscles": {
+            "PL": [],
+            "ENG": []
+          },
+          "Joints": {
+            "PL": [],
+            "ENG": []
+          }
         },
         "Udo": {
-          "Miesnie": [],
-          "Stawy": []
+          "Muscles": {
+            "PL": [],
+            "ENG": []
+          },
+          "Joints": {
+            "PL": [],
+            "ENG": []
+          }
         },
         "Golen": {
-          "Miesnie": [],
-          "Stawy": []
+          "Muscles": {
+            "PL": [],
+            "ENG": []
+          },
+          "Joints": {
+            "PL": [],
+            "ENG": []
+          }
         },
         "Stopa": {
-          "Miesnie": [],
-          "Stawy": []
+          "Muscles": {
+            "PL": [],
+            "ENG": []
+          },
+          "Joints": {
+            "PL": [],
+            "ENG": []
+          }
         }
       }
     },
