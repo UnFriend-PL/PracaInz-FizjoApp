@@ -1,0 +1,808 @@
+    {
+      "Czlowiek": {
+        "Przod": {
+          "Glowa i szyja": {
+            "Muscles": {
+              "PL": [
+                "M. mostkowo-obojczykowo-sutkowy",
+                "M. mostkowo-gnykowy",
+                "M. łopatkowo-gnykowy",
+                "M. mostkowo-tarczowy",
+                "M. tarczowo-gnykowy",
+                "M. dwubrzuścowy",
+                "M. rylcowo-gnykowy",
+                "M. żuchwowo-gnykowy",
+                "M. bródkowo-gnykowy",
+                "M. pochyły przedni",
+                "M. pochyły środkowy",
+                "M. pochyły tylny",
+                "M. pochyły najmniejszy",
+                "M. prosty przedni głowy",
+                "M. długi głowy",
+                "M. długi szyi",
+                "M. potyliczno-czołowy",
+                "M. skroniowo-ciemieniowy",
+                "M. okrężny oka",
+                "M. marszczący brwi",
+                "M. podłużny",
+                "M. szeroki szyi",
+                "M. obniżacz wargi dolnej",
+                "M. bródkowy",
+                "M. obniżacz kąta ust",
+                "M. śmiechowy",
+                "M. jarzmowy większy",
+                "M. dźwigacz wargi górnej",
+                "M. jarzmowy mniejszy",
+                "M. dźwigacz kąta ust",
+                "M. policzkowy",
+                "M. okrężny ust",
+                "M. nosowy",
+                "M. obniżacz przegrody nosa",
+                "M. uszny przedni",
+                "M. uszny górny",
+                "M. uszny tylny",
+                "M. skroniowy",
+                "M. żwacz",
+                "M. skrzydłowy przyśrodkowy",
+                "M. skrzydłowy boczny"
+              ],
+              "ENG": [
+                "Sternocleidomastoid muscle",
+                "Sternohyoid muscle",
+                "Omohyoid muscle",
+                "Sternothyroid muscle",
+                "Thyrohyoid muscle",
+                "Digastric muscle",
+                "Stylohyoid muscle",
+                "Mylohyoid muscle",
+                "Geniohyoid muscle",
+                "Scalenus anterior muscle",
+                "Scalenus medius muscle",
+                "Scalenus posterior muscle",
+                "Scalenus minimus muscle",
+                "Rectus capitis anterior muscle",
+                "Longus capitis muscle",
+                "Longus colli muscle",
+                "Occipitofrontalis muscle",
+                "Temporoparietalis muscle",
+                "Orbicularis oculi muscle",
+                "Corrugator supercilii muscle",
+                "Procerus muscle",
+                "Platysma muscle",
+                "Depressor labii inferioris muscle",
+                "Mentalis muscle",
+                "Depressor anguli oris muscle",
+                "Risorius muscle",
+                "Zygomaticus major muscle",
+                "Levator labii superioris muscle",
+                "Zygomaticus minor muscle",
+                "Levator anguli oris muscle",
+                "Buccinator muscle",
+                "Orbicularis oris muscle",
+                "Nasalis muscle",
+                "Depressor septi nasi muscle",
+                "Auricularis anterior muscle",
+                "Auricularis superior muscle",
+                "Auricularis posterior muscle",
+                "Temporalis muscle",
+                "Masseter muscle",
+                "Medial pterygoid muscle",
+                "Lateral pterygoid muscle"
+              ]
+            },
+            "Joints": {
+              "PL": [
+                "Staw skroniowo-żuchwowy",
+                "Staw szczytowo-potyliczny",
+                "Staw szczytowo-obrotowy"
+              ],
+              "ENG": [
+                "Temporomandibular joint",
+                "Atlanto-occipitai joint",
+                "Atlanto-axial joint"
+              ]
+            }
+          },
+          "Tulow": {
+            "Muscles": {
+              "PL": [
+                "M. piersiowy większy",
+                "M. piersiowy mniejszy",
+                "M. podobojczykowy",
+                "M. zębaty przedni",
+                "Mm. międzyżebrowe ",
+                "M. poprzeczny klatki piersiowej",
+                "Przepona",
+                "M. skośny zewnętrzny brzucha",
+                "M. skośny wewnętrzny brzucha",
+                "M. poprzeczny brzucha",
+                "M. prosty brzucha",
+                "M. piramidowy"
+              ],
+              "ENG": [
+                "Pectoralis major muscle",
+                "Pectoralis minor muscle",
+                "Subclavius muscle",
+                "Serratus anterior muscle",
+                "Intercostal muscles",
+                "Transversus thoracis muscle",
+                "Diaphragm",
+                "External oblique muscle",
+                "Internal oblique muscle",
+                "Transversus abdominis muscle",
+                "Rectus abdominis muscle",
+                "Pyramidalis muscle"
+              ]
+            },
+            "Joints": {
+              "PL": [
+                "Staw szczytowo-potyliczny",
+                "Staw szczytowo-obrotowy",
+                "Staw głowy żebra",
+                "Staw żebrowo-poprzeczny"
+              ],
+              "ENG": [
+                "Atlanto-occipitai joint",
+                "Atlanto-axial joint",
+                "Joint of head of rib",
+                "Costotransverse joint"
+              ]
+            }
+          },
+          "Konczyna_Gorna": {
+            "Obręcz_Konczyny_Gornej": {
+              "Muscles": {
+                "PL": [
+                  "M. naramienny"
+                ],
+                "ENG": [
+                  "Deltoid muscle"
+                ]
+              },
+              "Joints": {
+                "PL": [
+                  "Staw mostkowo-obojczykowy",
+                  "Staw barkowo-obojczykowy",
+                  "Staw ramienny"
+                ],
+                "ENG": [
+                  "Sternoclavicular joint",
+                  "Acromioclavicular joint",
+                  "Shoulder joint"
+                ]
+              }
+            },
+            "Ramie": {
+              "Muscles": {
+                "PL": [
+                  "M. kruczo-ramienny",
+                  "M. dwugłowy ramienia",
+                  "M. ramienny"
+                ],
+                "ENG": [
+                  "Coracobrachialis muscle",
+                  "Biceps brachii muscle",
+                  "Brachialis muscle"
+                ]
+              },
+              "Joints": {
+                "PL": [
+                  "Staw ramienny",
+                  "Staw ramienno-łokciowy",
+                  "Staw ramienno-promieniowy"
+                ],
+                "ENG": [
+                  "Shoulder joint",
+                  "Humero-ulnar joint",
+                  "Humero-radial joint"
+                ]
+              }
+            },
+            "Przedramie": {
+              "Muscles": {
+                "PL": [
+                  "M. nawrotny obły",
+                  "M. zginacz promieniowy nadgarstka",
+                  "M. dłoniowy długi",
+                  "M. zginacz łokciowy nadgarstka",
+                  "M. zginacz powierzchowny palców",
+                  "M. zginacz głęboki palców",
+                  "M. zginacz długi kciuka",
+                  "M. nawrotny czworoboczny",
+                  "M. ramienno-promieniowy",
+                  "M. prostownik promieniowy długi nadgarstka",
+                  "M. prostownik promieniowy krótki nadgarstka",
+                  "M. odwracacz"
+                ],
+                "ENG": [
+                  "Pronator teres muscle",
+                  "Flexor carpi radialis muscle",
+                  "Palmaris longus muscle",
+                  "Flexor carpi ulnaris muscle",
+                  "Flexor digitorum superficialis muscle",
+                  "Flexor digitorum profundus muscle",
+                  "Flexor pollicis longus muscle",
+                  "Pronator quadratus muscle",
+                  "Brachioradialis muscle",
+                  "Extensor carpi radialis longus muscle",
+                  "Extensor carpi radialis brevis muscle",
+                  "Supinator muscle"
+                ]
+              },
+              "Joints": {
+                "PL": [
+                  "Staw promieniowo-łokciowy bliższy",
+                  "Staw promieniowo-łokciowy dalszy"
+                ],
+                "ENG": [
+                  "Proximal radio-ulnar joint",
+                  "Distal radio-ulnar joint"
+                ]
+              }
+            },
+            "Dlon": {
+              "Muscles": {
+                "PL": [
+                  "M. odwodziciel krótki kciuka",
+                  "M. zginacz krótki kciuka",
+                  "M. przeciwstawiacz kciuka",
+                  "M. przywodziciel kciuka",
+                  "M. dłoniowy krótki",
+                  "M. odwodziciel palca małego",
+                  "M. zginacz krótki palca małego",
+                  "M. przeciwstawiacz palca małego",
+                  "Mm. glistowate",
+                  "Mm. międzykostne"
+                ],
+                "ENG": [
+                  "Abductor pollicis brevis muscle",
+                  "Flexor pollicis brevis muscle",
+                  "Opponens pollicis muscle",
+                  "Adductor pollicis muscle",
+                  "Palmaris brevis muscle",
+                  "Abductor digiti minimi muscle",
+                  "Flexor digiti minimi brevis muscle",
+                  "Opponens digiti minimi muscle",
+                  "Lumbricales muscles",
+                  "Interossei muscles"
+                ]
+              },
+              "Joints": {
+                "PL": [
+                  "Staw promieniowo-nadgarstkowy",
+                  "Staw śródnadgarstkowy",
+                  "Stawy nadgarstkowo-śródręczne",
+                  "Stawy międzyśródręczne",
+                  "Staw nadgarstkowo-śródręczny kciuka",
+                  "Stawy śródręczno-paliczkowe",
+                  "Stawy międzypaliczkowe ręki"
+                ],
+                "ENG": [
+                  "Wrist joint",
+                  "Midcarpal joint",
+                  "Carpometacarpal joints",
+                  "Intermetacarpal joints",
+                  "Carpometacarpal joint of thumb",
+                  "Metacarpophalangeal joints",
+                  "Interphalangeal joints of hand"
+                ]
+              }
+            }
+          },
+          "Konczyna_Dolna": {
+            "Obrecz_konczyny_dolnej": {
+              "Muscles": {
+                "PL": [
+                  "M. biodrowo-lędźwiowy",
+                  "M. lędźwiowy większy",
+                  "M. lędźwiowy mniejszy",
+                  "M. biodrowy",
+                  "M. zasłaniacz wewnętrzny",
+                  "M. bliźniaczy górny",
+                  "M. bliźniaczy dolny",
+                  "M. czworoboczny uda",
+                  "M. zasłaniacz zewnętrzny"
+                ],
+                "ENG": [
+                  "Iliopsoas muscle",
+                  "Psoas major muscle",
+                  "Psoas minor muscle",
+                  "Iliacus muscle",
+                  "Obturator intemus muscle",
+                  "Gemellus superior muscle",
+                  "Gemellus inferior muscle",
+                  "Quadratus femoris muscle",
+                  "Obturator externus muscle"
+                ]
+              },
+              "Joints": {
+                "PL": [
+                  "Staw krzyżowo-biodrowy",
+                  "Staw biodrowy"
+                ],
+                "ENG": [
+                  "Sacro-iliac joint",
+                  "Hip joint"
+                ]
+              }
+            },
+            "Udo": {
+              "Muscles": {
+                "PL": [
+                  "M. krawiecki",
+                  "M. czworogłowy uda",
+                  "M. prosty uda",
+                  "M. obszerny boczny",
+                  "M. obszerny przyśrodkowy",
+                  "M. obszerny pośredni",
+                  "M. stawowy kolana",
+                  "M. grzebieniowy",
+                  "M. smukły",
+                  "M. przywodziciel długi",
+                  "M. przywodziciel krótki",
+                  "M. przywodziciel wielki"
+                ],
+                "ENG": [
+                  "Sartorius muscle",
+                  "Quadriceps femoris muscle",
+                  "Rectus femoris muscle",
+                  "Vastus lateralis muscle",
+                  "Vastus medialis muscle",
+                  "Vastus intermedius muscle",
+                  "Articularis genus muscle",
+                  "Pectineus muscle",
+                  "Gracilis muscle",
+                  "Adductor longus muscle",
+                  "Adductor brevis muscle",
+                  "Adductor magnus muscle"
+                ]
+              },
+              "Joints": {
+                "PL": [
+                  "Staw biodrowy",
+                  "Staw kolanowy"
+                ],
+                "ENG": [
+                  "Hip joint",
+                  "Knee joint"
+                ]
+              }
+            },
+            "Golen": {
+              "Muscles": {
+                "PL": [
+                  "M. piszczelowy przedni",
+                  "M. prostownik długi palców",
+                  "M. strzałkowy trzeci",
+                  "M. prostownik długi palucha",
+                  "M. strzałkowy długi",
+                  "M. strzałkowy krótki"
+                ],
+                "ENG": [
+                  "Tibialis anterior muscle",
+                  "Extensor digitorum longus muscle",
+                  "Fibularis tertiu muscle",
+                  "Extensor hallucis longus muscle",
+                  "Fibularis longus muscle",
+                  "Fibularis brevis muscle"
+                ]
+              },
+              "Joints": {
+                "PL": [
+                  "Staw kolanowy",
+                  "Staw piszczelowo-strzałkowy"
+                ],
+                "ENG": [
+                  "Knee joint",
+                  "Tibiofibular joint"
+                ]
+              }
+            },
+            "Stopa": {
+              "Muscles": {
+                "PL": [
+                  "M. prostownik krótki palców",
+                  "M. prostownik krótki palucha"
+                ],
+                "ENG": [
+                  "Extensor digitorum brevis muscle",
+                  "Extensor hallucis brevis muscle"
+                ]
+              },
+              "Joints": {
+                "PL": [
+                  "Staw skokowy górny",
+                  "Staw skokowy dolny",
+                  "Staw piętowo-sześcienny",
+                  "Staw poprzeczny stępu",
+                  "Staw klinowo-łódkowy",
+                  "Stawy stępowo-śródstopne",
+                  "Stawy międzyśródstopne",
+                  "Stawy palców stopy"
+                ],
+                "ENG": [
+                  "Upper ankle joint",
+                  "Lower ankle joint",
+                  "Calcaneocuboid joint",
+                  "Transverse tarsal joint",
+                  "Sphenoid joint",
+                  "Tarsometatarsal joints",
+                  "Intermetatarsal joints",
+                  "Joints of the toes"
+                ]
+              }
+            }
+          }
+        },
+        "Tył": {
+          "Glowa i szyja": {
+            "Muscles": {
+              "PL": [],
+              "ENG": []
+            },
+            "Joints": {
+              "PL": [
+                "Staw skroniowo-żuchwowy",
+                "Staw szczytowo-potyliczny",
+                "Staw szczytowo-obrotowy"
+              ],
+              "ENG": [
+                "Temporomandibular joint",
+                "Atlanto-occipitai joint",
+                "Atlanto-axial joint"
+              ]
+            }
+          },
+          "Tulow": {
+            "Muscles": {
+              "PL": [
+                "M. czworoboczny",
+                "M. najszerszy grzbietu",
+                "M. równoległoboczny mniejszy",
+                "M. równoległoboczny większy",
+                "M. dźwigacz łopatki",
+                "M. zębaty tylny dolny",
+                "M. zębaty tylny górny",
+                "M. płatowy głowy",
+                "M. płatowy szyi",
+                "M. krzyżowo-grzbietowy",
+                "M. biodrowo-żebrowy",
+                "M. najdłuższy",
+                "M. kolcowy",
+                "M. półkolcowy",
+                "Mm. wielodzielne",
+                "Mm. skręcające",
+                "Mm. międzykolcowe",
+                "M. krzyżowo-guziczny tylny",
+                "Mm. międzypoprzeczne",
+                "M. krzyżowo-guziczny przedni",
+                "Mm. dźwigacze żeber",
+                "M. skośny górny głowy",
+                "M. prosty tylny mniejszy głowy",
+                "M. prosty tylny większy głowy",
+                "M. skośny dolny głowy",
+                "M. prosty boczny głowy",
+                "M. czworoboczny lędźwi"
+              ],
+              "ENG": [
+                "Trapezius muscle",
+                "Latissimus dorsi muscle",
+                "Rhomboid minor muscle",
+                "Rhomboid major muscle",
+                "Levator scapulae muscle",
+                "Serratus posterior inferior muscle",
+                "Serratus posterior superior muscle",
+                "Splenius capitis muscle",
+                "Splenius cervicis muscle",
+                "Sacrospinales muscle",
+                "Iliocostalis muscle",
+                "Longissimus muscle",
+                "Spinalis muscle",
+                "Semispinalis muscle",
+                "Multifidi muscle",
+                "Rotatores muscle",
+                "Interspinales muscle",
+                "Posterior sacrococcygeus muscle",
+                "Intertransversarii muscle",
+                "Anterior sacrococcygeus muscle",
+                "Levatores costarum muscle",
+                "Obliquus capitis superior muscle",
+                "Rectus capitis posterior minor muscle",
+                "Rectus capitis posterior major muscle",
+                "Obliquus capitis inferior muscle",
+                "Rectus capitis lateralis muscle",
+                "Quadratus lumborum muscle"
+              ]
+            },
+            "Joints": {
+              "PL": [
+                "Staw szczytowo-potyliczny",
+                "Staw szczytowo-obrotowy"
+              ],
+              "ENG": [
+                "Atlanto-occipitai joint",
+                "Atlanto-axial joint"
+              ]
+            }
+          },
+          "Konczyna_Gorna": {
+            "Obręcz_Konczyny_Gornej": {
+              "Muscles": {
+                "PL": [
+                  "M. naramienny",
+                  "M. nadgrzebieniowy",
+                  "M. podgrzebieniowy",
+                  "M. obły mniejszy",
+                  "M. obły większy",
+                  "M. podłopadkowy"
+                ],
+                "ENG": [
+                  "Deltoid muscle",
+                  "Supraspinatus muscle",
+                  "Infraspinatus muscle",
+                  "Teres minor muscle",
+                  "Teres major muscle",
+                  "Subscapularis muscle"
+                ]
+              },
+              "Joints": {
+                "PL": [
+                  "Staw barkowo-obojczykowy",
+                  "Staw ramienny"
+                ],
+                "ENG": [
+                  "Acromioclavicular joint",
+                  "Shoulder joint"
+                ]
+              }
+            },
+            "Ramie": {
+              "Muscles": {
+                "PL": [
+                  "M. trójgłowy ramienia",
+                  "M. łokciowy"
+                ],
+                "ENG": [
+                  "Triceps brachii muscle",
+                  "Anconeus muscle"
+                ]
+              },
+              "Joints": {
+                "PL": [
+                  "Staw ramienny",
+                  "Staw ramienno-łokciowy",
+                  "Staw ramienno-promieniowy"
+                ],
+                "ENG": [
+                  "Shoulder joint",
+                  "Humero-ulnar joint",
+                  "Humero-radial joint"
+                ]
+              }
+            },
+            "Przedramie": {
+              "Muscles": {
+                "PL": [
+                  "M. ramienno-promieniowy",
+                  "M. prostownik promieniowy długi nadgarstka",
+                  "M. prostownik promieniowy krótki nadgarstka",
+                  "M. odwracacz",
+                  "M. prostownik palców",
+                  "M. prostownik palca małego",
+                  "M. prostownik łokciowy nadgarstka",
+                  "M. odwodziciel długi kciuka",
+                  "M. prostownik krótki kciuka",
+                  "M. prostownik długi kciuka",
+                  "M. prostownik wskaziciela"
+                ],
+                "ENG": [
+                  "Brachioradialis muscle",
+                  "Extensor carpi radialis longus muscle",
+                  "Extensor carpi radialis brevis muscle",
+                  "Supinator muscle",
+                  "Extensor digitorum muscle",
+                  "Extensor digiti minimi muscle",
+                  "Extensor carpi ulnaris muscle",
+                  "Abductor pollicis longus muscle",
+                  "Extensor pollicis brevis muscle",
+                  "Extensor pollicis longus muscle",
+                  "Extensor indicis muscle"
+                ]
+              },
+              "Joints": {
+                "PL": [
+                  "Staw promieniowo-łokciowy bliższy",
+                  "Staw promieniowo-łokciowy dalszy"
+                ],
+                "ENG": [
+                  "Proximal radio-ulnar joint",
+                  "Distal radio-ulnar joint"
+                ]
+              }
+            },
+            "Dlon": {
+              "Muscles": {
+                "PL": [
+                  "Mm. glistowate",
+                  "Mm. międzykostne"
+                ],
+                "ENG": [
+                  "Lumbricales muscles",
+                  "Interossei muscles"
+                ]
+              },
+              "Joints": {
+                "PL": [
+                  "Staw promieniowo-nadgarstkowy",
+                  "Staw śródnadgarstkowy",
+                  "Stawy nadgarstkowo-śródręczne",
+                  "Stawy międzyśródręczne",
+                  "Staw nadgarstkowo-śródręczny kciuka",
+                  "Stawy śródręczno-paliczkowe",
+                  "Stawy międzypaliczkowe ręki"
+                ],
+                "ENG": [
+                  "Wrist joint",
+                  "Midcarpal joint",
+                  "Carpometacarpal joints",
+                  "Intermetacarpal joints",
+                  "Carpometacarpal joint of thumb",
+                  "Metacarpophalangeal joints",
+                  "Interphalangeal joints of hand"
+                ]
+              }
+            }
+          },
+          "Konczyna_Dolna": {
+            "Obrecz_konczyny_dolnej": {
+              "Muscles": {
+                "PL": [
+                  "M. pośladkowy wielki",
+                  "M. naprężacz powięzi szerokiej",
+                  "M. pośladkowy średni",
+                  "M. pośladkowy mały",
+                  "M. gruszkowaty"
+                ],
+                "ENG": [
+                  "Gluteus maximus muscle",
+                  "Tensor fasciae latae muscle",
+                  "Gluteus medius muscle",
+                  "Gluteus minimus muscle",
+                  "Piriformis muscle"
+                ]
+              },
+              "Joints": {
+                "PL": [
+                  "Staw krzyżowo-biodrowy",
+                  "Staw biodrowy"
+                ],
+                "ENG": [
+                  "Sacro-iliac joint",
+                  "Hip joint"
+                ]
+              }
+            },
+            "Udo": {
+              "Muscles": {
+                "PL": [
+                  "M. grzebieniowy",
+                  "M. smukły",
+                  "M. przywodziciel długi",
+                  "M. przywodziciel krótki",
+                  "M. przywodziciel wielki",
+                  "M. półścięgnisty",
+                  "M. półbłoniasty",
+                  "M. dwugłowy uda"
+                ],
+                "ENG": [
+                  "Pectineus muscle",
+                  "Gracilis muscle",
+                  "Adductor longus muscle",
+                  "Adductor brevis muscle",
+                  "Adductor magnus muscle",
+                  "Semitendinosus muscle",
+                  "Semimembranosus muscle",
+                  "Biceps femoris muscle"
+                ]
+              },
+              "Joints": {
+                "PL": [
+                  "Staw biodrowy",
+                  "Staw kolanowy"
+                ],
+                "ENG": [
+                  "Hip joint",
+                  "Knee joint"
+                ]
+              }
+            },
+            "Golen": {
+              "Muscles": {
+                "PL": [
+                  "M. strzałkowy długi",
+                  "M. strzałkowy krótki",
+                  "M. brzuchaty łydki",
+                  "M. płaszczkowaty",
+                  "M. podeszwowy",
+                  "M. podkolanowy",
+                  "M. zginacz długi palców",
+                  "M. piszczelowy tylny",
+                  "M. zginacz długi palucha"
+                ],
+                "ENG": [
+                  "Fibularis longus muscle",
+                  "Fibularis brevis muscle",
+                  "Gastrocnemius muscle",
+                  "Soleus muscle",
+                  "Plantaris muscle",
+                  "Popliteus muscle",
+                  "Flexor digitorum longus muscle",
+                  "Tibialis posterior muscle",
+                  "Flexor hallucis longus"
+                ]
+              },
+              "Joints": {
+                "PL": [
+                  "Staw kolanowy",
+                  "Staw piszczelowo-strzałkowy"
+                ],
+                "ENG": [
+                  "Knee joint",
+                  "Tibiofibular joint"
+                ]
+              }
+            },
+            "Stopa": {
+              "Muscles": {
+                "PL": [
+                  "M. odwodziciel palucha",
+                  "M. zginacz krótki palucha",
+                  "M. przywodziciel palucha",
+                  "M. odwodziciel palca małego",
+                  "M. zginacz krótki palca małego",
+                  "M. przeciwstawiacz palca małego",
+                  "M. zginacz krótki palców",
+                  "M. czworoboczny podeszwy",
+                  "Mm. glistowate",
+                  "Mm. międzykostne"
+                ],
+                "ENG": [
+                  "Abductor hallucis muscle",
+                  "Flexor hallucis brevis muscle",
+                  "Adductor hallucis muscle",
+                  "Abductor digiti minimi muscle",
+                  "Flexor digiti minimi brevis muscle",
+                  "Opponens digiti minimi muscle",
+                  "Flexor digitorum brevis muscle",
+                  "Quadratus plantae muscle",
+                  "Lumbricale muscles of foot",
+                  "Interossei muscles"
+                ]
+              },
+              "Joints": {
+                "PL": [
+                  "Staw skokowy górny",
+                  "Staw skokowy dolny",
+                  "Staw piętowo-sześcienny",
+                  "Staw poprzeczny stępu",
+                  "Staw klinowo-łódkowy",
+                  "Stawy stępowo-śródstopne",
+                  "Stawy międzyśródstopne",
+                  "Stawy palców stopy"
+                ],
+                "ENG": [
+                  "Upper ankle joint",
+                  "Lower ankle joint",
+                  "Calcaneocuboid joint",
+                  "Transverse tarsal joint",
+                  "Sphenoid joint",
+                  "Tarsometatarsal joints",
+                  "Intermetatarsal joints",
+                  "Joints of the toes"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
