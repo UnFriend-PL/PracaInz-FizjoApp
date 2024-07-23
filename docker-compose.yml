@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  mysql:
+    build: ./mysql
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: fizjoDB
+      MYSQL_DATABASE: fizjoDB
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  fizjobackend:
+    build:
+      context: ./fizjobackend
+      dockerfile: Dockerfile
+    container_name: fizjobackend
+    restart: always
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    ports:
+      - "5000:80"
+    depends_on:
+      - mysql
+volumes:
+  mysql-data:
