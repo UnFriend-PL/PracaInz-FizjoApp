@@ -55,6 +55,8 @@ namespace fizjobackend
                 catch (Exception ex)
                 {
                     logger.LogError(ex, "Database connection test failed.");
+                    logger.LogError(ex, "Check Azure rules.");
+
                 }
             }
         }
