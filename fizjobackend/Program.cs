@@ -46,16 +46,16 @@ namespace fizjobackend
                 var logger = services.GetRequiredService<ILogger<Program>>();
                 var context = services.GetRequiredService<FizjoDbContext>();
 
-                try
-                {
-                    context.Database.OpenConnection();
-                    context.Database.CloseConnection();
-                    logger.LogInformation("Database connection test succeeded.");
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, "Database connection test failed.");
-                }
+                //try
+                //{
+                //    context.Database.OpenConnection();
+                //    context.Database.CloseConnection();
+                //    logger.LogInformation("Database connection test succeeded.");
+                //}
+                //catch (Exception ex)
+                //{
+                //    logger.LogError(ex, "Database connection test failed.");
+                //}
             }
         }
     }
