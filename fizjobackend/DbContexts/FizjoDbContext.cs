@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using fizjobackend.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace fizjobackend.DbContexts
 {
@@ -6,6 +7,14 @@ namespace fizjobackend.DbContexts
     {
         public FizjoDbContext(DbContextOptions<FizjoDbContext> options) : base(options)
         {
+        }
+
+        public DbSet<Patient> Patients { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            
         }
     }
 }

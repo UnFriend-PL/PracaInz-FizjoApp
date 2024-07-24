@@ -1,9 +1,7 @@
-
 using fizjobackend.DbContexts;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Data.SqlClient;
+using fizjobackend.Interfaces.UsersInterfaces;
+using fizjobackend.Services.UserServices;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace fizjobackend
 {
@@ -23,6 +21,7 @@ namespace fizjobackend
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+            builder.Services.AddScoped<IUserService, UserService>();
             var app = builder.Build();
             TestDatabaseConnection(app);
 
