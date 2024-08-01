@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
-namespace fizjobackend.Entities
+namespace fizjobackend.Entities.UserEntities
 {
-    public abstract class User : IdentityUser
+    public abstract class User : IdentityUser<Guid>
     {
-        [Key]
-        public Guid UserId { get; set; }
+        public string AvatarPath { get; set; } = string.Empty;
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string Gender { get; set; } = string.Empty;

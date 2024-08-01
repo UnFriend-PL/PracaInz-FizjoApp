@@ -1,5 +1,5 @@
 using fizjobackend.DbContexts;
-using fizjobackend.Entities;
+using fizjobackend.Entities.UserEntities;
 using fizjobackend.Interfaces.UsersInterfaces;
 using fizjobackend.Services.UserServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -9,7 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 
-namespace fizjobackend 
+namespace fizjobackend
 {
     public class Program
     {
@@ -63,10 +63,10 @@ namespace fizjobackend
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
             builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddIdentity<User, IdentityRole>()
+            builder.Services.AddIdentity<User, UserRoles>()
                 .AddEntityFrameworkStores<FizjoDbContext>()
-                .AddRoles<IdentityRole>()
-                .AddRoleManager<RoleManager<IdentityRole>>()
+                .AddRoles<UserRoles>()
+                .AddRoleManager<RoleManager<UserRoles>>()
                 .AddSignInManager<SignInManager<User>>()
                 .AddUserManager<UserManager<User>>()
                 .AddDefaultTokenProviders();
