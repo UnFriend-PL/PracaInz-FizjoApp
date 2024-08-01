@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using fizjobackend.DbContexts;
 
@@ -11,9 +12,11 @@ using fizjobackend.DbContexts;
 namespace fizjobackend.Migrations
 {
     [DbContext(typeof(FizjoDbContext))]
-    partial class FizjoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240801190529_AbstractUsersTable")]
+    partial class AbstractUsersTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -150,6 +153,11 @@ namespace fizjobackend.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("nvarchar(21)");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
@@ -204,9 +212,11 @@ namespace fizjobackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
 
-                    b.UseTptMappingStrategy();
+                    b.HasDiscriminator().HasValue("User");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("fizjobackend.Entities.UserEntities.UserRoles", b =>
@@ -240,7 +250,7 @@ namespace fizjobackend.Migrations
                     b.Property<string>("HealthInsuranceNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("Patients", (string)null);
+                    b.HasDiscriminator().HasValue("Patient");
                 });
 
             modelBuilder.Entity("fizjobackend.Entities.PhysiotherapistEntities.Physiotherapist", b =>
@@ -251,7 +261,7 @@ namespace fizjobackend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("Physiotherapists", (string)null);
+                    b.HasDiscriminator().HasValue("Physiotherapist");
                 });
 
             modelBuilder.Entity("PhysiotherapistPhysiotherapySpecializationEntity", b =>
@@ -293,24 +303,6 @@ namespace fizjobackend.Migrations
                     b.HasOne("fizjobackend.Entities.PatientEntities.Patient", null)
                         .WithMany("MedicalRaports")
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("fizjobackend.Entities.PatientEntities.Patient", b =>
-                {
-                    b.HasOne("fizjobackend.Entities.UserEntities.User", null)
-                        .WithOne()
-                        .HasForeignKey("fizjobackend.Entities.PatientEntities.Patient", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("fizjobackend.Entities.PhysiotherapistEntities.Physiotherapist", b =>
-                {
-                    b.HasOne("fizjobackend.Entities.UserEntities.User", null)
-                        .WithOne()
-                        .HasForeignKey("fizjobackend.Entities.PhysiotherapistEntities.Physiotherapist", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

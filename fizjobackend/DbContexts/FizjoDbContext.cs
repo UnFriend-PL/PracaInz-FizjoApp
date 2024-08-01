@@ -16,13 +16,15 @@ namespace fizjobackend.DbContexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<User>().ToTable("Users");
+            modelBuilder.Entity<Patient>().ToTable("Patients");
+            modelBuilder.Entity<Physiotherapist>().ToTable("Physiotherapists");
+
             BuildPhysiothreapistSpecializationEntity(modelBuilder);
             BuildAppointmentEntity(modelBuilder);
-            modelBuilder.Entity<Physiotherapist>()
-                .HasMany(p => p.PhysiotherapySpecializations)
-                .WithMany(s => s.Physiotherapists)
-                .UsingEntity(j => j.ToTable("PhysiotherapistSpecializations"));
         }
+
 
         private static void BuildAppointmentEntity(ModelBuilder modelBuilder)
         {
@@ -49,8 +51,14 @@ namespace fizjobackend.DbContexts
                 .Entity<PhysiotherapySpecializationEntity>()
                 .Property(e => e.PhysiotherapySpecialization)
                 .HasConversion<string>();
+
+            modelBuilder.Entity<Physiotherapist>()
+                 .HasMany(p => p.PhysiotherapySpecializations)
+                 .WithMany(s => s.Physiotherapists)
+                 .UsingEntity(j => j.ToTable("PhysiotherapistSpecializations"));
         }
 
+        public DbSet<User> Users { get; set; }
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Physiotherapist> Physiotherapists { get; set; }
         public DbSet<UserRoles> UserRoles { get; set; } 
