@@ -71,7 +71,7 @@ namespace fizjobackend
                 .AddUserManager<UserManager<User>>()
                 .AddDefaultTokenProviders();
 
-            var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
+            var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]!);
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

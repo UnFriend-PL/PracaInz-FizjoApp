@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace fizjobackend.DbContexts
 {
-    public class FizjoDbContext : IdentityDbContext<User, UserRoles, Guid>
+    public class FizjoDbContext : DbContext
     {
         public FizjoDbContext(DbContextOptions<FizjoDbContext> options) : base(options)
         {
@@ -53,7 +53,7 @@ namespace fizjobackend.DbContexts
 
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Physiotherapist> Physiotherapists { get; set; }
-        public DbSet<UserRoles> UserRoles { get; set; }
+        public DbSet<UserRoles> UserRoles { get; set; } 
         public DbSet<PhysiotherapySpecializationEntity> PhysiotherapySpecializationEntities { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
 
