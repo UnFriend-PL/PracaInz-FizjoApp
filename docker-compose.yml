@@ -1,29 +1,31 @@
-version: "3.8"
+version: '3'
 
 services:
-  mysql:
-    build: ./mysql
-    container_name: mysql
-    restart: always
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
     environment:
-      MYSQL_ROOT_PASSWORD: fizjoDB
-      MYSQL_DATABASE: fizjoDB
+      - DB_VENDOR=mssql
+      - DB_ADDR=fizjoserver.database.windows.net
+      - DB_DATABASE=FizjoDB
+      - DB_USER=fizjoAdmin
+      - DB_PASSWORD=Kolo1212
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - JAVA_OPTS_APPEND=-Dkeycloak.profile.feature.upload_scripts=enabled
+      - KC_DB=mssql
+      - KC_DB_URL=jdbc:sqlserver://fizjoserver.database.windows.net:1433;database=FizjoDB;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+      - KC_DB_USERNAME=fizjoAdmin
+      - KC_DB_PASSWORD=Kolo1212
     ports:
-      - "3307:3306"
+      - "82:8080"
     volumes:
-      - mysql-data:/var/lib/mysql
-
-  fizjobackend:
-    build:
-      context: ./fizjobackend
-      dockerfile: Dockerfile
-    container_name: fizjobackend
-    restart: always
-    environment:
-      ASPNETCORE_ENVIRONMENT: Development
-    ports:
-      - "5000:80"
-    depends_on:
-      - mysql
-volumes:
-  mysql-data:
+      - ./themes:/opt/jboss/keycloak/themes
+      - ./realm-export.json:/opt/keycloak/data/import/realm-export.json
+    command: >
+      start-dev
+      --import-realm
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/auth"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
