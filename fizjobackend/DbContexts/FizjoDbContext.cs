@@ -9,12 +9,12 @@ namespace fizjobackend.DbContexts
         {
         }
 
-        public DbSet<Patient> Patients { get; set; }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             
         }
+        public DbSet<Patient> Patients { get; set; }
+
     }
 }

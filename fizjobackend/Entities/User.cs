@@ -3,11 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace fizjobackend.Entities
 {
-    public class User : IdentityUser
+    public abstract class User : IdentityUser
     {
         [Key]
         public Guid UserId { get; set; }
-        public string Password { get; set; } = string.Empty;
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string Gender { get; set; } = string.Empty;
