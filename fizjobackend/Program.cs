@@ -1,6 +1,8 @@
 using fizjobackend.DbContexts;
 using fizjobackend.Entities.UserEntities;
+using fizjobackend.Interfaces.AccountInterfaces;
 using fizjobackend.Interfaces.UsersInterfaces;
+using fizjobackend.Services.AccountService;
 using fizjobackend.Services.UserServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -63,13 +65,8 @@ namespace fizjobackend
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
             builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddIdentity<User, UserRoles>()
-                .AddEntityFrameworkStores<FizjoDbContext>()
-                .AddRoles<UserRoles>()
-                .AddRoleManager<RoleManager<UserRoles>>()
-                .AddSignInManager<SignInManager<User>>()
-                .AddUserManager<UserManager<User>>()
-                .AddDefaultTokenProviders();
+            builder.Services.AddScoped<IAccountService, AccountService>();
+            InitializeIdentity(builder);
 
             var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]!);
             builder.Services.AddAuthentication(options =>
@@ -109,6 +106,18 @@ namespace fizjobackend
             app.MapControllers();
             app.Run();
         }
+
+        private static void InitializeIdentity(WebApplicationBuilder builder)
+        {
+            builder.Services.AddIdentity<User, UserRoles>()
+                .AddEntityFrameworkStores<FizjoDbContext>()
+                .AddRoles<UserRoles>()
+                .AddRoleManager<RoleManager<UserRoles>>()
+                .AddSignInManager<SignInManager<User>>()
+                .AddUserManager<UserManager<User>>()
+                .AddDefaultTokenProviders();
+        }
+
         private static void TestDatabaseConnection(WebApplication app)
         {
             using (var scope = app.Services.CreateScope())
