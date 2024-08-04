@@ -1,100 +1,93 @@
 ﻿using fizjobackend.Entities.UserEntities;
-using fizjobackend.Models.AccountDTOs;
-using System.Globalization;
 using System.Text.RegularExpressions;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace fizjobackend.Helpers
 {
-    internal class AccountValidationHelper
+    internal static class AccountValidationHelper // static dlatego, ze lepiej uzywac static jesli bedziemy jedynie korzystac z metod w niej zawartych
     {
-        private User _user;
-
-        public AccountValidationHelper(User user)
+        // Dodaj interfejs i uzywaj interfejsóW przy wywoływaniu walidacji!!
+        public static string[] Validate(User user)
         {
-            _user = user;
-        }
-
-        string[] errors = [];
-
-        public bool Validate(out string[] errors)
-        {
+            var errors = new List<string>();
 
             try
             {
-
-                ValidateAndFormatName(_user.FirstName);
-                ValidateAndFormatName(_user.LastName);
-                ValidateGender(_user.Gender);
-                ValidateEmail(_user.Email);
-                ValidatePesel(_user.Pesel);
-                ValidateDateOfBirth(_user.DateOfBirth);
-                ValidatePhoneNumber(_user.PhoneNumber);
-                errors = this.errors;
-                if(errors != null)
-                {
-                    return false;
-                }
-                return true;
+                var error = ValidateAndFormatName(user.FirstName);
+                if (error != null) errors.Add(error);
+                error = ValidateGender(user.Gender);
+                if (error != null) errors.Add(error);
+                error = ValidateEmail(user.Email!);
+                if (error != null) errors.Add(error);
+                error = ValidatePesel(user.Pesel);
+                if (error != null) errors.Add(error);
+                error = ValidateDateOfBirth(user.DateOfBirth);
+                if (error != null) errors.Add(error);
+                error = ValidatePhoneNumber(user.PhoneNumber!);
+                if (error != null) errors.Add(error);
+                return errors.ToArray();
             }
-            catch (ArgumentException ex)
+            catch (Exception ex)
             {
-                errors = [ex.Message];
-                return false;
+                return [ex.Message];
             }
         }
 
-        private void ValidateAndFormatName(string name)
+        private static string? ValidateAndFormatName(string name)
         {
             if (!Regex.IsMatch(name, @"^[a-zA-Z]+$"))
             {
-                errors.Append("Name must contain only letters and no numbers.") ;
+                return "Name must contain only letters and no numbers.";
             }
+            return null;
         }
 
-        private void ValidateGender(string gender)
+        private static string? ValidateGender(string gender)
         {
             //enum
             gender.ToLower();
             string[] validGenders = { "female", "male", "other" };
             if (!Array.Exists(validGenders, g => g.Equals(gender, StringComparison.OrdinalIgnoreCase)))
             {
-                errors.Append("Gender must be either 'female', 'male', or 'other'.");
+                return "Gender must be either 'female', 'male', or 'other'.";
             }
-
+            return null;
         }
 
-        private void ValidateEmail(string email)
+        private static string? ValidateEmail(string email)
         {
             if (!Regex.IsMatch(email, @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"))
             {
-                errors.Append("Email must be valid and contain a domain.");
+                return "Email must be valid and contain a domain.";
             }
+            return null;
         }
 
-        private void ValidatePesel(string pesel)
+        private static string? ValidatePesel(string pesel)
         {
             if (pesel.Length != 11 && !Regex.IsMatch(pesel, @"^\d+$"))
             {
-                errors.Append("Pesel must be a string of 11 digits.");
+                return "Pesel must be a string of 11 digits.";
             }
             //suma kontrolna
+            return null;
         }
 
-        private void ValidateDateOfBirth(DateTime dateOfBirth)
+        private static string? ValidateDateOfBirth(DateTime dateOfBirth)
         {
             if (dateOfBirth > DateTime.Now)
             {
-                errors.Append("Date of Birth cannot be in the future.");
+                return "Date of Birth cannot be in the future.";
             }
+            return null;
         }
 
-        private void ValidatePhoneNumber(string phoneNumber)
+        private static string? ValidatePhoneNumber(string phoneNumber)
         {
             if (phoneNumber.Length <= 11 && !Regex.IsMatch(phoneNumber, @"^\d+$"))
             {
-                errors.Append("Phone number must be a string of up to 11 digits.");
+                return "Phone number must be a string of up to 11 digits.";
             }
+            return null;
         }
     }
 }

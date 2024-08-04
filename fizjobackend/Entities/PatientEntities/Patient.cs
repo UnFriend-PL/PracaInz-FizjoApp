@@ -16,7 +16,7 @@ namespace fizjobackend.Entities.PatientEntities
         public ICollection<Appointment> Appointments { get; set; } = [];
 
         public Patient() { }
-        public Patient(RegisterPatientDTO patient)
+        public Patient(PatientRegisterDTO patient)
         {
             Email = patient.Email;
             FirstName = patient.FirstName;
