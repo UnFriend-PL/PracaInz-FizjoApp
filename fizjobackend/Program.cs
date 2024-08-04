@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using Serilog;
 
 namespace fizjobackend
 {
@@ -18,9 +19,10 @@ namespace fizjobackend
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
-
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(builder.Configuration)
+                .CreateLogger();
+            builder.Host.UseSerilog();
             builder.Services.AddControllers();
             builder.Services.AddHttpClient();
             builder.Services.AddEndpointsApiExplorer();
@@ -66,8 +68,7 @@ namespace fizjobackend
             });
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IAccountService, AccountService>();
-            InitializeIdentity(builder);
-
+            builder.Services.AddScoped<IJwtGenerator, JwtGenerator>();
             var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]!);
             builder.Services.AddAuthentication(options =>
             {
@@ -83,12 +84,12 @@ namespace fizjobackend
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    //ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                    //ValidAudience = builder.Configuration["Jwt:Audience"],
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(key)
                 };
             });
-
+            InitializeIdentity(builder);
             var app = builder.Build();
             TestDatabaseConnection(app);
 

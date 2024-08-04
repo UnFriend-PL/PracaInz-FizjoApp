@@ -1,11 +1,12 @@
 ﻿using fizjobackend.Interfaces.AccountInterfaces;
 using fizjobackend.Models.AccountDTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fizjobackend.Controllers
 {
     [ApiController]
-    [Route("AccountController[controller]")]
+    [Route("[controller]")]
     public class AccountController : Controller
     {
         private readonly IAccountService _accountService;
@@ -30,6 +31,34 @@ namespace fizjobackend.Controllers
         public async Task<IActionResult> RegisterPhysiotherapist([FromBody] PhysiotherapisRegistertDTO physiotherapist)
             {
             var response = await _accountService.RegisterPhysiotherapistAccount(physiotherapist);
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody] LoginDTO login)
+        {
+            var response = await _accountService.Login(login);
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpGet("RefreshSession")]
+        public async Task<IActionResult> RefreshSession()
+        {
+            var token = Request.Headers["Authorization"].ToString().Split(" ")[1];
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                return BadRequest(new { message = "Token is missing" });
+            }
+            var response = await _accountService.RefreshSession(token);
             if (!response.Success)
             {
                 return BadRequest(response);

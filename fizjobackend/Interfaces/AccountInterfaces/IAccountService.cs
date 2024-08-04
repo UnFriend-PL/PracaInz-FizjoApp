@@ -7,5 +7,6 @@ namespace fizjobackend.Interfaces.AccountInterfaces
         Task<ServiceResponse<bool>> RegisterPatientAccount(PatientRegisterDTO patient);
         Task<ServiceResponse<bool>> RegisterPhysiotherapistAccount(PhysiotherapisRegistertDTO physiotherapist);
         Task<ServiceResponse<string>> Login(LoginDTO login);
+        Task<ServiceResponse<string>> RefreshSession(string refreshToken);
     }
 }

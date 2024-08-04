@@ -6,23 +6,48 @@ using fizjobackend.Interfaces.AccountInterfaces;
 using fizjobackend.Interfaces.RegisterDTOInterfaces;
 using fizjobackend.Models.AccountDTOs;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace fizjobackend.Services.AccountService
 {
     public class AccountService : IAccountService
-    {   
+    {
         private readonly FizjoDbContext _context;
         private readonly UserManager<User> _userManager;
+        private readonly ILogger<AccountService> _logger;
+        private readonly IConfiguration _configuration;
+        private readonly IJwtGenerator _jwtGenerator;
 
-        public AccountService(FizjoDbContext context, UserManager<User> userManager)
+        public AccountService(FizjoDbContext context, UserManager<User> userManager, ILogger<AccountService> logger, IConfiguration configuration, IJwtGenerator jwtGenerator)
         {
             _context = context;
             _userManager = userManager;
+            _logger = logger;
+            _configuration = configuration;
+            _jwtGenerator = jwtGenerator;
         }
 
         public async Task<ServiceResponse<string>> Login(LoginDTO login)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(login.Email);
+                if (user == null || !await _userManager.CheckPasswordAsync(user, login.Password))
+                {
+                    return new ServiceResponse<string>("Invalid login attempt") { Success = false };
+                }
+
+                var token = _jwtGenerator.GenerateJwtToken(user);
+                return new ServiceResponse<string>("Login successful") { Data = token };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred");
+                return new ServiceResponse<string>("An error occurred") { Success = false, Errors = new[] { ex.Message } };
+            }
         }
 
         public async Task<ServiceResponse<bool>> RegisterPatientAccount(PatientRegisterDTO patient)
@@ -35,6 +60,34 @@ namespace fizjobackend.Services.AccountService
             return await RegisterUserAccount<PhysiotherapisRegistertDTO>(physiotherapist);
         }
 
+        public async Task<ServiceResponse<string>> RefreshSession(string refreshToken)
+        {
+            try
+            {
+                var principal = _jwtGenerator.RefreshJwtToken(refreshToken);
+                if (principal == null)
+                {
+                    return new ServiceResponse<string>("Invalid refresh token") { Success = false };
+                }
+
+                var userId = principal.FindFirstValue(ClaimTypes.NameIdentifier);
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null)
+                {
+                    return new ServiceResponse<string>("User not found") { Success = false };
+                }
+
+                var newToken = _jwtGenerator.GenerateJwtToken(user);
+                return new ServiceResponse<string>("Token refreshed successfully") { Data = newToken };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while refreshing the token");
+                return new ServiceResponse<string>("An error occurred") { Success = false, Errors = new[] { ex.Message } };
+            }
+        }
+
+
         private async Task<ServiceResponse<bool>> RegisterUserAccount<T>(T userDto) where T : IUserRegisterDTO
         {
             try
@@ -42,6 +95,7 @@ namespace fizjobackend.Services.AccountService
                 if (await UserExists(userDto.Email))
                 {
                     return new ServiceResponse<bool>("User already exists") { Success = false };
+
                 }
                 if (userDto.Password != userDto.ConfirmPassword)
                 {
@@ -64,17 +118,18 @@ namespace fizjobackend.Services.AccountService
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred");
                 return new ServiceResponse<bool>("An error occurred") { Success = false, Errors = new[] { ex.Message } };
             }
         }
 
         private User CreateUserInstance<T>(T userDto) where T : IUserRegisterDTO
         {
-            if(userDto is PatientRegisterDTO patient)
+            if (userDto is PatientRegisterDTO patient)
             {
                 return new Patient(patient);
             }
-            else if(userDto is PhysiotherapisRegistertDTO physiotherapist)
+            else if (userDto is PhysiotherapisRegistertDTO physiotherapist)
             {
                 return new Physiotherapist(physiotherapist);
             }
