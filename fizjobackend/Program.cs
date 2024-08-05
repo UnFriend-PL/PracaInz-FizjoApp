@@ -11,6 +11,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using Serilog;
+using fizjobackend.Helpers;
+using fizjobackend.Interfaces.HelpersInterfaces;
 
 namespace fizjobackend
 {
@@ -69,6 +71,7 @@ namespace fizjobackend
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IJwtGenerator, JwtGenerator>();
+            builder.Services.AddScoped<IAccountValidationHelper, AccountValidationHelper>();
             var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]!);
             builder.Services.AddAuthentication(options =>
             {
