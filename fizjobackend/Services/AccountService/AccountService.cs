@@ -4,6 +4,7 @@ using fizjobackend.Entities.PhysiotherapistEntities;
 using fizjobackend.Entities.UserEntities;
 using fizjobackend.Helpers;
 using fizjobackend.Interfaces.AccountInterfaces;
+using fizjobackend.Interfaces.HelpersInterfaces;
 using fizjobackend.Interfaces.RegisterDTOInterfaces;
 using fizjobackend.Models.AccountDTOs;
 using Microsoft.AspNetCore.Identity;
@@ -16,11 +17,13 @@ namespace fizjobackend.Services.AccountService
         private readonly FizjoDbContext _context;
         private readonly UserManager<User> _userManager;
         private readonly IAccountService _accountService;
+        private readonly IAccountValidationHelper _accountValidationHelper;
 
-        public AccountService(FizjoDbContext context, UserManager<User> userManager)
+        public AccountService(FizjoDbContext context, UserManager<User> userManager, IAccountValidationHelper accountValidationHelper)
         {
             _context = context;
             _userManager = userManager;
+            _accountValidationHelper = accountValidationHelper;
         }
 
         public async Task<ServiceResponse<string>> Login(LoginDTO login)
@@ -62,7 +65,7 @@ namespace fizjobackend.Services.AccountService
                     var errors = result.Errors.Select(e => e.Description).ToArray();
                     return new ServiceResponse<bool>("User creation failed") { Success = false, Errors = errors };
                 }
-                var validateErrors = AccountValidationHelper.Validate(user);
+                var validateErrors = _accountValidationHelper.Validate(user);
                 if(validateErrors.Length > 0)
                 {
                     return new ServiceResponse<bool> ("Validation error"){ Success = false, Errors = validateErrors };

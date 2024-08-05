@@ -1,12 +1,15 @@
-﻿using fizjobackend.Entities.UserEntities;
+﻿using fizjobackend.DbContexts;
+using fizjobackend.Entities.UserEntities;
+using fizjobackend.Interfaces.HelpersInterfaces;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
 
 namespace fizjobackend.Helpers
 {
-    internal static class AccountValidationHelper // static dlatego, ze lepiej uzywac static jesli bedziemy jedynie korzystac z metod w niej zawartych
+    internal class AccountValidationHelper : IAccountValidationHelper 
     {
-        // Dodaj interfejs i uzywaj interfejsóW przy wywoływaniu walidacji!!
-        public static string[] Validate(User user)
+        public string[] Validate(User user)
         {
             var errors = new List<string>();
 
