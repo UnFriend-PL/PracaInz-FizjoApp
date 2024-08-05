@@ -1,10 +1,7 @@
-﻿using fizjobackend.Enums.UserEnums;
-
-namespace fizjobackend.Interfaces.RegisterDTOInterfaces
+﻿namespace fizjobackend.Interfaces.RegisterDTOInterfaces
 {
     public interface IUserRegisterDTO
     {
-        public RegisterType RegisterType { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Gender { get; set; }

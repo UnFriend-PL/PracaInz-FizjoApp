@@ -16,7 +16,7 @@ namespace fizjobackend.Entities.PhysiotherapistEntities
 
         public Physiotherapist() { }
 
-        public Physiotherapist(PhysiotherapisRegistertDTO patient)
+        public Physiotherapist(PhysiotherapisRegistertRequestDTO patient)
         {
             Email = patient.Email;
             FirstName = patient.FirstName;

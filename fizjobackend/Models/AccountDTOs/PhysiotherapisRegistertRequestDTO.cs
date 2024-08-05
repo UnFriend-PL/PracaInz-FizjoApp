@@ -1,13 +1,10 @@
-﻿using fizjobackend.Entities.PatientEntities;
-using fizjobackend.Enums.UserEnums;
-using fizjobackend.Interfaces.RegisterDTOInterfaces;
+﻿using fizjobackend.Interfaces.RegisterDTOInterfaces;
 
 namespace fizjobackend.Models.AccountDTOs
 {
-    public class PatientRegisterDTO : IUserRegisterDTO
+    public class PhysiotherapisRegistertRequestDTO : IUserRegisterDTO
     {
-        public string? InsuranceNumber { get; set; }
-        public RegisterType RegisterType { get; set; }
+        public string LicenseNumber { get; set; } = string.Empty;
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string Gender { get; set; } = string.Empty;

@@ -18,12 +18,11 @@ namespace fizjobackend.Entities.UserEntities
         [PersonalData]
         public DateTime DateOfBirth { get; set; }
         [PersonalData]
-        public override string? UserName
-        {
-            get => Email;
-            set => value = Email;
-        }
+        public override string? UserName { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public DateTime? LastModifiedDate { get; set; } 
+        public string? VerificationToken { get; set; }
+        public DateTime? VerifiedAt { get; set; }
+        public DateTime? ResetTokenExpires { get; set; }
     }
 }
