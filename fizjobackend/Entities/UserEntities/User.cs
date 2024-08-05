@@ -21,5 +21,8 @@ namespace fizjobackend.Entities.UserEntities
         public override string? UserName { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public DateTime? LastModifiedDate { get; set; } 
+        public string? VerificationToken { get; set; }
+        public DateTime? VerifiedAt { get; set; }
+        public DateTime? ResetTokenExpires { get; set; }
     }
 }

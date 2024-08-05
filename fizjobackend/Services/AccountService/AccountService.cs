@@ -6,10 +6,8 @@ using fizjobackend.Interfaces.AccountInterfaces;
 using fizjobackend.Interfaces.RegisterDTOInterfaces;
 using fizjobackend.Models.AccountDTOs;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
+using System.Security.Cryptography;
 
 namespace fizjobackend.Services.AccountService
 {
@@ -30,7 +28,7 @@ namespace fizjobackend.Services.AccountService
             _jwtGenerator = jwtGenerator;
         }
 
-        public async Task<ServiceResponse<string>> Login(LoginDTO login)
+        public async Task<ServiceResponse<string>> Login(LoginRequestDTO login)
         {
             try
             {
@@ -50,14 +48,14 @@ namespace fizjobackend.Services.AccountService
             }
         }
 
-        public async Task<ServiceResponse<bool>> RegisterPatientAccount(PatientRegisterDTO patient)
+        public async Task<ServiceResponse<bool>> RegisterPatientAccount(PatientRegisterRequestDTO patient)
         {
-            return await RegisterUserAccount<PatientRegisterDTO>(patient);
+            return await RegisterUserAccount<PatientRegisterRequestDTO>(patient);
         }
 
-        public async Task<ServiceResponse<bool>> RegisterPhysiotherapistAccount(PhysiotherapisRegistertDTO physiotherapist)
+        public async Task<ServiceResponse<bool>> RegisterPhysiotherapistAccount(PhysiotherapisRegistertRequestDTO physiotherapist)
         {
-            return await RegisterUserAccount<PhysiotherapisRegistertDTO>(physiotherapist);
+            return await RegisterUserAccount<PhysiotherapisRegistertRequestDTO>(physiotherapist);
         }
 
         public async Task<ServiceResponse<string>> RefreshSession(string refreshToken)
@@ -125,11 +123,11 @@ namespace fizjobackend.Services.AccountService
 
         private User CreateUserInstance<T>(T userDto) where T : IUserRegisterDTO
         {
-            if (userDto is PatientRegisterDTO patient)
+            if (userDto is PatientRegisterRequestDTO patient)
             {
                 return new Patient(patient);
             }
-            else if (userDto is PhysiotherapisRegistertDTO physiotherapist)
+            else if (userDto is PhysiotherapisRegistertRequestDTO physiotherapist)
             {
                 return new Physiotherapist(physiotherapist);
             }
@@ -139,6 +137,11 @@ namespace fizjobackend.Services.AccountService
         private async Task<bool> UserExists(string email)
         {
             return await _userManager.FindByEmailAsync(email) != null;
+        }
+
+        private string CreateRandomConfirmationToken()
+        {
+            return Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
         }
     }
 }

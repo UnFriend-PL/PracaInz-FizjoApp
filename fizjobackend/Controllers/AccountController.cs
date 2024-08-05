@@ -17,7 +17,7 @@ namespace fizjobackend.Controllers
         }
 
         [HttpPost("RegisterPatient")]
-        public async Task<IActionResult> RegisterPatient([FromBody] PatientRegisterDTO patient)
+        public async Task<IActionResult> RegisterPatient([FromBody] PatientRegisterRequestDTO patient)
         {
             var response = await _accountService.RegisterPatientAccount(patient);
             if (!response.Success)
@@ -28,7 +28,7 @@ namespace fizjobackend.Controllers
         }
 
         [HttpPost("RegisterPhysiotherapist")]
-        public async Task<IActionResult> RegisterPhysiotherapist([FromBody] PhysiotherapisRegistertDTO physiotherapist)
+        public async Task<IActionResult> RegisterPhysiotherapist([FromBody] PhysiotherapisRegistertRequestDTO physiotherapist)
             {
             var response = await _accountService.RegisterPhysiotherapistAccount(physiotherapist);
             if (!response.Success)
@@ -39,7 +39,7 @@ namespace fizjobackend.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] LoginDTO login)
+        public async Task<IActionResult> Login([FromBody] LoginRequestDTO login)
         {
             var response = await _accountService.Login(login);
             if (!response.Success)
