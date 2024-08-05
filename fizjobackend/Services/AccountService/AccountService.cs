@@ -3,6 +3,7 @@ using fizjobackend.Entities.PatientEntities;
 using fizjobackend.Entities.PhysiotherapistEntities;
 using fizjobackend.Entities.UserEntities;
 using fizjobackend.Interfaces.AccountInterfaces;
+using fizjobackend.Interfaces.EmailInterface;
 using fizjobackend.Interfaces.RegisterDTOInterfaces;
 using fizjobackend.Models.AccountDTOs;
 using Microsoft.AspNetCore.Identity;
@@ -18,14 +19,16 @@ namespace fizjobackend.Services.AccountService
         private readonly ILogger<AccountService> _logger;
         private readonly IConfiguration _configuration;
         private readonly IJwtGenerator _jwtGenerator;
+        private readonly IEmailService _emailService;
 
-        public AccountService(FizjoDbContext context, UserManager<User> userManager, ILogger<AccountService> logger, IConfiguration configuration, IJwtGenerator jwtGenerator)
+        public AccountService(FizjoDbContext context, UserManager<User> userManager, ILogger<AccountService> logger, IConfiguration configuration, IJwtGenerator jwtGenerator, IEmailService emailService)
         {
             _context = context;
             _userManager = userManager;
             _logger = logger;
             _configuration = configuration;
             _jwtGenerator = jwtGenerator;
+            _emailService = emailService;
         }
 
         public async Task<ServiceResponse<string>> Login(LoginRequestDTO login)
@@ -85,6 +88,33 @@ namespace fizjobackend.Services.AccountService
             }
         }
 
+        public async Task<ServiceResponse<bool>> ConfirmEmail(string email, string token)
+        {
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user == null)
+                {
+                    return new ServiceResponse<bool>("User not found") { Success = false };
+                }
+
+                if (user.VerificationToken != token)
+                {
+                    return new ServiceResponse<bool>("Invalid token") { Success = false };
+                }
+
+                user.EmailConfirmed = true;
+                user.VerifiedAt = DateTime.Now;
+                user.VerificationToken = null;
+                await _userManager.UpdateAsync(user);
+                return new ServiceResponse<bool>("Email confirmed successfully") { Data = true };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while confirming the email");
+                return new ServiceResponse<bool>("An error occurred") { Success = false, Errors = new[] { ex.Message } };
+            }
+        }
 
         private async Task<ServiceResponse<bool>> RegisterUserAccount<T>(T userDto) where T : IUserRegisterDTO
         {
@@ -104,14 +134,14 @@ namespace fizjobackend.Services.AccountService
                 {
                     return new ServiceResponse<bool>("Invalid user type") { Success = false };
                 }
-
+                user.VerificationToken = CreateRandomConfirmationToken();
                 var result = await _userManager.CreateAsync(user, userDto.Password);
                 if (!result.Succeeded)
                 {
                     var errors = result.Errors.Select(e => e.Description).ToArray();
                     return new ServiceResponse<bool>("User creation failed") { Success = false, Errors = errors };
                 }
-
+                await _emailService.SendVerificationEmail(user.Email, user.VerificationToken);
                 return new ServiceResponse<bool>("User registered successfully") { Data = true };
             }
             catch (Exception ex)
