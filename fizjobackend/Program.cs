@@ -13,6 +13,7 @@ using System.Text;
 using Serilog;
 using fizjobackend.Interfaces.EmailInterface;
 using fizjobackend.Services.EmailService;
+using DotNetEnv;
 
 namespace fizjobackend
 {
@@ -20,6 +21,7 @@ namespace fizjobackend
     {
         public static void Main(string[] args)
         {
+            Env.Load();
             var builder = WebApplication.CreateBuilder(args);
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(builder.Configuration)
@@ -66,13 +68,13 @@ namespace fizjobackend
             });
             builder.Services.AddDbContext<FizjoDbContext>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(Environment.GetEnvironmentVariable("CONNECTION_STRING"));
             });
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IJwtGenerator, JwtGenerator>();
             builder.Services.AddScoped<IEmailService, EmailService>();
-            var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]!);
+            var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY")!);
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

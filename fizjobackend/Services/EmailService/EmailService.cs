@@ -1,8 +1,6 @@
-﻿using fizjobackend.Entities.UserEntities;
-using fizjobackend.Interfaces.EmailInterface;
+﻿using fizjobackend.Interfaces.EmailInterface;
 using MailKit.Net.Smtp;
 using MailKit.Security;
-using Microsoft.Extensions.Options;
 using MimeKit;
 
 namespace fizjobackend.Services.EmailService
@@ -37,7 +35,7 @@ namespace fizjobackend.Services.EmailService
 
             using var client = new SmtpClient();
             await client.ConnectAsync(emailSettings["SmtpServer"], int.Parse(emailSettings["SmtpPort"]), SecureSocketOptions.StartTls);
-            await client.AuthenticateAsync(emailSettings["SmtpUser"], emailSettings["SmtpPass"]);
+            await client.AuthenticateAsync(Environment.GetEnvironmentVariable("SMTP_USER"), Environment.GetEnvironmentVariable("SMTP_PASSWORD"));
             await client.SendAsync(email);
             await client.DisconnectAsync(true);
             return true;
