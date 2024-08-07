@@ -1,6 +1,8 @@
 using fizjobackend.DbContexts;
 using fizjobackend.Entities.UserEntities;
+using fizjobackend.Interfaces.AccountInterfaces;
 using fizjobackend.Interfaces.UsersInterfaces;
+using fizjobackend.Services.AccountService;
 using fizjobackend.Services.UserServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -8,6 +10,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using Serilog;
+using fizjobackend.Interfaces.EmailInterface;
+using fizjobackend.Services.EmailService;
+using DotNetEnv;
 
 namespace fizjobackend
 {
@@ -15,10 +21,12 @@ namespace fizjobackend
     {
         public static void Main(string[] args)
         {
+            Env.Load();
             var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
-
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(builder.Configuration)
+                .CreateLogger();
+            builder.Host.UseSerilog();
             builder.Services.AddControllers();
             builder.Services.AddHttpClient();
             builder.Services.AddEndpointsApiExplorer();
@@ -60,18 +68,13 @@ namespace fizjobackend
             });
             builder.Services.AddDbContext<FizjoDbContext>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(Environment.GetEnvironmentVariable("CONNECTION_STRING"));
             });
             builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddIdentity<User, UserRoles>()
-                .AddEntityFrameworkStores<FizjoDbContext>()
-                .AddRoles<UserRoles>()
-                .AddRoleManager<RoleManager<UserRoles>>()
-                .AddSignInManager<SignInManager<User>>()
-                .AddUserManager<UserManager<User>>()
-                .AddDefaultTokenProviders();
-
-            var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]!);
+            builder.Services.AddScoped<IAccountService, AccountService>();
+            builder.Services.AddScoped<IJwtGenerator, JwtGenerator>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
+            var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY")!);
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -86,12 +89,12 @@ namespace fizjobackend
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    //ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                    //ValidAudience = builder.Configuration["Jwt:Audience"],
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(key)
                 };
             });
-
+            InitializeIdentity(builder);
             var app = builder.Build();
             TestDatabaseConnection(app);
 
@@ -109,6 +112,18 @@ namespace fizjobackend
             app.MapControllers();
             app.Run();
         }
+
+        private static void InitializeIdentity(WebApplicationBuilder builder)
+        {
+            builder.Services.AddIdentity<User, UserRoles>()
+                .AddEntityFrameworkStores<FizjoDbContext>()
+                .AddRoles<UserRoles>()
+                .AddRoleManager<RoleManager<UserRoles>>()
+                .AddSignInManager<SignInManager<User>>()
+                .AddUserManager<UserManager<User>>()
+                .AddDefaultTokenProviders();
+        }
+
         private static void TestDatabaseConnection(WebApplication app)
         {
             using (var scope = app.Services.CreateScope())

@@ -6,5 +6,9 @@
         public bool Success { get; set; } = true;
         public string[] Errors { get; set; } = Array.Empty<string>();
         public string Message { get; set; } = string.Empty;
+
+        public ServiceResponse(string message) {
+            Message = message;
+        }
     }
 }
