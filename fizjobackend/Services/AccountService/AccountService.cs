@@ -110,17 +110,16 @@ namespace fizjobackend.Services.AccountService
                 {
                     return new ServiceResponse<bool>("Invalid user type") { Success = false };
                 }
-
+                var validateErrors = _accountValidationHelper.Validate(user);
+                if (validateErrors.Length > 0)
+                {
+                    return new ServiceResponse<bool>("Validation error") { Success = false, Errors = validateErrors };
+                }
                 var result = await _userManager.CreateAsync(user, userDto.Password);
                 if (!result.Succeeded)
                 {
                     var errors = result.Errors.Select(e => e.Description).ToArray();
                     return new ServiceResponse<bool>("User creation failed") { Success = false, Errors = errors };
-                }
-                var validateErrors = _accountValidationHelper.Validate(user);
-                if(validateErrors.Length > 0)
-                {
-                    return new ServiceResponse<bool> ("Validation error"){ Success = false, Errors = validateErrors };
                 }
                 return new ServiceResponse<bool>("User registered successfully") { Data = true };
             }

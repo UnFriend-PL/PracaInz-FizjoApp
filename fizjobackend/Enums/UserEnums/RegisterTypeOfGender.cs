@@ -2,6 +2,8 @@
 {
     public enum RegisterTypeOfGender
     {
-
+        female,
+        male,
+        other
     }
 }

@@ -1,55 +1,60 @@
-﻿using fizjobackend.DbContexts;
-using fizjobackend.Entities.UserEntities;
+﻿using fizjobackend.Entities.UserEntities;
+using fizjobackend.Enums.UserEnums;
 using fizjobackend.Interfaces.HelpersInterfaces;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
 
 namespace fizjobackend.Helpers
 {
-    internal class AccountValidationHelper : IAccountValidationHelper 
+    internal class AccountValidationHelper : IAccountValidationHelper
     {
+        private static int[] peselArray;
+
         public string[] Validate(User user)
         {
             var errors = new List<string>();
 
             try
             {
-                var error = ValidateAndFormatName(user.FirstName);
-                if (error != null) errors.Add(error);
-                error = ValidateGender(user.Gender);
-                if (error != null) errors.Add(error);
-                error = ValidateEmail(user.Email!);
-                if (error != null) errors.Add(error);
-                error = ValidatePesel(user.Pesel);
-                if (error != null) errors.Add(error);
-                error = ValidateDateOfBirth(user.DateOfBirth);
-                if (error != null) errors.Add(error);
-                error = ValidatePhoneNumber(user.PhoneNumber!);
-                if (error != null) errors.Add(error);
-                return errors.ToArray();
+                AddErrorIfExists(errors, ValidateAndFormatName(user.FirstName, user.LastName));
+                AddErrorIfExists(errors, ValidateGender(user.Gender));
+                AddErrorIfExists(errors, ValidateEmail(user.Email!));
+                AddErrorIfExists(errors, ValidatePesel(user.Pesel));
+                AddErrorIfExists(errors, ValidateDateOfBirth(user.DateOfBirth));
+                AddErrorIfExists(errors, ValidatePhoneNumber(user.PhoneNumber!));
             }
             catch (Exception ex)
             {
-                return [ex.Message];
+                errors.Add(ex.Message);
+            }
+
+            return errors.ToArray();
+        }
+
+        private void AddErrorIfExists(List<string> errors, string? error)
+        {
+            if (!string.IsNullOrEmpty(error))
+            {
+                errors.Add(error);
             }
         }
 
-        private static string? ValidateAndFormatName(string name)
+        private static string? ValidateAndFormatName(string firstName, string lastName)
         {
-            if (!Regex.IsMatch(name, @"^[a-zA-Z]+$"))
+            if (ContainsDigits(firstName) || ContainsDigits(lastName))
             {
                 return "Name must contain only letters and no numbers.";
             }
             return null;
         }
 
+        private static bool ContainsDigits(string input)
+        {
+            return Regex.IsMatch(input, @"\d");
+        }
+
         private static string? ValidateGender(string gender)
         {
-            //enum
-            gender.ToLower();
-            string[] validGenders = { "female", "male", "other" };
-            if (!Array.Exists(validGenders, g => g.Equals(gender, StringComparison.OrdinalIgnoreCase)))
+            if (!Enum.TryParse<RegisterTypeOfGender>(gender, true, out _))
             {
                 return "Gender must be either 'female', 'male', or 'other'.";
             }
@@ -67,16 +72,40 @@ namespace fizjobackend.Helpers
 
         private static string? ValidatePesel(string pesel)
         {
-            if (pesel.Length != 11 && !Regex.IsMatch(pesel, @"^\d+$"))
+            if (!Regex.IsMatch(pesel, @"^\d{11}$"))
             {
                 return "Pesel must be a string of 11 digits.";
             }
-            //suma kontrolna
+
+            peselArray = pesel.Select(d => d - '0').ToArray();
+            int[] weights = { 1, 3, 7, 9, 1, 3, 7, 9, 1, 3 };
+            int checksum = CalculateChecksum(peselArray, weights);
+
+            if (checksum != peselArray[10])
+            {
+                return "Checksum does not match, correct pesel";
+            }
             return null;
+        }
+
+        private static int CalculateChecksum(int[] peselArray, int[] weights)
+        {
+            int sum = peselArray.Take(10).Select((digit, index) => digit * weights[index]).Sum();
+            int controlDigit = (10 - (sum % 10)) % 10;
+            return controlDigit;
         }
 
         private static string? ValidateDateOfBirth(DateTime dateOfBirth)
         {
+            int year = GetYearFromPesel(dateOfBirth.Year);
+            int month = GetMonthFromPesel(dateOfBirth.Year);
+            int day = (peselArray[4] * 10) + peselArray[5];
+
+            if (year != dateOfBirth.Year || month != dateOfBirth.Month || day != dateOfBirth.Day)
+            {
+                return "Date of birth is different from pesel";
+            }
+
             if (dateOfBirth > DateTime.Now)
             {
                 return "Date of Birth cannot be in the future.";
@@ -84,11 +113,23 @@ namespace fizjobackend.Helpers
             return null;
         }
 
+        private static int GetYearFromPesel(int year)
+        {
+            int baseYear = year >= 2000 ? 2000 : 1900;
+            return baseYear + (peselArray[0] * 10) + peselArray[1];
+        }
+
+        private static int GetMonthFromPesel(int year)
+        {
+            int monthOffset = year >= 2000 ? 20 : 0;
+            return (peselArray[2] * 10) + peselArray[3] - monthOffset;
+        }
+
         private static string? ValidatePhoneNumber(string phoneNumber)
         {
-            if (phoneNumber.Length <= 11 && !Regex.IsMatch(phoneNumber, @"^\d+$"))
+            if (!Regex.IsMatch(phoneNumber, @"^\d{9}$"))
             {
-                return "Phone number must be a string of up to 11 digits.";
+                return "Phone number must be a string of 9 digits.";
             }
             return null;
         }
