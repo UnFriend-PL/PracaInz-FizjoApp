@@ -1,7 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;1,200&family=Poppins:wght@300&display=swap");
+@import "utils/globalColors.scss";
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -17,6 +18,9 @@
 }
 
 body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
       to bottom,
@@ -30,4 +34,12 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: $bg-black;
 }
