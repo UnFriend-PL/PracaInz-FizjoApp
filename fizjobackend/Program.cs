@@ -14,6 +14,8 @@ using Serilog;
 using fizjobackend.Interfaces.EmailInterface;
 using fizjobackend.Services.EmailService;
 using DotNetEnv;
+using fizjobackend.Helpers;
+using fizjobackend.Interfaces.HelpersInterfaces;
 
 namespace fizjobackend
 {
@@ -75,6 +77,7 @@ namespace fizjobackend
             builder.Services.AddScoped<IJwtGenerator, JwtGenerator>();
             builder.Services.AddScoped<IEmailService, EmailService>();
             var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY")!);
+            builder.Services.AddScoped<IAccountValidationHelper, AccountValidationHelper>();
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -95,16 +98,14 @@ namespace fizjobackend
                 };
             });
             InitializeIdentity(builder);
+
             var app = builder.Build();
             TestDatabaseConnection(app);
-
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
             app.UseCors("CorsPolicy");
             app.UseHttpsRedirection();
             app.UseAuthentication();
@@ -142,7 +143,6 @@ namespace fizjobackend
                 {
                     logger.LogError(ex, "Database connection test failed.");
                     logger.LogError(ex, "Check Azure rules.");
-
                 }
             }
         }

@@ -2,8 +2,10 @@
 using fizjobackend.Entities.PatientEntities;
 using fizjobackend.Entities.PhysiotherapistEntities;
 using fizjobackend.Entities.UserEntities;
+using fizjobackend.Helpers;
 using fizjobackend.Interfaces.AccountInterfaces;
 using fizjobackend.Interfaces.EmailInterface;
+using fizjobackend.Interfaces.HelpersInterfaces;
 using fizjobackend.Interfaces.RegisterDTOInterfaces;
 using fizjobackend.Models.AccountDTOs;
 using Microsoft.AspNetCore.Identity;
@@ -20,8 +22,10 @@ namespace fizjobackend.Services.AccountService
         private readonly IConfiguration _configuration;
         private readonly IJwtGenerator _jwtGenerator;
         private readonly IEmailService _emailService;
+        private readonly IAccountValidationHelper _accountValidationHelper;
 
-        public AccountService(FizjoDbContext context, UserManager<User> userManager, ILogger<AccountService> logger, IConfiguration configuration, IJwtGenerator jwtGenerator, IEmailService emailService)
+
+        public AccountService(FizjoDbContext context, UserManager<User> userManager, ILogger<AccountService> logger, IConfiguration configuration, IJwtGenerator jwtGenerator, IEmailService emailService, IAccountValidationHelper accountValidationHelper)
         {
             _context = context;
             _userManager = userManager;
@@ -29,6 +33,7 @@ namespace fizjobackend.Services.AccountService
             _configuration = configuration;
             _jwtGenerator = jwtGenerator;
             _emailService = emailService;
+            _accountValidationHelper = accountValidationHelper;
         }
 
         public async Task<ServiceResponse<string>> Login(LoginRequestDTO login)
@@ -134,7 +139,12 @@ namespace fizjobackend.Services.AccountService
                 {
                     return new ServiceResponse<bool>("Invalid user type") { Success = false };
                 }
-                user.VerificationToken = CreateRandomConfirmationToken();
+                user.VerificationToken = CreateRandomConfirmationToken();                
+                var validateErrors = _accountValidationHelper.Validate(user);
+                if (validateErrors.Length > 0)
+                {
+                    return new ServiceResponse<bool>("Validation error") { Success = false, Errors = validateErrors };
+                }
                 var result = await _userManager.CreateAsync(user, userDto.Password);
                 if (!result.Succeeded)
                 {
