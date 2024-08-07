@@ -65,5 +65,17 @@ namespace fizjobackend.Controllers
             }
             return Ok(response);
         }
+
+        [HttpGet("ConfirmEmail")]
+        public async Task<IActionResult> ConfirmEmail(string email, string token)
+        {
+            var response = await _accountService.ConfirmEmail(email, token);
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
     }
 }

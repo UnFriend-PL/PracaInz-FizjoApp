@@ -11,6 +11,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using Serilog;
+using fizjobackend.Interfaces.EmailInterface;
+using fizjobackend.Services.EmailService;
+using DotNetEnv;
 using fizjobackend.Helpers;
 using fizjobackend.Interfaces.HelpersInterfaces;
 
@@ -20,11 +23,11 @@ namespace fizjobackend
     {
         public static void Main(string[] args)
         {
+            Env.Load();
             var builder = WebApplication.CreateBuilder(args);
-            Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(builder.Configuration)
-                .CreateLogger();
-            builder.Host.UseSerilog();
+
+            // Add services to the container.
+
             builder.Services.AddControllers();
             builder.Services.AddHttpClient();
             builder.Services.AddEndpointsApiExplorer();
@@ -66,13 +69,14 @@ namespace fizjobackend
             });
             builder.Services.AddDbContext<FizjoDbContext>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(Environment.GetEnvironmentVariable("CONNECTION_STRING"));
             });
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IJwtGenerator, JwtGenerator>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
+            var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY")!);
             builder.Services.AddScoped<IAccountValidationHelper, AccountValidationHelper>();
-            var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]!);
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -87,16 +91,16 @@ namespace fizjobackend
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    //ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    //ValidAudience = builder.Configuration["Jwt:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(key)
                 };
             });
-            InitializeIdentity(builder);
+
             var app = builder.Build();
+
             TestDatabaseConnection(app);
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -107,6 +111,7 @@ namespace fizjobackend
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
+
             app.MapControllers();
             app.Run();
         }
@@ -140,7 +145,6 @@ namespace fizjobackend
                 {
                     logger.LogError(ex, "Database connection test failed.");
                     logger.LogError(ex, "Check Azure rules.");
-
                 }
             }
         }
