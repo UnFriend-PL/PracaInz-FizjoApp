@@ -34,7 +34,6 @@ namespace fizjobackend.Services.AccountService
             _jwtGenerator = jwtGenerator;
             _emailService = emailService;
             _accountValidationHelper = accountValidationHelper;
-
         }
 
         public async Task<ServiceResponse<string>> Login(LoginRequestDTO login)
@@ -140,7 +139,8 @@ namespace fizjobackend.Services.AccountService
                 {
                     return new ServiceResponse<bool>("Invalid user type") { Success = false };
                 }
-                user.VerificationToken = CreateRandomConfirmationToken();                var validateErrors = _accountValidationHelper.Validate(user);
+                user.VerificationToken = CreateRandomConfirmationToken();                
+                var validateErrors = _accountValidationHelper.Validate(user);
                 if (validateErrors.Length > 0)
                 {
                     return new ServiceResponse<bool>("Validation error") { Success = false, Errors = validateErrors };
