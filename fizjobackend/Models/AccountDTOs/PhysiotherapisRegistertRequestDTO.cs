@@ -1,4 +1,4 @@
-﻿using fizjobackend.Interfaces.RegisterDTOInterfaces;
+﻿using fizjobackend.Interfaces.DTOInterfaces.RegisterDTOInterfaces;
 
 namespace fizjobackend.Models.AccountDTOs
 {

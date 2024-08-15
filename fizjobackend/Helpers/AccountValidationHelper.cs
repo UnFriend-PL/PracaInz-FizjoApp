@@ -15,12 +15,12 @@ namespace fizjobackend.Helpers
 
             try
             {
-                AddErrorIfExists(errors, ValidateAndFormatName(user.FirstName, user.LastName));
-                AddErrorIfExists(errors, ValidateGender(user.Gender));
-                AddErrorIfExists(errors, ValidateEmail(user.Email!));
-                AddErrorIfExists(errors, ValidatePesel(user.Pesel));
-                AddErrorIfExists(errors, ValidateDateOfBirth(user.DateOfBirth));
-                AddErrorIfExists(errors, ValidatePhoneNumber(user.PhoneNumber!));
+                if (AddErrorIfExists(errors, ValidateAndFormatName(user.FirstName, user.LastName))) return errors.ToArray();
+                if (AddErrorIfExists(errors, ValidateGender(user.Gender))) return errors.ToArray();
+                if (AddErrorIfExists(errors, ValidateEmail(user.Email!))) return errors.ToArray();
+                if (AddErrorIfExists(errors, ValidatePesel(user.Pesel))) return errors.ToArray();
+                if (AddErrorIfExists(errors, ValidateDateOfBirth(user.DateOfBirth))) return errors.ToArray();
+                if (AddErrorIfExists(errors, ValidatePhoneNumber(user.PhoneNumber!))) return errors.ToArray();
             }
             catch (Exception ex)
             {
@@ -30,12 +30,14 @@ namespace fizjobackend.Helpers
             return errors.ToArray();
         }
 
-        private void AddErrorIfExists(List<string> errors, string? error)
+        private bool AddErrorIfExists(List<string> errors, string? error)
         {
             if (!string.IsNullOrEmpty(error))
             {
                 errors.Add(error);
+                return true;
             }
+            return false;
         }
 
         private static string? ValidateAndFormatName(string firstName, string lastName)

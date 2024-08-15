@@ -3,6 +3,7 @@ import { useState, useContext } from "react";
 import Link from "next/link";
 import styles from "./navbar.module.scss";
 import { AuthContext } from "@/app/contexts/Auth/authContext";
+import { CgProfile } from "react-icons/cg";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,12 +24,6 @@ export default function Navbar() {
       name: "Home",
       action: undefined,
     },
-    About: {
-      href: "/about",
-      className: styles["nav-link"],
-      name: "About",
-      action: undefined,
-    },
     Services: {
       href: "/services",
       className: styles["nav-link"],
@@ -40,6 +35,13 @@ export default function Navbar() {
       className: styles["nav-link"],
       name: "Contact",
       action: undefined,
+    },
+    Profile: {
+      href: "/profile",
+      className: styles["nav-link"],
+      name: "Profile",
+      action: undefined,
+      icon: <CgProfile />,
     },
     SignIn: {
       href: "/auth",
@@ -101,10 +103,10 @@ export default function Navbar() {
 
 function GenerateLinks({ links }) {
   return Object.keys(links).map((key) => {
-    const { href, className, name, action } = links[key];
+    const { href, className, name, action, icon } = links[key];
     return (
       <Link key={key} href={href} className={className} onClick={action}>
-        {name}
+        {icon != undefined ? icon : name}
       </Link>
     );
   });
