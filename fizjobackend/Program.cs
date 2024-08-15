@@ -106,6 +106,7 @@ namespace fizjobackend
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UsePathBase("/api/v1/");
             app.UseCors("CorsPolicy");
             app.UseHttpsRedirection();
             app.UseAuthentication();
