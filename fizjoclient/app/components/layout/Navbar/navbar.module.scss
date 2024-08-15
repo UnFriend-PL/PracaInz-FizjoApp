@@ -82,6 +82,12 @@
     color: $text-light;
     background: $bg-hover-dark;
   }
+  & svg {
+    width: 1.8em;
+    height: auto;
+    color: $text-light;
+    padding: 0;
+  }
 }
 
 .signin-link {
