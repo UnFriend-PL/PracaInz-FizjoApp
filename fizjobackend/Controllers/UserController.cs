@@ -17,7 +17,7 @@ namespace fizjobackend.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpGet("GetUserInfo")]
+        [HttpGet("GetInfo")]
         public async Task<IActionResult> GetUserInfo()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

@@ -69,7 +69,8 @@ const AuthPage = () => {
       );
 
       if (response.success) {
-        login(response.token);
+        console.log(response.data);
+        login(response.data);
       } else {
         const errorData = response;
         setError(errorData.message || "An error occurred");
