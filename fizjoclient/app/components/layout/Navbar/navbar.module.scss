@@ -1,0 +1,107 @@
+@import "../../../utils/globalColors.scss";
+
+.navbar {
+  background: $bg-dark;
+  position: fixed;
+  width: 100%;
+  z-index: 99;
+}
+
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 0.5rem;
+  @media (min-width: 640px) {
+    padding: 0 1.5rem;
+  }
+  @media (min-width: 1024px) {
+    padding: 0 2rem;
+  }
+}
+
+.navbar-content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 4rem;
+}
+
+.menu-button {
+  position: absolute;
+  inset-y: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  @media (min-width: 640px) {
+    display: none;
+  }
+}
+
+.menu-button button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  color: $text-secondary;
+  &:hover {
+    color: $text-light;
+    background: $bg-hover-dark;
+  }
+  &:focus {
+    outline: none;
+    ring: 2px;
+    ring-inset: inset;
+    ring-color: $text-light;
+  }
+}
+
+.logo {
+  color: $text-light;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.nav-links {
+  display: none;
+  @media (min-width: 640px) {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+  }
+}
+
+.nav-link {
+  color: $text-secondary;
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  &:hover {
+    color: $text-light;
+    background: $bg-hover-dark;
+  }
+}
+
+.signin-link {
+  color: $text-light;
+  background: $bg-blue;
+  &:hover {
+    background: $bg-blue-hover;
+  }
+}
+
+.mobile-menu {
+  display: none;
+  @media (max-width: 639px) {
+    display: block;
+  }
+}
+
+.mobile-menu-links {
+  padding: 0.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
