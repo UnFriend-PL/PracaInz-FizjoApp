@@ -5,7 +5,7 @@
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  background-color: $background-color;
+  background-color: $bg-container;
   min-width: 30%;
   min-height: 100vh;
 }
@@ -13,16 +13,16 @@
 .title {
   font-size: 2rem;
   margin-bottom: 20px;
-  color: $text-color;
+  color: $text-dark-green;
 }
 
 .loading {
   font-size: 1.5rem;
-  color: $loading-color;
+  color: $text-dark-green;
 }
 
 .profileCard {
-  background: $card-background;
+  background: $bg-container;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 1.5rem;
@@ -40,8 +40,10 @@
 .label {
   font-weight: bold;
   color: $label-color;
+  text-decoration: cap;
+  text-transform: capitalize;
 }
 
 .value {
-  color: $value-color;
+  color: $text-black;
 }

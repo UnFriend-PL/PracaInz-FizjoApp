@@ -1,57 +1,71 @@
 "use client";
-import axios from "axios";
 
-const apiClient = axios.create({
-  baseURL: "https://localhost:7023/api/v1",
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
+const baseURL = "https://localhost:7023/api/v1";
 const cache = {};
 const cacheExpiry = 5 * 60 * 1000; // Cache time - (5 min)
 
 const apiService = {
-  get: async (endpoint, params = {}, withAuth = false) => {
+  get: async (endpoint, params = {}, withAuth = false, forceCache = false) => {
     const cacheKey = `${endpoint}?${new URLSearchParams(params).toString()}`;
     const cachedResponse = cache[cacheKey];
 
-    if (cachedResponse && Date.now() - cachedResponse.timestamp < cacheExpiry) {
+    if (
+      !forceCache &&
+      cachedResponse &&
+      Date.now() - cachedResponse.timestamp < cacheExpiry
+    ) {
       return cachedResponse.data;
     }
 
     try {
-      const config = { params };
+      const url = `${baseURL}${endpoint}?${new URLSearchParams(
+        params
+      ).toString()}`;
+      const config = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
       if (withAuth) {
         const token = localStorage.getItem("token");
         if (token) {
-          config.headers = { Authorization: `Bearer ${token}` };
+          config.headers["Authorization"] = `Bearer ${token}`;
         }
       }
-      const response = await apiClient.get(endpoint, config);
 
+      const response = await fetch(url, config);
+      const data = await response.json();
       cache[cacheKey] = {
-        data: response.data,
+        data,
         timestamp: Date.now(),
       };
-
-      return response.data;
+      return data;
     } catch (error) {
-      console.error("GET request error:", error);
+      console.error("API GET request failed:", error);
       throw error;
     }
   },
 
   post: async (endpoint, data, withAuth = false) => {
     try {
-      const config = {};
+      const url = `${baseURL}${endpoint}`;
+      const config = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      };
       if (withAuth) {
         const token = localStorage.getItem("token");
         if (token) {
-          config.headers = { Authorization: `Bearer ${token}` };
+          config.headers["Authorization"] = `Bearer ${token}`;
         }
       }
-      const response = await apiClient.post(endpoint, data, config);
+
+      const response = await fetch(url, config);
+      const responseData = await response.json();
 
       Object.keys(cache).forEach((key) => {
         if (key.startsWith(endpoint)) {
@@ -59,7 +73,7 @@ const apiService = {
         }
       });
 
-      return response.data;
+      return responseData;
     } catch (error) {
       console.error("POST request error:", error);
       throw error;
@@ -68,14 +82,23 @@ const apiService = {
 
   put: async (endpoint, data, withAuth = false) => {
     try {
-      const config = {};
+      const url = `${baseURL}${endpoint}`;
+      const config = {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      };
       if (withAuth) {
         const token = localStorage.getItem("token");
         if (token) {
-          config.headers = { Authorization: `Bearer ${token}` };
+          config.headers["Authorization"] = `Bearer ${token}`;
         }
       }
-      const response = await apiClient.put(endpoint, data, config);
+
+      const response = await fetch(url, config);
+      const responseData = await response.json();
 
       Object.keys(cache).forEach((key) => {
         if (key.startsWith(endpoint)) {
@@ -83,7 +106,7 @@ const apiService = {
         }
       });
 
-      return response.data;
+      return responseData;
     } catch (error) {
       console.error("PUT request error:", error);
       throw error;
@@ -92,14 +115,22 @@ const apiService = {
 
   delete: async (endpoint, withAuth = false) => {
     try {
-      const config = {};
+      const url = `${baseURL}${endpoint}`;
+      const config = {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
       if (withAuth) {
         const token = localStorage.getItem("token");
         if (token) {
-          config.headers = { Authorization: `Bearer ${token}` };
+          config.headers["Authorization"] = `Bearer ${token}`;
         }
       }
-      const response = await apiClient.delete(endpoint, config);
+
+      const response = await fetch(url, config);
+      const responseData = await response.json();
 
       Object.keys(cache).forEach((key) => {
         if (key.startsWith(endpoint)) {
@@ -107,7 +138,7 @@ const apiService = {
         }
       });
 
-      return response.data;
+      return responseData;
     } catch (error) {
       console.error("DELETE request error:", error);
       throw error;

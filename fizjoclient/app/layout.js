@@ -8,7 +8,7 @@ export const metadata = {
   title: "Fizjo panel",
   description: "Fizjo panel - end-to-end physiotherapy management system",
 };
-
+export const revalidate = 3600;
 export default function RootLayout({ children }) {
   return (
     <html lang="en">

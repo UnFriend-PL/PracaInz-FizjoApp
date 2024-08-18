@@ -2,11 +2,12 @@
 import React, { useState, useEffect } from "react";
 import styles from "./profile.module.scss";
 import apiService from "../services/apiService/apiService";
+import { AuthContext } from "../contexts/Auth/authContext";
 
 const Profile = () => {
   const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const { isAuthenticated } = React.useContext(AuthContext);
   const getUserInfo = async (e) => {
     e.preventDefault();
     try {
@@ -32,8 +33,22 @@ const Profile = () => {
         console.error("Error fetching user info:", error);
       }
     };
-    fetchData();
-  }, []);
+    if (isAuthenticated) fetchData();
+  }, [isAuthenticated]);
+
+  if (!isAuthenticated) {
+    return (
+      <div className={styles.container}>
+        <h1 className={styles.title}>Profile</h1>
+        <div className={styles.profileCard}>
+          <div className={styles.field}>
+            <span className={styles.label}>Error:</span>
+            <span className={styles.value}>You are not authenticated</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return <div className={styles.loading}>Loading...</div>;
