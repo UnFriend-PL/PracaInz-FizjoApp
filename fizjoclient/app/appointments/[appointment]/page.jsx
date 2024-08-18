@@ -2,7 +2,8 @@
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import styles from "./appointmentDetails.module.scss";
-import HumanBodyV2 from "@/app/components/common/humanBody/humanBodyv2";
+import HumanBodyV2 from "@/app/components/common/humanBody/humanBody";
+
 const Appointments = () => {
   const params = useParams();
   const appointment = params.appointment;
@@ -10,9 +11,14 @@ const Appointments = () => {
 
   const handleBodyPartPress = (bodyPart) => {
     setSelectedParts((prevSelectedParts) => {
-      if (prevSelectedParts.some((part) => part.slug === bodyPart.slug)) {
+      const existingPart = prevSelectedParts.find(
+        (part) => part.slug === bodyPart.slug
+      );
+      if (existingPart) {
+        // Remove the part if it exists
         return prevSelectedParts.filter((part) => part.slug !== bodyPart.slug);
       } else {
+        // Add the part if it doesn't exist
         return [...prevSelectedParts, bodyPart];
       }
     });
@@ -23,15 +29,17 @@ const Appointments = () => {
       <HumanBodyV2
         side={"front"}
         gender={"female"}
+        data={selectedParts}
         scale={1.5}
-        data={[]}
         onBodyPartPress={handleBodyPartPress}
       />
       <div>
         <h3>Selected Body Parts:</h3>
         <ul>
           {selectedParts.map((part) => (
-            <li key={part.slug}>{part.slug}</li>
+            <li key={part.slug}>
+              {part.slug} - Intensity: {part.intensity}
+            </li>
           ))}
         </ul>
       </div>
