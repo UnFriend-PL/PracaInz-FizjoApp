@@ -7,11 +7,11 @@
   height: 100vh;
   min-width: 30%;
   max-width: 50%;
-  background-color: $background-color;
+  background-color: $bg-container;
 }
 
 .formContainer {
-  background-color: $container-background;
+  background-color: $bg-container;
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -24,12 +24,6 @@
   flex-direction: column;
 }
 
-.heading {
-  margin-bottom: 1rem;
-  color: $text-light;
-  text-align: center;
-}
-
 .label {
   margin-bottom: 0.5rem;
   color: $label-color;
@@ -40,7 +34,7 @@
   border: 1px solid $input-border;
   border-radius: 4px;
   margin-bottom: 1rem;
-  background-color: $button-background;
+  background-color: $bg-container;
   color: $input-color;
 }
 
@@ -49,8 +43,8 @@
 }
 
 .submitButton {
-  background-color: $bg-blue;
-  color: $submit-button-color;
+  background-color: $button-bg;
+  color: $button-submit-bg;
   padding: 0.75rem;
   border: none;
   border-radius: 4px;
@@ -58,14 +52,14 @@
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: $bg-blue-hover;
+    background-color: $button-bg-hover;
   }
 }
 
 .toggleButton {
   margin-top: 1rem;
-  background-color: $button-background;
-  color: $button-color;
+  background-color: $button-bg;
+  color: $text-white;
   padding: 0.75rem;
   border: none;
   border-radius: 4px;
@@ -73,7 +67,7 @@
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: $bg-hover-dark;
+    background-color: $bg-hover-dark-green;
   }
 }
 
@@ -94,6 +88,7 @@
   text-align: center;
   font-size: 2.5rem;
   margin-bottom: 1.5rem;
+  color: $text-black;
 }
 
 .label {
@@ -114,28 +109,28 @@
 
 .button {
   padding: 10px 20px;
-  background-color: $bg-blue;
-  color: $text-light;
+  background-color: $button-bg;
+  color: $text-white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 
 .button:hover {
-  background-color: $bg-blue-hover;
+  background-color: $button-bg-hover;
 }
 
 .submitButton {
   padding: 10px 20px;
-  background-color: $bg-blue;
-  color: $text-light;
+  background-color: $button-submit-bg;
+  color: $text-white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 
 .submitButton:hover {
-  background-color: $bg-blue-hover;
+  background-color: $button-submit-bg-hover;
 }
 
 .error {
