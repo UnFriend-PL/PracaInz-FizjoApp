@@ -4,7 +4,7 @@ import styles from "./auth.module.scss";
 import LoginForm from "./LoginForm";
 import RegistrationForm from "./SignUp";
 import apiService from "../services/apiService/apiService";
-import { AuthContext } from "../contexts/Auth/authContext";
+import { AuthContext } from "../contexts/auth/authContext";
 
 const AuthPage = () => {
   const { login } = useContext(AuthContext);

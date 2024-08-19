@@ -1,10 +1,14 @@
 "use client";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import React, { useState, useContext } from "react";
+import HumanBody from "@/app/components/common/humanBody/humanBody";
+import { UserContext } from "@/app/contexts/user/userContext";
+import { AuthContext } from "@/app/contexts/auth/authContext";
 import styles from "./appointmentDetails.module.scss";
-import HumanBodyV2 from "@/app/components/common/humanBody/humanBody";
 
 const Appointments = () => {
+  const { user } = React.useContext(UserContext);
+  const { isAuthenticated } = React.useContext(AuthContext);
   const params = useParams();
   const appointment = params.appointment;
   const [selectedParts, setSelectedParts] = useState([]);
@@ -24,27 +28,29 @@ const Appointments = () => {
     });
   };
 
-  return (
-    <>
-      <HumanBodyV2
-        side={"front"}
-        gender={"female"}
-        data={selectedParts}
-        scale={1.5}
-        onBodyPartPress={handleBodyPartPress}
-      />
-      <div>
-        <h3>Selected Body Parts:</h3>
-        <ul>
-          {selectedParts.map((part) => (
-            <li key={part.slug}>
-              {part.slug} - Intensity: {part.intensity}
-            </li>
-          ))}
-        </ul>
-      </div>
-    </>
-  );
+  if (isAuthenticated && user)
+    return (
+      <>
+        {console.log(user)}
+        <HumanBody
+          side={"front"}
+          gender={user.gender}
+          data={selectedParts}
+          scale={1.5}
+          onBodyPartPress={handleBodyPartPress}
+        />
+        <div>
+          <h3>Selected Body Parts:</h3>
+          <ul>
+            {selectedParts.map((part) => (
+              <li key={part.slug}>
+                {part.slug} - Intensity: {part.intensity}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </>
+    );
 };
 
 export default Appointments;
