@@ -6,25 +6,35 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [role, setRole] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
-    if (storedToken && !isTokenExpired(storedToken)) {
+    const decodedToken = storedToken ? jwtDecode(storedToken) : null;
+
+    if (storedToken && decodedToken && !isTokenExpired(decodedToken)) {
       setIsAuthenticated(true);
+      const role =
+        decodedToken[
+          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+        ];
+      console.log("Role: ", role);
+      setRole(role);
     } else {
       localStorage.removeItem("token");
       setIsAuthenticated(false);
+      setRole(null);
+      router.push("/login");
     }
   }, []);
 
   const isTokenExpired = (token) => {
     try {
-      const decodedToken = jwtDecode(token);
-      const currentTime = Date.now() / 1000; // Convert to seconds
-      return decodedToken.exp < currentTime;
+      const currentTime = Date.now() / 1000;
+      return token.exp < currentTime;
     } catch (error) {
-      return true; // If there's an error in decoding, assume token is invalid or expired
+      return true;
     }
   };
 
@@ -41,7 +51,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, role }}>
       {children}
     </AuthContext.Provider>
   );

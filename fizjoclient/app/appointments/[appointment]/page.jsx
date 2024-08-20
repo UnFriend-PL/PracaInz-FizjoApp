@@ -36,7 +36,7 @@ const Appointments = () => {
           side={"front"}
           gender={user.gender}
           data={selectedParts}
-          scale={1.5}
+          scale={1.6}
           onBodyPartPress={handleBodyPartPress}
         />
         <div>

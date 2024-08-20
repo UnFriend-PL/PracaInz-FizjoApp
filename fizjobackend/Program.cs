@@ -17,6 +17,8 @@ using DotNetEnv;
 using fizjobackend.Helpers;
 using fizjobackend.Interfaces.HelpersInterfaces;
 using fizjobackend.Seeders;
+using fizjobackend.Interfaces.AppointmentsInterfaces;
+using fizjobackend.Services.AppointmentsService;
 
 namespace fizjobackend
 {
@@ -77,6 +79,7 @@ namespace fizjobackend
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IJwtGenerator, JwtGenerator>();
             builder.Services.AddScoped<IEmailService, EmailService>();
+            builder.Services.AddScoped<IAppointmentsService, AppointmentService>();
             var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY")!);
             builder.Services.AddScoped<IAccountValidationHelper, AccountValidationHelper>();
             builder.Services.AddAuthentication(options =>
@@ -93,6 +96,7 @@ namespace fizjobackend
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
+                    RoleClaimType = "role",
                     ValidIssuer = builder.Configuration["Jwt:Issuer"],
                     ValidAudience = builder.Configuration["Jwt:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(key)

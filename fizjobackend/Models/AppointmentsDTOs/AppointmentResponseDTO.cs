@@ -1,21 +1,17 @@
-﻿using fizjobackend.Entities.PatientEntities;
-using fizjobackend.Entities.PhysiotherapistEntities;
-using fizjobackend.Enums.AppointmentEnums;
-using System.ComponentModel.DataAnnotations.Schema;
-using fizjobackend.Models.AppointmentsDTOs;
+﻿using fizjobackend.Enums.AppointmentEnums;
+using fizjobackend.Entities.AppointmentEntities;
+using fizjobackend.Interfaces.DTOInterfaces.UserDTOInterfaces;
 
-namespace fizjobackend.Entities.AppointmentEntities
+namespace fizjobackend.Models.AppointmentsDTOs
 {
-    public class Appointment
+    public class AppointmentResponseDTO
     {
         public Guid AppointmentId { get; set; }
         public AppointmentStatus AppointmentStatus { get; set; } = AppointmentStatus.Scheduled;
-        public virtual Patient Patient { get; set; }
-        [ForeignKey("PatientId")]
         public Guid PatientId { get; set; }
-        public virtual Physiotherapist Physiotherapist { get; set; }
-        [ForeignKey("PhysiotherapistId")]
+        public IUserInfoResponseDTO? Patient { get; set; }
         public Guid PhysiotherapistId { get; set; }
+        public IUserInfoResponseDTO? Physiotherapist { get; set; }
         public DateTime AppointmentDate { get; set; } = DateTime.Now;
         public DateTime? MovedFromDate { get; set; }
         public string AppointmentDescription { get; set; } = string.Empty;
@@ -23,14 +19,21 @@ namespace fizjobackend.Entities.AppointmentEntities
         public string? Notes { get; set; }
         public string? Diagnosis { get; set; }
         public bool isPaid { get; set; } = false;
-        public Appointment() { }
 
-        public Appointment(CreateAppointmentRequestDTO appointment)
+        public AppointmentResponseDTO() { }
+
+        public AppointmentResponseDTO(Appointment appointment, IUserInfoResponseDTO patient, IUserInfoResponseDTO physiotherapist)
         {
+            AppointmentId = appointment.AppointmentId;
+            AppointmentStatus = appointment.AppointmentStatus;
             PatientId = appointment.PatientId;
+            Patient = patient;
             PhysiotherapistId = appointment.PhysiotherapistId;
+            Physiotherapist = physiotherapist;
             AppointmentDate = appointment.AppointmentDate;
+            MovedFromDate = appointment.MovedFromDate;
             AppointmentDescription = appointment.AppointmentDescription;
+            Description = appointment.Description;
             Notes = appointment.Notes;
             Diagnosis = appointment.Diagnosis;
             isPaid = appointment.isPaid;

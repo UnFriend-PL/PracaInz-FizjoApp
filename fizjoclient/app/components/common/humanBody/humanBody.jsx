@@ -5,7 +5,9 @@ import { bodyBack } from "./genderModel/bodyBack";
 import { bodyFemaleBack } from "./genderModel/bodyFemaleBack";
 import { bodyFemaleFront } from "./genderModel/bodyFemaleFront";
 import styles from "./humanBody.module.scss";
+
 const comparison = (a, b) => a.slug === b.slug;
+
 const SvgWrapper = ({ side, scale, children }) => {
   const viewBox = side === "front" ? "-50 -40 734 1538" : "756 0 774 1448";
   return (
@@ -41,6 +43,7 @@ const Body = ({
     },
     [data, colors]
   );
+
   const getColorToFill = (bodyPart) => {
     let color;
     if (bodyPart.intensity) color = colors[bodyPart.intensity];
@@ -59,6 +62,7 @@ const Body = ({
               id={bodyPart.slug}
               fill={getColorToFill(bodyPart)}
               d={path}
+              className={styles.bodyPart}
             />
           ));
         }
@@ -66,6 +70,7 @@ const Body = ({
       })}
     </SvgWrapper>
   );
+
   if (gender === "female") {
     return renderBodySvg(side === "front" ? bodyFemaleFront : bodyFemaleBack);
   }

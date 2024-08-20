@@ -25,9 +25,9 @@ export default function Navbar() {
       action: undefined,
     },
     Services: {
-      href: "/services",
+      href: "/appointments",
       className: styles["nav-link"],
-      name: "Services",
+      name: "Appointments",
       action: undefined,
     },
     Contact: {
