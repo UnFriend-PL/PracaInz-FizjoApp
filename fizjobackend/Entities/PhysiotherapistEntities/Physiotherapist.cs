@@ -16,18 +16,20 @@ namespace fizjobackend.Entities.PhysiotherapistEntities
 
         public Physiotherapist() { }
 
-        public Physiotherapist(PhysiotherapisRegistertRequestDTO patient)
+        public Physiotherapist(PhysiotherapisRegistertRequestDTO physiotherapist)
         {
-            Email = patient.Email;
-            FirstName = patient.FirstName;
-            LastName = patient.LastName;
-            Gender = patient.Gender;
-            Address = patient.Address;
-            Pesel = patient.Pesel;
-            DateOfBirth = patient.DateOfBirth;
-            Address = patient.Address;
-            PhoneNumber = patient.PhoneNumber;
-            LicenseNumber = patient.LicenseNumber;
+            Email = physiotherapist.Email;
+            FirstName = physiotherapist.FirstName;
+            LastName = physiotherapist.LastName;
+            Gender = physiotherapist.Gender;
+            Country = physiotherapist.Country;
+            City = physiotherapist.City;
+            StreetWithHouseNumber = physiotherapist.StreetWithHouseNumber;
+            PostCode = physiotherapist.PostCode;
+            Pesel = physiotherapist.Pesel;
+            DateOfBirth = physiotherapist.DateOfBirth;
+            PhoneNumber = physiotherapist.PhoneNumber;
+            LicenseNumber = physiotherapist.LicenseNumber;
             CreatedDate = DateTime.UtcNow;
         }
     }

@@ -22,10 +22,12 @@ namespace fizjobackend.Entities.PatientEntities
             FirstName = patient.FirstName;
             LastName = patient.LastName;
             Gender = patient.Gender;
-            Address = patient.Address;
+            Country = patient.Country;
+            City = patient.City;
+            StreetWithHouseNumber = patient.StreetWithHouseNumber;
+            PostCode = patient.PostCode;
             Pesel = patient.Pesel;
             DateOfBirth = patient.DateOfBirth;
-            Address = patient.Address;
             HealthInsuranceNumber = patient.InsuranceNumber;
             PhoneNumber = patient.PhoneNumber;
             CreatedDate = DateTime.UtcNow;

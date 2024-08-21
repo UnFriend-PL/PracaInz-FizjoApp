@@ -1,0 +1,49 @@
+@import "../utils/globalColors.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: $bg-container;
+  min-width: 30%;
+  min-height: 100vh;
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: $text-dark-green;
+}
+
+.loading {
+  font-size: 1.5rem;
+  color: $text-dark-green;
+}
+
+.profileCard {
+  background: $bg-container;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 100%;
+}
+
+.field {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid $border-color;
+}
+
+.label {
+  font-weight: bold;
+  color: $label-color;
+  text-decoration: cap;
+  text-transform: capitalize;
+}
+
+.value {
+  color: $text-black;
+}

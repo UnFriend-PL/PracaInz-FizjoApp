@@ -1,13 +1,20 @@
 "use client";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Link from "next/link";
 import styles from "./navbar.module.scss";
+import { AuthContext } from "@/app/contexts/Auth/authContext";
+import { CgProfile } from "react-icons/cg";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { isAuthenticated, logout } = useContext(AuthContext);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleLogOut = () => {
+    logout();
   };
 
   const MENU_LINKS = {
@@ -15,26 +22,32 @@ export default function Navbar() {
       href: "/",
       className: styles["nav-link"],
       name: "Home",
-    },
-    About: {
-      href: "/about",
-      className: styles["nav-link"],
-      name: "About",
+      action: undefined,
     },
     Services: {
       href: "/services",
       className: styles["nav-link"],
       name: "Services",
+      action: undefined,
     },
     Contact: {
       href: "/contact",
       className: styles["nav-link"],
       name: "Contact",
+      action: undefined,
+    },
+    Profile: {
+      href: "/profile",
+      className: styles["nav-link"],
+      name: "Profile",
+      action: undefined,
+      icon: <CgProfile />,
     },
     SignIn: {
       href: "/auth",
       className: `${styles["nav-link"]} ${styles["signin-link"]}`,
-      name: "Sign In",
+      name: isAuthenticated ? "Log out" : "Sign In",
+      action: handleLogOut,
     },
   };
 
@@ -90,10 +103,10 @@ export default function Navbar() {
 
 function GenerateLinks({ links }) {
   return Object.keys(links).map((key) => {
-    const { href, className, name } = links[key];
+    const { href, className, name, action, icon } = links[key];
     return (
-      <Link key={key} href={href} className={className}>
-        {name}
+      <Link key={key} href={href} className={className} onClick={action}>
+        {icon != undefined ? icon : name}
       </Link>
     );
   });

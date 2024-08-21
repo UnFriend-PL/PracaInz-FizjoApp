@@ -16,12 +16,13 @@ using fizjobackend.Services.EmailService;
 using DotNetEnv;
 using fizjobackend.Helpers;
 using fizjobackend.Interfaces.HelpersInterfaces;
+using fizjobackend.Seeders;
 
 namespace fizjobackend
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             Env.Load();
             var builder = WebApplication.CreateBuilder(args);
@@ -101,11 +102,18 @@ namespace fizjobackend
 
             var app = builder.Build();
             TestDatabaseConnection(app);
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var logger = services.GetRequiredService<ILogger<Program>>();
+                await RoleSeeder.SeedRolesAsync(services, logger);
+            }
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UsePathBase("/api/v1/");
             app.UseCors("CorsPolicy");
             app.UseHttpsRedirection();
             app.UseAuthentication();
@@ -116,10 +124,12 @@ namespace fizjobackend
 
         private static void InitializeIdentity(WebApplicationBuilder builder)
         {
-            builder.Services.AddIdentity<User, UserRoles>()
+            builder.Services
+                .AddIdentity<User, IdentityRole<Guid>>()
+                .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<FizjoDbContext>()
-                .AddRoles<UserRoles>()
-                .AddRoleManager<RoleManager<UserRoles>>()
+                .AddRoles<IdentityRole<Guid>>()
+                .AddRoleManager<RoleManager<IdentityRole<Guid>>>()
                 .AddSignInManager<SignInManager<User>>()
                 .AddUserManager<UserManager<User>>()
                 .AddDefaultTokenProviders();

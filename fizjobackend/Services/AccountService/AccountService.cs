@@ -4,9 +4,9 @@ using fizjobackend.Entities.PhysiotherapistEntities;
 using fizjobackend.Entities.UserEntities;
 using fizjobackend.Helpers;
 using fizjobackend.Interfaces.AccountInterfaces;
+using fizjobackend.Interfaces.DTOInterfaces.RegisterDTOInterfaces;
 using fizjobackend.Interfaces.EmailInterface;
 using fizjobackend.Interfaces.HelpersInterfaces;
-using fizjobackend.Interfaces.RegisterDTOInterfaces;
 using fizjobackend.Models.AccountDTOs;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
@@ -18,19 +18,18 @@ namespace fizjobackend.Services.AccountService
     {
         private readonly FizjoDbContext _context;
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole<Guid>> _roleManager;
         private readonly ILogger<AccountService> _logger;
-        private readonly IConfiguration _configuration;
         private readonly IJwtGenerator _jwtGenerator;
         private readonly IEmailService _emailService;
         private readonly IAccountValidationHelper _accountValidationHelper;
 
 
-        public AccountService(FizjoDbContext context, UserManager<User> userManager, ILogger<AccountService> logger, IConfiguration configuration, IJwtGenerator jwtGenerator, IEmailService emailService, IAccountValidationHelper accountValidationHelper)
+        public AccountService(FizjoDbContext context, UserManager<User> userManager, ILogger<AccountService> logger, IConfiguration configuration, IJwtGenerator jwtGenerator, IEmailService emailService, IAccountValidationHelper accountValidationHelper, RoleManager<IdentityRole<Guid>> roleManager)
         {
             _context = context;
             _userManager = userManager;
             _logger = logger;
-            _configuration = configuration;
             _jwtGenerator = jwtGenerator;
             _emailService = emailService;
             _accountValidationHelper = accountValidationHelper;
@@ -58,12 +57,12 @@ namespace fizjobackend.Services.AccountService
 
         public async Task<ServiceResponse<bool>> RegisterPatientAccount(PatientRegisterRequestDTO patient)
         {
-            return await RegisterUserAccount<PatientRegisterRequestDTO>(patient);
+            return await RegisterUserAccount<PatientRegisterRequestDTO>(patient, "patient");
         }
 
         public async Task<ServiceResponse<bool>> RegisterPhysiotherapistAccount(PhysiotherapisRegistertRequestDTO physiotherapist)
         {
-            return await RegisterUserAccount<PhysiotherapisRegistertRequestDTO>(physiotherapist);
+            return await RegisterUserAccount<PhysiotherapisRegistertRequestDTO>(physiotherapist, "physiotherapist");
         }
 
         public async Task<ServiceResponse<string>> RefreshSession(string refreshToken)
@@ -121,7 +120,7 @@ namespace fizjobackend.Services.AccountService
             }
         }
 
-        private async Task<ServiceResponse<bool>> RegisterUserAccount<T>(T userDto) where T : IUserRegisterDTO
+        private async Task<ServiceResponse<bool>> RegisterUserAccount<T>(T userDto, string role) where T : IUserRegisterDTO
         {
             try
             {
@@ -152,6 +151,7 @@ namespace fizjobackend.Services.AccountService
                     return new ServiceResponse<bool>("User creation failed") { Success = false, Errors = errors };
                 }
                 await _emailService.SendVerificationEmail(user.Email, user.VerificationToken);
+                await _userManager.AddToRoleAsync(user, role);
                 return new ServiceResponse<bool>("User registered successfully") { Data = true };
             }
             catch (Exception ex)

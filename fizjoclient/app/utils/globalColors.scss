@@ -1,19 +1,37 @@
-$bg-dark: #2d3748;
-$bg-black: #000;
-$text-light: #fff;
-$text-secondary: #a0aec0;
-$bg-hover-dark: #4a5568;
-$bg-blue: #0093ad;
-$bg-blue-hover: #2b6cb0;
-$background-color: #000000;
-// auth
-$container-background: #000000;
-$button-background: #e0e0e0;
-$button-color: #333333;
-$button-active-background: #049bb6;
-$button-active-color: #ffffff;
-$label-color: #ffffff;
-$input-border: #cccccc;
-$submit-button-background: #0093ad;
-$submit-button-color: #ffffff;
-$input-color: #080808;
+// backgrounds
+$bg-page: #fffefd;
+$bg-navbar: #9fe4ca;
+$bg-black: #000000;
+$bg-dark-green: #197b5c;
+$bg-light-green: #47ffa6;
+$bg-white: #fffefd;
+$bg-container: #fffefd;
+
+// backgrounds hover
+$bg-hover-dark-green: #197b5c;
+
+// text
+$text-white: #fffefd;
+$text-light-green: #47ffa6;
+$text-dark-green: #197b5c;
+$text-black: #000;
+
+// buttons
+$button-bg: #0aca81;
+$button-submit-bg: #197b5c;
+$button-cancel-bg: #f15454;
+
+// buttons hover
+$button-bg-hover: #008042;
+$button-submit-bg-hover: #197b5cab;
+$button-cancel-bg-hover: #f15454d2;
+
+// labels
+$label-color: #197b5c;
+
+//inputs
+$input-border: #197b5c;
+$input-color: #000000;
+
+// borders
+$border-color: #197b5c;
