@@ -1,4 +1,5 @@
-﻿using fizjobackend.Enums.AppointmentEnums;
+﻿using fizjobackend.Entities.AppointmentEntities;
+using fizjobackend.Enums.AppointmentEnums;
 using fizjobackend.Interfaces.AppointmentsInterfaces;
 using fizjobackend.Models.AppointmentsDTOs;
 using Microsoft.AspNetCore.Authorization;
@@ -23,7 +24,7 @@ namespace fizjobackend.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpPost("/Appointment/Create")]
+        [HttpPost("/Appointments/Appointment/Create")]
         public async Task<IActionResult> CreateAppointment([FromBody] CreateAppointmentRequestDTO newAppointmentRequest)
         {
 
@@ -37,11 +38,25 @@ namespace fizjobackend.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpGet("/All")]
+        [HttpGet("/Appointments/All")]
         public async Task<IActionResult> GetAllAppointments([FromQuery] ListOfAppointmentsRequestDTO appointmentsRequest)
         {
             var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             var response = await _appointmentsService.GetAppointments(userId, appointmentsRequest.Status, appointmentsRequest.Page);
+            if (!response.Success)
+            {
+                _logger.LogWarning("Failed to get all appointments: {Message}", response.Message);
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpGet("/Appointments/{AppointmentId}")]
+        public async Task<IActionResult> GetAllAppointments(string appointmentId)
+        {
+            var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var response = await _appointmentsService.GetAppointmentDetails(userId, Guid.Parse(appointmentId));
             if (!response.Success)
             {
                 _logger.LogWarning("Failed to get all appointments: {Message}", response.Message);

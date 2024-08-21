@@ -9,5 +9,6 @@
         public string? Notes { get; set; }
         public string? Diagnosis { get; set; }
         public bool isPaid { get; set; } = false;
+        public double Price { get; set; }
     }
 }

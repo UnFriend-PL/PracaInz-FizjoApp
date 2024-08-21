@@ -5,7 +5,6 @@ using fizjobackend.Entities.PhysiotherapistEntities;
 using fizjobackend.Entities.UserEntities;
 using fizjobackend.Enums.AppointmentEnums;
 using fizjobackend.Interfaces.AppointmentsInterfaces;
-using fizjobackend.Models.AccountDTOs;
 using fizjobackend.Models.AppointmentsDTOs;
 using fizjobackend.Models.UserDTOs;
 using Microsoft.EntityFrameworkCore;
@@ -71,8 +70,8 @@ namespace fizjobackend.Services.AppointmentsService
                 var newAppointmentEntry = await _context.Appointments.AddAsync(newAppointment);
                 await _context.SaveChangesAsync();
 
-                var patientResponseDto = new PatientInfoResponseDTO(patient);
-                var physiotherapistResponseDto = new PhysiotherapistInfoResponseDTO(physiotherapist);
+                var patientResponseDto = new PatientAppointmentDetailResponseDTO(patient);
+                var physiotherapistResponseDto = new PhysiotherapistAppointmentResponseDTO(physiotherapist);
                 AppointmentResponseDTO appointment = new AppointmentResponseDTO(newAppointment, patientResponseDto, physiotherapistResponseDto);
                 serviceResponse.Data = appointment;
                 return serviceResponse;
@@ -93,6 +92,12 @@ namespace fizjobackend.Services.AppointmentsService
 
                 var appointmentsQuery = _context.Appointments
                     .Where(a => (a.PatientId == userId || a.PhysiotherapistId == userId) && a.AppointmentStatus == status);
+                if (status == AppointmentStatus.Scheduled)
+                {
+                    DateTime startTime = DateTime.Now.AddHours(-1);
+                    DateTime endTime = DateTime.Now.AddDays(8);
+                    appointmentsQuery = appointmentsQuery.Where(a => a.AppointmentDate >= startTime && a.AppointmentDate <= endTime);
+                }
 
                 var totalAppointmentsCount = await appointmentsQuery.CountAsync();
                 var appointments = await appointmentsQuery
@@ -104,17 +109,18 @@ namespace fizjobackend.Services.AppointmentsService
                     .ToListAsync();
 
                 var preparedAppointments = appointments.Select(appointment =>
-                    new AppointmentResponseDTO(
+                    new AppointmentInListResponseDTO(
                         appointment,
-                        new PatientInfoResponseDTO(appointment.Patient),
-                        new PhysiotherapistInfoResponseDTO(appointment.Physiotherapist))
+                        appointment.Patient,
+                        appointment.Physiotherapist)
                     ).ToList();
 
                 ListOfAppointmentsResponseDTO appointmentsResponse = new ListOfAppointmentsResponseDTO()
                 {
                     Appointments = preparedAppointments,
                     CurrentPage = page,
-                    TotalPages = (int)Math.Ceiling(totalAppointmentsCount / 10.0)
+                    TotalPages = (int)Math.Ceiling(totalAppointmentsCount / 10.0),
+                    TotalAppointments = totalAppointmentsCount
                 };
 
                 serviceResponse.Data = appointmentsResponse;
@@ -124,6 +130,47 @@ namespace fizjobackend.Services.AppointmentsService
             {
                 _logger.LogError(e, "Error getting appointments");
                 return new ServiceResponse<ListOfAppointmentsResponseDTO>($"Error during getting appointments.");
+            }
+        }
+
+        public async Task<ServiceResponse<AppointmentResponseDTO>> GetAppointmentDetails(Guid userId, Guid appointmentId)
+        {
+            var serviceResponse = new ServiceResponse<AppointmentResponseDTO>($"Appointment details for {appointmentId}");
+            try
+            {
+                _logger.LogInformation($"Fetching appointment details for userId: {userId}, appointmentId: {appointmentId}", userId, appointmentId);
+
+                var appointment = await _context.Appointments
+                    .Include(a => a.Patient)
+                    .Include(a => a.Physiotherapist)
+                    .FirstOrDefaultAsync(a => a.AppointmentId == appointmentId);
+
+                if (appointment == null)
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "Appointment not found";
+                    _logger.LogWarning($"Appointment not found: appointment - {appointmentId}, userId - {userId}");
+                    return serviceResponse;
+                }
+
+                if (appointment.PatientId != userId && appointment.PhysiotherapistId != userId)
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "You are not authorized to view this appointment";
+                    _logger.LogWarning($"User not authorized to view appointment - {userId}");
+                    return serviceResponse;
+                }
+
+                var patientResponseDto = new PatientAppointmentDetailResponseDTO(appointment.Patient);
+                var physiotherapistResponseDto = new PhysiotherapistAppointmentResponseDTO(appointment.Physiotherapist);
+                AppointmentResponseDTO appointmentResponse = new AppointmentResponseDTO(appointment, patientResponseDto, physiotherapistResponseDto);
+                serviceResponse.Data = appointmentResponse;
+                return serviceResponse;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error getting appointment details");
+                return new ServiceResponse<AppointmentResponseDTO>($"Error during getting appointment details.");
             }
         }
     }

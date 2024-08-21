@@ -22,7 +22,8 @@ namespace fizjobackend.Entities.AppointmentEntities
         public string Description { get; set; } = string.Empty;
         public string? Notes { get; set; }
         public string? Diagnosis { get; set; }
-        public bool isPaid { get; set; } = false;
+        public bool IsPaid { get; set; } = false;
+        public double Price { get; set; } = 0;
         public Appointment() { }
 
         public Appointment(CreateAppointmentRequestDTO appointment)
@@ -33,7 +34,8 @@ namespace fizjobackend.Entities.AppointmentEntities
             AppointmentDescription = appointment.AppointmentDescription;
             Notes = appointment.Notes;
             Diagnosis = appointment.Diagnosis;
-            isPaid = appointment.isPaid;
+            IsPaid = appointment.isPaid;
+            Price = appointment.Price;
         }
     }
 }

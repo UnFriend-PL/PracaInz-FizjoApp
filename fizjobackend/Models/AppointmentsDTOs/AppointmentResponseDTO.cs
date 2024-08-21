@@ -8,21 +8,23 @@ namespace fizjobackend.Models.AppointmentsDTOs
     {
         public Guid AppointmentId { get; set; }
         public AppointmentStatus AppointmentStatus { get; set; } = AppointmentStatus.Scheduled;
+        public string AppointmentStatusName => AppointmentStatus.ToString(); 
         public Guid PatientId { get; set; }
-        public IUserInfoResponseDTO? Patient { get; set; }
+        public PatientAppointmentDetailResponseDTO Patient { get; set; }
         public Guid PhysiotherapistId { get; set; }
-        public IUserInfoResponseDTO? Physiotherapist { get; set; }
+        public PhysiotherapistAppointmentResponseDTO Physiotherapist { get; set; }
         public DateTime AppointmentDate { get; set; } = DateTime.Now;
         public DateTime? MovedFromDate { get; set; }
         public string AppointmentDescription { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public string? Notes { get; set; }
         public string? Diagnosis { get; set; }
-        public bool isPaid { get; set; } = false;
+        public bool IsPaid { get; set; } = false;
+        public decimal Price { get; set; }
 
         public AppointmentResponseDTO() { }
 
-        public AppointmentResponseDTO(Appointment appointment, IUserInfoResponseDTO patient, IUserInfoResponseDTO physiotherapist)
+        public AppointmentResponseDTO(Appointment appointment, PatientAppointmentDetailResponseDTO patient, PhysiotherapistAppointmentResponseDTO physiotherapist)
         {
             AppointmentId = appointment.AppointmentId;
             AppointmentStatus = appointment.AppointmentStatus;
@@ -36,7 +38,7 @@ namespace fizjobackend.Models.AppointmentsDTOs
             Description = appointment.Description;
             Notes = appointment.Notes;
             Diagnosis = appointment.Diagnosis;
-            isPaid = appointment.isPaid;
+            IsPaid = appointment.IsPaid;
         }
     }
 }
