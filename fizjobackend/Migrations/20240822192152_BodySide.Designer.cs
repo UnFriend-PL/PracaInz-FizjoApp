@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using fizjobackend.DbContexts;
 
@@ -11,9 +12,11 @@ using fizjobackend.DbContexts;
 namespace fizjobackend.Migrations
 {
     [DbContext(typeof(FizjoDbContext))]
-    partial class FizjoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240822192152_BodySide")]
+    partial class BodySide
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -203,6 +206,27 @@ namespace fizjobackend.Migrations
                     b.ToTable("Appointments");
                 });
 
+            modelBuilder.Entity("fizjobackend.Entities.BodyEntities.BodyPart", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Side")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BodyParts");
+                });
+
             modelBuilder.Entity("fizjobackend.Entities.BodyEntities.BodySection", b =>
                 {
                     b.Property<int>("Id")
@@ -226,6 +250,37 @@ namespace fizjobackend.Migrations
                     b.HasIndex("ViewId");
 
                     b.ToTable("BodySections");
+                });
+
+            modelBuilder.Entity("fizjobackend.Entities.BodyEntities.BodySectionDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BodyPartId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BodySectionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Side")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BodyPartId");
+
+                    b.HasIndex("BodySectionId");
+
+                    b.ToTable("BodySectionDetails");
                 });
 
             modelBuilder.Entity("fizjobackend.Entities.BodyEntities.Joint", b =>
@@ -262,6 +317,7 @@ namespace fizjobackend.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -513,6 +569,25 @@ namespace fizjobackend.Migrations
                     b.Navigation("View");
                 });
 
+            modelBuilder.Entity("fizjobackend.Entities.BodyEntities.BodySectionDetail", b =>
+                {
+                    b.HasOne("fizjobackend.Entities.BodyEntities.BodyPart", "BodyPart")
+                        .WithMany("BodySectionDetails")
+                        .HasForeignKey("BodyPartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("fizjobackend.Entities.BodyEntities.BodySection", "BodySection")
+                        .WithMany("BodySectionDetails")
+                        .HasForeignKey("BodySectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BodyPart");
+
+                    b.Navigation("BodySection");
+                });
+
             modelBuilder.Entity("fizjobackend.Entities.BodyEntities.Joint", b =>
                 {
                     b.HasOne("fizjobackend.Entities.BodyEntities.BodySection", "BodySection")
@@ -562,8 +637,15 @@ namespace fizjobackend.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("fizjobackend.Entities.BodyEntities.BodyPart", b =>
+                {
+                    b.Navigation("BodySectionDetails");
+                });
+
             modelBuilder.Entity("fizjobackend.Entities.BodyEntities.BodySection", b =>
                 {
+                    b.Navigation("BodySectionDetails");
+
                     b.Navigation("Joints");
 
                     b.Navigation("Muscles");

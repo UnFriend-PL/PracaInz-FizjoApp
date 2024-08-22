@@ -1,10 +1,13 @@
 ﻿using fizjobackend.Entities.AppointmentEntities;
+using fizjobackend.Entities.BodyEntities;
 using fizjobackend.Entities.PatientEntities;
 using fizjobackend.Entities.PhysiotherapistEntities;
 using fizjobackend.Entities.UserEntities;
+using fizjobackend.Seeders.BodySeeder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using MimeKit;
 
 namespace fizjobackend.DbContexts
 {
@@ -43,8 +46,30 @@ namespace fizjobackend.DbContexts
 
             BuildPhysiothreapistSpecializationEntity(modelBuilder);
             BuildAppointmentEntity(modelBuilder);
+            BuildBodyEntities(modelBuilder);
+
         }
 
+        private static void BuildBodyEntities(ModelBuilder modelBuilder)
+        {
+            // View -> BodySection
+            modelBuilder.Entity<BodySection>()
+                .HasOne(bs => bs.View)
+                .WithMany(v => v.BodySections)
+                .HasForeignKey(bs => bs.ViewId);
+            // BodySection -> Muscle
+            modelBuilder.Entity<Muscle>()
+                .HasOne(m => m.BodySection)
+                .WithMany(bs => bs.Muscles)
+                .HasForeignKey(m => m.BodySectionId);
+
+            // BodySection -> Joint
+            modelBuilder.Entity<Joint>()
+                .HasOne(j => j.BodySection)
+                .WithMany(bs => bs.Joints)
+                .HasForeignKey(j => j.BodySectionId);
+
+        }
 
         private static void BuildAppointmentEntity(ModelBuilder modelBuilder)
         {
@@ -84,5 +109,10 @@ namespace fizjobackend.DbContexts
         public DbSet<PhysiotherapySpecializationEntity> PhysiotherapySpecializationEntities { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
 
+        // Body parts db entities
+        public DbSet<View> Views { get; set; }
+        public DbSet<BodySection> BodySections { get; set; }
+        public DbSet<Muscle> Muscles { get; set; }
+        public DbSet<Joint> Joints { get; set; }
     }
 }

@@ -19,6 +19,9 @@ using fizjobackend.Interfaces.HelpersInterfaces;
 using fizjobackend.Seeders;
 using fizjobackend.Interfaces.AppointmentsInterfaces;
 using fizjobackend.Services.AppointmentsService;
+using fizjobackend.Seeders.BodySeeder;
+using fizjobackend.Interfaces.BodyVisualizerInterfaces;
+using fizjobackend.Services.BodyVisualizerService;
 
 namespace fizjobackend
 {
@@ -80,6 +83,7 @@ namespace fizjobackend
             builder.Services.AddScoped<IJwtGenerator, JwtGenerator>();
             builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped<IAppointmentsService, AppointmentService>();
+            builder.Services.AddScoped<IBodyVisualizerService, BodyVisualizerService>();
             var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY")!);
             builder.Services.AddScoped<IAccountValidationHelper, AccountValidationHelper>();
             builder.Services.AddAuthentication(options =>
@@ -111,6 +115,7 @@ namespace fizjobackend
                 var services = scope.ServiceProvider;
                 var logger = services.GetRequiredService<ILogger<Program>>();
                 await RoleSeeder.SeedRolesAsync(services, logger);
+                await BodySeeder.SeedBodyAsync(services, logger);
             }
             if (app.Environment.IsDevelopment())
             {

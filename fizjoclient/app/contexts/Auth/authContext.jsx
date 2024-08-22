@@ -11,8 +11,16 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
-    const decodedToken = storedToken ? jwtDecode(storedToken) : null;
+    let decodedToken;
 
+    try {
+      decodedToken = storedToken ? jwtDecode(storedToken) : null;
+    } catch (error) {
+      console.error("Invalid token:", error);
+      localStorage.removeItem("token");
+      router.push("/auth");
+      return;
+    }
     if (storedToken && decodedToken && !isTokenExpired(decodedToken)) {
       setIsAuthenticated(true);
       const role =
@@ -25,9 +33,9 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem("token");
       setIsAuthenticated(false);
       setRole(null);
-      router.push("/login");
+      router.push("/auth");
     }
-  }, []);
+  }, [isAuthenticated]);
 
   const isTokenExpired = (token) => {
     try {
@@ -47,7 +55,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem("token");
     setIsAuthenticated(false);
-    router.push("/login");
+    router.push("/auth");
   };
 
   return (
