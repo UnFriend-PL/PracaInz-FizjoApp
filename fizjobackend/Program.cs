@@ -73,11 +73,11 @@ namespace fizjobackend
             {
                 options.UseSqlServer(Environment.GetEnvironmentVariable("CONNECTION_STRING"));
             });
+            var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY")!);
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IJwtGenerator, JwtGenerator>();
             builder.Services.AddScoped<IEmailService, EmailService>();
-            var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY")!);
             builder.Services.AddScoped<IAccountValidationHelper, AccountValidationHelper>();
             builder.Services.AddAuthentication(options =>
             {

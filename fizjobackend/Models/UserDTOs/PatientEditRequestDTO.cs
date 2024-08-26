@@ -1,10 +1,10 @@
 ﻿using fizjobackend.Entities.PatientEntities;
-using fizjobackend.Entities.UserEntities;
+using fizjobackend.Entities.PhysiotherapistEntities;
 using fizjobackend.Interfaces.DTOInterfaces.UserDTOInterfaces;
 
 namespace fizjobackend.Models.UserDTOs
 {
-    public class PatientInfoResponseDTO : IUserInfoResponseDTO
+    public class PatientEditRequestDTO 
     {
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
@@ -19,25 +19,9 @@ namespace fizjobackend.Models.UserDTOs
         public string PhoneNumber { get; set; } = string.Empty;
         public string HealthInsuranceNumber { get; set; } = string.Empty;
 
-        public PatientInfoResponseDTO() { }
+        public PatientEditRequestDTO() { }
 
-        public PatientInfoResponseDTO(Patient patient)
-        {
-            FirstName = patient.FirstName;
-            LastName = patient.LastName;
-            Gender = patient.Gender;
-            Country = patient.Country;
-            City = patient.City;
-            StreetWithHouseNumber = patient.StreetWithHouseNumber;
-            PostCode = patient.PostCode;
-            Pesel = patient.Pesel;
-            DateOfBirth = patient.DateOfBirth;
-            Email = patient.Email;
-            PhoneNumber = patient.PhoneNumber;
-            HealthInsuranceNumber = patient.HealthInsuranceNumber;
-        }
-
-        public PatientInfoResponseDTO(PatientEditRequestDTO patient)
+        public PatientEditRequestDTO(Patient patient)
         {
             FirstName = patient.FirstName;
             LastName = patient.LastName;
