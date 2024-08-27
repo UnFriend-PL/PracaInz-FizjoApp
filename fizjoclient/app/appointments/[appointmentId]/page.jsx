@@ -1,178 +1,108 @@
 "use client";
 import { useParams } from "next/navigation";
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import HumanBody from "@/app/components/common/humanBody/humanBody";
 import { AuthContext } from "@/app/contexts/auth/authContext";
 import styles from "./appointmentDetails.module.scss";
 import apiService from "@/app/services/apiService/apiService";
+import SwitchSelector from "react-switch-selector";
+import MusclesAndJoints from "./musclesAndJoints";
+import AppointmentDetails from "./appointmentDetails";
 
 const Appointments = () => {
-  const { isAuthenticated } = React.useContext(AuthContext);
-  const params = useParams();
-  const appointmentId = params.appointmentId;
-  const [selectedParts, setSelectedParts] = useState([]);
+  const { isAuthenticated } = useContext(AuthContext);
+  const { appointmentId } = useParams();
+  const [selectedParts, setSelectedParts] = useState({ front: [], back: [] });
   const [appointment, setAppointment] = useState(null);
-  const handleBodyPartPress = (bodyPart) => {
-    setSelectedParts((prevSelectedParts) => {
-      const existingPart = prevSelectedParts.find(
-        (part) => part.slug === bodyPart.slug
-      );
-      if (existingPart) {
-        // Remove the part if it exists
-        return prevSelectedParts.filter((part) => part.slug !== bodyPart.slug);
-      } else {
-        // Add the part if it doesn't exist
-        return [...prevSelectedParts, bodyPart];
-      }
-    });
-  };
+  const [viewPosition, setViewPosition] = useState("front");
+  const [musclesAndJoints, setMusclesAndJoints] = useState([]);
 
   useEffect(() => {
     if (isAuthenticated) {
       apiService
         .get(`/Appointments/${appointmentId}`, {}, true)
-        .then((response) => {
-          setAppointment(response.data);
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        .then((response) => setAppointment(response.data))
+        .catch((error) =>
+          console.error("Failed to fetch appointment details:", error)
+        );
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, appointmentId]);
 
-  if (isAuthenticated && appointment)
-    return (
-      <>
-        <div className={styles.container}>
-          {console.log(appointment)}
-          <AppointmentDetails appointment={appointment} />
+  const fetchMusclesAndJoints = useCallback(
+    async (bodyPart) => {
+      const existingPart = musclesAndJoints.find(
+        (part) => part.name === bodyPart.slug
+      );
+      if (existingPart) {
+        setMusclesAndJoints((prev) =>
+          prev.filter((part) => part.name !== bodyPart.slug)
+        );
+      } else {
+        const { slug } = bodyPart;
+        const [viewSide, bodySectionName] = slug.includes("-")
+          ? slug.split(/-(.+)/)
+          : [null, slug];
+        const requestBody = {
+          bodySectionName,
+          viewPosition,
+          viewSide,
+          gender: appointment.patient.gender,
+        };
+        try {
+          const response = await apiService.post(
+            `/BodyVisualizer/GetBodyPartDetails`,
+            requestBody,
+            true
+          );
+          setMusclesAndJoints((prev) => [...prev, response.data]);
+        } catch (error) {
+          console.error("Failed to fetch muscles and joints details:", error);
+        }
+      }
+    },
+    [musclesAndJoints, viewPosition, appointment]
+  );
+
+  const handleBodyPartPress = (bodyPart) => {
+    fetchMusclesAndJoints(bodyPart);
+    setSelectedParts((prev) => ({
+      ...prev,
+      [viewPosition]: prev[viewPosition].some(
+        (part) => part.slug === bodyPart.slug
+      )
+        ? prev[viewPosition].filter((part) => part.slug !== bodyPart.slug)
+        : [...prev[viewPosition], bodyPart],
+    }));
+  };
+
+  if (!isAuthenticated || !appointment) return null;
+
+  return (
+    <>
+      <div className={styles.container}>
+        <div className={styles.bodyContainer}>
+          <SwitchSelector
+            onChange={setViewPosition}
+            options={[
+              { label: "Front", value: "front" },
+              { label: "Back", value: "back" },
+            ]}
+          />
           <HumanBody
-            side={"back"}
+            side={viewPosition}
             gender={appointment.patient.gender}
-            data={selectedParts}
+            data={selectedParts[viewPosition]}
             scale={1.6}
             onBodyPartPress={handleBodyPartPress}
           />
-          <div>
-            <h3>Selected Body Parts:</h3>
-            <ul>
-              {selectedParts.map((part) => (
-                <li key={part.slug}>
-                  {part.slug} - Intensity: {part.intensity}
-                </li>
-              ))}
-            </ul>
-          </div>
         </div>
-      </>
-    );
+        <MusclesAndJoints musclesAndJoints={musclesAndJoints} />
+      </div>
+      <div className={styles.container}>
+        <AppointmentDetails appointment={appointment} />
+      </div>
+    </>
+  );
 };
 
 export default Appointments;
-
-const AppointmentDetails = ({ appointment }) => {
-  return (
-    <div className={styles.appointmentCard}>
-      <div className={styles.header}>
-        <span className={styles.status}>
-          Status: {appointment.appointmentStatusName}
-        </span>
-      </div>
-
-      <div className={styles.details}>
-        <div className={styles.detailGroup}>
-          <span className={styles.label}>Patient:</span>
-          <span className={styles.value}>
-            {appointment.patient.firstName} {appointment.patient.lastName}
-          </span>
-        </div>
-        <div className={styles.detailGroup}>
-          <span className={styles.label}>Email:</span>
-          <span className={styles.value}>{appointment.patient.email}</span>
-          <span className={styles.label}>Phone:</span>
-          <span className={styles.value}>
-            {appointment.patient.phoneNumber}
-          </span>
-        </div>
-        <div className={styles.detailGroup}>
-          <span className={styles.label}>Address:</span>
-          <span className={styles.value}>
-            {appointment.patient.streetWithHouseNumber},{" "}
-            {appointment.patient.postCode} {appointment.patient.city},{" "}
-            {appointment.patient.country}
-          </span>
-        </div>
-        <div className={styles.detailGroup}>
-          <span className={styles.label}>DOB:</span>
-          <span className={styles.value}>
-            {new Date(appointment.patient.dateOfBirth).toLocaleDateString()}
-          </span>
-          <span className={styles.label}>Insurance:</span>
-          <span className={styles.value}>
-            {appointment.patient.healthInsuranceNumber}
-          </span>
-        </div>
-      </div>
-
-      <div className={styles.details}>
-        <div className={styles.detailGroup}>
-          <span className={styles.label}>Physiotherapist:</span>
-          <span className={styles.value}>
-            {appointment.physiotherapist.firstName}{" "}
-            {appointment.physiotherapist.lastName}
-          </span>
-        </div>
-        <div className={styles.detailGroup}>
-          <span className={styles.label}>Email:</span>
-          <span className={styles.value}>
-            {appointment.physiotherapist.email}
-          </span>
-          <span className={styles.label}>Phone:</span>
-          <span className={styles.value}>
-            {appointment.physiotherapist.phoneNumber}
-          </span>
-        </div>
-        <div className={styles.detailGroup}>
-          <span className={styles.label}>License Number:</span>
-          <span className={styles.value}>
-            {appointment.physiotherapist.licenseNumber}
-          </span>
-        </div>
-      </div>
-
-      <div className={styles.details}>
-        <div className={styles.detailGroup}>
-          <span className={styles.label}>Date:</span>
-          <span className={styles.value}>
-            {new Date(appointment.appointmentDate).toLocaleString()}
-          </span>
-        </div>
-        <div className={styles.detailGroup}>
-          <span className={styles.label}>Description:</span>
-          <span className={styles.value}>
-            {appointment.appointmentDescription || "No description provided"}
-          </span>
-        </div>
-        <div className={styles.detailGroup}>
-          <span className={styles.label}>Notes:</span>
-          <span className={styles.value}>
-            {appointment.notes || "No notes provided"}
-          </span>
-        </div>
-        <div className={styles.detailGroup}>
-          <span className={styles.label}>Diagnosis:</span>
-          <span className={styles.value}>
-            {appointment.diagnosis || "No diagnosis provided"}
-          </span>
-        </div>
-        <div className={styles.detailGroup}>
-          <span className={styles.label}>Paid:</span>
-          <span className={styles.value}>
-            {appointment.isPaid ? "Yes" : "No"}
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-};

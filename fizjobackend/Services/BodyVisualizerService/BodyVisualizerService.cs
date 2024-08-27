@@ -34,7 +34,7 @@ namespace fizjobackend.Services.BodyVisualizerService
 
                 // Step 2: Load the BodySection based on the BodySectionName and ViewId
                 var bodySection = await _context.BodySections
-                    .FirstOrDefaultAsync(bs => bs.BodySectionName == bodyRequest.BodySectionName && bs.ViewId == view.Id);
+                    .FirstOrDefaultAsync(bs => bs.BodySectionName == bodyRequest.BodySectionName && bs.ViewId == view.Id && bs.BodySide == bodyRequest.ViewSide);
 
                 if (bodySection == null)
                 {

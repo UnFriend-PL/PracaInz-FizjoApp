@@ -123,7 +123,6 @@ namespace fizjobackend.Seeders.BodySeeder
         private static async Task AddBodyPartMusclesAndJointsAsync(FizjoDbContext context, BodySection bodySection, string side)
         {
             string filePath = Path.Combine(AppContext.BaseDirectory, "bodyParts.json");
-            //var jsonFilePath = @"C:/Users/szymo/OneDrive/Pulpit/PracaInz-FizjoApp/fizjobackend/bodyParts.json"; // Upewnij się, że ścieżka jest poprawna
             var jsonData = File.ReadAllText(filePath);
             var bodyParts = JsonConvert.DeserializeObject<BodyParts>(jsonData);
 

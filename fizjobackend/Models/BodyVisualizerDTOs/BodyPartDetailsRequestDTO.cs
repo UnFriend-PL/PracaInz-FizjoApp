@@ -4,7 +4,7 @@
     {
         public string BodySectionName { get; set; }
         public string ViewPosition { get; set; } = "front";
-        public string? SideView { get; set; } = null;
+        public string? ViewSide { get; set; } 
         public string Gender { get; set; } = "male";
     }
 }

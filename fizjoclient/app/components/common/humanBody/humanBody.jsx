@@ -8,8 +8,11 @@ import styles from "./humanBody.module.scss";
 
 const comparison = (a, b) => a.slug === b.slug;
 
-const SvgWrapper = ({ side, scale, children }) => {
-  const viewBox = side === "front" ? "-50 -40 734 1538" : "756 0 774 1448";
+const SvgWrapper = ({ side, scale, gender, children }) => {
+  const viewBoxFemale =
+    side === "front" ? "-50 -40 734 1538" : "756 0 774 1448";
+  const viewBoxMale = side === "front" ? "-50 -40 734 1538" : "656 0 774 1448";
+  const viewBox = gender === "female" ? viewBoxFemale : viewBoxMale;
   return (
     <svg viewBox={viewBox} height={400 * scale} width={200 * scale}>
       {children}
@@ -52,7 +55,7 @@ const Body = ({
   };
 
   const renderBodySvg = (data) => (
-    <SvgWrapper side={side} scale={scale}>
+    <SvgWrapper side={side} scale={scale} gender={gender}>
       {mergedBodyParts(data).map((bodyPart) => {
         if (bodyPart.pathArray) {
           return bodyPart.pathArray.map((path, index) => (
