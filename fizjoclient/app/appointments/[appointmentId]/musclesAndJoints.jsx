@@ -2,38 +2,62 @@ import { useState } from "react";
 import Select from "react-select";
 import styles from "./appointmentDetails.module.scss";
 
-// Funkcja mapująca dane do formatu akceptowanego przez react-select
 const mapData = (data) => {
-  return data.flatMap((section) => {
+  return data.map((section) => {
     const muscles = section.muscles.map((muscle) => ({
       label: muscle.name,
       value: muscle.name.toLowerCase().replace(/\s+/g, "-"),
       description: `Muscle in the ${section.name} section`,
+      bodySectionId: section.bodySectionId,
+      viewId: section.viewId,
+      muscleId: muscle.id,
     }));
 
     const joints = section.joints.map((joint) => ({
       label: joint.name,
       value: joint.name.toLowerCase().replace(/\s+/g, "-"),
       description: `Joint in the ${section.name} section`,
+      bodySectionId: section.bodySectionId,
+      viewId: section.viewId,
+      jointId: joint.id,
     }));
 
-    return [...muscles, ...joints];
+    return {
+      sectionName: section.name,
+      muscles,
+      joints,
+    };
   });
 };
 
 const MusclesAndJoints = ({ musclesAndJoints }) => {
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [selectedItems, setSelectedItems] = useState({});
   const [currentIndex, setCurrentIndex] = useState(0);
+  const mappedData = mapData(musclesAndJoints);
 
-  // Mapped data for select component
-  const formattedData = mapData(musclesAndJoints);
-
-  // Handling selection changes
-  const handleChange = (selected) => {
-    setSelectedItems(selected || []);
+  const handleChange = (selected, sectionName, type) => {
+    setSelectedItems((prevState) => ({
+      ...prevState,
+      [sectionName]: {
+        ...prevState[sectionName],
+        [type]: selected || [],
+      },
+    }));
+    console.log(selectedItems);
   };
 
-  // Handling navigation to previous and next body parts
+  const handleRemove = (sectionName, type, value) => {
+    setSelectedItems((prevState) => ({
+      ...prevState,
+      [sectionName]: {
+        ...prevState[sectionName],
+        [type]: prevState[sectionName][type].filter(
+          (item) => item.value !== value
+        ),
+      },
+    }));
+  };
+
   const handlePrev = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? musclesAndJoints.length - 1 : prevIndex - 1
@@ -49,66 +73,64 @@ const MusclesAndJoints = ({ musclesAndJoints }) => {
   if (musclesAndJoints.length === 0)
     return <div className={styles.musclesAndJointsWrapper}></div>;
 
-  const { name, muscles, joints } = musclesAndJoints[currentIndex];
+  const { sectionName, muscles, joints } = mappedData[currentIndex];
 
   return (
     <div className={styles.musclesAndJointsWrapper}>
+      <div className={styles.selectedItemsList}>
+        {Object.entries(selectedItems).map(([sectionName, items]) => (
+          <div key={sectionName} className={styles.selectedSection}>
+            <div className={styles.selectedSectionHeader}>
+              {sectionName.replace("-", " ")}
+            </div>
+            {["muscles", "joints"].map((type) =>
+              items[type]?.map((item) => (
+                <div key={item.value} className={styles.selectedItem}>
+                  {item.label}
+                  <button
+                    onClick={() => handleRemove(sectionName, type, item.value)}
+                    className={styles.removeButton}
+                  >
+                    &times;
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
+        ))}
+      </div>
       <div className={styles.navigation}>
         <button onClick={handlePrev}>&lt;</button>
         <span>{`${currentIndex + 1} / ${musclesAndJoints.length}`}</span>
         <button onClick={handleNext}>&gt;</button>
       </div>
-      <div className={styles.bodyPart}>
-        <div className={styles.bodyPartHeader}>{name.replace("-", " ")}</div>
-        <div className={styles.bodyPartSubHeader}>Muscles:</div>
-        <div className={styles.musclesAndJointsList}>
+      <div className={styles.bodyPartContainer}>
+        <div key={sectionName} className={styles.bodyPart}>
+          <div className={styles.bodyPartHeader}>
+            {sectionName.replace("-", " ")}
+          </div>
+          <div className={styles.bodyPartSubHeader}>Muscles:</div>
           <Select
-            options={formattedData.filter((item) =>
-              item.description.includes("Muscle")
-            )}
+            options={muscles}
             isMulti
-            onChange={handleChange}
-            value={selectedItems}
+            onChange={(selected) =>
+              handleChange(selected, sectionName, "muscles")
+            }
+            value={selectedItems[sectionName]?.muscles || []}
             className={styles.select}
             placeholder="Select muscles"
           />
-        </div>
-        <div className={styles.bodyPartSubHeader}>Joints:</div>
-        <div className={styles.musclesAndJointsList}>
+          <div className={styles.bodyPartSubHeader}>Joints:</div>
           <Select
-            options={formattedData.filter((item) =>
-              item.description.includes("Joint")
-            )}
+            options={joints}
             isMulti
-            onChange={handleChange}
-            value={selectedItems}
+            onChange={(selected) =>
+              handleChange(selected, sectionName, "joints")
+            }
+            value={selectedItems[sectionName]?.joints || []}
             className={styles.select}
             placeholder="Select joints"
           />
-        </div>
-        <div className={styles.selectedItems}>
-          <h3>Selected Items:</h3>
-          {selectedItems.map((item) => (
-            <div key={item.value} className={styles.selectedItem}>
-              <input
-                type="checkbox"
-                checked
-                readOnly
-                className={styles.checkbox}
-              />
-              <span>{item.label}</span>
-              <button
-                onClick={() =>
-                  setSelectedItems((prevItems) =>
-                    prevItems.filter((i) => i.value !== item.value)
-                  )
-                }
-                className={styles.removeButton}
-              >
-                Remove
-              </button>
-            </div>
-          ))}
         </div>
       </div>
     </div>
