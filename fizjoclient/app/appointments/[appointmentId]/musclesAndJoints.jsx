@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import Select from "react-select";
 import styles from "./appointmentDetails.module.scss";
 
@@ -33,60 +33,130 @@ const mapData = (data) => {
 const MusclesAndJoints = ({ musclesAndJoints }) => {
   const [selectedItems, setSelectedItems] = useState({});
   const [currentIndex, setCurrentIndex] = useState(0);
+
   const mappedData = mapData(musclesAndJoints);
 
-  const handleChange = (selected, sectionName, type) => {
-    setSelectedItems((prevState) => ({
-      ...prevState,
-      [sectionName]: {
+  const handleChange = useCallback((selected, sectionName, type) => {
+    setSelectedItems((prevState) => {
+      const updatedSection = {
         ...prevState[sectionName],
         [type]: selected || [],
-      },
-    }));
-    console.log(selectedItems);
-  };
+      };
 
-  const handleRemove = (sectionName, type, value) => {
-    setSelectedItems((prevState) => ({
-      ...prevState,
-      [sectionName]: {
+      if (
+        (!updatedSection.muscles || updatedSection.muscles.length === 0) &&
+        (!updatedSection.joints || updatedSection.joints.length === 0)
+      ) {
+        const { [sectionName]: _, ...rest } = prevState;
+        return rest;
+      }
+
+      return {
+        ...prevState,
+        [sectionName]: updatedSection,
+      };
+    });
+  }, []);
+
+  const handleRemove = useCallback((sectionName, type, value) => {
+    setSelectedItems((prevState) => {
+      const updatedSection = {
         ...prevState[sectionName],
         [type]: prevState[sectionName][type].filter(
           (item) => item.value !== value
         ),
-      },
-    }));
-  };
+      };
 
-  const handlePrev = () => {
+      if (
+        (!updatedSection.muscles || updatedSection.muscles.length === 0) &&
+        (!updatedSection.joints || updatedSection.joints.length === 0)
+      ) {
+        const { [sectionName]: _, ...rest } = prevState;
+        return rest;
+      }
+
+      return {
+        ...prevState,
+        [sectionName]: updatedSection,
+      };
+    });
+  }, []);
+
+  const handlePrev = useCallback(() => {
     setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? musclesAndJoints.length - 1 : prevIndex - 1
+      prevIndex === 0 ? mappedData.length - 1 : prevIndex - 1
     );
-  };
+  }, [mappedData.length]);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     setCurrentIndex((prevIndex) =>
-      prevIndex === musclesAndJoints.length - 1 ? 0 : prevIndex + 1
+      prevIndex === mappedData.length - 1 ? 0 : prevIndex + 1
     );
-  };
+  }, [mappedData.length]);
 
-  if (musclesAndJoints.length === 0)
+  const validateSelectedItems = useCallback(() => {
+    const currentIds = new Set();
+    musclesAndJoints.forEach((section) => {
+      section.muscles.forEach((muscle) => currentIds.add(muscle.id));
+      section.joints.forEach((joint) => currentIds.add(joint.id));
+    });
+
+    setSelectedItems((prevSelectedItems) => {
+      const newSelectedItems = {};
+      Object.entries(prevSelectedItems).forEach(([sectionName, items]) => {
+        const newItems = {
+          muscles: (items.muscles || []).filter((item) =>
+            currentIds.has(item.muscleId)
+          ),
+          joints: (items.joints || []).filter((item) =>
+            currentIds.has(item.jointId)
+          ),
+        };
+
+        if (
+          (newItems.muscles && newItems.muscles.length > 0) ||
+          (newItems.joints && newItems.joints.length > 0)
+        ) {
+          newSelectedItems[sectionName] = newItems;
+        }
+      });
+      return newSelectedItems;
+    });
+  }, [musclesAndJoints]);
+
+  useEffect(() => {
+    validateSelectedItems();
+  }, [musclesAndJoints, validateSelectedItems]);
+
+  useEffect(() => {
+    if (mappedData.length === 0) return;
+    if (currentIndex >= mappedData.length) {
+      setCurrentIndex(0);
+    }
+  }, [currentIndex, mappedData.length]);
+
+  if (mappedData.length === 0)
     return <div className={styles.musclesAndJointsWrapper}></div>;
 
-  const { sectionName, muscles, joints } = mappedData[currentIndex];
+  const {
+    sectionName = "",
+    muscles = [],
+    joints = [],
+  } = mappedData[currentIndex] || {};
 
   return (
     <div className={styles.musclesAndJointsWrapper}>
       <div className={styles.selectedItemsList}>
+        <span className={styles.selectedItemsHeader}>Selected items:</span>
         {Object.entries(selectedItems).map(([sectionName, items]) => (
           <div key={sectionName} className={styles.selectedSection}>
             <div className={styles.selectedSectionHeader}>
-              {sectionName.replace("-", " ")}
+              {sectionName.replace("-", " ")}:
             </div>
             {["muscles", "joints"].map((type) =>
               items[type]?.map((item) => (
                 <div key={item.value} className={styles.selectedItem}>
-                  {item.label}
+                  <div className={styles.selectedItemLabel}>{item.label}</div>
                   <button
                     onClick={() => handleRemove(sectionName, type, item.value)}
                     className={styles.removeButton}
@@ -101,11 +171,11 @@ const MusclesAndJoints = ({ musclesAndJoints }) => {
       </div>
       <div className={styles.navigation}>
         <button onClick={handlePrev}>&lt;</button>
-        <span>{`${currentIndex + 1} / ${musclesAndJoints.length}`}</span>
+        <span>{`${currentIndex + 1} / ${mappedData.length}`}</span>
         <button onClick={handleNext}>&gt;</button>
       </div>
       <div className={styles.bodyPartContainer}>
-        <div key={sectionName} className={styles.bodyPart}>
+        <div className={styles.bodyPart}>
           <div className={styles.bodyPartHeader}>
             {sectionName.replace("-", " ")}
           </div>
@@ -133,6 +203,13 @@ const MusclesAndJoints = ({ musclesAndJoints }) => {
           />
         </div>
       </div>
+      <button
+        onClick={() => {
+          console.log(selectedItems);
+        }}
+      >
+        CHECK
+      </button>
     </div>
   );
 };
