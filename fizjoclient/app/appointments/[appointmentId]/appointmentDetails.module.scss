@@ -149,4 +149,30 @@
   color: #555;
 }
 
+.selectedItems {
+  margin-top: 1em;
+}
 
+.selectedItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75em;
+}
+
+.selectedItem .checkbox {
+  margin-right: 10px;
+}
+
+.removeButton {
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  padding: 0.3em 0.6em;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.removeButton:hover {
+  background-color: #e60000;
+}
