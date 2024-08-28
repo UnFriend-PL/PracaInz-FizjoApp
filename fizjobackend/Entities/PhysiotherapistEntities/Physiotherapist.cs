@@ -34,7 +34,7 @@ namespace fizjobackend.Entities.PhysiotherapistEntities
             CreatedDate = DateTime.UtcNow;
         }
 
-        public Physiotherapist(PhysiotherapistEditRequestDTO physiotherapist)
+        public Physiotherapist(PhysiotherapistEditRequestDTO physiotherapist, Guid userId)
         {
             Email = physiotherapist.Email;
             FirstName = physiotherapist.FirstName;

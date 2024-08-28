@@ -5,5 +5,6 @@ namespace fizjobackend.Interfaces.HelpersInterfaces
     public interface IAccountValidationHelper
     {
         string[] Validate(User user);
+
     }
 }
