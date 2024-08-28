@@ -22,14 +22,14 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 1em;
   .navigation {
     display: flex;
-    flex-basis: 100%;
+    flex-basis: 50%;
     justify-content: space-between;
     align-items: center;
     align-self: stretch;
@@ -47,8 +47,30 @@
   .navigation button:hover {
     background-color: $button-bg-hover;
   }
+  .bodyPartContainer {
+    flex-basis: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-self: flex-start;
+    align-items: center;
+    align-content: center;
+  }
   .bodyPart {
     flex-basis: 100%;
+  }
+
+  .bodyPartHeader {
+    margin: 1em 0 1em 0;
+    font-size: 1.2em;
+    text-transform: capitalize;
+    font-weight: bold;
+    color: $text-dark-green;
+  }
+
+  .bodyPartSubHeader {
+    color: $text-black;
+    font-size: 1em;
+    font-weight: bold;
   }
 }
 .appointmentCard {
@@ -109,24 +131,6 @@
   align-content: flex-start;
 }
 
-.bodyPart {
-  flex-basis: 100%;
-  align-self: stretch;
-}
-.bodyPartHeader {
-  margin: 1em 0 1em 0;
-  font-size: 1.2em;
-  text-transform: capitalize;
-  font-weight: bold;
-  color: $text-dark-green;
-}
-
-.bodyPartSubHeader {
-  color: $text-black;
-  font-size: 1em;
-  font-weight: bold;
-}
-
 .musclesAndJointsList {
   margin-top: 1em;
   padding-left: 1em;
@@ -170,6 +174,9 @@
   font-weight: bold;
   color: $text-black;
   text-transform: capitalize;
+  position: absolute;
+  top: -1.3em;
+  left: 0.1em;
 }
 .selectedSection {
   display: flex;
@@ -178,7 +185,10 @@
   align-items: center;
   align-content: center;
   flex-basis: 100%;
-  margin: 0.5em 0;
+  margin: 1.5em 0 0.5em 0;
+  background-color: $bg-page;
+  padding: 0.2em;
+  position: relative;
 }
 .selectedItems {
   display: flex;

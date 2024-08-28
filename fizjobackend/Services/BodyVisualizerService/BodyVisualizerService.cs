@@ -21,7 +21,6 @@ namespace fizjobackend.Services.BodyVisualizerService
             var serviceResponse = new ServiceResponse<BodyPartDetailsResponseDTO>("Body part details retrieved successfully");
             try
             {
-                // Step 1: Load the View based on the provided Gender and ViewPosition
                 var view = await _context.Views
                     .FirstOrDefaultAsync(v => v.Gender == bodyRequest.Gender && v.Name == bodyRequest.ViewPosition);
 
@@ -32,7 +31,6 @@ namespace fizjobackend.Services.BodyVisualizerService
                     return serviceResponse;
                 }
 
-                // Step 2: Load the BodySection based on the BodySectionName and ViewId
                 var bodySection = await _context.BodySections
                     .FirstOrDefaultAsync(bs => bs.BodySectionName == bodyRequest.BodySectionName && bs.ViewId == view.Id && bs.BodySide == bodyRequest.ViewSide);
 
@@ -43,7 +41,6 @@ namespace fizjobackend.Services.BodyVisualizerService
                     return serviceResponse;
                 }
 
-                // Step 3: Load the related Muscles and Joints collections
                 var muscles = await _context.Muscles
                     .Where(m => m.BodySectionId == bodySection.Id)
                     .Select(m => new MuscleResponseDTO(m))
@@ -54,7 +51,6 @@ namespace fizjobackend.Services.BodyVisualizerService
                     .Select(j => new JointResponseDTO(j))
                     .ToListAsync();
 
-                // Construct the response DTO
                 var name = bodySection.BodySide != null ? $"{bodySection.BodySide}-{bodySection.BodySectionName}" : $"{bodySection.BodySectionName}";
                 var bodyPartDetailsResponseDTO = new BodyPartDetailsResponseDTO()
                 {

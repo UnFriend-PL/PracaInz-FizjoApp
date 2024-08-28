@@ -24,6 +24,7 @@ namespace fizjobackend.Entities.AppointmentEntities
         public string? Diagnosis { get; set; }
         public bool IsPaid { get; set; } = false;
         public double Price { get; set; } = 0;
+        public ICollection<AppointmentBodyDetails> AppointmentBodyDetails { get; set; }
         public Appointment() { }
 
         public Appointment(CreateAppointmentRequestDTO appointment)

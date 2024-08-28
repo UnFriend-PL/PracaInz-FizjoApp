@@ -64,5 +64,20 @@ namespace fizjobackend.Controllers
             }
             return Ok(response);
         }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpGet("/Appointments/{AppointmentId}/SaveBodyDetails")]
+        public async Task<IActionResult> GetAllAppointments(string appointmentId, [FromBody] SaveAppointmentBodyDetailsRequestDTO detailsToSave)
+        {
+            var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var response = await _appointmentsService.SaveBodyPartDetails(userId, Guid.Parse(appointmentId), detailsToSave);
+            if (!response.Success)
+            {
+                _logger.LogWarning("Failed to get all appointments: {Message}", response.Message);
+                return BadRequest(response);
+            }
+            return Ok(response);
+            //return Ok();
+        }
     }
 }
