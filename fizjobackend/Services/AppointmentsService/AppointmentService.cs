@@ -287,23 +287,22 @@ namespace fizjobackend.Services.AppointmentsService
                 foreach (var bodyPart in groupedBodyParts)
                 {
                     var firstBodyPart = bodyPart.First();
-                    var viewSide = firstBodyPart.BodySide.Split("-").FirstOrDefault();
+                    var viewSide = firstBodyPart.BodySide.Split("-");
                     var bodyPartDetailsRequest = new BodyPartDetailsRequestDTO
                     {
                         BodySectionName = firstBodyPart.BodySection.BodySectionName,
                         Gender = firstBodyPart.View.Gender,
                         ViewPosition = firstBodyPart.View.Name,
-                        ViewSide = viewSide,
+                        ViewSide = viewSide.Length >1? viewSide[0] : null,
                     };
 
                     var bodyPartFromDb = await _bodyVisualizerService.GetBodyPartDetails(bodyPartDetailsRequest);
-
                     var responseDto = new LoadAppointmentBodyDetailsResponseDTO
                     {
-                        SelectedMuscles = bodyPartFromDb.Data!.Muscles
+                        SelectedMuscles = bodyPartFromDb.Data.Muscles
                             .Where(muscle => selectedMuscles.Any(sm => sm.Id == muscle.Id))
                             .ToList(),
-                        SelectedJoints = bodyPartFromDb.Data!.Joints
+                        SelectedJoints = bodyPartFromDb.Data.Joints
                             .Where(joint => selectedJoints.Any(sj => sj.Id == joint.Id))
                             .ToList(),
                         BodyPartMusclesAndJoints = bodyPartFromDb.Data,
