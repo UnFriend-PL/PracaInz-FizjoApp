@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import Select from "react-select";
 import styles from "./appointmentDetails.module.scss";
+import apiService from "@/app/services/apiService/apiService";
 
 const mapData = (data) => {
   return data.map((section) => {
@@ -30,7 +31,41 @@ const mapData = (data) => {
   });
 };
 
-const MusclesAndJoints = ({ musclesAndJoints }) => {
+const createBodyDetails = (selectedItems) => {
+  const bodyDetails = [];
+
+  for (const [bodySide, details] of Object.entries(selectedItems)) {
+    // Przetwarzanie mięśni
+    if (details.muscles && details.muscles.length > 0) {
+      details.muscles.forEach((muscle) => {
+        bodyDetails.push({
+          bodySectionId: muscle.bodySectionId,
+          viewId: muscle.viewId,
+          muscleId: muscle.muscleId,
+          jointId: null,
+          bodySide: bodySide,
+        });
+      });
+    }
+
+    // Przetwarzanie stawów
+    if (details.joints && details.joints.length > 0) {
+      details.joints.forEach((joint) => {
+        bodyDetails.push({
+          bodySectionId: joint.bodySectionId,
+          viewId: joint.viewId,
+          muscleId: null,
+          jointId: joint.jointId,
+          bodySide: bodySide,
+        });
+      });
+    }
+  }
+
+  return { bodyDetails };
+};
+
+const MusclesAndJoints = ({ musclesAndJoints, appointmentId }) => {
   const [selectedItems, setSelectedItems] = useState({});
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -135,6 +170,26 @@ const MusclesAndJoints = ({ musclesAndJoints }) => {
     }
   }, [currentIndex, mappedData.length]);
 
+  const handleSave = async () => {
+    const bodyDetailsPayload = createBodyDetails(selectedItems);
+    console.log("Sending data:", bodyDetailsPayload);
+
+    try {
+      const response = apiService.post(
+        `/appointments/${appointmentId}/SaveBodyDetails`,
+        bodyDetailsPayload,
+        true
+      );
+      if (!response.success) {
+        throw new Error("Network response was not ok");
+      }
+
+      console.log("Data saved:", response);
+    } catch (error) {
+      console.error("There was a problem with the fetch operation:", error);
+    }
+  };
+
   if (mappedData.length === 0)
     return <div className={styles.musclesAndJointsWrapper}></div>;
 
@@ -203,12 +258,8 @@ const MusclesAndJoints = ({ musclesAndJoints }) => {
           />
         </div>
       </div>
-      <button
-        onClick={() => {
-          console.log(selectedItems);
-        }}
-      >
-        CHECK
+      <button onClick={handleSave} className={styles.saveButton}>
+        SAVE
       </button>
     </div>
   );

@@ -96,7 +96,7 @@ const Appointments = () => {
             onBodyPartPress={handleBodyPartPress}
           />
         </div>
-        <MusclesAndJoints musclesAndJoints={musclesAndJoints} />
+        <MusclesAndJoints musclesAndJoints={musclesAndJoints} appointmentId={appointmentId} />
       </div>
       <div className={styles.container}>
         <AppointmentDetails appointment={appointment} />

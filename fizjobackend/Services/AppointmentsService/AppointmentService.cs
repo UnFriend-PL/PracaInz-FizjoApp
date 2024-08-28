@@ -6,7 +6,9 @@ using fizjobackend.Enums.AppointmentEnums;
 using fizjobackend.Interfaces.AppointmentsInterfaces;
 using fizjobackend.Interfaces.BodyVisualizerInterfaces;
 using fizjobackend.Models.AppointmentsDTOs;
+using fizjobackend.Models.BodyVisualizerDTOs;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace fizjobackend.Services.AppointmentsService
 {
@@ -205,17 +207,20 @@ namespace fizjobackend.Services.AppointmentsService
                     appointment.AppointmentBodyDetails = new List<AppointmentBodyDetails>();
                 }
 
+                // Create a list of current body details in the database
+                var currentBodyDetails = appointment.AppointmentBodyDetails.ToList();
+
+                // Add or update body details
                 foreach (var bodyDetail in bodyDetailsToSave.BodyDetails)
                 {
-
                     var isAppointmentBodyDetailinDb = await _context.AppointmentBodyDetails
-                        .AnyAsync(abd => abd.AppointmentId == appointmentId && 
-                                         abd.BodySectionId == bodyDetail.BodySectionId && 
-                                         abd.BodySide == bodyDetail.BodySide && 
+                        .AnyAsync(abd => abd.AppointmentId == appointmentId &&
+                                         abd.BodySectionId == bodyDetail.BodySectionId &&
+                                         abd.BodySide == bodyDetail.BodySide &&
                                          abd.MuscleId == bodyDetail.MuscleId &&
-                                         abd.JointId == bodyDetail.JointId
-                                         );
-                    if(isAppointmentBodyDetailinDb) continue;
+                                         abd.JointId == bodyDetail.JointId);
+                    if (isAppointmentBodyDetailinDb) continue;
+
                     var appointmentBodyDetail = new AppointmentBodyDetails()
                     {
                         AppointmentId = appointmentId,
@@ -224,10 +229,21 @@ namespace fizjobackend.Services.AppointmentsService
                         MuscleId = bodyDetail.MuscleId,
                         JointId = bodyDetail.JointId,
                         BodySide = bodyDetail.BodySide
-                    };     
+                    };
 
                     appointment.AppointmentBodyDetails.Add(appointmentBodyDetail);
                 }
+
+                // Remove body details that are not in the new list
+                var bodyDetailsToRemove = currentBodyDetails
+                    .Where(dbDetail => !bodyDetailsToSave.BodyDetails
+                        .Any(newDetail => newDetail.BodySectionId == dbDetail.BodySectionId &&
+                                          newDetail.BodySide == dbDetail.BodySide &&
+                                          newDetail.MuscleId == dbDetail.MuscleId &&
+                                          newDetail.JointId == dbDetail.JointId))
+                    .ToList();
+
+                _context.AppointmentBodyDetails.RemoveRange(bodyDetailsToRemove);
 
                 await _context.SaveChangesAsync();
                 return serviceResponse;
@@ -236,6 +252,74 @@ namespace fizjobackend.Services.AppointmentsService
             {
                 _logger.LogError(e, "Error saving body part details");
                 return new ServiceResponse<bool>($"Error during saving body part details.");
+            }
+        }
+
+        public async Task<ServiceResponse<List<LoadAppointmentBodyDetailsResponseDTO>>> LoadAppointmentBodyDetails(Guid appointmentId)
+        {
+            var serviceResponse = new ServiceResponse<List<LoadAppointmentBodyDetailsResponseDTO>>("Body part details loaded successfully");
+            try
+            {
+                _logger.LogInformation("Loading body part details for appointmentId: {AppointmentId}", appointmentId);
+
+                var selectedBodyPartsFromDb = await _context.AppointmentBodyDetails
+                    .Where(abd => abd.AppointmentId == appointmentId)
+                    .Include(abd => abd.BodySection)
+                    .Include(abd => abd.View)
+                    .Include(abd => abd.Muscle)
+                    .Include(abd => abd.Joint)
+                    .ToListAsync();
+
+                var selectedMuscles = selectedBodyPartsFromDb
+                    .Where(abd => abd.MuscleId != null)
+                    .Select(abd => new MuscleResponseDTO(abd.Muscle))
+                    .ToList();
+
+                var selectedJoints = selectedBodyPartsFromDb
+                    .Where(abd => abd.JointId != null)
+                    .Select(abd => new JointResponseDTO(abd.Joint))
+                    .ToList();
+
+                var groupedBodyParts = selectedBodyPartsFromDb.GroupBy(abd => abd.BodySectionId);
+
+                var selectedBodyParts = new List<LoadAppointmentBodyDetailsResponseDTO>();
+
+                foreach (var bodyPart in groupedBodyParts)
+                {
+                    var firstBodyPart = bodyPart.First();
+                    var viewSide = firstBodyPart.BodySide.Split("-").FirstOrDefault();
+                    var bodyPartDetailsRequest = new BodyPartDetailsRequestDTO
+                    {
+                        BodySectionName = firstBodyPart.BodySection.BodySectionName,
+                        Gender = firstBodyPart.View.Gender,
+                        ViewPosition = firstBodyPart.View.Name,
+                        ViewSide = viewSide,
+                    };
+
+                    var bodyPartFromDb = await _bodyVisualizerService.GetBodyPartDetails(bodyPartDetailsRequest);
+
+                    var responseDto = new LoadAppointmentBodyDetailsResponseDTO
+                    {
+                        SelectedMuscles = bodyPartFromDb.Data!.Muscles
+                            .Where(muscle => selectedMuscles.Any(sm => sm.Id == muscle.Id))
+                            .ToList(),
+                        SelectedJoints = bodyPartFromDb.Data!.Joints
+                            .Where(joint => selectedJoints.Any(sj => sj.Id == joint.Id))
+                            .ToList(),
+                        BodyPartMusclesAndJoints = bodyPartFromDb.Data,
+                    };
+
+                    selectedBodyParts.Add(responseDto);
+                }
+
+                serviceResponse.Data = selectedBodyParts;
+                _logger.LogInformation("Successfully loaded body part details for appointmentId: {AppointmentId}", appointmentId);
+                return serviceResponse;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error loading body part details for appointmentId: {AppointmentId}", appointmentId);
+                return new ServiceResponse<List<LoadAppointmentBodyDetailsResponseDTO>>($"Error during loading body part details.");
             }
         }
     }
