@@ -1,3 +1,4 @@
+// components/BodyPartSelector.jsx
 import React from "react";
 import Select from "react-select";
 import styles from "./appointmentDetails.module.scss";

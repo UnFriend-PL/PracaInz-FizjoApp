@@ -14,7 +14,8 @@ const MusclesAndJoints = ({
 }) => {
   const [selectedItems, setSelectedItems] = useState({});
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  // console.log(musclesAndJoints);
+  // console.log(loadedMusclesAndJoints);
   const mappedData = mapData(musclesAndJoints);
 
   const handleChange = useCallback((selected, sectionName, type) => {
@@ -23,15 +24,10 @@ const MusclesAndJoints = ({
         ...prevState[sectionName],
         [type]: selected || [],
       };
-
-      if (
-        (!updatedSection.muscles || updatedSection.muscles.length === 0) &&
-        (!updatedSection.joints || updatedSection.joints.length === 0)
-      ) {
+      if (!updatedSection.muscles?.length && !updatedSection.joints?.length) {
         const { [sectionName]: _, ...rest } = prevState;
         return rest;
       }
-
       return {
         ...prevState,
         [sectionName]: updatedSection,
@@ -47,15 +43,10 @@ const MusclesAndJoints = ({
           (item) => item.value !== value
         ),
       };
-
-      if (
-        (!updatedSection.muscles || updatedSection.muscles.length === 0) &&
-        (!updatedSection.joints || updatedSection.joints.length === 0)
-      ) {
+      if (!updatedSection.muscles?.length && !updatedSection.joints?.length) {
         const { [sectionName]: _, ...rest } = prevState;
         return rest;
       }
-
       return {
         ...prevState,
         [sectionName]: updatedSection,
@@ -63,44 +54,38 @@ const MusclesAndJoints = ({
     });
   }, []);
 
-  const handlePrev = useCallback(() => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? mappedData.length - 1 : prevIndex - 1
-    );
-  }, [mappedData.length]);
-
-  const handleNext = useCallback(() => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === mappedData.length - 1 ? 0 : prevIndex + 1
-    );
-  }, [mappedData.length]);
+  const handleNavigation = useCallback(
+    (direction) => {
+      setCurrentIndex((prevIndex) => {
+        const maxIndex = mappedData.length - 1;
+        if (direction === "prev")
+          return prevIndex === 0 ? maxIndex : prevIndex - 1;
+        return prevIndex === maxIndex ? 0 : prevIndex + 1;
+      });
+    },
+    [mappedData.length]
+  );
 
   const validateSelectedItems = useCallback(() => {
-    const currentIds = new Set();
-    musclesAndJoints.forEach((section) => {
-      section.muscles.forEach((muscle) => currentIds.add(muscle.id));
-      section.joints.forEach((joint) => currentIds.add(joint.id));
-    });
+    const currentIds = new Set(
+      musclesAndJoints.flatMap((section) => [
+        ...section.muscles.map((m) => m.id),
+        ...section.joints.map((j) => j.id),
+      ])
+    );
 
     setSelectedItems((prevSelectedItems) => {
       const newSelectedItems = {};
-      Object.entries(prevSelectedItems).forEach(([sectionName, items]) => {
-        const newItems = {
-          muscles: (items.muscles || []).filter((item) =>
-            currentIds.has(item.muscleId)
-          ),
-          joints: (items.joints || []).filter((item) =>
-            currentIds.has(item.jointId)
-          ),
-        };
-
-        if (
-          (newItems.muscles && newItems.muscles.length > 0) ||
-          (newItems.joints && newItems.joints.length > 0)
-        ) {
-          newSelectedItems[sectionName] = newItems;
-        }
-      });
+      for (const [sectionName, items] of Object.entries(prevSelectedItems)) {
+        const muscles = (items.muscles || []).filter((item) =>
+          currentIds.has(item.muscleId)
+        );
+        const joints = (items.joints || []).filter((item) =>
+          currentIds.has(item.jointId)
+        );
+        if (muscles.length || joints.length)
+          newSelectedItems[sectionName] = { muscles, joints };
+      }
       return newSelectedItems;
     });
   }, [musclesAndJoints]);
@@ -110,33 +95,62 @@ const MusclesAndJoints = ({
   }, [musclesAndJoints, validateSelectedItems]);
 
   useEffect(() => {
-    if (mappedData.length === 0) return;
-    if (currentIndex >= mappedData.length) {
+    if (mappedData.length && currentIndex >= mappedData.length) {
       setCurrentIndex(0);
     }
   }, [currentIndex, mappedData.length]);
 
+  useEffect(() => {
+    musclesAndJoints.forEach((section) => {
+      const initialSelectedMuscles = section.muscles
+        .filter((muscle) =>
+          loadedMusclesAndJoints.some((item) => item.id === muscle.id)
+        )
+        .map((muscle) => ({
+          section: section.name,
+          label: muscle.name,
+          value: muscle.name.toLowerCase().replace(/\s+/g, "-"),
+          description: `Muscle in the ${section.name} section`,
+          bodySectionId: section.bodySectionId,
+          viewId: section.viewId,
+          muscleId: muscle.id,
+        }));
+
+      const initialSelectedJoints = section.joints
+        .filter((joint) =>
+          loadedMusclesAndJoints.some((item) => item.id === joint.id)
+        )
+        .map((joint) => ({
+          section: section.name,
+          label: joint.name,
+          value: joint.name.toLowerCase().replace(/\s+/g, "-"),
+          description: `Joint in the ${section.name} section`,
+          bodySectionId: section.bodySectionId,
+          viewId: section.viewId,
+          jointId: joint.id,
+        }));
+
+      console.log(initialSelectedMuscles);
+      handleChange(initialSelectedMuscles, section.name, "muscles");
+      handleChange(initialSelectedJoints, section.name, "joints");
+    });
+  }, [loadedMusclesAndJoints]);
+
   const handleSave = async () => {
     const bodyDetailsPayload = createBodyDetails(selectedItems);
-    console.log("Sending data:", bodyDetailsPayload);
-
     try {
       const response = await apiService.post(
         `/appointments/${appointmentId}/SaveBodyDetails`,
         bodyDetailsPayload,
         true
       );
-      if (!response.success) {
-        throw new Error("Network response was not ok");
-      }
-
-      console.log("Data saved:", response);
+      if (!response.success) throw new Error("Network response was not ok");
     } catch (error) {
-      console.error("There was a problem with the fetch operation:", error);
+      console.error("Save failed:", error);
     }
   };
 
-  if (mappedData.length === 0)
+  if (!mappedData.length)
     return <div className={styles.musclesAndJointsWrapper}></div>;
 
   const {
@@ -152,9 +166,9 @@ const MusclesAndJoints = ({
         handleRemove={handleRemove}
       />
       <div className={styles.navigation}>
-        <button onClick={handlePrev}>&lt;</button>
+        <button onClick={() => handleNavigation("prev")}>&lt;</button>
         <span>{`${currentIndex + 1} / ${mappedData.length}`}</span>
-        <button onClick={handleNext}>&gt;</button>
+        <button onClick={() => handleNavigation("next")}>&gt;</button>
       </div>
       <BodyPartSelector
         sectionName={sectionName}

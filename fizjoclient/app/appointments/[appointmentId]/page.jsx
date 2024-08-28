@@ -17,6 +17,7 @@ const Appointments = () => {
   const [viewPosition, setViewPosition] = useState("front");
   const [musclesAndJoints, setMusclesAndJoints] = useState([]);
   const [loadedMusclesAndJoints, setLoadedMusclesAndJoints] = useState([]);
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -26,25 +27,52 @@ const Appointments = () => {
         .catch((error) =>
           console.error("Failed to fetch appointment details:", error)
         );
-      fetchSavedMusclesAndJoints();
     }
-  }, [isAuthenticated, appointmentId]);
+    if (isFirstLoad) {
+      fetchSavedMusclesAndJoints();
+      setIsFirstLoad(false);
+    }
+  }, [isAuthenticated, appointmentId, isFirstLoad]);
 
   const fetchSavedMusclesAndJoints = useCallback(async () => {
-    await apiService
-      .post(
+    try {
+      const response = await apiService.post(
         `/Appointments/${appointmentId}/LoadSelectedBodyDetails`,
         null,
         true
-      )
-      .then((response) => {
-        setLoadedMusclesAndJoints(response.data);
-        console.log(response.data);
-      })
-      .catch((error) =>
-        console.error("Failed to fetch appointment details:", error)
       );
-  }, []);
+
+      const uniqueMusclesAndJoints = new Set();
+      const uniqueSelectedMusclesAndJoints = new Set();
+      const updatedSelectedParts = { front: [], back: [] };
+
+      response.data.forEach((element) => {
+        // console.log(element);
+        uniqueMusclesAndJoints.add(element.bodyPartMusclesAndJoints);
+        updatedSelectedParts[viewPosition].push({
+          slug: element.bodyPartMusclesAndJoints.name,
+        });
+      });
+
+      response.data
+        .flatMap((element) => element.selectedMuscles)
+        .forEach((muscle) => {
+          uniqueSelectedMusclesAndJoints.add(muscle);
+        });
+
+      response.data
+        .flatMap((element) => element.selectedJoints)
+        .forEach((joint) => {
+          uniqueSelectedMusclesAndJoints.add(joint);
+        });
+
+      setMusclesAndJoints(Array.from(uniqueMusclesAndJoints));
+      setSelectedParts(updatedSelectedParts);
+      setLoadedMusclesAndJoints(Array.from(uniqueSelectedMusclesAndJoints));
+    } catch (error) {
+      console.error("Failed to fetch appointment details:", error);
+    }
+  }, [appointmentId, viewPosition]);
 
   const fetchMusclesAndJoints = useCallback(
     async (bodyPart) => {
