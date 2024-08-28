@@ -52,7 +52,7 @@ namespace fizjobackend.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpGet("/Appointments/{AppointmentId}")]
+        [HttpGet("/Appointments/{appointmentId}")]
         public async Task<IActionResult> GetAllAppointments(string appointmentId)
         {
             var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
@@ -66,8 +66,8 @@ namespace fizjobackend.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpGet("/Appointments/{AppointmentId}/SaveBodyDetails")]
-        public async Task<IActionResult> GetAllAppointments(string appointmentId, [FromBody] SaveAppointmentBodyDetailsRequestDTO detailsToSave)
+        [HttpPost("/Appointments/{appointmentId}/SaveBodyDetails")]
+        public async Task<IActionResult> SaveBodyDetails(string appointmentId, [FromBody] SaveAppointmentBodyDetailsRequestDTO detailsToSave)
         {
             var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             var response = await _appointmentsService.SaveBodyPartDetails(userId, Guid.Parse(appointmentId), detailsToSave);
@@ -77,7 +77,20 @@ namespace fizjobackend.Controllers
                 return BadRequest(response);
             }
             return Ok(response);
-            //return Ok();
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpPost("/Appointments/{appointmentId}/LoadSelectedBodyDetails")]
+        public async Task<IActionResult> LoadSelectedBodyDetails(Guid appointmentId)
+        {
+            // Should we add an user access check here?
+            var response = await _appointmentsService.LoadAppointmentBodyDetails(appointmentId);
+            if (!response.Success)
+            {
+                _logger.LogWarning("Failed to get all appointments: {Message}", response.Message);
+                return BadRequest(response);
+            }
+            return Ok(response);
         }
     }
 }
