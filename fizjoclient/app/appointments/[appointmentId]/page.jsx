@@ -16,6 +16,7 @@ const Appointments = () => {
   const [appointment, setAppointment] = useState(null);
   const [viewPosition, setViewPosition] = useState("front");
   const [musclesAndJoints, setMusclesAndJoints] = useState([]);
+  const [loadedMusclesAndJoints, setLoadedMusclesAndJoints] = useState([]);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -25,8 +26,25 @@ const Appointments = () => {
         .catch((error) =>
           console.error("Failed to fetch appointment details:", error)
         );
+      fetchSavedMusclesAndJoints();
     }
   }, [isAuthenticated, appointmentId]);
+
+  const fetchSavedMusclesAndJoints = useCallback(async () => {
+    await apiService
+      .post(
+        `/Appointments/${appointmentId}/LoadSelectedBodyDetails`,
+        null,
+        true
+      )
+      .then((response) => {
+        setLoadedMusclesAndJoints(response.data);
+        console.log(response.data);
+      })
+      .catch((error) =>
+        console.error("Failed to fetch appointment details:", error)
+      );
+  }, []);
 
   const fetchMusclesAndJoints = useCallback(
     async (bodyPart) => {
@@ -37,27 +55,27 @@ const Appointments = () => {
         setMusclesAndJoints((prev) =>
           prev.filter((part) => part.name !== bodyPart.slug)
         );
-      } else {
-        const { slug } = bodyPart;
-        const [viewSide, bodySectionName] = slug.includes("-")
-          ? slug.split(/-(.+)/)
-          : [null, slug];
-        const requestBody = {
-          bodySectionName,
-          viewPosition,
-          viewSide,
-          gender: appointment.patient.gender,
-        };
-        try {
-          const response = await apiService.post(
-            `/BodyVisualizer/GetBodyPartDetails`,
-            requestBody,
-            true
-          );
-          setMusclesAndJoints((prev) => [...prev, response.data]);
-        } catch (error) {
-          console.error("Failed to fetch muscles and joints details:", error);
-        }
+        return;
+      }
+      const { slug } = bodyPart;
+      const [viewSide, bodySectionName] = slug.includes("-")
+        ? slug.split(/-(.+)/)
+        : [null, slug];
+      const requestBody = {
+        bodySectionName,
+        viewPosition,
+        viewSide,
+        gender: appointment.patient.gender,
+      };
+      try {
+        const response = await apiService.post(
+          `/BodyVisualizer/GetBodyPartDetails`,
+          requestBody,
+          true
+        );
+        setMusclesAndJoints((prev) => [...prev, response.data]);
+      } catch (error) {
+        console.error("Failed to fetch muscles and joints details:", error);
       }
     },
     [musclesAndJoints, viewPosition, appointment]
@@ -96,7 +114,12 @@ const Appointments = () => {
             onBodyPartPress={handleBodyPartPress}
           />
         </div>
-        <MusclesAndJoints musclesAndJoints={musclesAndJoints} appointmentId={appointmentId} />
+        <MusclesAndJoints
+          musclesAndJoints={musclesAndJoints}
+          appointmentId={appointmentId}
+          loadedMusclesAndJoints={loadedMusclesAndJoints}
+          setMusclesAndJoints={setMusclesAndJoints}
+        />
       </div>
       <div className={styles.container}>
         <AppointmentDetails appointment={appointment} />

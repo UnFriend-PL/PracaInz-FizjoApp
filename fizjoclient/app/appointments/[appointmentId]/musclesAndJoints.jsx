@@ -65,7 +65,12 @@ const createBodyDetails = (selectedItems) => {
   return { bodyDetails };
 };
 
-const MusclesAndJoints = ({ musclesAndJoints, appointmentId }) => {
+const MusclesAndJoints = ({
+  musclesAndJoints,
+  appointmentId,
+  loadedMusclesAndJoints,
+  setMusclesAndJoints,
+}) => {
   const [selectedItems, setSelectedItems] = useState({});
   const [currentIndex, setCurrentIndex] = useState(0);
 
