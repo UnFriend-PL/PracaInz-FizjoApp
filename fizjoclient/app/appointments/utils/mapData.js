@@ -1,6 +1,7 @@
 const mapData = (data) => {
   return data.map((section) => {
     const muscles = section.muscles.map((muscle) => ({
+      section: section.name,
       label: muscle.name,
       value: muscle.name.toLowerCase().replace(/\s+/g, "-"),
       description: `Muscle in the ${section.name} section`,
@@ -10,6 +11,7 @@ const mapData = (data) => {
     }));
 
     const joints = section.joints.map((joint) => ({
+      section: section.name,
       label: joint.name,
       value: joint.name.toLowerCase().replace(/\s+/g, "-"),
       description: `Joint in the ${section.name} section`,

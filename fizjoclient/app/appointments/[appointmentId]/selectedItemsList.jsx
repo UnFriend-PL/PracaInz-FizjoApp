@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./appointmentDetails.module.scss";
 
-const SelectedItemsList = ({ selectedItems, handleRemove }) => (
+const SelectedItemsList = React.memo(({ selectedItems, handleRemove }) => (
   <div className={styles.selectedItemsList}>
     <span className={styles.selectedItemsHeader}>Selected items:</span>
     {Object.entries(selectedItems).map(([sectionName, items]) => (
@@ -25,6 +25,6 @@ const SelectedItemsList = ({ selectedItems, handleRemove }) => (
       </div>
     ))}
   </div>
-);
+));
 
 export default SelectedItemsList;

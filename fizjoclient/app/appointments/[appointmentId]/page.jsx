@@ -47,9 +47,10 @@ const Appointments = () => {
       const updatedSelectedParts = { front: [], back: [] };
 
       response.data.forEach((element) => {
-        // console.log(element);
         uniqueMusclesAndJoints.add(element.bodyPartMusclesAndJoints);
-        updatedSelectedParts[viewPosition].push({
+        updatedSelectedParts[
+          element.bodyPartMusclesAndJoints.viewId == (1 || 3) ? "front" : "back"
+        ].push({
           slug: element.bodyPartMusclesAndJoints.name,
         });
       });
@@ -146,7 +147,6 @@ const Appointments = () => {
           musclesAndJoints={musclesAndJoints}
           appointmentId={appointmentId}
           loadedMusclesAndJoints={loadedMusclesAndJoints}
-          setMusclesAndJoints={setMusclesAndJoints}
         />
       </div>
       <div className={styles.container}>

@@ -69,7 +69,6 @@ const AuthPage = () => {
       );
 
       if (response.success) {
-        console.log(response.data);
         login(response.data);
       } else {
         const errorData = response;

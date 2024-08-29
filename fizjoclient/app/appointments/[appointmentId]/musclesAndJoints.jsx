@@ -1,58 +1,23 @@
-import { useState, useCallback, useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
+import { useState } from "react";
 import styles from "./appointmentDetails.module.scss";
 import apiService from "@/app/services/apiService/apiService";
 import mapData from "../utils/mapData";
 import createBodyDetails from "../utils/createBodyDetails";
 import SelectedItemsList from "./SelectedItemsList";
-import BodyPartSelector from "./bodyPartSelector";
+import BodyPartSelector from "./BodyPartSelector";
+import useSelectedItems from "../utils/useSelectedItems";
 
 const MusclesAndJoints = ({
   musclesAndJoints,
   appointmentId,
   loadedMusclesAndJoints,
-  setMusclesAndJoints,
 }) => {
-  const [selectedItems, setSelectedItems] = useState({});
+  const { selectedItems, handleChange, handleRemove, setSelectedItems } =
+    useSelectedItems();
+
   const [currentIndex, setCurrentIndex] = useState(0);
-  // console.log(musclesAndJoints);
-  // console.log(loadedMusclesAndJoints);
   const mappedData = mapData(musclesAndJoints);
-
-  const handleChange = useCallback((selected, sectionName, type) => {
-    setSelectedItems((prevState) => {
-      const updatedSection = {
-        ...prevState[sectionName],
-        [type]: selected || [],
-      };
-      if (!updatedSection.muscles?.length && !updatedSection.joints?.length) {
-        const { [sectionName]: _, ...rest } = prevState;
-        return rest;
-      }
-      return {
-        ...prevState,
-        [sectionName]: updatedSection,
-      };
-    });
-  }, []);
-
-  const handleRemove = useCallback((sectionName, type, value) => {
-    setSelectedItems((prevState) => {
-      const updatedSection = {
-        ...prevState[sectionName],
-        [type]: prevState[sectionName][type].filter(
-          (item) => item.value !== value
-        ),
-      };
-      if (!updatedSection.muscles?.length && !updatedSection.joints?.length) {
-        const { [sectionName]: _, ...rest } = prevState;
-        return rest;
-      }
-      return {
-        ...prevState,
-        [sectionName]: updatedSection,
-      };
-    });
-  }, []);
 
   const handleNavigation = useCallback(
     (direction) => {
@@ -101,38 +66,17 @@ const MusclesAndJoints = ({
   }, [currentIndex, mappedData.length]);
 
   useEffect(() => {
-    musclesAndJoints.forEach((section) => {
-      const initialSelectedMuscles = section.muscles
-        .filter((muscle) =>
-          loadedMusclesAndJoints.some((item) => item.id === muscle.id)
-        )
-        .map((muscle) => ({
-          section: section.name,
-          label: muscle.name,
-          value: muscle.name.toLowerCase().replace(/\s+/g, "-"),
-          description: `Muscle in the ${section.name} section`,
-          bodySectionId: section.bodySectionId,
-          viewId: section.viewId,
-          muscleId: muscle.id,
-        }));
+    mappedData.forEach((section) => {
+      const initialSelectedMuscles = section.muscles.filter((muscle) =>
+        loadedMusclesAndJoints.some((item) => item.id === muscle.muscleId)
+      );
 
-      const initialSelectedJoints = section.joints
-        .filter((joint) =>
-          loadedMusclesAndJoints.some((item) => item.id === joint.id)
-        )
-        .map((joint) => ({
-          section: section.name,
-          label: joint.name,
-          value: joint.name.toLowerCase().replace(/\s+/g, "-"),
-          description: `Joint in the ${section.name} section`,
-          bodySectionId: section.bodySectionId,
-          viewId: section.viewId,
-          jointId: joint.id,
-        }));
+      const initialSelectedJoints = section.joints.filter((joint) =>
+        loadedMusclesAndJoints.some((item) => item.id === joint.jointId)
+      );
 
-      console.log(initialSelectedMuscles);
-      handleChange(initialSelectedMuscles, section.name, "muscles");
-      handleChange(initialSelectedJoints, section.name, "joints");
+      handleChange(initialSelectedMuscles, section.sectionName, "muscles");
+      handleChange(initialSelectedJoints, section.sectionName, "joints");
     });
   }, [loadedMusclesAndJoints]);
 
