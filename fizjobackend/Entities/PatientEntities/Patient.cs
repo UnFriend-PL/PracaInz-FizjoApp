@@ -33,23 +33,5 @@ namespace fizjobackend.Entities.PatientEntities
             PhoneNumber = patient.PhoneNumber;
             CreatedDate = DateTime.UtcNow;
         }
-
-        public Patient(PatientEditRequestDTO patient, Guid userId)
-        {
-            Id = userId;
-            Email = patient.Email;
-            FirstName = patient.FirstName;
-            LastName = patient.LastName;
-            Gender = patient.Gender;
-            Country = patient.Country;
-            City = patient.City;
-            StreetWithHouseNumber = patient.StreetWithHouseNumber;
-            PostCode = patient.PostCode;
-            Pesel = patient.Pesel;
-            DateOfBirth = patient.DateOfBirth;
-            HealthInsuranceNumber = patient.HealthInsuranceNumber;
-            PhoneNumber = patient.PhoneNumber;
-            LastModifiedDate = DateTime.UtcNow;
-        }
     }
 }

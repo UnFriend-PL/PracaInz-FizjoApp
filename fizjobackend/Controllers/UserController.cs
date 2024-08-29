@@ -1,6 +1,7 @@
 ﻿using fizjobackend.Entities.UserEntities;
 using fizjobackend.Interfaces.DTOInterfaces.UserDTOInterfaces;
 using fizjobackend.Interfaces.UsersInterfaces;
+using fizjobackend.Models.UserDTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -33,7 +34,7 @@ namespace fizjobackend.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpPut("EditInfsso")]
+        [HttpPut("EditInfoUser")]
         public async Task<IActionResult> EditUserInfo([FromBody] UserEditRequestDTO userEdit) 
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

@@ -36,21 +36,5 @@ namespace fizjobackend.Models.UserDTOs
             PhoneNumber = patient.PhoneNumber;
             HealthInsuranceNumber = patient.HealthInsuranceNumber;
         }
-
-        public PatientInfoResponseDTO(PatientEditRequestDTO patient)
-        {
-            FirstName = patient.FirstName;
-            LastName = patient.LastName;
-            Gender = patient.Gender;
-            Country = patient.Country;
-            City = patient.City;
-            StreetWithHouseNumber = patient.StreetWithHouseNumber;
-            PostCode = patient.PostCode;
-            Pesel = patient.Pesel;
-            DateOfBirth = patient.DateOfBirth;
-            Email = patient.Email;
-            PhoneNumber = patient.PhoneNumber;
-            HealthInsuranceNumber = patient.HealthInsuranceNumber;
-        }
     }
 }

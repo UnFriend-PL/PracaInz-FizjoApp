@@ -1,5 +1,6 @@
 ﻿using fizjobackend.Entities.UserEntities;
 using fizjobackend.Interfaces.DTOInterfaces.UserDTOInterfaces;
+using fizjobackend.Models.UserDTOs;
 
 namespace fizjobackend.Interfaces.UsersInterfaces
 {
