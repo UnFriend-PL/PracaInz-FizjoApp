@@ -127,6 +127,9 @@ const Appointments = () => {
   return (
     <>
       <div className={styles.container}>
+        <AppointmentDetails appointment={appointment} />
+      </div>
+      <div className={`${styles.container} ${styles.spaceAtBottom}`}>
         <div className={styles.bodyContainer}>
           <SwitchSelector
             onChange={setViewPosition}
@@ -148,9 +151,6 @@ const Appointments = () => {
           appointmentId={appointmentId}
           loadedMusclesAndJoints={loadedMusclesAndJoints}
         />
-      </div>
-      <div className={styles.container}>
-        <AppointmentDetails appointment={appointment} />
       </div>
     </>
   );

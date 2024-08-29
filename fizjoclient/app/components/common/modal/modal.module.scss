@@ -1,0 +1,64 @@
+@import "../../../utils/globalColors.scss";
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.modalContent {
+  background: $bg-page;
+  padding: 2em;
+  border-radius: 8px;
+  min-width: 45%;
+  min-height: 30%;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.large {
+  max-width: 80%;
+}
+.medium {
+  max-width: 60%;
+}
+.small {
+  max-width: 45%;
+}
+.closeButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  background-color: $button-cancel-bg;
+  color: $text-white;
+  padding: 0.5em;
+  height: 2em;
+  width: 2em;
+  border-radius: 5%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  cursor: pointer;
+}
+
+.modalNavigation {
+  flex-basis: 100%;
+  .header {
+    color: $text-dark-green;
+    font-size: 1.5em;
+    font-weight: bold;
+    border-bottom: 1px solid black;
+  }
+}

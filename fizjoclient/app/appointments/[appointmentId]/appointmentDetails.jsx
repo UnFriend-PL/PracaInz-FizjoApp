@@ -1,4 +1,8 @@
+import { useState } from "react";
 import styles from "./appointmentDetails.module.scss";
+import Modal from "@/app/components/common/modal/modal";
+import { format } from "date-fns";
+import { pl } from "date-fns/locale";
 
 const AppointmentDetails = ({ appointment }) => {
   const {
@@ -29,52 +33,107 @@ const AppointmentDetails = ({ appointment }) => {
     isPaid,
   } = appointment;
 
+  const [isPatientModalOpen, setPatientModalOpen] = useState(false);
+  const [isPhysiotherpistModalOpen, setPhysiotherapistModalOpen] =
+    useState(false);
+  const openPatientModal = () => setPatientModalOpen(true);
+  const closePatientModal = () => setPatientModalOpen(false);
+  const openPhysiotherapistModal = () => setPhysiotherapistModalOpen(true);
+  const closePhysiotherapistModal = () => setPhysiotherapistModalOpen(false);
+
   return (
     <div className={styles.appointmentCard}>
+      <span className={styles.appointmentDate}>
+        {format(new Date(appointmentDate), "dd.MM.yyyy HH:mm", {
+          locale: pl,
+        })}
+      </span>
       <div className={styles.header}>
-        <span className={styles.status}>Status: {appointmentStatusName}</span>
+        <span className={styles.status}>
+          Appointment: {appointmentStatusName}
+        </span>
       </div>
       <div className={styles.details}>
-        <DetailGroup label="Patient" value={`${firstName} ${lastName}`} />
-        <DetailGroup label="Email" value={email} />
-        <DetailGroup label="Phone" value={phoneNumber} />
-        <DetailGroup
-          label="Address"
-          value={`${streetWithHouseNumber}, ${postCode} ${city}, ${country}`}
-        />
-        <DetailGroup
-          label="DOB"
-          value={new Date(dateOfBirth).toLocaleDateString()}
-        />
-        <DetailGroup label="Insurance" value={healthInsuranceNumber} />
-        <DetailGroup
-          label="Physiotherapist"
-          value={`${physioFirstName} ${physioLastName}`}
-        />
-        <DetailGroup label="Email" value={physioEmail} />
-        <DetailGroup label="Phone" value={physioPhoneNumber} />
-        <DetailGroup label="License Number" value={licenseNumber} />
-        <DetailGroup
-          label="Date"
-          value={new Date(appointmentDate).toLocaleString()}
-        />
-        <DetailGroup
-          label="Description"
-          value={appointmentDescription || "No description provided"}
-        />
-        <DetailGroup label="Notes" value={notes || "No notes provided"} />
-        <DetailGroup
+        <div className={styles.detailsGroup}>
+          <div className={styles.detailGroupName}>Patient: </div>
+          <div className={styles.header}>
+            {firstName} {lastName}
+          </div>
+          <Modal
+            isOpen={isPatientModalOpen}
+            onClose={closePatientModal}
+            size={"medium"}
+            header={"Patient Details"}
+          >
+            <>
+              <DetailElement label="First Name" value={firstName} />
+              <DetailElement label="Last Name" value={lastName} />
+              <DetailElement label="Email" value={email} />
+              <DetailElement label="Phone" value={phoneNumber} />
+              <DetailElement
+                label="Address"
+                value={`${streetWithHouseNumber}, ${postCode} ${city}, ${country}`}
+              />
+              <DetailElement
+                label="DOB"
+                value={new Date(dateOfBirth).toLocaleDateString()}
+              />
+              <DetailElement label="Insurance" value={healthInsuranceNumber} />
+            </>
+          </Modal>
+          <button
+            className={styles.detailGroupButton}
+            onClick={openPatientModal}
+          >
+            Show details
+          </button>
+          <div className={styles.detailsGroupInfo}></div>
+        </div>
+        <div className={styles.detailsGroup}>
+          <div className={styles.detailGroupName}>Physiotherapist: </div>
+          <div className={styles.header}>
+            {physioFirstName} {physioLastName}
+          </div>
+
+          <button
+            className={styles.detailGroupButton}
+            onClick={openPhysiotherapistModal}
+          >
+            Show details
+          </button>
+          <div className={styles.detailsGroupInfo}></div>
+        </div>
+        <Modal
+          isOpen={isPhysiotherpistModalOpen}
+          onClose={closePhysiotherapistModal}
+          size={"medium"}
+          header={"Physiotherapist Details"}
+        >
+          <DetailElement label="First Name" value={physioFirstName} />
+          <DetailElement label="Last Name" value={physioLastName} />
+          <DetailElement label="License Number" value={licenseNumber} />
+        </Modal>
+      </div>
+      <div className={styles.detailsGroup}>
+        <DetailElement
           label="Diagnosis"
           value={diagnosis || "No diagnosis provided"}
         />
-        <DetailGroup label="Paid" value={isPaid ? "Yes" : "No"} />
+        <DetailElement label="Notes" value={notes || "No notes provided"} />
+      </div>
+      <div className={styles.detailsGroup}>
+        <DetailElement
+          label="Description"
+          value={appointmentDescription || "No description provided"}
+        />
+        <DetailElement label="Paid" value={isPaid ? "Yes" : "No"} />
       </div>
     </div>
   );
 };
 
-const DetailGroup = ({ label, value }) => (
-  <div className={styles.detailGroup}>
+const DetailElement = ({ label, value }) => (
+  <div className={styles.detailElement}>
     <span className={styles.label}>{label}:</span>
     <span className={styles.value}>{value}</span>
   </div>

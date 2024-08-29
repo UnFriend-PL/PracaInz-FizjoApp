@@ -9,6 +9,9 @@
   flex-wrap: wrap;
   flex-basis: 100%;
 }
+.spaceAtBottom {
+  padding-bottom: 15em;
+}
 .bodyContainer {
   display: flex;
   flex-direction: row;
@@ -23,7 +26,7 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: flex-start;
-  background-color: #f9f9f9;
+  background-color: $bg-section;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 1em;
@@ -83,23 +86,63 @@
   justify-content: space-between;
   align-items: center;
   align-content: center;
-}
 
+  .details {
+    flex-basis: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    align-content: stretch;
+    justify-content: space-between;
+  }
+  .appointmentDate {
+    top: -1.2em;
+    font-size: 1em;
+    font-weight: 800;
+  }
+  .detailsGroup {
+    flex-basis: 45%;
+    background-color: $bg-section;
+    padding: 1em;
+    margin: 4em 0 1em 0;
+    position: relative;
+    .detailGroupName {
+      position: absolute;
+      top: -2em;
+      left: 0;
+      font-size: 1.3em;
+      font-weight: 800;
+    }
+    .detailGroupButton:hover {
+      color: $text-dark-green;
+    }
+  }
+}
+.detailElement {
+  flex-basis: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.1em;
+  margin: 0.4em 0 0.4em 0;
+  .label {
+    flex-basis: content;
+  }
+  .value {
+    flex-basis: content;
+  }
+}
 .header {
   display: flex;
   flex-basis: 100%;
   justify-content: space-between;
-  color: $text-dark-green;
   font-weight: bold;
   font-size: 1.5em;
-}
-
-.details {
-  flex-basis: 30%;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  align-content: center;
+  .status {
+    background-color: $bg-dark-green;
+    color: $text-white;
+    padding: 0.5em;
+    border-radius: 5px;
+  }
 }
 
 .detailGroup {
