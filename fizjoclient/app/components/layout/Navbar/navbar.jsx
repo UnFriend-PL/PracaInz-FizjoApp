@@ -2,7 +2,7 @@
 import { useState, useContext } from "react";
 import Link from "next/link";
 import styles from "./navbar.module.scss";
-import { AuthContext } from "@/app/contexts/Auth/authContext";
+import { AuthContext } from "@/app/contexts/auth/authContext";
 import { CgProfile } from "react-icons/cg";
 
 export default function Navbar() {
@@ -25,9 +25,9 @@ export default function Navbar() {
       action: undefined,
     },
     Services: {
-      href: "/services",
+      href: "/appointments",
       className: styles["nav-link"],
-      name: "Services",
+      name: "Appointments",
       action: undefined,
     },
     Contact: {
