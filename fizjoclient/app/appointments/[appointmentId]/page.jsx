@@ -102,6 +102,9 @@ const Appointments = () => {
           requestBody,
           true
         );
+        if (!response.success) {
+          throw new Error(response.message);
+        }
         setMusclesAndJoints((prev) => [...prev, response.data]);
       } catch (error) {
         console.error("Failed to fetch muscles and joints details:", error);

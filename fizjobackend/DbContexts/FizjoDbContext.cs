@@ -1,5 +1,6 @@
 ﻿using fizjobackend.Entities.AppointmentEntities;
 using fizjobackend.Entities.BodyEntities;
+using fizjobackend.Entities.ConectorsEntities;
 using fizjobackend.Entities.PatientEntities;
 using fizjobackend.Entities.PhysiotherapistEntities;
 using fizjobackend.Entities.UserEntities;
