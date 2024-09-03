@@ -1,0 +1,71 @@
+@import "@/app/utils/globalColors.scss";
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  flex-wrap: wrap;
+  background-color: $bg-container;
+  flex-basis: 100%;
+}
+
+.dateGroup {
+  display: flex;
+  flex-wrap: wrap;
+  flex-basis: 80%;
+  .date {
+    color: $text-black;
+    flex-basis: 100%;
+    font-weight: 800;
+    font-size: 1.2em;
+    margin-bottom: 0.3em;
+    border-bottom: 3px solid $border-color;
+  }
+  .appointmentCard {
+    &:hover {
+      background-color: $bg-hover-light-green;
+      cursor: pointer;
+    }
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+    background: $bg-container;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 1rem;
+    .time {
+      color: $text-black;
+      font-weight: 800;
+      font-size: 1.2em;
+      margin-bottom: 0.3em;
+    }
+    .details {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      align-content: center;
+      flex-basis: 100%;
+      .field {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid $border-color;
+        .label {
+          font-weight: bold;
+          color: $label-color;
+          text-decoration: cap;
+          text-transform: capitalize;
+        }
+        .value {
+          color: $text-black;
+        }
+      }
+    }
+  }
+}

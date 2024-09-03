@@ -31,6 +31,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="8.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Serilog" Version="4.0.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.2" />
     <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
@@ -41,6 +42,7 @@
   <ItemGroup>
     <Folder Include="DbContexts\" />
     <Folder Include="Enums\UserEnums\" />
+    <Folder Include="Interfaces\BodyVisualizerService\" />
     <Folder Include="Middleware\" />
     <Folder Include="Migrations\" />
   </ItemGroup>

@@ -1,0 +1,388 @@
+{
+  "Front": {
+    "head": {
+      "muscles": [
+        "Occipitofrontalis muscle",
+        "Temporoparietalis muscle",
+        "Orbicularis oculi muscle",
+        "Corrugator supercilii muscle",
+        "Procerus muscle",
+        "Platysma muscle",
+        "Depressor labii inferioris muscle",
+        "Mentalis muscle",
+        "Depressor anguli oris muscle",
+        "Risorius muscle",
+        "Zygomaticus major muscle",
+        "Levator labii superioris muscle",
+        "Zygomaticus minor muscle",
+        "Levator anguli oris muscle",
+        "Buccinator muscle",
+        "Orbicularis oris muscle",
+        "Nasalis muscle",
+        "Depressor septi nasi muscle",
+        "Auricularis anterior muscle",
+        "Auricularis superior muscle",
+        "Auricularis posterior muscle",
+        "Temporalis muscle",
+        "Masseter muscle",
+        "Medial pterygoid muscle",
+        "Lateral pterygoid muscle"
+      ],
+      "joints": [
+        "Temporomandibular joint",
+        "Atlanto-occipitai joint",
+        "Atlanto-axial joint"
+      ]
+    },
+    "neck": {
+      "muscles": [
+        "Sternocleidomastoid muscle",
+        "Sternohyoid muscle",
+        "Omohyoid muscle",
+        "Sternothyroid muscle",
+        "Thyrohyoid muscle",
+        "Digastric muscle",
+        "Stylohyoid muscle",
+        "Mylohyoid muscle",
+        "Geniohyoid muscle",
+        "Scalenus anterior muscle",
+        "Scalenus medius muscle",
+        "Scalenus posterior muscle",
+        "Scalenus minimus muscle",
+        "Rectus capitis anterior muscle",
+        "Longus capitis muscle",
+        "Longus colli muscle"
+      ],
+      "joints": []
+    },
+    "chest": {
+      "muscles": [
+        "Pectoralis major muscle",
+        "Pectoralis minor muscle",
+        "Subclavius muscle",
+        "Serratus anterior muscle",
+        "Intercostal muscles",
+        "Transversus thoracis muscle",
+        "Diaphragm"
+      ],
+      "joints": []
+    },
+    "trapezius": {
+      "muscles": [],
+      "joints": ["Atlanto-occipital joint", "Atlanto-axial joint"]
+    },
+    "obliques": {
+      "muscles": ["External oblique muscle", "Internal oblique muscle"],
+      "joints": []
+    },
+    "abs": {
+      "muscles": [
+        "Transversus abdominis muscle",
+        "Rectus abdominis muscle",
+        "Pyramidalis muscle"
+      ],
+      "joints": []
+    },
+    "deltoids": {
+      "muscles": ["Deltoid muscle", "Coracobrachialis muscle"],
+      "joints": [
+        "Sternoclavicular joint",
+        "Acromioclavicular joint",
+        "Shoulder joint"
+      ]
+    },
+    "biceps": {
+      "muscles": ["Biceps brachii muscle", "Brachialis muscle"],
+      "joints": ["Elbow joint"]
+    },
+    "triceps": {
+      "muscles": ["Triceps brachii muscle", "Anconeus muscle"],
+      "joints": ["Elbow joint"]
+    },
+    "forearm": {
+      "muscles": [
+        "Pronator teres muscle",
+        "Flexor carpi radialis muscle",
+        "Palmaris longus muscle",
+        "Flexor carpi ulnaris muscle",
+        "Flexor digitorum superficialis muscle",
+        "Flexor digitorum profundus muscle",
+        "Flexor pollicis longus muscle",
+        "Pronator quadratus muscle",
+        "Brachioradialis muscle",
+        "Extensor carpi radialis longus muscle",
+        "Extensor carpi radialis brevis muscle",
+        "Supinator muscle"
+      ],
+      "joints": [
+        "Elbow joint",
+        "Wrist joint",
+        "Proximal radio-ulnar joint",
+        "Distal radio-ulnar joint"
+      ]
+    },
+    "hand": {
+      "muscles": [
+        "Abductor pollicis brevis muscle",
+        "Flexor pollicis brevis muscle",
+        "Opponens pollicis muscle",
+        "Adductor pollicis muscle",
+        "Palmaris brevis muscle",
+        "Abductor digiti minimi muscle",
+        "Flexor digiti minimi brevis muscle",
+        "Opponens digiti minimi muscle",
+        "Lumbricales muscles",
+        "Interossei muscles"
+      ],
+      "joints": [
+        "Wrist joint",
+        "Midcarpal joint",
+        "Carpometacarpal joints",
+        "Intermetacarpal joints",
+        "Carpometacarpal joint of thumb",
+        "Metacarpophalangeal joints",
+        "Interphalangeal joints of hand"
+      ]
+    },
+    "adductors": {
+      "muscles": [
+        "Obturator intemus muscle",
+        "Gemellus superior muscle",
+        "Gemellus inferior muscle",
+        "Obturator externus muscle",
+        "Gracilis muscle",
+        "Adductor longus muscle",
+        "Adductor brevis muscle",
+        "Adductor magnus muscle"
+      ],
+      "joints": ["Hip joint", "Knee joint"]
+    },
+    "quadriceps": {
+      "muscles": [
+        "Sartorius muscle",
+        "Quadriceps femoris muscle",
+        "Rectus femoris muscle",
+        "Vastus lateralis muscle",
+        "Vastus medialis muscle",
+        "Vastus intermedius muscle",
+        "Articularis genus muscle",
+        "Pectineus muscle"
+      ],
+      "joints": ["Hip joint", "Knee joint"]
+    },
+    "knee": {
+      "muscles": ["Popliteus muscle", "Plantaris muscle", "pes anserine"],
+      "joints": ["Knee joint"]
+    },
+    "calves": {
+      "muscles": [
+        "Tibialis anterior muscle",
+        "Extensor digitorum longus muscle",
+        "Extensor hallucis longus muscle"
+      ],
+      "joints": ["Knee joint", "Ankle joint", "Subtalar joint"]
+    },
+    "tibialis": {
+      "muscles": ["Tibialis anterior muscle", "Tibialis posterior muscle"],
+      "joints": ["Ankle joint", "Subtalar joint"]
+    },
+    "ankle": {
+      "muscles": [
+        "Fibularis tertius muscle",
+        "Fibularis longus muscle",
+        "Fibularis brevis muscle"
+      ],
+      "joints": ["Ankle joint", "Subtalar joint"]
+    },
+    "foot": {
+      "muscles": [
+        "Upper ankle joint",
+        "Lower ankle joint",
+        "Calcaneocuboid joint",
+        "Transverse tarsal joint",
+        "Sphenoid joint",
+        "Tarsometatarsal joints",
+        "Intermetatarsal joints"
+      ],
+      "joints": ["Ankle joint", "Joints of the toes"]
+    }
+  },
+  "Back": {
+    "head": {
+      "muscles": [],
+      "joints": [
+        "Temporomandibular joint",
+        "Atlanto-occipitai joint",
+        "Atlanto-axial joint"
+      ]
+    },
+    "neck": {
+      "muscles": ["Splenius capitis muscle", "Splenius cervicis muscle"],
+      "joints": ["Atlanto-axial joint"]
+    },
+    "trapezius": {
+      "muscles": ["Trapezius muscle"],
+      "joints": ["Atlanto-occipital joint", "Atlanto-axial joint"]
+    },
+    "upper-back": {
+      "muscles": [
+        "Latissimus dorsi muscle",
+        "Rhomboid minor muscle",
+        "Rhomboid major muscle",
+        "Levator scapulae muscle",
+        "Serratus posterior superior muscle",
+        "Splenius capitis muscle",
+        "Splenius cervicis muscle",
+        "Sacrospinales muscle",
+        "Iliocostalis muscle",
+        "Longissimus muscle",
+        "Spinalis muscle",
+        "Semispinalis muscle",
+        "Multifidi muscle",
+        "Rotatores muscle",
+        "Interspinales muscle",
+        "Intertransversarii muscle",
+        "Obliquus capitis superior muscle",
+        "Rectus capitis posterior minor muscle",
+        "Rectus capitis posterior major muscle",
+        "Obliquus capitis inferior muscle",
+        "Rectus capitis lateralis muscle"
+      ],
+      "joints": ["Atlanto-occipital joint", "Atlanto-axial joint"]
+    },
+    "lower-back": {
+      "muscles": [
+        "Posterior sacrococcygeus muscle",
+        "Anterior sacrococcygeus muscle",
+        "Quadratus lumborum muscle"
+      ],
+      "joints": ["Atlanto-occipital joint", "Atlanto-axial joint"]
+    },
+    "deltoids": {
+      "muscles": ["Deltoid muscle", "Coracobrachialis muscle"],
+      "joints": [
+        "Sternoclavicular joint",
+        "Acromioclavicular joint",
+        "Shoulder joint"
+      ]
+    },
+    "triceps": {
+      "muscles": ["Triceps brachii muscle", "Anconeus muscle"],
+      "joints": ["Elbow joint"]
+    },
+    "forearm": {
+      "muscles": [
+        "Pronator teres muscle",
+        "Flexor carpi radialis muscle",
+        "Palmaris longus muscle",
+        "Flexor carpi ulnaris muscle",
+        "Flexor digitorum superficialis muscle",
+        "Flexor digitorum profundus muscle",
+        "Flexor pollicis longus muscle",
+        "Pronator quadratus muscle",
+        "Brachioradialis muscle",
+        "Extensor carpi radialis longus muscle",
+        "Extensor carpi radialis brevis muscle",
+        "Supinator muscle"
+      ],
+      "joints": [
+        "Elbow joint",
+        "Wrist joint",
+        "Proximal radio-ulnar joint",
+        "Distal radio-ulnar joint"
+      ]
+    },
+    "hand": {
+      "muscles": [
+        "Abductor pollicis brevis muscle",
+        "Flexor pollicis brevis muscle",
+        "Opponens pollicis muscle",
+        "Adductor pollicis muscle",
+        "Palmaris brevis muscle",
+        "Abductor digiti minimi muscle",
+        "Flexor digiti minimi brevis muscle",
+        "Opponens digiti minimi muscle",
+        "Lumbricales muscles",
+        "Interossei muscles"
+      ],
+      "joints": [
+        "Wrist joint",
+        "Midcarpal joint",
+        "Carpometacarpal joints",
+        "Intermetacarpal joints",
+        "Carpometacarpal joint of thumb",
+        "Metacarpophalangeal joints",
+        "Interphalangeal joints of hand"
+      ]
+    },
+    "hamstring": {
+      "muscles": [
+        "Biceps femoris muscle",
+        "Semitendinosus muscle",
+        "Semimembranosus muscle"
+      ],
+      "joints": ["Hip joint", "Knee joint"]
+    },
+    "adductors": {
+      "muscles": [
+        "Pectineus muscle",
+        "Gracilis muscle",
+        "Adductor longus muscle",
+        "Adductor brevis muscle",
+        "Adductor magnus muscle"
+      ],
+      "joints": ["Hip joint", "Knee joint"]
+    },
+    "gluteal": {
+      "muscles": [
+        "Gluteus maximus muscle",
+        "Gluteus medius muscle",
+        "Gluteus minimus muscle",
+        "Piriformis muscle",
+        "Tensor fasciae latae muscle"
+      ],
+      "joints": ["Sacro-iliac joint", "Hip joint"]
+    },
+    "calves": {
+      "muscles": ["Gastrocnemius muscle", "Soleus muscle", "Plantaris muscle"],
+      "joints": [
+        "Knee joint",
+        "Ankle joint",
+        "Subtalar joint",
+        "Tibiofibular joint"
+      ]
+    },
+    "ankle": {
+      "muscles": [
+        "Fibularis tertius muscle",
+        "Fibularis longus muscle",
+        "Fibularis brevis muscle"
+      ],
+      "joints": ["Ankle joint", "Subtalar joint"]
+    },
+    "foot": {
+      "muscles": [
+        "Abductor hallucis muscle",
+        "Flexor hallucis brevis muscle",
+        "Adductor hallucis muscle",
+        "Abductor digiti minimi muscle",
+        "Flexor digiti minimi brevis muscle",
+        "Opponens digiti minimi muscle",
+        "Flexor digitorum brevis muscle",
+        "Quadratus plantae muscle",
+        "Lumbricale muscles of foot",
+        "Interossei muscles"
+      ],
+      "joints": [
+        "Upper ankle joint",
+        "Lower ankle joint",
+        "Calcaneocuboid joint",
+        "Transverse tarsal joint",
+        "Sphenoid joint",
+        "Tarsometatarsal joints",
+        "Intermetatarsal joints",
+        "Joints of the toes"
+      ]
+    }
+  }
+}

@@ -18,9 +18,9 @@ const apiService = {
     }
 
     try {
-      const url = `${baseURL}${endpoint}?${new URLSearchParams(
-        params
-      ).toString()}`;
+      const url = `${baseURL}${endpoint}${
+        params ? `? ${new URLSearchParams(params).toString()}` : ""
+      }`;
       const config = {
         method: "GET",
         headers: {

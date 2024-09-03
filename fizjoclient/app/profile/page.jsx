@@ -2,12 +2,12 @@
 import React, { useState, useEffect } from "react";
 import styles from "./profile.module.scss";
 import apiService from "../services/apiService/apiService";
-import { AuthContext } from "../contexts/Auth/authContext";
-
+import { AuthContext } from "../contexts/auth/authContext";
+import { UserContext } from "../contexts/user/userContext";
 const Profile = () => {
-  const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const { isAuthenticated } = React.useContext(AuthContext);
+  const { user, updateUser } = React.useContext(UserContext);
   const getUserInfo = async (e) => {
     e.preventDefault();
     try {
@@ -28,7 +28,7 @@ const Profile = () => {
     const fetchData = async () => {
       try {
         const data = await getUserInfo({ preventDefault: () => {} });
-        setUserProfile(data);
+        updateUser(data);
       } catch (error) {
         console.error("Error fetching user info:", error);
       }
@@ -58,12 +58,12 @@ const Profile = () => {
     <div className={styles.container}>
       <h1 className={styles.title}>Profile</h1>
       <div className={styles.profileCard}>
-        {Object.keys(userProfile).map((key) => (
+        {Object.keys(user).map((key) => (
           <div className={styles.field} key={key}>
             <span className={styles.label}>
               {key.replace(/([A-Z])/g, " $1").trim()}:
             </span>
-            <span className={styles.value}>{userProfile[key]}</span>
+            <span className={styles.value}>{user[key]}</span>
           </div>
         ))}
       </div>
