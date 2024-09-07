@@ -3,6 +3,7 @@ using fizjobackend.Entities.UserEntities;
 using fizjobackend.Interfaces.DTOInterfaces.UserDTOInterfaces;
 using fizjobackend.Interfaces.UsersInterfaces;
 using fizjobackend.Models.UserDTOs;
+using Microsoft.EntityFrameworkCore;
 
 namespace fizjobackend.Services.UserServices
 {
@@ -18,12 +19,13 @@ namespace fizjobackend.Services.UserServices
             _logger = logger;
         }
 
-        public async Task<ServiceResponse<IUserInfoResponseDTO>> GetUserInfo(Guid userId, string userRole)
+        public async Task<ServiceResponse<IUserInfoResponseDTO>> GetUserInfo(Guid userId, IEnumerable<string> userRoles)
         {
             ServiceResponse<IUserInfoResponseDTO> response;
 
             try
             {
+                var userRole = GetBaseRoleFromUserRoles(userRoles);
                 IUserInfoResponseDTO userInfo = userRole.ToLower() switch
                 {
                     "patient" => new PatientInfoResponseDTO(await _context.Patients.FindAsync(userId)
@@ -46,6 +48,55 @@ namespace fizjobackend.Services.UserServices
             }
 
             return response;
+        }
+
+        public async Task<ServiceResponse<IUserInfoResponseDTO>> FindPatient(SearchPatientRequestDTO searchParam, IEnumerable<string> searcherRoles)
+        {
+            ServiceResponse<IUserInfoResponseDTO> response;
+
+            try
+            {
+                var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Email == searchParam.SearchParam || p .PhoneNumber == searchParam.SearchParam || p.Pesel == searchParam.SearchParam);
+                var userRole = GetBaseRoleFromUserRoles(searcherRoles);
+                if(userRole.ToLower() != "physiotherapist")
+                {
+                    throw new UnauthorizedAccessException("Only physiotherapists can search for patients");
+                }
+                if (patient == null)
+                {
+                    response = new ServiceResponse<IUserInfoResponseDTO>("User not found");
+                    response.Success = false;
+                    response.Message = "User not found";
+                    return response;
+                }
+                response = new ServiceResponse<IUserInfoResponseDTO>("User found");
+                response.Data = new PatientInfoResponseDTO(patient);
+                response.Success = true;
+                response.Message = "User found";
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response = new ServiceResponse<IUserInfoResponseDTO>("An error occurred while finding user");
+                _logger.LogError(ex, "An error occurred while finding user");
+                response.Success = false;
+                response.Errors = new[] { ex.Message };
+            }
+
+            return response;
+        }
+
+        private string GetBaseRoleFromUserRoles(IEnumerable<string> userRoles)
+        {
+            var validRoles = new[] { "patient", "physiotherapist" };
+            var userRole = userRoles.FirstOrDefault(role => validRoles.Contains(role.ToLower()));
+
+            if (userRole == null || userRoles.Count(role => validRoles.Contains(role.ToLower())) > 1)
+            {
+                throw new ArgumentException("User must have exactly one role: either 'patient' or 'physiotherapist'");
+            }
+
+            return userRole;
         }
 
     }

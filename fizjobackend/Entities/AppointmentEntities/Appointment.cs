@@ -26,7 +26,7 @@ namespace fizjobackend.Entities.AppointmentEntities
         public double Price { get; set; } = 0;
         public int? PainLevelBeofore { get; set; }
         public int? PainLevelAfter { get; set; }
-        public string InitialCondition { get; set; } = string.Empty; 
+        public string InitialCondition { get; set; } = string.Empty;
         public ICollection<AppointmentBodyDetails> AppointmentBodyDetails { get; set; }
         public Appointment() { }
 

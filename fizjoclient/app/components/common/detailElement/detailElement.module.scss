@@ -1,0 +1,13 @@
+.detailElement {
+  flex-basis: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.1em;
+  margin: 0.4em 0 0.4em 0;
+  .label {
+    flex-basis: content;
+  }
+  .value {
+    flex-basis: content;
+  }
+}

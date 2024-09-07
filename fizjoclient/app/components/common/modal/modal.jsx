@@ -26,7 +26,6 @@ const Modal = ({ isOpen, onClose, children, size, header }) => {
           </button>
           <div className={styles.header}>{header}</div>
         </div>
-
         {children}
       </div>
     </div>

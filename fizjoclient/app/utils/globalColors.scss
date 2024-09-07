@@ -17,6 +17,7 @@ $text-white: #fffefd;
 $text-light-green: #47ffa6;
 $text-dark-green: #197b5c;
 $text-black: #000;
+$text-error: #f15454d2;
 
 // buttons
 $button-bg: #0aca81;
@@ -43,3 +44,20 @@ $hight-light-color: #ffc23f;
 
 // Tags
 $tag-bg: #ffae00;
+
+// --------------------------------------------------
+// calendar
+$neutral-background: #f7f9fc;
+$box-shadow-color: rgba(0, 0, 0, 0.1);
+$header-background: #eeeeee;
+$header-text-color: #000000;
+$nav-button-background: #197b5c;
+$nav-button-hover-background: #ff7675;
+$days-background: #6c757d;
+$days-text-color: #f8f9fa;
+$cell-border-color: #e9ecef;
+$cell-disabled-color: #adb5bd;
+$cell-disabled-background: #e9ecef;
+$cell-today-background: #007bff;
+$cell-selected-background: #28a745;
+$cell-hover-background: #495057;

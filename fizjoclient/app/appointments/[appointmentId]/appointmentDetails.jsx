@@ -3,6 +3,8 @@ import styles from "./appointmentDetails.module.scss";
 import Modal from "@/app/components/common/modal/modal";
 import { format } from "date-fns";
 import { pl } from "date-fns/locale";
+import DetailElement from "@/app/components/common/detailElement/detailElement";
+import PatientDeails from "../patientDetails";
 
 const AppointmentDetails = ({ appointment }) => {
   const {
@@ -66,19 +68,7 @@ const AppointmentDetails = ({ appointment }) => {
             header={"Patient Details"}
           >
             <>
-              <DetailElement label="First Name" value={firstName} />
-              <DetailElement label="Last Name" value={lastName} />
-              <DetailElement label="Email" value={email} />
-              <DetailElement label="Phone" value={phoneNumber} />
-              <DetailElement
-                label="Address"
-                value={`${streetWithHouseNumber}, ${postCode} ${city}, ${country}`}
-              />
-              <DetailElement
-                label="DOB"
-                value={new Date(dateOfBirth).toLocaleDateString()}
-              />
-              <DetailElement label="Insurance" value={healthInsuranceNumber} />
+              <PatientDeails patient={appointment.patient} />
             </>
           </Modal>
           <button
@@ -131,12 +121,5 @@ const AppointmentDetails = ({ appointment }) => {
     </div>
   );
 };
-
-const DetailElement = ({ label, value }) => (
-  <div className={styles.detailElement}>
-    <span className={styles.label}>{label}:</span>
-    <span className={styles.value}>{value}</span>
-  </div>
-);
 
 export default AppointmentDetails;
