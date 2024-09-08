@@ -29,7 +29,6 @@
   padding: 1.5rem;
   width: 100%;
   max-width: 100%;
-  box-sizing: border-box;
 }
 
 .field {
@@ -50,15 +49,14 @@
 .value {
   color: $text-black;
   padding: 0.5rem 0;
-  border: 1px solid $border-color; /* Dodanie ramki do pola wartości */
-  border-radius: 5px; /* Dodanie zaokrąglonych narożników */
-  /* Użycie kolorów tła dla inputów */
+  border: 1px solid $border-color;
+  border-radius: 5px;
 }
 .error {
-  color: red; /* Kolor tekstu błędu */
-  font-size: 0.875rem; /* Rozmiar czcionki dla błędu */
-  margin-top: 0.25rem; /* Margines powyżej błędu */
-  align-self: flex-start; /* Ustawienie błędu po lewej stronie */
+  color: red;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  align-self: flex-start;
 }
 
 .button {
@@ -79,12 +77,3 @@
   display: flex;
   justify-content: flex-end;
 }
-/*
-background-color: $button-bg;
-padding: 0.5rem 1rem;
-border: none;
-border-radius: 5px;
-cursor: pointer;
-font-size: 1rem;
-text-transform: uppercase;
-transition: background-color 0.3s ease;*/

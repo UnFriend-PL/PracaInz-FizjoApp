@@ -34,36 +34,10 @@ namespace fizjobackend.Services.UserServices
             ServiceResponse<IUserInfoResponseDTO> response = new ServiceResponse<IUserInfoResponseDTO>("");
             try
             {
-                
                 var userFromDb = await _context.Users.FindAsync(userId);
                 if(userFromDb != null)
                 {
-                    
-                    if (userFromDb.FirstName != userEdit.FirstName)
-                        userFromDb.FirstName = userEdit.FirstName;
-                    if (userFromDb.LastName != userEdit.LastName)
-                        userFromDb.LastName = userEdit.LastName;
-                    if (userFromDb.Email != userEdit.Email)
-                        userFromDb.Email= userEdit.Email;
-                    if (userFromDb.Gender != userEdit.Gender)
-                        userFromDb.Gender = userEdit.Gender;
-                    if (userFromDb.City != userEdit.City)
-                        userFromDb.City = userEdit.City;
-                    if (userFromDb.Country != userEdit.Country)
-                        userFromDb.Country = userEdit.Country;
-                    if (userFromDb.DateOfBirth != userEdit.DateOfBirth)
-                        userFromDb.DateOfBirth = userEdit.DateOfBirth;
-                    if (userFromDb.Pesel != userEdit.Pesel)
-                        userFromDb.Pesel = userEdit.Pesel;
-                    if (userFromDb.PostCode != userEdit.PostCode)
-                        userFromDb.PostCode = userEdit.PostCode;
-                    if (userFromDb.StreetWithHouseNumber != userEdit.StreetWithHouseNumber)
-                        userFromDb.StreetWithHouseNumber = userEdit.StreetWithHouseNumber;
-                    if(userFromDb.PhoneNumber != userEdit.PhoneNumber)
-                        userFromDb.PhoneNumber = userEdit.PhoneNumber;
-                    if (userFromDb.LastModifiedDate<DateTime.UtcNow)
-                        userFromDb.LastModifiedDate = DateTime.UtcNow;
-
+                    userFromDb = ModifyUser(userFromDb, userEdit);
                 }
                 var validateErrorsFromPatient = _accountValidationHelper.Validate(userFromDb);
                 if (validateErrorsFromPatient.Length > 0)
@@ -124,6 +98,35 @@ namespace fizjobackend.Services.UserServices
 
             return response;
         }
+        private User ModifyUser(User userToEdit, UserEditRequestDTO userEdit)
+        {
+            
+            if (userToEdit.FirstName != userEdit.FirstName)
+                userToEdit.FirstName = userEdit.FirstName;
+            if (userToEdit.LastName != userEdit.LastName)
+                userToEdit.LastName = userEdit.LastName;
+            if (userToEdit.Email != userEdit.Email)
+                userToEdit.Email = userEdit.Email;
+            if (userToEdit.Gender != userEdit.Gender)
+                userToEdit.Gender = userEdit.Gender;
+            if (userToEdit.City != userEdit.City)
+                userToEdit.City = userEdit.City;
+            if (userToEdit.Country != userEdit.Country)
+                userToEdit.Country = userEdit.Country;
+            if (userToEdit.DateOfBirth != userEdit.DateOfBirth)
+                userToEdit.DateOfBirth = userEdit.DateOfBirth;
+            if (userToEdit.Pesel != userEdit.Pesel)
+                userToEdit.Pesel = userEdit.Pesel;
+            if (userToEdit.PostCode != userEdit.PostCode)
+                userToEdit.PostCode = userEdit.PostCode;
+            if (userToEdit.StreetWithHouseNumber != userEdit.StreetWithHouseNumber)
+                userToEdit.StreetWithHouseNumber = userEdit.StreetWithHouseNumber;
+            if (userToEdit.PhoneNumber != userEdit.PhoneNumber)
+                userToEdit.PhoneNumber = userEdit.PhoneNumber;
+            if (userToEdit.LastModifiedDate < DateTime.UtcNow)
+                userToEdit.LastModifiedDate = DateTime.UtcNow;
 
+            return userToEdit;
+        }
     }
 }
