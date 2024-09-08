@@ -58,6 +58,7 @@ const Appointments = () => {
           element.bodyPartMusclesAndJoints.viewId == (1 || 3) ? "front" : "back"
         ].push({
           slug: element.bodyPartMusclesAndJoints.name,
+          slugPL: element.bodyPartMusclesAndJoints.namePL,
         });
       });
 

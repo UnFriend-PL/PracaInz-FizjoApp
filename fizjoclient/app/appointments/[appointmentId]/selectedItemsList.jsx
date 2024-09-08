@@ -10,12 +10,15 @@ const SelectedItemsList = React.memo(({ selectedItems, handleRemove }) => {
   const { language } = useContext(LanguageContext);
   const t = locales[language];
 
+  console.log(selectedItems);
   return (
     <div className={styles.selectedItemsList}>
       <span className={styles.selectedItemsHeader}>{t.selectedItems}:</span>
       {Object.entries(selectedItems).map(([sectionName, items]) => (
         <div key={sectionName} className={styles.selectedSection}>
           <div className={styles.selectedSectionHeader}>
+            {console.log(sectionName)}
+            {/* {sectionName.sectionDisplayName.replace("-", " ")}: x */}
             {sectionName.replace("-", " ")}:
           </div>
           {["muscles", "joints"].map((type) =>

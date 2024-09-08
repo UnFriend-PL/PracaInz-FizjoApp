@@ -11,7 +11,6 @@ namespace fizjobackend.Entities.BodyEntities
         public string? BodySide { get; set; }  // "left", "right", or "center"
         public string? BodySidePL { get; set; } 
         public int ViewId { get; set; }
-
         public View View { get; set; }
         public ICollection<Muscle> Muscles { get; set; }
         public ICollection<Joint> Joints { get; set; }

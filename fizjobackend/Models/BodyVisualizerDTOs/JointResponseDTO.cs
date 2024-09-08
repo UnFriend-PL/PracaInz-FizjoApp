@@ -6,11 +6,12 @@ namespace fizjobackend.Models.BodyVisualizerDTOs
     {
         public int Id { get; set; }
         public string? Name { get; set; }
-
+        public string? NamePL { get; set; }
         public JointResponseDTO(Joint joint)
         {
             Id = joint.Id;
             Name = joint.Name;
+            NamePL = joint.NamePL;
         }
     }
 }

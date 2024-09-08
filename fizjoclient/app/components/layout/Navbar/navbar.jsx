@@ -65,8 +65,6 @@ export default function Navbar() {
 
   return (
     <nav className={styles.navbar}>
-      <button onClick={() => changeLanguage("en")}>EN</button>
-      <button onClick={() => changeLanguage("pl")}>PL</button>
       <div className={styles.container}>
         <div className={styles["navbar-content"]}>
           <div className={styles["menu-button"]}>
@@ -102,18 +100,16 @@ export default function Navbar() {
           </div>
           <div className={styles.languages}>
             <button
-              type="button"
-              className={styles["lang-button"]}
-              onClick={() => changeLanguage("pl")}
-            >
-              PL
-            </button>
-            <button
-              type="button"
-              className={styles["lang-button"]}
+              className={styles.languageButton}
               onClick={() => changeLanguage("en")}
             >
               EN
+            </button>
+            <button
+              className={styles.languageButton}
+              onClick={() => changeLanguage("pl")}
+            >
+              PL
             </button>
           </div>
         </div>

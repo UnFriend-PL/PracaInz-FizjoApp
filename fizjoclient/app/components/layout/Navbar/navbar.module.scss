@@ -82,6 +82,23 @@
   }
 }
 
+.languages {
+  display: flex;
+  flex-basis: fit-content;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+}
+.languageButton {
+  color: $text-white;
+  border: none;
+  flex-basis: 100%;
+  &:hover {
+    color: $text-dark-green;
+  }
+}
+
 .nav-link {
   color: $text-white;
   font-weight: 900;
