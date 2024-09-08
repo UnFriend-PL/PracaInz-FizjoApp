@@ -1,17 +1,34 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { CiEdit } from "react-icons/ci";
+import { IoSaveOutline } from "react-icons/io5";
 import styles from "./profile.module.scss";
 import apiService from "../services/apiService/apiService";
 import { validateField } from "../validation";
-import { AuthContext } from "../contexts/Auth/authContext";
+import { AuthContext } from "../contexts/auth/authContext";
+import { UserContext } from "../contexts/user/userContext";
 
 const Profile = () => {
-  const [userProfile, setUserProfile] = useState(null);
+  const [userProfile, setUserProfile] = useState({
+    firstName: "",
+    lastName: "",
+    gender: "",
+    country: "",
+    city: "",
+    streetWithHouseNumber: "",
+    postCode: "",
+    pesel: "",
+    dateOfBirth: new Date(),
+    email: "",
+    phoneNumber: "",
+  });
+
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const { isAuthenticated } = React.useContext(AuthContext);
+  const { user, updateUser } = React.useContext(UserContext);
 
   const formatDate = (dateString) => {
     return dateString ? dateString.split("T")[0] : "";
@@ -34,6 +51,7 @@ const Profile = () => {
       setLoading(false);
     }
   };
+
   const handleEdit = () => {
     setIsEditing(true);
   };
@@ -84,6 +102,7 @@ const Profile = () => {
       console.error("Validation errors:", newErrors);
     }
   };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUserProfile((prevProfile) => ({
@@ -94,11 +113,13 @@ const Profile = () => {
     const error = validateField(name, value);
     setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
   };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await getUserInfo({ preventDefault: () => {} });
         setUserProfile(data);
+        updateUser(data);
       } catch (error) {
         console.error("Error fetching user info:", error);
         console.log(userProfile.dateOfBirth);
@@ -129,40 +150,59 @@ const Profile = () => {
     <div className={styles.container}>
       <h1 className={styles.title}>Profile</h1>
       <div className={styles.profileCard}>
-        {Object.keys(userProfile).map((key) => (
+        <div className={styles.profileNav}>
+          {isEditing ? (
+            <div className={styles["button"]}>
+              <IoSaveOutline onClick={handleSave} title="Save" />
+            </div>
+          ) : (
+            <div className={styles["button"]}>
+              <CiEdit onClick={handleEdit} title="Edit" />
+            </div>
+          )}
+        </div>
+        {Object.keys(user).map((key) => (
           <div className={styles.field} key={key}>
             <span className={styles.label}>
               {key.replace(/([A-Z])/g, " $1").trim()}:
             </span>
             {isEditing ? (
               <>
-                <input
-                  type="text"
-                  name={key}
-                  value={userProfile[key]}
-                  onChange={handleChange}
-                  className={styles.value}
-                />
+                {key === "gender" ? (
+                  <select
+                    name="gender"
+                    value={userProfile.gender}
+                    onChange={handleChange}
+                    className={styles.value}
+                  >
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
+                ) : (
+                  <input
+                    type={
+                      key === "dateOfBirth"
+                        ? "date"
+                        : key === "pesel" || key === "phoneNumber"
+                        ? "number"
+                        : "text"
+                    }
+                    name={key}
+                    value={userProfile[key]}
+                    onChange={handleChange}
+                    className={styles.value}
+                  />
+                )}
                 {errors[key] && (
                   <div className={styles.error}>{errors[key]}</div>
                 )}
               </>
             ) : (
-              <span className={styles.profileCardEdit}>{userProfile[key]}</span>
+              <span className={styles.profileCardEdit}>{user[key]}</span>
             )}
           </div>
         ))}
-        <div className={styles["nav-links"]}>
-          {isEditing ? (
-            <button onClick={handleSave} className={styles["nav-link"]}>
-              Save
-            </button>
-          ) : (
-            <button onClick={handleEdit} className={styles["nav-link"]}>
-              Edit
-            </button>
-          )}
-        </div>
       </div>
     </div>
   );

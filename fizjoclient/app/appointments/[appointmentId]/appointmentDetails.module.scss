@@ -1,0 +1,277 @@
+@import "@/app/utils/globalColors.scss";
+
+.container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  align-content: stretch;
+  flex-direction: row;
+  flex-wrap: wrap;
+  flex-basis: 100%;
+}
+.spaceAtBottom {
+  padding-bottom: 15em;
+}
+.bodyContainer {
+  display: flex;
+  flex-direction: row;
+  flex-basis: 45%;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.musclesAndJointsWrapper {
+  flex-basis: 45%;
+  align-self: stretch;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: $bg-section;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1em;
+  .navigation {
+    display: flex;
+    flex-basis: 50%;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+  }
+
+  .navigation button {
+    background-color: $button-bg;
+    color: $text-white;
+    border: none;
+    padding: 0.3em 0.6em;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .navigation button:hover {
+    background-color: $button-bg-hover;
+  }
+  .bodyPartContainer {
+    flex-basis: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-self: flex-start;
+    align-items: center;
+    align-content: center;
+  }
+  .bodyPart {
+    flex-basis: 100%;
+  }
+
+  .bodyPartHeader {
+    margin: 1em 0 1em 0;
+    font-size: 1.2em;
+    text-transform: capitalize;
+    font-weight: bold;
+    color: $text-dark-green;
+  }
+
+  .bodyPartSubHeader {
+    color: $text-black;
+    font-size: 1em;
+    font-weight: bold;
+  }
+}
+.appointmentCard {
+  display: flex;
+  flex-basis: 80%;
+  padding: 1em;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+
+  .details {
+    flex-basis: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    align-content: stretch;
+    justify-content: space-between;
+  }
+  .appointmentDate {
+    top: -1.2em;
+    font-size: 1em;
+    font-weight: 800;
+  }
+  .detailsGroup {
+    flex-basis: 45%;
+    background-color: $bg-section;
+    padding: 1em;
+    margin: 4em 0 1em 0;
+    position: relative;
+    .detailGroupName {
+      position: absolute;
+      top: -2em;
+      left: 0;
+      font-size: 1.3em;
+      font-weight: 800;
+    }
+    .detailGroupButton:hover {
+      color: $text-dark-green;
+    }
+  }
+}
+.detailElement {
+  flex-basis: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.1em;
+  margin: 0.4em 0 0.4em 0;
+  .label {
+    flex-basis: content;
+  }
+  .value {
+    flex-basis: content;
+  }
+}
+.header {
+  display: flex;
+  flex-basis: 100%;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: 1.5em;
+  .status {
+    background-color: $bg-dark-green;
+    color: $text-white;
+    padding: 0.5em;
+    border-radius: 5px;
+  }
+}
+
+.detailGroup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: center;
+  flex-basis: 100%;
+}
+
+.label {
+  font-weight: bold;
+}
+
+.value {
+  flex-basis: 100%;
+}
+
+.detailGroup {
+  flex-wrap: wrap;
+  flex-basis: 100%;
+}
+
+.detailGroup {
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: flex-start;
+}
+
+.musclesAndJointsList {
+  margin-top: 1em;
+  padding-left: 1em;
+}
+
+.musclesAndJointsItemWrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75em;
+}
+
+.musclesAndJointsItemWrapper input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.subHeader {
+  margin-top: 15px;
+  font-size: 16px;
+  font-weight: semi-bold;
+  color: #555;
+}
+.selectedItemsList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: stretch;
+  align-items: flex-start;
+  align-content: flex-start;
+  align-self: stretch;
+  flex-basis: 100%;
+}
+.selectedItemsHeader {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: $text-dark-green;
+  text-transform: capitalize;
+  align-self: stretch;
+  flex-basis: 100%;
+}
+.selectedSectionHeader {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: $text-black;
+  text-transform: capitalize;
+  position: absolute;
+  top: -1.3em;
+  left: 0.1em;
+}
+.selectedSection {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+  flex-basis: 100%;
+  margin: 1.5em 0 0.5em 0;
+  background-color: $bg-page;
+  padding: 0.2em;
+  position: relative;
+}
+.selectedItems {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  flex-basis: content;
+}
+
+.selectedItem {
+  display: flex;
+  align-items: center;
+  flex-basis: content;
+  font-size: 0.9em;
+  background-color: $tag-bg;
+  color: $text-white;
+  border-radius: 5px 0 0 5px;
+  margin: 0.2em;
+}
+.selectedItemLabel {
+  padding: 0.5em;
+  border-radius: 0 5px 5px 0;
+  background-color: $tag-bg;
+  color: #fff;
+}
+.selectedItem .checkbox {
+  margin-right: 10px;
+}
+
+.removeButton {
+  background-color: $button-cancel-bg;
+  color: white;
+  border: none;
+  padding: 0.3em 0.6em;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: auto;
+  align-self: stretch;
+}
+
+.removeButton:hover {
+  background-color: $button-cancel-bg-hover;
+}

@@ -8,8 +8,6 @@
   padding: 20px;
   background-color: $bg-container;
   min-width: 30%;
-  min-height: 100vh;
-  box-sizing: border-box;
 }
 
 .title {
@@ -63,20 +61,30 @@
   align-self: flex-start; /* Ustawienie błędu po lewej stronie */
 }
 
-.nav-links {
-  display: flex;
-  justify-content: flex-end; /* Ustawienie przycisków na końcu */
-  width: 100%;
-  margin-top: 1rem;
-}
-
-.nav-link {
-  background-color: $button-bg;
-  padding: 0.5rem 1rem;
+.button {
+  font-size: 1.2rem;
+  font-weight: 800;
+  height: auto;
+  background-color: $button-submit-bg;
   border: none;
   border-radius: 5px;
-  cursor: pointer;
-  font-size: 1rem;
-  text-transform: uppercase;
-  transition: background-color 0.3s ease;
+  color: $text-white;
+  padding: 0.5rem;
+  &:hover {
+    background-color: $button-submit-bg-hover;
+  }
 }
+.profileNav {
+  flex-basis: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+/*
+background-color: $button-bg;
+padding: 0.5rem 1rem;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+font-size: 1rem;
+text-transform: uppercase;
+transition: background-color 0.3s ease;*/

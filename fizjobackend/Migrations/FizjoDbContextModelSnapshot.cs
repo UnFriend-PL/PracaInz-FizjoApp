@@ -176,17 +176,33 @@ namespace fizjobackend.Migrations
                     b.Property<string>("Diagnosis")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("InitialCondition")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("MovedFromDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("PainLevelAfter")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PainLevelBeofore")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("PatientId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("PhysiotherapistId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
                     b.HasKey("AppointmentId");
 
@@ -195,6 +211,138 @@ namespace fizjobackend.Migrations
                     b.HasIndex("PhysiotherapistId");
 
                     b.ToTable("Appointments");
+                });
+
+            modelBuilder.Entity("fizjobackend.Entities.AppointmentEntities.AppointmentBodyDetails", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AppointmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("BodySectionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("BodySide")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("JointId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MuscleId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PainLevel")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ViewId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppointmentId");
+
+                    b.HasIndex("BodySectionId");
+
+                    b.HasIndex("JointId");
+
+                    b.HasIndex("MuscleId");
+
+                    b.HasIndex("ViewId");
+
+                    b.ToTable("AppointmentBodyDetails");
+                });
+
+            modelBuilder.Entity("fizjobackend.Entities.BodyEntities.BodySection", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BodySectionName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BodySide")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ViewId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ViewId");
+
+                    b.ToTable("BodySections");
+                });
+
+            modelBuilder.Entity("fizjobackend.Entities.BodyEntities.Joint", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BodySectionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BodySectionId");
+
+                    b.ToTable("Joints");
+                });
+
+            modelBuilder.Entity("fizjobackend.Entities.BodyEntities.Muscle", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BodySectionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BodySectionId");
+
+                    b.ToTable("Muscles");
+                });
+
+            modelBuilder.Entity("fizjobackend.Entities.BodyEntities.View", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Views");
                 });
 
             modelBuilder.Entity("fizjobackend.Entities.PatientEntities.MedicalRaport", b =>
@@ -407,6 +555,80 @@ namespace fizjobackend.Migrations
                     b.Navigation("Physiotherapist");
                 });
 
+            modelBuilder.Entity("fizjobackend.Entities.AppointmentEntities.AppointmentBodyDetails", b =>
+                {
+                    b.HasOne("fizjobackend.Entities.AppointmentEntities.Appointment", "Appointment")
+                        .WithMany("AppointmentBodyDetails")
+                        .HasForeignKey("AppointmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("fizjobackend.Entities.BodyEntities.BodySection", "BodySection")
+                        .WithMany()
+                        .HasForeignKey("BodySectionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("fizjobackend.Entities.BodyEntities.Joint", "Joint")
+                        .WithMany()
+                        .HasForeignKey("JointId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("fizjobackend.Entities.BodyEntities.Muscle", "Muscle")
+                        .WithMany()
+                        .HasForeignKey("MuscleId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("fizjobackend.Entities.BodyEntities.View", "View")
+                        .WithMany()
+                        .HasForeignKey("ViewId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Appointment");
+
+                    b.Navigation("BodySection");
+
+                    b.Navigation("Joint");
+
+                    b.Navigation("Muscle");
+
+                    b.Navigation("View");
+                });
+
+            modelBuilder.Entity("fizjobackend.Entities.BodyEntities.BodySection", b =>
+                {
+                    b.HasOne("fizjobackend.Entities.BodyEntities.View", "View")
+                        .WithMany("BodySections")
+                        .HasForeignKey("ViewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("View");
+                });
+
+            modelBuilder.Entity("fizjobackend.Entities.BodyEntities.Joint", b =>
+                {
+                    b.HasOne("fizjobackend.Entities.BodyEntities.BodySection", "BodySection")
+                        .WithMany("Joints")
+                        .HasForeignKey("BodySectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BodySection");
+                });
+
+            modelBuilder.Entity("fizjobackend.Entities.BodyEntities.Muscle", b =>
+                {
+                    b.HasOne("fizjobackend.Entities.BodyEntities.BodySection", "BodySection")
+                        .WithMany("Muscles")
+                        .HasForeignKey("BodySectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BodySection");
+                });
+
             modelBuilder.Entity("fizjobackend.Entities.PatientEntities.MedicalRaport", b =>
                 {
                     b.HasOne("fizjobackend.Entities.PatientEntities.Patient", null)
@@ -432,6 +654,23 @@ namespace fizjobackend.Migrations
                         .HasForeignKey("fizjobackend.Entities.PhysiotherapistEntities.Physiotherapist", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("fizjobackend.Entities.AppointmentEntities.Appointment", b =>
+                {
+                    b.Navigation("AppointmentBodyDetails");
+                });
+
+            modelBuilder.Entity("fizjobackend.Entities.BodyEntities.BodySection", b =>
+                {
+                    b.Navigation("Joints");
+
+                    b.Navigation("Muscles");
+                });
+
+            modelBuilder.Entity("fizjobackend.Entities.BodyEntities.View", b =>
+                {
+                    b.Navigation("BodySections");
                 });
 
             modelBuilder.Entity("fizjobackend.Entities.PatientEntities.Patient", b =>
