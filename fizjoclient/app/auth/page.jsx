@@ -6,10 +6,10 @@ import RegistrationForm from "./SignUp";
 import apiService from "../services/apiService/apiService";
 import { AuthContext } from "../contexts/auth/authContext";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
-import polish from "./locales/pl.json";
-import english from "./locales/en.json";
+import pl from "./locales/pl.json";
+import en from "./locales/en.json";
 
-const locales = { english, polish };
+const locales = { en, pl };
 
 const AuthPage = () => {
   const { login } = useContext(AuthContext);

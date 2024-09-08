@@ -7,10 +7,10 @@ import { CgProfile } from "react-icons/cg";
 import { IoIosLogOut } from "react-icons/io";
 import { IoIosLogIn } from "react-icons/io";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
-import english from "./locales/en.json";
-import polish from "./locales/pl.json";
+import en from "./locales/en.json";
+import pl from "./locales/pl.json";
 
-const locales = { english, polish };
+const locales = { en, pl };
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -65,6 +65,8 @@ export default function Navbar() {
 
   return (
     <nav className={styles.navbar}>
+      <button onClick={() => changeLanguage("en")}>EN</button>
+      <button onClick={() => changeLanguage("pl")}>PL</button>
       <div className={styles.container}>
         <div className={styles["navbar-content"]}>
           <div className={styles["menu-button"]}>

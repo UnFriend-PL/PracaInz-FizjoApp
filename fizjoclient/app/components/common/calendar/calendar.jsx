@@ -11,18 +11,18 @@ import {
   isSameMonth,
   isSameDay,
 } from "date-fns";
-import { pl, enUS } from "date-fns/locale";
+import { pl as plDate, enUS } from "date-fns/locale";
 import styles from "./calendar.module.scss";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
-import polish from "./locales/pl.json";
-import english from "./locales/en.json";
+import pl from "./locales/pl.json";
+import en from "./locales/en.json";
 
-const locales = { english, polish };
+const locales = { en, pl };
 
 const Calendar = ({ onDateSelect }) => {
   const { language } = useContext(LanguageContext);
   const t = locales[language];
-  const locale = language === "polish" ? pl : enUS;
+  const locale = language === "pl" ? plDate : enUS;
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
   const today = new Date();

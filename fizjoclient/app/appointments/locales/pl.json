@@ -14,5 +14,13 @@
   "selectDate": "Wybierz datę",
   "scheduleAppointmentButton": "Umów wizytę",
   "showMore": "pokaż więcej",
-  "showLess": "pokaż mniej"
+  "showLess": "pokaż mniej",
+  "firstName": "Imię",
+  "lastName": "Nazwisko",
+  "email": "Email",
+  "phone": "Telefon",
+  "pesel": "PESEL",
+  "address": "Adres",
+  "dob": "Data urodzenia",
+  "insurance": "Numer ubezpieczenia zdrowotnego"
 }

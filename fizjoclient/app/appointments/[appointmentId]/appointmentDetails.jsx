@@ -2,14 +2,14 @@ import { useState, useContext } from "react";
 import styles from "./appointmentDetails.module.scss";
 import Modal from "@/app/components/common/modal/modal";
 import { format } from "date-fns";
-import { pl } from "date-fns/locale";
+import { pl as plDate } from "date-fns/locale";
 import DetailElement from "@/app/components/common/detailElement/detailElement";
 import PatientDeails from "../patientDetails";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
-import polish from "./locales/pl.json";
-import english from "./locales/en.json";
+import pl from "./locales/pl.json";
+import en from "./locales/en.json";
 
-const locales = { english, polish };
+const locales = { en, pl };
 
 const AppointmentDetails = ({ appointment }) => {
   const { language } = useContext(LanguageContext);
@@ -54,7 +54,7 @@ const AppointmentDetails = ({ appointment }) => {
     <div className={styles.appointmentCard}>
       <span className={styles.appointmentDate}>
         {format(new Date(appointmentDate), "dd.MM.yyyy HH:mm", {
-          locale: language === "pl" ? pl : undefined,
+          locale: language === "pl" ? plDate : undefined,
         })}
       </span>
       <div className={styles.header}>
