@@ -2,10 +2,10 @@
 import React, { useContext } from "react";
 import styles from "./auth.module.scss";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
-import polish from "./locales/pl.json";
-import english from "./locales/en.json";
+import pl from "./locales/pl.json";
+import en from "./locales/en.json";
 
-const locales = { english, polish };
+const locales = { en, pl };
 
 const LoginForm = ({
   formData,

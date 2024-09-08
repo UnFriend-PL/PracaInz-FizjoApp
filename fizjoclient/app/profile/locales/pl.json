@@ -1,0 +1,14 @@
+{
+  "profile": "Profil",
+  "loading": "Ładowanie...",
+  "error": "Błąd",
+  "notAuthenticated": "Nie jesteś zalogowany",
+  "firstName": "Imię",
+  "lastName": "Nazwisko",
+  "email": "Email",
+  "phone": "Telefon",
+  "pesel": "PESEL",
+  "address": "Adres",
+  "dob": "Data urodzenia",
+  "insurance": "Numer ubezpieczenia zdrowotnego"
+}

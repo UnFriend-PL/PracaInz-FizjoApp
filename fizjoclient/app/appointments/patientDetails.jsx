@@ -1,22 +1,34 @@
+import React, { useContext } from "react";
 import DetailElement from "../components/common/detailElement/detailElement";
+import { LanguageContext } from "@/app/contexts/lang/langContext";
+import pl from "./locales/pl.json";
+import en from "./locales/en.json";
+
+const locales = { en, pl };
 
 const PatientDeails = ({ patient }) => {
+  const { language } = useContext(LanguageContext);
+  const t = locales[language];
+
   return (
     <>
-      <DetailElement label="First Name" value={patient.firstName} />
-      <DetailElement label="Last Name" value={patient.lastName} />
-      <DetailElement label="Email" value={patient.email} />
-      <DetailElement label="Phone" value={patient.phoneNumber} />
-      <DetailElement label="Pesel" value={patient.pesel} />
+      <DetailElement label={t.firstName} value={patient.firstName} />
+      <DetailElement label={t.lastName} value={patient.lastName} />
+      <DetailElement label={t.email} value={patient.email} />
+      <DetailElement label={t.phone} value={patient.phoneNumber} />
+      <DetailElement label={t.pesel} value={patient.pesel} />
       <DetailElement
-        label="Address"
+        label={t.address}
         value={`${patient.streetWithHouseNumber}, ${patient.postCode} ${patient.city}, ${patient.country}`}
       />
       <DetailElement
-        label="DOB"
+        label={t.dob}
         value={new Date(patient.dateOfBirth).toLocaleDateString()}
       />
-      <DetailElement label="Insurance" value={patient.healthInsuranceNumber} />
+      <DetailElement
+        label={t.insurance}
+        value={patient.healthInsuranceNumber}
+      />
     </>
   );
 };

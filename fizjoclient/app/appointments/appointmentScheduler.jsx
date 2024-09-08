@@ -9,10 +9,10 @@ import Calendar from "../components/common/calendar/calendar";
 import PatientDeails from "./patientDetails";
 import TimePicker from "../components/common/timePicker/timePicker";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
-import polish from "./locales/pl.json";
-import english from "./locales/en.json";
+import pl from "./locales/pl.json";
+import en from "./locales/en.json";
 
-const locales = { english, polish };
+const locales = { en, pl };
 
 const AppointmentScheduler = () => {
   const { language } = useContext(LanguageContext);

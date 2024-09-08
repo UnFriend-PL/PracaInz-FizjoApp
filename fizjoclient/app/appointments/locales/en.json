@@ -14,5 +14,13 @@
   "selectDate": "Select date",
   "scheduleAppointmentButton": "Schedule Appointment",
   "showMore": "show more",
-  "showLess": "show less"
+  "showLess": "show less",
+  "firstName": "First Name",
+  "lastName": "Last Name",
+  "email": "Email",
+  "phone": "Phone",
+  "pesel": "PESEL",
+  "address": "Address",
+  "dob": "Date of Birth",
+  "insurance": "Health Insurance Number"
 }
