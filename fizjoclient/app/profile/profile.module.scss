@@ -1,6 +1,7 @@
 @import "../utils/globalColors.scss";
 
 .container {
+  padding-top: 4rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -13,6 +14,7 @@
   font-size: 2rem;
   margin-bottom: 20px;
   color: $text-dark-green;
+  text-align: center;
 }
 
 .loading {
@@ -31,8 +33,9 @@
 
 .field {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   padding: 0.8rem 0;
+  padding-right: 2%;
   border-bottom: 1px solid $border-color;
 }
 
@@ -40,9 +43,37 @@
   font-weight: bold;
   color: $label-color;
   text-decoration: cap;
-  text-transform: capitalize;
+  margin-bottom: 0.5rem;
 }
 
 .value {
   color: $text-black;
+  padding: 0.5rem 0;
+  border: 1px solid $border-color;
+  border-radius: 5px;
+}
+.error {
+  color: red;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  align-self: flex-start;
+}
+
+.button {
+  font-size: 1.2rem;
+  font-weight: 800;
+  height: auto;
+  background-color: $button-submit-bg;
+  border: none;
+  border-radius: 5px;
+  color: $text-white;
+  padding: 0.5rem;
+  &:hover {
+    background-color: $button-submit-bg-hover;
+  }
+}
+.profileNav {
+  flex-basis: 100%;
+  display: flex;
+  justify-content: flex-end;
 }
