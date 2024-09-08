@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   format,
   addMonths,
@@ -11,9 +11,18 @@ import {
   isSameMonth,
   isSameDay,
 } from "date-fns";
+import { pl, enUS } from "date-fns/locale";
 import styles from "./calendar.module.scss";
+import { LanguageContext } from "@/app/contexts/lang/langContext";
+import polish from "./locales/pl.json";
+import english from "./locales/en.json";
+
+const locales = { english, polish };
 
 const Calendar = ({ onDateSelect }) => {
+  const { language } = useContext(LanguageContext);
+  const t = locales[language];
+  const locale = language === "polish" ? pl : enUS;
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
   const today = new Date();
@@ -32,16 +41,16 @@ const Calendar = ({ onDateSelect }) => {
           className={styles.navButton}
           onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
         >
-          Prev
+          {t.prev}
         </button>
         <h2 className={styles.currentMonth}>
-          {format(currentMonth, "MMMM yyyy")}
+          {format(currentMonth, "MMMM yyyy", { locale })}
         </h2>
         <button
           className={styles.navButton}
           onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
         >
-          Next
+          {t.next}
         </button>
       </div>
     );
@@ -50,12 +59,12 @@ const Calendar = ({ onDateSelect }) => {
   const renderDays = () => {
     const days = [];
     const dateFormat = "EEEE";
-    const startDate = startOfWeek(currentMonth);
+    const startDate = startOfWeek(currentMonth, { locale });
 
     for (let i = 0; i < 7; i++) {
       days.push(
         <div className={styles.day} key={i}>
-          {format(addDays(startDate, i), dateFormat)}
+          {format(addDays(startDate, i), dateFormat, { locale })}
         </div>
       );
     }
@@ -66,8 +75,8 @@ const Calendar = ({ onDateSelect }) => {
   const renderCells = () => {
     const monthStart = startOfMonth(currentMonth);
     const monthEnd = endOfMonth(monthStart);
-    const startDate = startOfWeek(monthStart);
-    const endDate = endOfWeek(monthEnd);
+    const startDate = startOfWeek(monthStart, { locale });
+    const endDate = endOfWeek(monthEnd, { locale });
 
     const dateFormat = "d";
     const rows = [];

@@ -4,10 +4,16 @@ import Link from "next/link";
 import styles from "./navbar.module.scss";
 import { AuthContext } from "@/app/contexts/auth/authContext";
 import { CgProfile } from "react-icons/cg";
+import { LanguageContext } from "@/app/contexts/lang/langContext";
+import english from "./locales/en.json";
+import polish from "./locales/pl.json";
+
+const locales = { english, polish };
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { isAuthenticated, logout } = useContext(AuthContext);
+  const { changeLanguage, language } = useContext(LanguageContext);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -17,42 +23,46 @@ export default function Navbar() {
     logout();
   };
 
+  const t = locales[language];
+
   const MENU_LINKS = {
     Home: {
       href: "/",
       className: styles["nav-link"],
-      name: "Home",
+      name: t.home,
       action: undefined,
     },
     Services: {
       href: "/appointments",
       className: styles["nav-link"],
-      name: "Appointments",
+      name: t.appointments,
       action: undefined,
     },
     Contact: {
       href: "/contact",
       className: styles["nav-link"],
-      name: "Contact",
+      name: t.contact,
       action: undefined,
     },
     Profile: {
       href: "/profile",
       className: styles["nav-link"],
-      name: "Profile",
+      name: t.profile,
       action: undefined,
       icon: <CgProfile />,
     },
     SignIn: {
       href: "/auth",
       className: `${styles["nav-link"]} ${styles["signin-link"]}`,
-      name: isAuthenticated ? "Log out" : "Sign In",
+      name: isAuthenticated ? t.logOut : t.signIn,
       action: handleLogOut,
     },
   };
 
   return (
     <nav className={styles.navbar}>
+      <button onClick={() => changeLanguage("english")}>EN</button>
+      <button onClick={() => changeLanguage("polish")}>PL</button>
       <div className={styles.container}>
         <div className={styles["navbar-content"]}>
           <div className={styles["menu-button"]}>
@@ -81,7 +91,7 @@ export default function Navbar() {
             </button>
           </div>
           <div className={styles.logo}>
-            <Link href="/">Logo</Link>
+            <Link href="/">{t.logo}</Link>
           </div>
           <div className={styles["nav-links"]}>
             <GenerateLinks links={MENU_LINKS} />

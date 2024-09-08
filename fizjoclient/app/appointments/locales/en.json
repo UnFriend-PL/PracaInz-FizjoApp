@@ -1,0 +1,18 @@
+{
+  "appointmentTitle": "Appointment title",
+  "physiotherapist": "Physiotherapist",
+  "patient": "Patient",
+  "scheduleAppointment": "Schedule an appointment",
+  "typeEmailPeselPhone": "Type email, pesel or phone number",
+  "search": "Search",
+  "price": "Price",
+  "isPaid": "Is Paid",
+  "description": "Description",
+  "notes": "Notes",
+  "diagnosis": "Diagnosis",
+  "selectAppointmentHour": "Select appointment hour",
+  "selectDate": "Select date",
+  "scheduleAppointmentButton": "Schedule Appointment",
+  "showMore": "show more",
+  "showLess": "show less"
+}

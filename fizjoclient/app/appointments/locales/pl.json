@@ -1,0 +1,18 @@
+{
+  "appointmentTitle": "Tytuł wizyty",
+  "physiotherapist": "Fizjoterapeuta",
+  "patient": "Pacjent",
+  "scheduleAppointment": "Umów wizytę",
+  "typeEmailPeselPhone": "Wpisz email, pesel lub numer telefonu",
+  "search": "Szukaj",
+  "price": "Cena",
+  "isPaid": "Opłacone",
+  "description": "Opis",
+  "notes": "Notatki",
+  "diagnosis": "Diagnoza",
+  "selectAppointmentHour": "Wybierz godzinę wizyty",
+  "selectDate": "Wybierz datę",
+  "scheduleAppointmentButton": "Umów wizytę",
+  "showMore": "pokaż więcej",
+  "showLess": "pokaż mniej"
+}

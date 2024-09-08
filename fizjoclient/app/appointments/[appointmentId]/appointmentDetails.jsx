@@ -1,12 +1,19 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import styles from "./appointmentDetails.module.scss";
 import Modal from "@/app/components/common/modal/modal";
 import { format } from "date-fns";
 import { pl } from "date-fns/locale";
 import DetailElement from "@/app/components/common/detailElement/detailElement";
 import PatientDeails from "../patientDetails";
+import { LanguageContext } from "@/app/contexts/lang/langContext";
+import polish from "./locales/pl.json";
+import english from "./locales/en.json";
+
+const locales = { english, polish };
 
 const AppointmentDetails = ({ appointment }) => {
+  const { language } = useContext(LanguageContext);
+  const t = locales[language];
   const {
     appointmentStatusName,
     patient: {
@@ -47,17 +54,17 @@ const AppointmentDetails = ({ appointment }) => {
     <div className={styles.appointmentCard}>
       <span className={styles.appointmentDate}>
         {format(new Date(appointmentDate), "dd.MM.yyyy HH:mm", {
-          locale: pl,
+          locale: language === "pl" ? pl : undefined,
         })}
       </span>
       <div className={styles.header}>
         <span className={styles.status}>
-          Appointment: {appointmentStatusName}
+          {t.appointment}: {appointmentStatusName}
         </span>
       </div>
       <div className={styles.details}>
         <div className={styles.detailsGroup}>
-          <div className={styles.detailGroupName}>Patient: </div>
+          <div className={styles.detailGroupName}>{t.patient}: </div>
           <div className={styles.header}>
             {firstName} {lastName}
           </div>
@@ -65,7 +72,7 @@ const AppointmentDetails = ({ appointment }) => {
             isOpen={isPatientModalOpen}
             onClose={closePatientModal}
             size={"medium"}
-            header={"Patient Details"}
+            header={t.patientDetails}
           >
             <>
               <PatientDeails patient={appointment.patient} />
@@ -75,12 +82,12 @@ const AppointmentDetails = ({ appointment }) => {
             className={styles.detailGroupButton}
             onClick={openPatientModal}
           >
-            Show details
+            {t.showDetails}
           </button>
           <div className={styles.detailsGroupInfo}></div>
         </div>
         <div className={styles.detailsGroup}>
-          <div className={styles.detailGroupName}>Physiotherapist: </div>
+          <div className={styles.detailGroupName}>{t.physiotherapist}: </div>
           <div className={styles.header}>
             {physioFirstName} {physioLastName}
           </div>
@@ -89,7 +96,7 @@ const AppointmentDetails = ({ appointment }) => {
             className={styles.detailGroupButton}
             onClick={openPhysiotherapistModal}
           >
-            Show details
+            {t.showDetails}
           </button>
           <div className={styles.detailsGroupInfo}></div>
         </div>
@@ -97,26 +104,26 @@ const AppointmentDetails = ({ appointment }) => {
           isOpen={isPhysiotherpistModalOpen}
           onClose={closePhysiotherapistModal}
           size={"medium"}
-          header={"Physiotherapist Details"}
+          header={t.physiotherapistDetails}
         >
-          <DetailElement label="First Name" value={physioFirstName} />
-          <DetailElement label="Last Name" value={physioLastName} />
-          <DetailElement label="License Number" value={licenseNumber} />
+          <DetailElement label={t.firstName} value={physioFirstName} />
+          <DetailElement label={t.lastName} value={physioLastName} />
+          <DetailElement label={t.licenseNumber} value={licenseNumber} />
         </Modal>
       </div>
       <div className={styles.detailsGroup}>
         <DetailElement
-          label="Diagnosis"
-          value={diagnosis || "No diagnosis provided"}
+          label={t.diagnosis}
+          value={diagnosis || t.noDiagnosisProvided}
         />
-        <DetailElement label="Notes" value={notes || "No notes provided"} />
+        <DetailElement label={t.notes} value={notes || t.noNotesProvided} />
       </div>
       <div className={styles.detailsGroup}>
         <DetailElement
-          label="Description"
-          value={appointmentDescription || "No description provided"}
+          label={t.description}
+          value={appointmentDescription || t.noDescriptionProvided}
         />
-        <DetailElement label="Paid" value={isPaid ? "Yes" : "No"} />
+        <DetailElement label={t.paid} value={isPaid ? t.yes : t.no} />
       </div>
     </div>
   );

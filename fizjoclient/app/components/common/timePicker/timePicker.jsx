@@ -44,7 +44,7 @@ const TimePicker = ({
   const handleTimeChange = (selectedOption) => {
     setTime(selectedOption.value);
     if (onTimeChange) {
-      onTimeChange(selectedOption.value); // Call the callback with the selected time
+      onTimeChange(selectedOption.value);
     }
   };
 
@@ -55,7 +55,7 @@ const TimePicker = ({
     if (regex.test(inputValue)) {
       setIsValid(true);
       if (onTimeChange) {
-        onTimeChange(inputValue); // Call the callback with the manually entered time if valid
+        onTimeChange(inputValue);
       }
     } else {
       setIsValid(false);
