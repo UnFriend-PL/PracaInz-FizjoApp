@@ -23,12 +23,12 @@ const AppointmentScheduler = () => {
   const [error, setError] = useState(null);
   const [searchValue, setSearchValue] = useState("");
   const [showPatientDetails, setShowPatientDetails] = useState(false);
-  const [selectedHour, setSelectedHour] = useState(null);
+  const [selectedHour, setSelectedHour] = useState("12:00");
   const [appointmentDescription, setAppointmentDescription] = useState("");
   const [notes, setNotes] = useState("");
   const [diagnosis, setDiagnosis] = useState("");
   const [isPaid, setIsPaid] = useState(false);
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState(99.99);
   const router = useRouter();
 
   const searchPatient = async () => {
@@ -58,7 +58,6 @@ const AppointmentScheduler = () => {
     if (
       !selectedPatient ||
       !selectedHour ||
-      !appointmentDescription ||
       !price
     ) {
       setError("All fields are required.");

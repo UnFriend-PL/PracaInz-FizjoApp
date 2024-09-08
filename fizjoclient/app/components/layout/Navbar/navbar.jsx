@@ -4,6 +4,8 @@ import Link from "next/link";
 import styles from "./navbar.module.scss";
 import { AuthContext } from "@/app/contexts/auth/authContext";
 import { CgProfile } from "react-icons/cg";
+import { IoIosLogOut } from "react-icons/io";
+import { IoIosLogIn } from "react-icons/io";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
 import english from "./locales/en.json";
 import polish from "./locales/pl.json";
@@ -56,13 +58,13 @@ export default function Navbar() {
       className: `${styles["nav-link"]} ${styles["signin-link"]}`,
       name: isAuthenticated ? t.logOut : t.signIn,
       action: handleLogOut,
+      icon: isAuthenticated ? <IoIosLogOut /> : <IoIosLogIn />,
+      title: isAuthenticated ? t.logOut : t.signIn,
     },
   };
 
   return (
     <nav className={styles.navbar}>
-      <button onClick={() => changeLanguage("english")}>EN</button>
-      <button onClick={() => changeLanguage("polish")}>PL</button>
       <div className={styles.container}>
         <div className={styles["navbar-content"]}>
           <div className={styles["menu-button"]}>
@@ -96,6 +98,22 @@ export default function Navbar() {
           <div className={styles["nav-links"]}>
             <GenerateLinks links={MENU_LINKS} />
           </div>
+          <div className={styles.languages}>
+            <button
+              type="button"
+              className={styles["lang-button"]}
+              onClick={() => changeLanguage("pl")}
+            >
+              PL
+            </button>
+            <button
+              type="button"
+              className={styles["lang-button"]}
+              onClick={() => changeLanguage("en")}
+            >
+              EN
+            </button>
+          </div>
         </div>
       </div>
 
@@ -113,9 +131,15 @@ export default function Navbar() {
 
 function GenerateLinks({ links }) {
   return Object.keys(links).map((key) => {
-    const { href, className, name, action, icon } = links[key];
+    const { href, className, name, action, icon, title } = links[key];
     return (
-      <Link key={key} href={href} className={className} onClick={action}>
+      <Link
+        key={key}
+        href={href}
+        className={className}
+        onClick={action}
+        title={title}
+      >
         {icon != undefined ? icon : name}
       </Link>
     );

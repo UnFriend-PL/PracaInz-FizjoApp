@@ -6,7 +6,8 @@ namespace fizjobackend.Entities.BodyEntities
     {
         [Key]
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
+        public string? NamePL { get; set; }
         public int BodySectionId { get; set; }
 
         public BodySection BodySection { get; set; }
