@@ -1,4 +1,5 @@
 ﻿using fizjobackend.Entities.AppointmentEntities;
+using fizjobackend.Entities.OpinionEntities;
 using fizjobackend.Entities.UserEntities;
 using fizjobackend.Models.AccountDTOs;
 using fizjobackend.Models.UserDTOs;
@@ -14,7 +15,7 @@ namespace fizjobackend.Entities.PhysiotherapistEntities
         public ICollection<PhysiotherapySpecializationEntity> PhysiotherapySpecializations { get; set; } = [];
         [InverseProperty("Physiotherapist")]
         public ICollection<Appointment> Appointments { get; set; } = [];
-
+        public ICollection<Opinion> Opinions { get; set; } = [];
         public Physiotherapist() { }
 
         public Physiotherapist(PhysiotherapisRegistertRequestDTO physiotherapist)

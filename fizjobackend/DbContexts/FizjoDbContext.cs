@@ -1,6 +1,7 @@
 ﻿using fizjobackend.Entities.AppointmentEntities;
 using fizjobackend.Entities.BodyEntities;
 using fizjobackend.Entities.ConectorsEntities;
+using fizjobackend.Entities.OpinionEntities;
 using fizjobackend.Entities.PatientEntities;
 using fizjobackend.Entities.PhysiotherapistEntities;
 using fizjobackend.Entities.UserEntities;
@@ -47,6 +48,7 @@ namespace fizjobackend.DbContexts
             BuildAppointmentEntity(modelBuilder);
             BuildBodyEntities(modelBuilder);
             BuildAppointmentBodyDetailsEntity(modelBuilder); // Add this method to configure AppointmentBodyDetails
+            BuildOpinionsPatient(modelBuilder);
         }
 
         private static void BuildBodyEntities(ModelBuilder modelBuilder)
@@ -134,12 +136,29 @@ namespace fizjobackend.DbContexts
                  .WithMany(s => s.Physiotherapists)
                  .UsingEntity(j => j.ToTable("PhysiotherapistSpecializations"));
         }
+        private static void BuildOpinionsPatient(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Opinion>()
+                .HasOne(o => o.Patient)
+                .WithMany(p => p.Opinions)
+                .HasForeignKey(o => o.PatientId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<Opinion>()
+                .HasOne(o => o.Physiotherapist)
+                .WithMany(p => p.Opinions)
+                .HasForeignKey(o => o.PhysiotherapistId)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Physiotherapist> Physiotherapists { get; set; }
         public DbSet<PhysiotherapySpecializationEntity> PhysiotherapySpecializationEntities { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<Opinion> Opinions { get; set; }
+
 
         // Body parts db entities
         public DbSet<View> Views { get; set; }

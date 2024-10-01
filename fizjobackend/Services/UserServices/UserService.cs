@@ -100,7 +100,6 @@ namespace fizjobackend.Services.UserServices
         }
         private User ModifyUser(User userToEdit, UserEditRequestDTO userEdit)
         {
-            
             if (userToEdit.FirstName != userEdit.FirstName)
                 userToEdit.FirstName = userEdit.FirstName;
             if (userToEdit.LastName != userEdit.LastName)
