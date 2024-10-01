@@ -22,6 +22,8 @@ using fizjobackend.Services.AppointmentsService;
 using fizjobackend.Seeders.BodySeeder;
 using fizjobackend.Interfaces.BodyVisualizerInterfaces;
 using fizjobackend.Services.BodyVisualizerService;
+using fizjobackend.Interfaces.OpinionInterfaces;
+using fizjobackend.Services.OpinionService;
 
 namespace fizjobackend
 {
@@ -82,6 +84,7 @@ namespace fizjobackend
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IJwtGenerator, JwtGenerator>();
             builder.Services.AddScoped<IEmailService, EmailService>();
+            builder.Services.AddScoped<IOpinionService, OpinionService>();
             builder.Services.AddScoped<IAppointmentsService, AppointmentService>();
             builder.Services.AddScoped<IBodyVisualizerService, BodyVisualizerService>();
             var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY")!);

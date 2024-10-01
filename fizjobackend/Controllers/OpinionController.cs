@@ -20,7 +20,7 @@ namespace fizjobackend.Controllers
             _opinionService = opinionService;
         }
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpGet("AddOpinion")]
+        [HttpPost("AddOpinion")]
         public async Task<IActionResult> GetUserInfo([FromBody] OpinionRequestDTOs opinion)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

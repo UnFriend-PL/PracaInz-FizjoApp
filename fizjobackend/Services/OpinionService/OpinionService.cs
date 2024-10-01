@@ -2,12 +2,14 @@
 using fizjobackend.Entities.OpinionEntities;
 using fizjobackend.Entities.UserEntities;
 using fizjobackend.Interfaces.AccountInterfaces;
+using fizjobackend.Interfaces.DTOInterfaces.UserDTOInterfaces;
 using fizjobackend.Interfaces.EmailInterface;
 using fizjobackend.Interfaces.HelpersInterfaces;
 using fizjobackend.Interfaces.OpinionInterfaces;
 using fizjobackend.Models.AccountDTOs;
 using fizjobackend.Models.OpinionDTOs;
 using fizjobackend.Services.AccountService;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,28 +23,51 @@ namespace fizjobackend.Services.OpinionService
         {
             _context = context;
         }
-        public async Task<ServiceResponse<Opinion>> AddOpinion(Guid userId, OpinionRequestDTOs opinion)
+        public async Task<ServiceResponse<Opinion>> AddOpinion(Guid userId, OpinionRequestDTOs opinionFromBody)
         {
+            ServiceResponse<Opinion> response = new ServiceResponse<Opinion>("");
+
             try
             {
                 var user = await _context.Users.FindAsync(userId);
-                if(user != null)
+
+                if (user == null)
                 {
-                    string nameAndFirstLetterOfTheLastName = user.FirstName + " " + user.LastName[0] + ".";
-                    new OpinionRequestDTOs opinion = new OpinionRequestDTOs
-                    {
-                        PhysiotherapistId = opinion.PhysiotherapistId,
-                        NameAndFirstLetterOfTheLastName = nameAndFirstLetterOfTheLastName,
-                        Comment = opinion.Comment,
-                        Rating = opinion.Rating,
-                        UploadDate = DateTime.Now
-                    };
+                    response.Success = false;
+                    response.Message = "User not found";
+                    return response;
                 }
-                return null;
+                var physiotherapist = await _context.Physiotherapists.FindAsync(opinionFromBody.PhysiotherapistId);
+                if (physiotherapist == null)
+                {
+                    response.Success = false;
+                    response.Message = "Physiotherapist not found";
+                    return response;
+                }
+                string nameAndFirstLetterOfTheLastName = user.FirstName + " " + user.LastName[0] + ".";
+
+                Opinion finallyOpinion = new Opinion
+                {
+                    PatientId = userId,
+                    PhysiotherapistId = opinionFromBody.PhysiotherapistId,
+                    NameAndFirstLetterOfTheLastName = nameAndFirstLetterOfTheLastName,
+                    Comment = opinionFromBody.Comment,
+                    Rating = opinionFromBody.Rating,
+                    UploadDate = DateTime.Now
+                };
+
+                _context.Opinions.Add(finallyOpinion);
+                await _context.SaveChangesAsync();
+
+                response.Message = "Opinion added successfully";
+                response.Success = true;
+                return response;
             }
             catch (Exception ex)
             {
-                return null;
+                response.Success = false;
+                response.Message = $"An error occurred: {ex.Message}";
+                return response;
             }
         }
     }
