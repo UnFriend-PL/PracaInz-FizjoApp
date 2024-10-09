@@ -1,19 +1,27 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import apiService from "@/app/services/apiService/apiService";
 import { AuthContext } from "@/app/contexts/auth/authContext";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
-import { pl } from "date-fns/locale";
+import { pl as plDate } from "date-fns/locale";
 import styles from "./appointments.module.scss";
+import AppointmentScheduler from "./appointmentScheduler";
+import { LanguageContext } from "@/app/contexts/lang/langContext";
+import pl from "./locales/pl.json";
+import en from "./locales/en.json";
+const locales = { en, pl };
+
 const Appointments = () => {
   const router = useRouter();
-  const { isAuthenticated } = React.useContext(AuthContext);
-  const { role } = React.useContext(AuthContext);
+  const { isAuthenticated } = useContext(AuthContext);
+  const { role } = useContext(AuthContext);
+  const { language } = useContext(LanguageContext);
   const [loading, setLoading] = useState(true);
   const [appointments, setAppointments] = useState([]);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const t = locales[language];
 
   const getAppointments = async (status = "Scheduled") => {
     try {
@@ -29,7 +37,7 @@ const Appointments = () => {
             new Date(appointment.appointmentDate),
             "dd.MM.yyyy",
             {
-              locale: pl,
+              locale: language === "pl" ? plDate : undefined,
             }
           );
           if (!acc[date]) {
@@ -61,32 +69,39 @@ const Appointments = () => {
 
   return (
     <>
-      <div className={styles.container}>
-        {Object.keys(appointments).map((date) => (
-          <div key={date} className={styles.dateGroup}>
-            <span className={styles.date}>{date}</span>
-            {appointments[date].map((appointment) => (
-              <div
-                key={appointment.appointmentId}
-                className={styles.appointmentCard}
-                onClick={showDetails(appointment)}
-              >
-                <span>
-                  {format(new Date(appointment.appointmentDate), "HH:mm", {
-                    locale: pl,
-                  })}
-                </span>
-                <span>Appointment title</span>
-                {role === "physiotherapist" ? (
-                  <span>{appointment.patientFirstName}</span>
-                ) : (
-                  <span>{appointment.physiotherapistFirstName}</span>
-                )}
+      {role == "Physiotherapist" && (
+        <>
+          <div className={styles.container}>
+            <AppointmentScheduler />
+          </div>
+          <div className={styles.container}>
+            {Object.keys(appointments).map((date) => (
+              <div key={date} className={styles.dateGroup}>
+                <span className={styles.date}>{date}</span>
+                {appointments[date].map((appointment) => (
+                  <div
+                    key={appointment.appointmentId}
+                    className={styles.appointmentCard}
+                    onClick={showDetails(appointment)}
+                  >
+                    <span>
+                      {format(new Date(appointment.appointmentDate), "HH:mm", {
+                        locale: language === "pl" ? plDate : undefined,
+                      })}
+                    </span>
+                    <span>{t.appointmentTitle}</span>
+                    {role === "physiotherapist" ? (
+                      <span>{appointment.patientFirstName}</span>
+                    ) : (
+                      <span>{appointment.physiotherapistFirstName}</span>
+                    )}
+                  </div>
+                ))}
               </div>
             ))}
           </div>
-        ))}
-      </div>
+        </>
+      )}
     </>
   );
 };

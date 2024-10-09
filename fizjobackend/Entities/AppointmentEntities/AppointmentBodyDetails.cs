@@ -16,7 +16,5 @@ namespace fizjobackend.Entities.AppointmentEntities
         public int? JointId { get; set; }
         public virtual Joint Joint { get; set; }
         public string BodySide { get; set; }
-        public int? PainLevel { get; set; }
-
     }
 }

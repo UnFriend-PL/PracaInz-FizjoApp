@@ -1,8 +1,12 @@
+import { LanguageContext } from "@/app/contexts/lang/langContext";
+import { useContext } from "react";
 const mapData = (data) => {
+  const { language } = useContext(LanguageContext);
+
   return data.map((section) => {
     const muscles = section.muscles.map((muscle) => ({
       section: section.name,
-      label: muscle.name,
+      label: language == "en" ? muscle.name : muscle.namePL,
       value: muscle.name.toLowerCase().replace(/\s+/g, "-"),
       description: `Muscle in the ${section.name} section`,
       bodySectionId: section.bodySectionId,
@@ -12,7 +16,7 @@ const mapData = (data) => {
 
     const joints = section.joints.map((joint) => ({
       section: section.name,
-      label: joint.name,
+      label: language == "en" ? joint.name : joint.namePL,
       value: joint.name.toLowerCase().replace(/\s+/g, "-"),
       description: `Joint in the ${section.name} section`,
       bodySectionId: section.bodySectionId,
@@ -22,6 +26,7 @@ const mapData = (data) => {
 
     return {
       sectionName: section.name,
+      sectionDisplayName: language == "en" ? section.name : section.namePL,
       muscles,
       joints,
     };

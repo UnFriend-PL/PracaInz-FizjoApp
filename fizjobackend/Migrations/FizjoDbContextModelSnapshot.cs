@@ -235,9 +235,6 @@ namespace fizjobackend.Migrations
                     b.Property<int?>("MuscleId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PainLevel")
-                        .HasColumnType("int");
-
                     b.Property<int>("ViewId")
                         .HasColumnType("int");
 
@@ -265,10 +262,15 @@ namespace fizjobackend.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("BodySectionName")
-                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BodySectionNamePL")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BodySide")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BodySidePL")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ViewId")
@@ -293,7 +295,9 @@ namespace fizjobackend.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NamePL")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -317,6 +321,9 @@ namespace fizjobackend.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("NamePL")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BodySectionId");
@@ -337,7 +344,9 @@ namespace fizjobackend.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NamePL")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

@@ -2,7 +2,6 @@
 using fizjobackend.Entities.OpinionEntities;
 using fizjobackend.Entities.UserEntities;
 using fizjobackend.Models.AccountDTOs;
-using fizjobackend.Models.UserDTOs;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace fizjobackend.Entities.PatientEntities
@@ -30,7 +29,7 @@ namespace fizjobackend.Entities.PatientEntities
             PostCode = patient.PostCode;
             Pesel = patient.Pesel;
             DateOfBirth = patient.DateOfBirth;
-            HealthInsuranceNumber = patient.HealthInsuranceNumber;
+            HealthInsuranceNumber = patient.InsuranceNumber;
             PhoneNumber = patient.PhoneNumber;
             CreatedDate = DateTime.UtcNow;
         }
