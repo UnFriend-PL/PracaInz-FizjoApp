@@ -21,7 +21,7 @@ namespace fizjobackend.Controllers
         }
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("AddOpinion")]
-        public async Task<IActionResult> GetUserInfo([FromBody] OpinionRequestDTOs opinion)
+        public async Task<IActionResult> AddOpinion([FromBody] OpinionRequestDTOs opinion)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var response = await _opinionService.AddOpinion(Guid.Parse(userId), opinion);
@@ -31,5 +31,12 @@ namespace fizjobackend.Controllers
             }
             return Ok(response);
         }
+        //[Authorize(AuthenticationSchemes ="Bearer")]
+        //[HttpGet("GetOpinionByPhysiotherapistId")]
+        //public async Task<IActionResult> GetOpinion([FromQuery]Guid phisiotherapistId)
+        //{
+        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //    var resposne = await _opinionService.GetOpinionByPhysiotherapistId(Guid.Parse(userId));
+        //}
     }
 }

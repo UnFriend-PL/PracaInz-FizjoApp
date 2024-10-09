@@ -6,7 +6,7 @@ namespace fizjobackend.Models.OpinionDTOs
 {
     public class OpinionRequestDTOs
     {
-        //public Guid IdWizyty
+        public Guid AppointmentId { get; set; }
         public Guid PhysiotherapistId { get; set; }
         public string NameAndFirstLetterOfTheLastName { get; set; }
         public string Comment { get; set; }

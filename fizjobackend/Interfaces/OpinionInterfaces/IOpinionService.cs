@@ -8,5 +8,6 @@ namespace fizjobackend.Interfaces.OpinionInterfaces
     {
         Task<ServiceResponse<Opinion>> AddOpinion(Guid userId, OpinionRequestDTOs opinion);
 
+
     }
 }

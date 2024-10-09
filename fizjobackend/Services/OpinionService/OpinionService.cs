@@ -29,22 +29,34 @@ namespace fizjobackend.Services.OpinionService
 
             try
             {
-                var user = await _context.Users.FindAsync(userId);
-
-                if (user == null)
+                var patient = await _context.Patients.FindAsync(userId);
+                var physiotherapist = await _context.Physiotherapists.FindAsync(opinionFromBody.PhysiotherapistId);
+                if (patient == null)
                 {
                     response.Success = false;
-                    response.Message = "User not found";
+                    response.Message = "Patient not found";
                     return response;
                 }
-                var physiotherapist = await _context.Physiotherapists.FindAsync(opinionFromBody.PhysiotherapistId);
                 if (physiotherapist == null)
                 {
                     response.Success = false;
                     response.Message = "Physiotherapist not found";
                     return response;
                 }
-                string nameAndFirstLetterOfTheLastName = user.FirstName + " " + user.LastName[0] + ".";
+                var appointment = await _context.Appointments.FindAsync(opinionFromBody.AppointmentId);
+
+                if(appointment==null)
+                {
+                    response.Success=false;
+                    response.Message = "Appointment not found";
+                }
+                if (appointment.PatientId != userId || appointment.PhysiotherapistId != physiotherapist.Id)
+                {
+                    response.Success = false;
+                    response.Message = "Id of the patient or physiotherapist is not correct";
+                }
+
+                string nameAndFirstLetterOfTheLastName = patient.FirstName + " " + patient.LastName[0] + ".";
 
                 Opinion finallyOpinion = new Opinion
                 {
