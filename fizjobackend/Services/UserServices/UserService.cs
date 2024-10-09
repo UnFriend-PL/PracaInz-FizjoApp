@@ -56,9 +56,9 @@ namespace fizjobackend.Services.UserServices
 
             try
             {
-                var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Email == searchParam.SearchParam || p .PhoneNumber == searchParam.SearchParam || p.Pesel == searchParam.SearchParam);
+                var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Email == searchParam.SearchParam || p.PhoneNumber == searchParam.SearchParam || p.Pesel == searchParam.SearchParam);
                 var userRole = GetBaseRoleFromUserRoles(searcherRoles);
-                if(userRole.ToLower() != "physiotherapist")
+                if (userRole.ToLower() != "physiotherapist")
                 {
                     throw new UnauthorizedAccessException("Only physiotherapists can search for patients");
                 }
@@ -98,6 +98,36 @@ namespace fizjobackend.Services.UserServices
 
             return userRole;
         }
+        private User ModifyUser(User userToEdit, UserEditRequestDTO userEdit)
+        {
+            if (userToEdit.FirstName != userEdit.FirstName)
+                userToEdit.FirstName = userEdit.FirstName;
+            if (userToEdit.LastName != userEdit.LastName)
+                userToEdit.LastName = userEdit.LastName;
+            if (userToEdit.Email != userEdit.Email)
+                userToEdit.Email = userEdit.Email;
+            if (userToEdit.Gender != userEdit.Gender)
+                userToEdit.Gender = userEdit.Gender;
+            if (userToEdit.City != userEdit.City)
+                userToEdit.City = userEdit.City;
+            if (userToEdit.Country != userEdit.Country)
+                userToEdit.Country = userEdit.Country;
+            if (userToEdit.DateOfBirth != userEdit.DateOfBirth)
+                userToEdit.DateOfBirth = userEdit.DateOfBirth;
+            if (userToEdit.Pesel != userEdit.Pesel)
+                userToEdit.Pesel = userEdit.Pesel;
+            if (userToEdit.PostCode != userEdit.PostCode)
+                userToEdit.PostCode = userEdit.PostCode;
+            if (userToEdit.StreetWithHouseNumber != userEdit.StreetWithHouseNumber)
+                userToEdit.StreetWithHouseNumber = userEdit.StreetWithHouseNumber;
+            if (userToEdit.PhoneNumber != userEdit.PhoneNumber)
+                userToEdit.PhoneNumber = userEdit.PhoneNumber;
+            if (userToEdit.LastModifiedDate < DateTime.UtcNow)
+                userToEdit.LastModifiedDate = DateTime.UtcNow;
+
+            return userToEdit;
+        }
+
         private User ModifyUser(User userToEdit, UserEditRequestDTO userEdit)
         {
             if (userToEdit.FirstName != userEdit.FirstName)
