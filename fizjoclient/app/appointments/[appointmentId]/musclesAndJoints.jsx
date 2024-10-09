@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useContext } from "react";
 import { useState } from "react";
 import styles from "./appointmentDetails.module.scss";
 import apiService from "@/app/services/apiService/apiService";
@@ -7,12 +7,20 @@ import createBodyDetails from "../utils/createBodyDetails";
 import SelectedItemsList from "./SelectedItemsList";
 import BodyPartSelector from "./BodyPartSelector";
 import useSelectedItems from "../utils/useSelectedItems";
+import { LanguageContext } from "@/app/contexts/lang/langContext";
+import pl from "./locales/pl.json";
+import en from "./locales/en.json";
+
+const locales = { en, pl };
 
 const MusclesAndJoints = ({
   musclesAndJoints,
   appointmentId,
   loadedMusclesAndJoints,
 }) => {
+  const { language } = useContext(LanguageContext);
+  const t = locales[language];
+
   const { selectedItems, handleChange, handleRemove, setSelectedItems } =
     useSelectedItems();
 
@@ -110,9 +118,9 @@ const MusclesAndJoints = ({
         handleRemove={handleRemove}
       />
       <div className={styles.navigation}>
-        <button onClick={() => handleNavigation("prev")}>&lt;</button>
+        <button onClick={() => handleNavigation("prev")}>{t.prev}</button>
         <span>{`${currentIndex + 1} / ${mappedData.length}`}</span>
-        <button onClick={() => handleNavigation("next")}>&gt;</button>
+        <button onClick={() => handleNavigation("next")}>{t.next}</button>
       </div>
       <BodyPartSelector
         sectionName={sectionName}
@@ -122,7 +130,7 @@ const MusclesAndJoints = ({
         handleChange={handleChange}
       />
       <button onClick={handleSave} className={styles.saveButton}>
-        SAVE
+        {t.save}
       </button>
     </div>
   );

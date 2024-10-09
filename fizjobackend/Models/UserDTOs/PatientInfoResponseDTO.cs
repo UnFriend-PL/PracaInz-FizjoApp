@@ -6,6 +6,7 @@ namespace fizjobackend.Models.UserDTOs
 {
     public class PatientInfoResponseDTO : IUserInfoResponseDTO
     {
+        public Guid Id { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string Gender { get; set; } = string.Empty;
@@ -23,6 +24,7 @@ namespace fizjobackend.Models.UserDTOs
 
         public PatientInfoResponseDTO(Patient patient)
         {
+            Id = patient.Id;
             FirstName = patient.FirstName;
             LastName = patient.LastName;
             Gender = patient.Gender;

@@ -5,6 +5,7 @@
         public int ViewId { get; set; }
         public int BodySectionId { get; set; }
         public string Name { get; set; } = string.Empty;
+        public string? NamePL { get; set; }
         public List<MuscleResponseDTO> Muscles { get; set; }
         public List<JointResponseDTO> Joints { get; set; }
     }
