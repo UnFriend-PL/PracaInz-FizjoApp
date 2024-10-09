@@ -1,7 +1,6 @@
 ﻿using fizjobackend.Entities.AppointmentEntities;
 using fizjobackend.Entities.UserEntities;
 using fizjobackend.Models.AccountDTOs;
-using fizjobackend.Models.UserDTOs;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace fizjobackend.Entities.PhysiotherapistEntities

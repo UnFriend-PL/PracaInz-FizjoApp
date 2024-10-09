@@ -5,7 +5,7 @@ namespace fizjobackend.Models.AccountDTOs
 {
     public class PatientRegisterRequestDTO : IUserRegisterDTO
     {
-        public string? HealthInsuranceNumber { get; set; }
+        public string? InsuranceNumber { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string Gender { get; set; } = string.Empty;

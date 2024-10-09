@@ -7,7 +7,6 @@ import en from "./locales/en.json";
 
 const locales = { en, pl };
 
-import { validateField } from "../validation";
 const RegistrationForm = ({
   formData,
   handleChange,
@@ -24,24 +23,25 @@ const RegistrationForm = ({
 
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
+
   const validateField = (name, value) => {
     let error = "";
     switch (name) {
       case "firstName":
       case "lastName":
         if (!/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/.test(value)) {
-          error = "Only letters are allowed";
+          error = t.onlyLetters;
         }
         break;
       case "gender":
         if (!["male", "female", "other"].includes(value)) {
-          error = "Invalid gender";
+          error = t.invalidGender;
         }
         break;
       case "country":
       case "city":
         if (!/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/.test(value)) {
-          error = "Only letters are allowed";
+          error = t.onlyLetters;
         }
         break;
       case "streetWithHouseNumber":
@@ -51,12 +51,12 @@ const RegistrationForm = ({
         break;
       case "postCode":
         if (!/^\d{2}-\d{3}$/.test(value)) {
-          error = "Invalid post code format";
+          error = t.invalidPostCode;
         }
         break;
       case "phoneNumber":
         if (!/^\d{9}$/.test(value)) {
-          error = "Phone number must be 9 digits";
+          error = t.invalidPhoneNumber;
         }
         break;
       case "pesel":
@@ -67,19 +67,18 @@ const RegistrationForm = ({
       case "confirmPassword":
       case "password":
         if (!validatePassword(value)) {
-          error =
-            "Password must contain at least 1 letter, 1 number, and 1 special character";
+          error = t.passwordRequirements;
         }
         if (
           formData.confirmPassword !== "" &&
           value !== formData.confirmPassword
         ) {
-          error = "Passwords do not match";
+          error = t.passwordMismatch;
         }
         break;
       case "dateOfBirth":
         if (!validateDateOfBirth(value, formData.pesel)) {
-          error = "Date of birth does not match PESEL";
+          error = t.dateOfBirthMismatch;
         }
         break;
       default:
