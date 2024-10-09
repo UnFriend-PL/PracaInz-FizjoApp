@@ -26,38 +26,37 @@ namespace fizjobackend.Services.OpinionService
         public async Task<ServiceResponse<Opinion>> AddOpinion(Guid userId, OpinionRequestDTOs opinionFromBody)
         {
             ServiceResponse<Opinion> response = new ServiceResponse<Opinion>("");
-
             try
             {
                 var patient = await _context.Patients.FindAsync(userId);
                 var physiotherapist = await _context.Physiotherapists.FindAsync(opinionFromBody.PhysiotherapistId);
-                if (patient == null)
-                {
-                    response.Success = false;
-                    response.Message = "Patient not found";
-                    return response;
-                }
-                if (physiotherapist == null)
-                {
-                    response.Success = false;
-                    response.Message = "Physiotherapist not found";
-                    return response;
-                }
-                var appointment = await _context.Appointments.FindAsync(opinionFromBody.AppointmentId);
-
+                var appointment = await _context.Appointments.Where(a => a.PatientId == userId && a.PhysiotherapistId== physiotherapist.Id).FirstOrDefaultAsync();
                 if(appointment==null)
                 {
-                    response.Success=false;
+                    response.Success = false;
                     response.Message = "Appointment not found";
+                    return response;
                 }
-                if (appointment.PatientId != userId || appointment.PhysiotherapistId != physiotherapist.Id)
+                if (appointment.AppointmentDate > DateTime.Now)
                 {
                     response.Success = false;
-                    response.Message = "Id of the patient or physiotherapist is not correct";
+                    response.Message = "Visit does not take place";
+                    return response;
                 }
-
+                var lastOpinion = await _context.Opinions.Where(a => a.PatientId == userId && a.PhysiotherapistId == physiotherapist.Id).FirstOrDefaultAsync();
+                if(lastOpinion!=null)
+                {
+                    response.Success = false;
+                    response.Message = "Opinion exists";
+                    return response;
+                }
+                if (opinionFromBody.Rating > 5)
+                {
+                    response.Success = false;
+                    response.Message = "Rating is not between 0 - 5";
+                    return response;
+                }
                 string nameAndFirstLetterOfTheLastName = patient.FirstName + " " + patient.LastName[0] + ".";
-
                 Opinion finallyOpinion = new Opinion
                 {
                     PatientId = userId,
@@ -67,7 +66,6 @@ namespace fizjobackend.Services.OpinionService
                     Rating = opinionFromBody.Rating,
                     UploadDate = DateTime.Now
                 };
-
                 _context.Opinions.Add(finallyOpinion);
                 await _context.SaveChangesAsync();
 

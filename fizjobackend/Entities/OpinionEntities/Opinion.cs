@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using fizjobackend.Entities.PhysiotherapistEntities;
 using fizjobackend.Entities.PatientEntities;
+using fizjobackend.Entities.AppointmentEntities;
 
 namespace fizjobackend.Entities.OpinionEntities
 {
