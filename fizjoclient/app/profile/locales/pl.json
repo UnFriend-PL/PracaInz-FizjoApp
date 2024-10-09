@@ -1,0 +1,21 @@
+{
+  "profile": "Profil",
+  "loading": "Ładowanie...",
+  "error": "Błąd",
+  "notAuthenticated": "Nie jesteś zalogowany",
+  "firstName": "Imię",
+  "lastName": "Nazwisko",
+  "gender": "płeć",
+  "country": "Kraj",
+  "city": "Miasto",
+  "streetWithHouseNumber": "Ulica z nr domu",
+  "postCode": "Kod pocztowy",
+  "dateOfBirth": "Data urodzenia",
+  "phoneNumber": "Numer telefonu",
+  "email": "Email",
+  "phone": "Telefon",
+  "pesel": "PESEL",
+  "address": "Adres",
+  "dob": "Data urodzenia",
+  "insurance": "Numer ubezpieczenia zdrowotnego"
+}

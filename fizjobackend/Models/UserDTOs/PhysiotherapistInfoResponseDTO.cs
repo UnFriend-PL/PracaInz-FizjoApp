@@ -5,6 +5,7 @@ namespace fizjobackend.Models.UserDTOs
 {
     public class PhysiotherapistInfoResponseDTO : IUserInfoResponseDTO
     {
+        public Guid Id { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string Gender { get; set; } = string.Empty;
@@ -22,6 +23,7 @@ namespace fizjobackend.Models.UserDTOs
 
         public PhysiotherapistInfoResponseDTO(Physiotherapist physiotherapist)
         {
+            Id = physiotherapist.Id;
             FirstName = physiotherapist.FirstName;
             LastName = physiotherapist.LastName;
             Gender = physiotherapist.Gender;

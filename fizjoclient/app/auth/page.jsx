@@ -5,9 +5,16 @@ import LoginForm from "./LoginForm";
 import RegistrationForm from "./SignUp";
 import apiService from "../services/apiService/apiService";
 import { AuthContext } from "../contexts/auth/authContext";
+import { LanguageContext } from "@/app/contexts/lang/langContext";
+import pl from "./locales/pl.json";
+import en from "./locales/en.json";
+
+const locales = { en, pl };
 
 const AuthPage = () => {
   const { login } = useContext(AuthContext);
+  const { language } = useContext(LanguageContext);
+  const t = locales[language];
   const [isRegistering, setIsRegistering] = useState(false);
   const [accountType, setAccountType] = useState("patient");
   const [signUpData, setSignUpData] = useState({
@@ -107,7 +114,7 @@ const AuthPage = () => {
           className={styles.toggleButton}
           onClick={() => setIsRegistering(!isRegistering)}
         >
-          {isRegistering ? "Back to Login" : "Sign Up"}
+          {isRegistering ? t.backToLogin : t.signUp}
         </button>
       </div>
     </div>
