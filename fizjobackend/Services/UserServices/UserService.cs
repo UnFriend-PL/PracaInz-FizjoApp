@@ -50,15 +50,15 @@ namespace fizjobackend.Services.UserServices
             return response;
         }
 
-      public async Task<ServiceResponse<IUserInfoResponseDTO>> FindPatient(SearchPatientRequestDTO searchParam, IEnumerable<string> searcherRoles)
+        public async Task<ServiceResponse<IUserInfoResponseDTO>> FindPatient(SearchPatientRequestDTO searchParam, IEnumerable<string> searcherRoles)
         {
             ServiceResponse<IUserInfoResponseDTO> response;
 
             try
             {
-                var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Email == searchParam.SearchParam || p .PhoneNumber == searchParam.SearchParam || p.Pesel == searchParam.SearchParam);
+                var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Email == searchParam.SearchParam || p.PhoneNumber == searchParam.SearchParam || p.Pesel == searchParam.SearchParam);
                 var userRole = GetBaseRoleFromUserRoles(searcherRoles);
-                if(userRole.ToLower() != "physiotherapist")
+                if (userRole.ToLower() != "physiotherapist")
                 {
                     throw new UnauthorizedAccessException("Only physiotherapists can search for patients");
                 }
@@ -99,7 +99,7 @@ namespace fizjobackend.Services.UserServices
             return userRole;
         }
 
-                private User ModifyUser(User userToEdit, UserEditRequestDTO userEdit)
+        private User ModifyUser(User userToEdit, UserEditRequestDTO userEdit)
         {
             if (userToEdit.FirstName != userEdit.FirstName)
                 userToEdit.FirstName = userEdit.FirstName;
