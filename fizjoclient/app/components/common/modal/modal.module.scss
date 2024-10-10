@@ -14,10 +14,13 @@
 
 .modalContent {
   background: $bg-page;
-  padding: 2em;
+  padding: 2rem;
   border-radius: 8px;
   min-width: 45%;
   min-height: 30%;
+  max-height: 80%;
+  scrollbar-width: thin;
+  overflow-y: scroll;
   position: relative;
   display: flex;
   flex-wrap: wrap;
@@ -25,12 +28,15 @@
 
 .large {
   max-width: 80%;
+  min-width: 80%;
 }
 .medium {
   max-width: 60%;
+  min-width: 60%;
 }
 .small {
   max-width: 45%;
+  min-width: 45%;
 }
 .closeButton {
   position: absolute;
@@ -38,12 +44,12 @@
   right: 0;
   background: none;
   border: none;
-  font-size: 1.5em;
+  font-size: 1.5rem;
   background-color: $button-cancel-bg;
   color: $text-white;
-  padding: 0.5em;
-  height: 2em;
-  width: 2em;
+  padding: 0.5rem;
+  height: 2rem;
+  width: 2rem;
   border-radius: 5%;
   display: flex;
   flex-wrap: wrap;
@@ -57,7 +63,7 @@
   flex-basis: 100%;
   .header {
     color: $text-dark-green;
-    font-size: 1.5em;
+    font-size: 1.5rem;
     font-weight: bold;
     border-bottom: 1px solid black;
   }

@@ -57,6 +57,7 @@ namespace fizjobackend.Services.BodyVisualizerService
                     ViewId = view.Id,
                     BodySectionId = bodySection.Id,
                     Name = name,
+                    NamePL = bodySection.BodySectionNamePL,
                     Muscles = muscles,
                     Joints = joints
                 };
