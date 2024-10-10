@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Select from "react-select";
+import Select from "react-select/async";
 import styles from "./timePicker.module.scss";
 
 const TimePicker = ({
