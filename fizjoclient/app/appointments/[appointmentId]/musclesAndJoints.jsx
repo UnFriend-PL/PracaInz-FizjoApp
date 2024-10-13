@@ -10,7 +10,6 @@ import useSelectedItems from "../utils/useSelectedItems";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
 import pl from "./locales/pl.json";
 import en from "./locales/en.json";
-import { set } from "date-fns";
 const locales = { en, pl };
 
 const MusclesAndJoints = ({
@@ -75,9 +74,9 @@ const MusclesAndJoints = ({
 
   function setInitialValues(mappedData, loadedMusclesAndJoints, handleChange) {
     mappedData.forEach((section) => {
-      const initialSelectedMuscles = section.muscles.filter((muscle) => {
-        loadedMusclesAndJoints.some((item) => item.id === muscle.muscleId);
-      });
+      const initialSelectedMuscles = section.muscles.filter((muscle) =>
+        loadedMusclesAndJoints.some((item) => item.id === muscle.muscleId)
+      );
 
       const initialSelectedJoints = section.joints.filter((joint) =>
         loadedMusclesAndJoints.some((item) => item.id === joint.jointId)
@@ -90,11 +89,7 @@ const MusclesAndJoints = ({
 
   useEffect(() => {
     setInitialValues(mappedData, loadedMusclesAndJoints, handleChange);
-  }, [language]);
-
-  useEffect(() => {
-    setInitialValues(mappedData, loadedMusclesAndJoints, handleChange);
-  }, [loadedMusclesAndJoints]);
+  }, [loadedMusclesAndJoints, language]);
 
   const handleSave = async () => {
     setIsSaving(true);
