@@ -164,6 +164,68 @@ namespace fizjobackend.Services.OpinionService
 
             return response;
         }
+        public async Task<ServiceResponse<List<Opinion>>> GetOpinionsByPatientId(Guid patientId, int page, int pageSize)
+        {
+            var response = new ServiceResponse<List<Opinion>>("");
+
+            try
+            {
+                var opinions = await _context.Opinions
+                    .Where(o => o.PatientId == patientId)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                if (opinions == null || opinions.Count == 0)
+                {
+                    response.Success = false;
+                    response.Message = "No opinions found for this patient.";
+                    return response;
+                }
+
+                response.Success = true;
+                response.Data = opinions;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"An error occurred: {ex.Message}";
+            }
+
+            return response;
+        }
+
+        public async Task<ServiceResponse<List<Opinion>>> GetOpinionsByPhysiotherapistId(Guid physiotherapistId, int page, int pageSize)
+        {
+            var response = new ServiceResponse<List<Opinion>>("");
+
+            try
+            {
+                var opinions = await _context.Opinions
+                    .Where(o => o.PhysiotherapistId == physiotherapistId)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                if (opinions == null || opinions.Count == 0)
+                {
+                    response.Success = false;
+                    response.Message = "No opinions found for this physiotherapist.";
+                    return response;
+                }
+
+                response.Success = true;
+                response.Data = opinions;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"An error occurred: {ex.Message}";
+            }
+
+            return response;
+        }
+
 
     }
 }
