@@ -27,7 +27,10 @@ namespace fizjobackend.Controllers
         [HttpPost("/Appointments/Appointment/Create")]
         public async Task<IActionResult> CreateAppointment([FromBody] CreateAppointmentRequestDTO newAppointmentRequest)
         {
-
+            if(newAppointmentRequest.PhysiotherapistId == Guid.Empty)
+            {
+               newAppointmentRequest.PhysiotherapistId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            }
             var response = await _appointmentsService.CreateAppointment(newAppointmentRequest);
             if (!response.Success)
             {

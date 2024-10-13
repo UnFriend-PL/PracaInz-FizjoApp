@@ -1,0 +1,90 @@
+@import "@/app/utils/globalColors.scss";
+
+.appointmentScheduler {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  align-content: center;
+  background-color: $bg-section;
+  padding: 1rem;
+  flex-basis: 100%;
+  .appointmentSchedulerButton {
+    background-color: $button-submit-bg;
+    color: $text-white;
+    padding: 0.2rem;
+    font-size: 2.5rem;
+    font-weight: 800;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .searchPanel {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+    flex-basis: 100%;
+    padding-top: 2rem;
+
+    .searchLabel {
+      color: $label-color;
+      font-weight: bold;
+      text-transform: capitalize;
+      font-size: 1.2rem;
+    }
+    .searchValue {
+      display: flex;
+      flex-basis: 100%;
+      flex-wrap: wrap;
+      .showDetails {
+        color: $text-dark-green;
+        cursor: pointer;
+        flex-basis: 100%;
+        font-size: 0.9rem;
+        text-decoration: underline;
+        line-height: 0.2rem;
+        padding-bottom: 1rem;
+      }
+    }
+
+    .deletePatient {
+      color: $text-error;
+      cursor: pointer;
+    }
+    .searchField {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      align-content: center;
+      flex-basis: 100%;
+      .searchInput {
+        padding: 0.5rem;
+        border-radius: 5px;
+        border: 1px solid $border-color;
+        flex-basis: 80%;
+      }
+      .searchButton {
+        background-color: $button-submit-bg;
+        color: $text-white;
+        padding: 0.5rem;
+        font-weight: 800;
+        border-radius: 5px;
+        cursor: pointer;
+        flex-basis: 15%;
+      }
+    }
+    .submitButton {
+      margin-top: 2rem;
+      background-color: $button-submit-bg;
+      color: $text-white;
+      padding: 0.5rem;
+      font-weight: 800;
+      border-radius: 5px;
+      cursor: pointer;
+      flex-basis: 100%;
+    }
+  }
+}

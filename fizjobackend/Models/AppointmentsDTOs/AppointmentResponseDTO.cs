@@ -20,7 +20,10 @@ namespace fizjobackend.Models.AppointmentsDTOs
         public string? Notes { get; set; }
         public string? Diagnosis { get; set; }
         public bool IsPaid { get; set; } = false;
-        public decimal Price { get; set; }
+        public double Price { get; set; }
+        public int? PainLevelBeofore { get; set; }
+        public int? PainLevelAfter { get; set; }
+        public string InitialCondition { get; set; } = string.Empty;
 
         public AppointmentResponseDTO() { }
 
@@ -39,6 +42,10 @@ namespace fizjobackend.Models.AppointmentsDTOs
             Notes = appointment.Notes;
             Diagnosis = appointment.Diagnosis;
             IsPaid = appointment.IsPaid;
+            Price = appointment.Price;
+            PainLevelBeofore = appointment.PainLevelBeofore;
+            PainLevelAfter = appointment.PainLevelAfter;
+            InitialCondition = appointment.InitialCondition;
         }
     }
 }

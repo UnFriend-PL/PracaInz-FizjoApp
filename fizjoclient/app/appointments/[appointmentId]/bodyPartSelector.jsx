@@ -1,15 +1,31 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import Select from "react-select";
 import styles from "./appointmentDetails.module.scss";
+import { LanguageContext } from "@/app/contexts/lang/langContext";
+import pl from "./locales/pl.json";
+import en from "./locales/en.json";
 
-const BodyPartSelector = React.memo(
-  ({ sectionName, muscles, joints, selectedItems, handleChange }) => (
+const locales = { en, pl };
+
+const BodyPartSelector = ({
+  sectionName,
+  muscles,
+  joints,
+  selectedItems,
+  handleChange,
+}) => {
+  const { language } = useContext(LanguageContext);
+  const t = locales[language];
+
+  useEffect(() => {}, [language]);
+
+  return (
     <div className={styles.bodyPartContainer}>
       <div className={styles.bodyPart}>
         <div className={styles.bodyPartHeader}>
           {sectionName.replace("-", " ")}
         </div>
-        <div className={styles.bodyPartSubHeader}>Muscles:</div>
+        <div className={styles.bodyPartSubHeader}>{t.muscles}:</div>
         <Select
           options={muscles}
           isMulti
@@ -18,20 +34,20 @@ const BodyPartSelector = React.memo(
           }
           value={selectedItems[sectionName]?.muscles || []}
           className={styles.select}
-          placeholder="Select muscles"
+          placeholder={t.selectMuscles}
         />
-        <div className={styles.bodyPartSubHeader}>Joints:</div>
+        <div className={styles.bodyPartSubHeader}>{t.joints}:</div>
         <Select
           options={joints}
           isMulti
           onChange={(selected) => handleChange(selected, sectionName, "joints")}
           value={selectedItems[sectionName]?.joints || []}
           className={styles.select}
-          placeholder="Select joints"
+          placeholder={t.selectJoints}
         />
       </div>
     </div>
-  )
-);
+  );
+};
 
 export default BodyPartSelector;

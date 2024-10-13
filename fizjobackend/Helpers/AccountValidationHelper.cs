@@ -29,6 +29,7 @@ namespace fizjobackend.Helpers
 
             return errors.ToArray();
         }
+
         private bool AddErrorIfExists(List<string> errors, string? error)
         {
             if (!string.IsNullOrEmpty(error))

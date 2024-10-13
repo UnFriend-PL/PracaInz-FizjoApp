@@ -8,6 +8,11 @@ import apiService from "@/app/services/apiService/apiService";
 import SwitchSelector from "react-switch-selector";
 import MusclesAndJoints from "./musclesAndJoints";
 import AppointmentDetails from "./appointmentDetails";
+import { LanguageContext } from "@/app/contexts/lang/langContext";
+import pl from "./locales/pl.json";
+import en from "./locales/en.json";
+
+const locales = { en, pl };
 
 const Appointments = () => {
   const { isAuthenticated } = useContext(AuthContext);
@@ -18,7 +23,8 @@ const Appointments = () => {
   const [musclesAndJoints, setMusclesAndJoints] = useState([]);
   const [loadedMusclesAndJoints, setLoadedMusclesAndJoints] = useState([]);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
-
+  const { language } = useContext(LanguageContext);
+  const t = locales[language];
   useEffect(() => {
     if (isAuthenticated) {
       apiService
@@ -52,6 +58,7 @@ const Appointments = () => {
           element.bodyPartMusclesAndJoints.viewId == (1 || 3) ? "front" : "back"
         ].push({
           slug: element.bodyPartMusclesAndJoints.name,
+          slugPL: element.bodyPartMusclesAndJoints.namePL,
         });
       });
 
@@ -137,8 +144,8 @@ const Appointments = () => {
           <SwitchSelector
             onChange={setViewPosition}
             options={[
-              { label: "Front", value: "front" },
-              { label: "Back", value: "back" },
+              { label: t.front, value: "front" },
+              { label: t.back, value: "back" },
             ]}
           />
           <HumanBody

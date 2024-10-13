@@ -1,6 +1,4 @@
-﻿using fizjobackend.Entities.UserEntities;
-using fizjobackend.Interfaces.DTOInterfaces.UserDTOInterfaces;
-using fizjobackend.Interfaces.UsersInterfaces;
+﻿using fizjobackend.Interfaces.UsersInterfaces;
 using fizjobackend.Models.UserDTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +23,7 @@ namespace fizjobackend.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userRoles = User.FindAll(ClaimTypes.Role).Select(c => c.Value);
-            var response = await _userService.GetUserInfo(Guid.Parse(userId), userRoles.First());
+            var response = await _userService.GetUserInfo(Guid.Parse(userId), userRoles);
             if (!response.Success)
             {
                 return BadRequest(response);
@@ -34,17 +32,16 @@ namespace fizjobackend.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpPut("EditInfoUser")]
-        public async Task<IActionResult> EditUserInfo([FromBody] UserEditRequestDTO userEdit) 
+        [HttpPost("FindPatient")]
+        public async Task<IActionResult> FindPatient([FromBody] SearchPatientRequestDTO searchParam)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var userRoles = User.FindAll(ClaimTypes.Role).Select(c=>c.Value);
-            var resposne = await _userService.EditUserInfo(Guid.Parse(userId), userRoles.First(), userEdit);
-            if (!resposne.Success)
+            var userRoles = User.FindAll(ClaimTypes.Role).Select(c => c.Value);
+            var response = await _userService.FindPatient(searchParam, userRoles);
+            if (!response.Success)
             {
-                return BadRequest(resposne);
+                return BadRequest(response);
             }
-            return Ok(resposne);
+            return Ok(response);
         }
 
     }

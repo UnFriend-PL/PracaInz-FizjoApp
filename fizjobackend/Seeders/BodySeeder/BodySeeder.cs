@@ -139,25 +139,40 @@ namespace fizjobackend.Seeders.BodySeeder
 
             if (section != null)
             {
-                if(section.Muscles != null)
-                foreach (var muscle in section.Muscles)
+                // Muscles in English and Polish
+                if (section.Muscles != null)
                 {
-                    var muscleEntity = new Muscle { Name = muscle, BodySectionId = bodySection.Id };
-                    await context.Muscles.AddAsync(muscleEntity);
-                        await context.SaveChangesAsync();
-
+                    for (int i = 0; i < section.Muscles["en"].Count; i++)
+                    {
+                        var muscleEntity = new Muscle
+                        {
+                            Name = section.Muscles["en"][i],
+                            NamePL = section.Muscles["pl"][i],
+                            BodySectionId = bodySection.Id
+                        };
+                        await context.Muscles.AddAsync(muscleEntity);
                     }
+                    await context.SaveChangesAsync();
+                }
+
+                // Joints in English and Polish
                 if (section.Joints != null)
-                foreach (var joint in section.Joints)
                 {
-                    var jointEntity = new Joint { Name = joint, BodySectionId = bodySection.Id };
-                    await context.Joints.AddAsync(jointEntity);
-                        await context.SaveChangesAsync();
-
+                    for (int i = 0; i < section.Joints["en"].Count; i++)
+                    {
+                        var jointEntity = new Joint
+                        {
+                            Name = section.Joints["en"][i],
+                            NamePL = section.Joints["pl"][i],
+                            BodySectionId = bodySection.Id
+                        };
+                        await context.Joints.AddAsync(jointEntity);
                     }
-
+                    await context.SaveChangesAsync();
+                }
             }
         }
+
     }
 }
 
@@ -166,8 +181,8 @@ namespace fizjobackend.Seeders.BodySeeder
 
 public class BodyPartSection
 {
-    public List<string> Muscles { get; set; }
-    public List<string> Joints { get; set; }
+    public Dictionary<string, List<string>> Muscles { get; set; } // "en" and "pl" as keys
+    public Dictionary<string, List<string>> Joints { get; set; }  // "en" and "pl" as keys
 }
 
 public class BodyParts

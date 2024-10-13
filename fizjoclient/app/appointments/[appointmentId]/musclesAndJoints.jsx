@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useContext } from "react";
 import { useState } from "react";
 import styles from "./appointmentDetails.module.scss";
 import apiService from "@/app/services/apiService/apiService";
@@ -7,15 +7,22 @@ import createBodyDetails from "../utils/createBodyDetails";
 import SelectedItemsList from "./SelectedItemsList";
 import BodyPartSelector from "./BodyPartSelector";
 import useSelectedItems from "../utils/useSelectedItems";
+import { LanguageContext } from "@/app/contexts/lang/langContext";
+import pl from "./locales/pl.json";
+import en from "./locales/en.json";
+const locales = { en, pl };
 
 const MusclesAndJoints = ({
   musclesAndJoints,
   appointmentId,
   loadedMusclesAndJoints,
 }) => {
+  const { language } = useContext(LanguageContext);
+  const t = locales[language];
+
   const { selectedItems, handleChange, handleRemove, setSelectedItems } =
     useSelectedItems();
-
+  const [isSaving, setIsSaving] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const mappedData = mapData(musclesAndJoints);
 
@@ -65,7 +72,7 @@ const MusclesAndJoints = ({
     }
   }, [currentIndex, mappedData.length]);
 
-  useEffect(() => {
+  function setInitialValues(mappedData, loadedMusclesAndJoints, handleChange) {
     mappedData.forEach((section) => {
       const initialSelectedMuscles = section.muscles.filter((muscle) =>
         loadedMusclesAndJoints.some((item) => item.id === muscle.muscleId)
@@ -78,9 +85,14 @@ const MusclesAndJoints = ({
       handleChange(initialSelectedMuscles, section.sectionName, "muscles");
       handleChange(initialSelectedJoints, section.sectionName, "joints");
     });
-  }, [loadedMusclesAndJoints]);
+  }
+
+  useEffect(() => {
+    setInitialValues(mappedData, loadedMusclesAndJoints, handleChange);
+  }, [loadedMusclesAndJoints, language]);
 
   const handleSave = async () => {
+    setIsSaving(true);
     const bodyDetailsPayload = createBodyDetails(selectedItems);
     try {
       const response = await apiService.post(
@@ -91,6 +103,8 @@ const MusclesAndJoints = ({
       if (!response.success) throw new Error("Network response was not ok");
     } catch (error) {
       console.error("Save failed:", error);
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -110,9 +124,9 @@ const MusclesAndJoints = ({
         handleRemove={handleRemove}
       />
       <div className={styles.navigation}>
-        <button onClick={() => handleNavigation("prev")}>&lt;</button>
+        <button onClick={() => handleNavigation("prev")}>{t.prev}</button>
         <span>{`${currentIndex + 1} / ${mappedData.length}`}</span>
-        <button onClick={() => handleNavigation("next")}>&gt;</button>
+        <button onClick={() => handleNavigation("next")}>{t.next}</button>
       </div>
       <BodyPartSelector
         sectionName={sectionName}
@@ -121,8 +135,12 @@ const MusclesAndJoints = ({
         selectedItems={selectedItems}
         handleChange={handleChange}
       />
-      <button onClick={handleSave} className={styles.saveButton}>
-        SAVE
+      <button
+        onClick={handleSave}
+        disabled={isSaving}
+        className={styles.saveButton}
+      >
+        {isSaving ? t.saving : t.save}
       </button>
     </div>
   );
