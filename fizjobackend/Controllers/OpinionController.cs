@@ -43,5 +43,19 @@ namespace fizjobackend.Controllers
             }
             return Ok(response);
         }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpPut("{opinionId}")]
+        public async Task<IActionResult> UpdateOpinion(Guid opinionId, [FromBody] UpdateOpinionRequestDTO updateOpinion)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var response = await _opinionService.UpdateOpinion(Guid.Parse(userId), opinionId, updateOpinion);
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response.Data);
+        }
+
     }
 }

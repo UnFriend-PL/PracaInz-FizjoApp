@@ -1,5 +1,6 @@
 ﻿using fizjobackend.DbContexts;
 using fizjobackend.Entities.OpinionEntities;
+using fizjobackend.Entities.PatientEntities;
 using fizjobackend.Entities.UserEntities;
 using fizjobackend.Interfaces.AccountInterfaces;
 using fizjobackend.Interfaces.DTOInterfaces.UserDTOInterfaces;
@@ -108,6 +109,51 @@ namespace fizjobackend.Services.OpinionService
 
                 response.Success = true;
                 response.Message = "Opinion deleted successfully.";
+                response.Data = opinion;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"An error occurred: {ex.Message}";
+            }
+
+            return response;
+        }
+        public async Task<ServiceResponse<Opinion>> UpdateOpinion(Guid patientId, Guid opinionId, UpdateOpinionRequestDTO updateOpinion)
+        {
+            var response = new ServiceResponse<Opinion>("");
+
+            try
+            {
+                var opinion = await _context.Opinions.FindAsync(opinionId);
+
+                if (opinion == null)
+                {
+                    response.Success = false;
+                    response.Message = "Opinion not found.";
+                    return response;
+                }
+
+                if (opinion.PatientId != patientId)
+                {
+                    response.Success = false;
+                    response.Message = "User is not authorized to update this opinion.";
+                    return response;
+                }
+                if (updateOpinion.Rating > 5)
+                {
+                    response.Success = false;
+                    response.Message = "Rating is not between 0 - 5";
+                }
+                opinion.Rating = updateOpinion.Rating;
+                opinion.Comment = updateOpinion.Comment;
+
+                
+                _context.Opinions.Update(opinion);
+                await _context.SaveChangesAsync();
+
+                response.Success = true;
+                response.Message = "Opinion updated successfully.";
                 response.Data = opinion;
             }
             catch (Exception ex)
