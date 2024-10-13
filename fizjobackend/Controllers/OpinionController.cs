@@ -31,12 +31,17 @@ namespace fizjobackend.Controllers
             }
             return Ok(response);
         }
-        //[Authorize(AuthenticationSchemes ="Bearer")]
-        //[HttpGet("GetOpinionByPhysiotherapistId")]
-        //public async Task<IActionResult> GetOpinion([FromQuery]Guid phisiotherapistId)
-        //{
-        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        //    var resposne = await _opinionService.GetOpinionByPhysiotherapistId(Guid.Parse(userId));
-        //}
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpDelete("{opinionId}")]
+        public async Task<IActionResult> DeleteOpinion(Guid opinionId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var response = await _opinionService.DeleteOpinion(Guid.Parse(userId), opinionId);
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
     }
 }

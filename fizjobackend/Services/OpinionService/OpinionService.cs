@@ -80,5 +80,44 @@ namespace fizjobackend.Services.OpinionService
                 return response;
             }
         }
+
+        public async Task<ServiceResponse<Opinion>> DeleteOpinion(Guid patientId, Guid opinionId)
+        {
+            var response = new ServiceResponse<Opinion>("");
+
+            try
+            {
+                var opinion = await _context.Opinions.FindAsync(opinionId);
+
+                if (opinion == null)
+                {
+                    response.Success = false;
+                    response.Message = "Opinion not found.";
+                    return response;
+                }
+
+                if (opinion.PatientId != patientId)
+                {
+                    response.Success = false;
+                    response.Message = "User is not authorized to delete this opinion.";
+                    return response;
+                }
+
+                _context.Opinions.Remove(opinion);
+                await _context.SaveChangesAsync();
+
+                response.Success = true;
+                response.Message = "Opinion deleted successfully.";
+                response.Data = opinion;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"An error occurred: {ex.Message}";
+            }
+
+            return response;
+        }
+
     }
 }
