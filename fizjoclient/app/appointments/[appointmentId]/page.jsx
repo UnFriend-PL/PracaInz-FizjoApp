@@ -22,23 +22,28 @@ const Appointments = () => {
   const [viewPosition, setViewPosition] = useState("front");
   const [musclesAndJoints, setMusclesAndJoints] = useState([]);
   const [loadedMusclesAndJoints, setLoadedMusclesAndJoints] = useState([]);
-  const [isFirstLoad, setIsFirstLoad] = useState(true);
   const { language } = useContext(LanguageContext);
   const t = locales[language];
+
   useEffect(() => {
     if (isAuthenticated) {
-      apiService
-        .get(`/Appointments/${appointmentId}`, {}, true)
-        .then((response) => setAppointment(response.data))
-        .catch((error) =>
-          console.error("Failed to fetch appointment details:", error)
-        );
+      fetchAppointmentDetails();
     }
-    if (isFirstLoad) {
-      fetchSavedMusclesAndJoints();
-      setIsFirstLoad(false);
+    fetchSavedMusclesAndJoints();
+  }, [isAuthenticated, appointmentId]);
+
+  const fetchAppointmentDetails = async () => {
+    try {
+      const response = await apiService.get(
+        `/Appointments/${appointmentId}`,
+        {},
+        true
+      );
+      setAppointment(response.data);
+    } catch (error) {
+      console.error("Failed to fetch appointment details:", error);
     }
-  }, [isAuthenticated, appointmentId, isFirstLoad]);
+  };
 
   const fetchSavedMusclesAndJoints = useCallback(async () => {
     try {
@@ -54,9 +59,9 @@ const Appointments = () => {
 
       response.data.forEach((element) => {
         uniqueMusclesAndJoints.add(element.bodyPartMusclesAndJoints);
-        updatedSelectedParts[
-          element.bodyPartMusclesAndJoints.viewId == (1 || 3) ? "front" : "back"
-        ].push({
+        const viewKey =
+          element.bodyPartMusclesAndJoints.viewId === 1 ? "front" : "back";
+        updatedSelectedParts[viewKey].push({
           slug: element.bodyPartMusclesAndJoints.name,
           slugPL: element.bodyPartMusclesAndJoints.namePL,
         });
@@ -64,23 +69,19 @@ const Appointments = () => {
 
       response.data
         .flatMap((element) => element.selectedMuscles)
-        .forEach((muscle) => {
-          uniqueSelectedMusclesAndJoints.add(muscle);
-        });
+        .forEach((muscle) => uniqueSelectedMusclesAndJoints.add(muscle));
 
       response.data
         .flatMap((element) => element.selectedJoints)
-        .forEach((joint) => {
-          uniqueSelectedMusclesAndJoints.add(joint);
-        });
+        .forEach((joint) => uniqueSelectedMusclesAndJoints.add(joint));
 
       setMusclesAndJoints(Array.from(uniqueMusclesAndJoints));
       setSelectedParts(updatedSelectedParts);
       setLoadedMusclesAndJoints(Array.from(uniqueSelectedMusclesAndJoints));
     } catch (error) {
-      console.error("Failed to fetch appointment details:", error);
+      console.error("Failed to fetch saved muscles and joints:", error);
     }
-  }, [appointmentId, viewPosition]);
+  }, [appointmentId]);
 
   const fetchMusclesAndJoints = useCallback(
     async (bodyPart) => {
@@ -93,10 +94,8 @@ const Appointments = () => {
         );
         return;
       }
-      const { slug } = bodyPart;
-      const [viewSide, bodySectionName] = slug.includes("-")
-        ? slug.split(/-(.+)/)
-        : [null, slug];
+
+      const [viewSide, bodySectionName] = bodyPart.slug.split(/-(.+)/);
       const requestBody = {
         bodySectionName,
         viewPosition,
@@ -109,9 +108,7 @@ const Appointments = () => {
           requestBody,
           true
         );
-        if (!response.success) {
-          throw new Error(response.message);
-        }
+        if (!response.success) throw new Error(response.message);
         setMusclesAndJoints((prev) => [...prev, response.data]);
       } catch (error) {
         console.error("Failed to fetch muscles and joints details:", error);
@@ -122,14 +119,18 @@ const Appointments = () => {
 
   const handleBodyPartPress = (bodyPart) => {
     fetchMusclesAndJoints(bodyPart);
-    setSelectedParts((prev) => ({
-      ...prev,
-      [viewPosition]: prev[viewPosition].some(
-        (part) => part.slug === bodyPart.slug
-      )
-        ? prev[viewPosition].filter((part) => part.slug !== bodyPart.slug)
-        : [...prev[viewPosition], bodyPart],
-    }));
+    setSelectedParts((prev) => {
+      const updated = { ...prev };
+      const parts = prev[viewPosition];
+      if (parts.some((part) => part.slug === bodyPart.slug)) {
+        updated[viewPosition] = parts.filter(
+          (part) => part.slug !== bodyPart.slug
+        );
+      } else {
+        updated[viewPosition] = [...parts, bodyPart];
+      }
+      return updated;
+    });
   };
 
   if (!isAuthenticated || !appointment) return null;

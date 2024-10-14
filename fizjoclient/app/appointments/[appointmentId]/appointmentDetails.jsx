@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import styles from "./appointmentDetails.module.scss";
 import Modal from "@/app/components/common/modal/modal";
 import { format } from "date-fns";
@@ -6,7 +6,7 @@ import { pl as plDate } from "date-fns/locale";
 import { FaRegEdit } from "react-icons/fa";
 import { GiCancel } from "react-icons/gi";
 import DetailElement from "@/app/components/common/detailElement/detailElement";
-import PatientDeails from "../patientDetails";
+import PatientDetails from "../patientDetails";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
 import pl from "./locales/pl.json";
 import en from "./locales/en.json";
@@ -16,27 +16,14 @@ const locales = { en, pl };
 const AppointmentDetails = ({ appointment }) => {
   const { language } = useContext(LanguageContext);
   const t = locales[language];
+  const [isPatientModalOpen, setPatientModalOpen] = useState(false);
+  const [isPhysioModalOpen, setPhysioModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+
   const {
     appointmentStatusName,
-    patient: {
-      firstName,
-      lastName,
-      email,
-      phoneNumber,
-      streetWithHouseNumber,
-      postCode,
-      city,
-      country,
-      dateOfBirth,
-      healthInsuranceNumber,
-    },
-    physiotherapist: {
-      firstName: physioFirstName,
-      lastName: physioLastName,
-      email: physioEmail,
-      phoneNumber: physioPhoneNumber,
-      licenseNumber,
-    },
+    patient,
+    physiotherapist,
     appointmentDate,
     appointmentDescription,
     notes,
@@ -44,18 +31,7 @@ const AppointmentDetails = ({ appointment }) => {
     isPaid,
   } = appointment;
 
-  const [isPatientModalOpen, setPatientModalOpen] = useState(false);
-  const [isPhysiotherpistModalOpen, setPhysiotherapistModalOpen] =
-    useState(false);
-  const openPatientModal = () => setPatientModalOpen(true);
-  const closePatientModal = () => setPatientModalOpen(false);
-  const openPhysiotherapistModal = () => setPhysiotherapistModalOpen(true);
-  const closePhysiotherapistModal = () => setPhysiotherapistModalOpen(false);
-
-  const [isEditing, setIsEditing] = useState(false);
-  const editAppointment = () => {
-    setIsEditing((prev) => !prev);
-  };
+  const toggleEditing = () => setIsEditing(!isEditing);
 
   return (
     <div className={styles.appointmentCard}>
@@ -68,60 +44,45 @@ const AppointmentDetails = ({ appointment }) => {
         <span className={styles.status}>
           {t.appointment}: {appointmentStatusName}
         </span>
-
-        <div className={styles.editButton} onClick={editAppointment}>
+        <div className={styles.editButton} onClick={toggleEditing}>
           {isEditing ? <FaRegEdit /> : <GiCancel />}
         </div>
       </div>
       <div className={styles.details}>
-        <div className={styles.detailsGroup}>
-          <div className={styles.detailGroupName}>{t.patient}: </div>
-          <div className={styles.header}>
-            {firstName} {lastName}
-          </div>
-          <Modal
-            isOpen={isPatientModalOpen}
-            onClose={closePatientModal}
-            size={"medium"}
-            header={t.patientDetails}
-          >
-            <>
-              <PatientDeails patient={appointment.patient} />
-            </>
-          </Modal>
-          <button
-            className={styles.detailGroupButton}
-            onClick={openPatientModal}
-          >
-            {t.showDetails}
-          </button>
-          <div className={styles.detailsGroupInfo}></div>
-        </div>
-        <div className={styles.detailsGroup}>
-          <div className={styles.detailGroupName}>{t.physiotherapist}: </div>
-          <div className={styles.header}>
-            {physioFirstName} {physioLastName}
-          </div>
-
-          <button
-            className={styles.detailGroupButton}
-            onClick={openPhysiotherapistModal}
-          >
-            {t.showDetails}
-          </button>
-          <div className={styles.detailsGroupInfo}></div>
-        </div>
-        <Modal
-          isOpen={isPhysiotherpistModalOpen}
-          onClose={closePhysiotherapistModal}
-          size={"medium"}
-          header={t.physiotherapistDetails}
-        >
-          <DetailElement label={t.firstName} value={physioFirstName} />
-          <DetailElement label={t.lastName} value={physioLastName} />
-          <DetailElement label={t.licenseNumber} value={licenseNumber} />
-        </Modal>
+        <DetailGroup
+          title={t.patient}
+          name={`${patient.firstName} ${patient.lastName}`}
+          onShowDetails={() => setPatientModalOpen(true)}
+          t={t}
+        />
+        <DetailGroup
+          title={t.physiotherapist}
+          name={`${physiotherapist.firstName} ${physiotherapist.lastName}`}
+          onShowDetails={() => setPhysioModalOpen(true)}
+          t={t}
+        />
       </div>
+      <Modal
+        isOpen={isPatientModalOpen}
+        onClose={() => setPatientModalOpen(false)}
+        size="medium"
+        header={t.patientDetails}
+      >
+        <PatientDetails patient={patient} />
+      </Modal>
+      <Modal
+        isOpen={isPhysioModalOpen}
+        onClose={() => setPhysioModalOpen(false)}
+        size="medium"
+        header={t.physiotherapistDetails}
+      >
+        <DetailElement label={t.firstName} value={physiotherapist.firstName} />
+        <DetailElement label={t.lastName} value={physiotherapist.lastName} />
+        <DetailElement
+          label={t.licenseNumber}
+          value={physiotherapist.licenseNumber}
+        />
+      </Modal>
       <div className={styles.detailsGroup}>
         <DetailElement
           label={t.diagnosis}
@@ -139,5 +100,15 @@ const AppointmentDetails = ({ appointment }) => {
     </div>
   );
 };
+
+const DetailGroup = ({ title, name, onShowDetails, t }) => (
+  <div className={styles.detailsGroup}>
+    <div className={styles.detailGroupName}>{title}: </div>
+    <div className={styles.header}>{name}</div>
+    <button className={styles.detailGroupButton} onClick={onShowDetails}>
+      {t.showDetails}
+    </button>
+  </div>
+);
 
 export default AppointmentDetails;
