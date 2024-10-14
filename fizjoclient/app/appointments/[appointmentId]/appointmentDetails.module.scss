@@ -130,6 +130,12 @@
     padding: 0.5em;
     border-radius: 5px;
   }
+  .editButton {
+    color: $text-dark-green;
+    cursor: pointer;
+    font-size: 2rem;
+    font-weight: bold;
+  }
 }
 
 .detailGroup {

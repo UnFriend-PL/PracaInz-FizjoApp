@@ -3,6 +3,8 @@ import styles from "./appointmentDetails.module.scss";
 import Modal from "@/app/components/common/modal/modal";
 import { format } from "date-fns";
 import { pl as plDate } from "date-fns/locale";
+import { FaRegEdit } from "react-icons/fa";
+import { GiCancel } from "react-icons/gi";
 import DetailElement from "@/app/components/common/detailElement/detailElement";
 import PatientDeails from "../patientDetails";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
@@ -50,6 +52,11 @@ const AppointmentDetails = ({ appointment }) => {
   const openPhysiotherapistModal = () => setPhysiotherapistModalOpen(true);
   const closePhysiotherapistModal = () => setPhysiotherapistModalOpen(false);
 
+  const [isEditing, setIsEditing] = useState(false);
+  const editAppointment = () => {
+    setIsEditing((prev) => !prev);
+  };
+
   return (
     <div className={styles.appointmentCard}>
       <span className={styles.appointmentDate}>
@@ -61,6 +68,10 @@ const AppointmentDetails = ({ appointment }) => {
         <span className={styles.status}>
           {t.appointment}: {appointmentStatusName}
         </span>
+
+        <div className={styles.editButton} onClick={editAppointment}>
+          {isEditing ? <FaRegEdit /> : <GiCancel />}
+        </div>
       </div>
       <div className={styles.details}>
         <div className={styles.detailsGroup}>
