@@ -3,14 +3,12 @@ import random
 from datetime import datetime, timedelta
 import urllib3
 
-# Disable SSL warnings
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 API_URL_LOGIN = "https://localhost:7023/Account/Login"
 API_URL_FIND_PATIENT = "https://localhost:7023/User/FindPatient"
 API_URL_CREATE_APPOINTMENT = "https://localhost:7023/Appointments/Appointment/Create"
 
-# Function to log in as physiotherapist
 def login_physio(api_url, index):
     email = f"physio{index}@example.com"
     password = "Password12#"
@@ -34,7 +32,6 @@ def login_physio(api_url, index):
         print(f"Error during login: {e}")
         return None
 
-# Function to find patient by email
 def find_patient(api_url, token, patient_email):
     headers = {"Authorization": f"Bearer {token}"}
     search_param = {
@@ -56,11 +53,9 @@ def find_patient(api_url, token, patient_email):
         print(f"Error during patient search: {e}")
         return None
 
-# Function to create an appointment
 def create_appointment(api_url, token, patient_id):
     headers = {"Authorization": f"Bearer {token}"}
     
-    # Generating a date in 2023 for the appointment
     appointment_date = datetime(2023, random.randint(1, 12), random.randint(1, 28)).isoformat() + 'Z'
     
     appointment_data = {
@@ -84,7 +79,6 @@ def create_appointment(api_url, token, patient_id):
     except requests.RequestException as e:
         print(f"Error during appointment creation: {e}")
 
-# Main logic to execute the workflow
 physiotherapist_ids = [f"physio{index}@example.com" for index in range(1, 11)]
 for index in range(1, 11):
     token = login_physio(API_URL_LOGIN, index)
@@ -95,7 +89,6 @@ for index in range(1, 11):
         
         if patient_data:
             patient_id = patient_data['id']
-            # Create appointments for each physiotherapist for the found patient
             for physiotherapist_index in range(1, 11):
                 physiotherapist_email = f"physio{physiotherapist_index}@example.com"
                 create_appointment(API_URL_CREATE_APPOINTMENT, token, patient_id)
