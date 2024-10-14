@@ -138,7 +138,10 @@ const Appointments = () => {
   return (
     <>
       <div className={styles.container}>
-        <AppointmentDetails appointment={appointment} />
+        <AppointmentDetails
+          appointment={appointment}
+          appointmentId={appointmentId}
+        />
       </div>
       <div className={`${styles.container} ${styles.spaceAtBottom}`}>
         <div className={styles.bodyContainer}>

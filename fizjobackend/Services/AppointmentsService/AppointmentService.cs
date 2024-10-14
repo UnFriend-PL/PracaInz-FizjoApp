@@ -25,6 +25,55 @@ namespace fizjobackend.Services.AppointmentsService
             _bodyVisualizerService = bodyVisualizerService;
         }
 
+        public async Task<ServiceResponse<bool>> ChangeAppointmentStatus(Guid appointmentId, Guid physiotherapistId, ChangeAppointmentStatusRequestDTO status)
+        {
+            var apoointment = await _context.Appointments.FindAsync(appointmentId);
+            if (apoointment == null)
+            {
+                return new ServiceResponse<bool>("Appointment not found");
+            }
+            if(apoointment.PhysiotherapistId != physiotherapistId)
+            {
+                return new ServiceResponse<bool>("You are not authorized to change status of this appointment");
+            }
+            apoointment.AppointmentStatus = status.Status;
+            await _context.SaveChangesAsync();
+            return new ServiceResponse<bool>("Appointment status changed successfully");
+        }
+
+        public async Task<ServiceResponse<bool>> EditAppointment(Guid appointmentId,Guid physiotherapistId, EditAppointmentRequestDTO editAppointmentRequest)
+        {
+            try
+            {
+               
+                var appointment = await _context.Appointments.FindAsync(appointmentId);
+                if (appointment == null)
+                {
+                    return new ServiceResponse<bool>("Appointment not found");
+                }
+                if(appointment.PhysiotherapistId != physiotherapistId)
+                {
+                    return new ServiceResponse<bool>("You are not authorized to edit this appointment");
+                }
+                appointment.AppointmentDescription = editAppointmentRequest.AppointmentDescription;
+                appointment.AppointmentDate = editAppointmentRequest.AppointmentDate;
+                appointment.Notes = editAppointmentRequest.Notes;
+                appointment.Diagnosis = editAppointmentRequest.Diagnosis;
+                appointment.IsPaid = editAppointmentRequest.IsPaid;
+                appointment.Price = editAppointmentRequest.Price;
+                await _context.SaveChangesAsync();
+
+                var response = new ServiceResponse<bool>("Appointment edited successfully");
+                response.Data = true;
+                return response;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error editing appointment");
+                return new ServiceResponse<bool>($"Error during editing appointment.");
+            }
+        }
+
         public async Task<ServiceResponse<AppointmentResponseDTO>> CreateAppointment(CreateAppointmentRequestDTO newAppointmentRequest)
         {
             try
@@ -293,7 +342,7 @@ namespace fizjobackend.Services.AppointmentsService
                         BodySectionName = firstBodyPart.BodySection.BodySectionName,
                         Gender = firstBodyPart.View.Gender,
                         ViewPosition = firstBodyPart.View.Name,
-                        ViewSide = viewSide.Length >1? viewSide[0] : null,
+                        ViewSide = viewSide.Length > 1 ? viewSide[0] : null,
                     };
 
                     var bodyPartFromDb = await _bodyVisualizerService.GetBodyPartDetails(bodyPartDetailsRequest);
