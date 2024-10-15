@@ -37,7 +37,6 @@ const MusclesAndJoints = ({
   const handleNavigation = useCallback(
     (direction) => {
       setCurrentIndex((prevIndex) => {
-        const maxIndex = mappedData.length - 1;
         return direction === "prev"
           ? (prevIndex - 1 + mappedData.length) % mappedData.length
           : (prevIndex + 1) % mappedData.length;

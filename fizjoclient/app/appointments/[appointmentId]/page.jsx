@@ -60,7 +60,9 @@ const Appointments = () => {
       response.data.forEach((element) => {
         uniqueMusclesAndJoints.add(element.bodyPartMusclesAndJoints);
         const viewKey =
-          element.bodyPartMusclesAndJoints.viewId === 1 ? "front" : "back";
+          element.bodyPartMusclesAndJoints.viewId == (1 || 3)
+            ? "front"
+            : "back";
         updatedSelectedParts[viewKey].push({
           slug: element.bodyPartMusclesAndJoints.name,
           slugPL: element.bodyPartMusclesAndJoints.namePL,
@@ -94,8 +96,9 @@ const Appointments = () => {
         );
         return;
       }
-
-      const [viewSide, bodySectionName] = bodyPart.slug.split(/-(.+)/);
+      const [viewSide, bodySectionName] = bodyPart.slug.includes("-")
+        ? bodyPart.slug.split(/-(.+)/)
+        : [null, bodyPart.slug];
       const requestBody = {
         bodySectionName,
         viewPosition,

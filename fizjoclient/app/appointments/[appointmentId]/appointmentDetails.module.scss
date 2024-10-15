@@ -130,12 +130,6 @@
     padding: 0.5em;
     border-radius: 5px;
   }
-  .editButton {
-    color: $text-dark-green;
-    cursor: pointer;
-    font-size: 2rem;
-    font-weight: bold;
-  }
 }
 
 .detailGroup {
@@ -326,4 +320,27 @@
 
 .saveButton:hover {
   background-color: $button-bg-hover;
+}
+
+.nonEditableField {
+  padding: 0.5em;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: default;
+  transition: background-color 0.2s, border-color 0.2s;
+
+  &:hover {
+    background-color: #f9f9f9;
+    border-color: #ccc;
+    cursor: text;
+  }
+}
+
+.detailField .textarea {
+  width: 100%;
+  padding: 0.5em;
+  border: 1px solid $border-color;
+  border-radius: 4px;
+  resize: none;
+  overflow: hidden;
 }

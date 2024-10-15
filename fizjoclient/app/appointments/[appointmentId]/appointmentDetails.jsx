@@ -1,10 +1,8 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import styles from "./appointmentDetails.module.scss";
 import Modal from "@/app/components/common/modal/modal";
 import { format } from "date-fns";
 import { pl as plDate } from "date-fns/locale";
-import { FaRegEdit } from "react-icons/fa";
-import { GiCancel } from "react-icons/gi";
 import DetailElement from "@/app/components/common/detailElement/detailElement";
 import PatientDetails from "../patientDetails";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
@@ -67,9 +65,6 @@ const AppointmentDetails = ({ appointment, appointmentId }) => {
         <span className={styles.status}>
           {t.appointment}: {appointmentStatusName}
         </span>
-        <div className={styles.editButton} onClick={toggleEditing}>
-          {isEditing ? <GiCancel /> : <FaRegEdit />}
-        </div>
       </div>
       <div className={styles.details}>
         <DetailGroup
@@ -112,16 +107,16 @@ const AppointmentDetails = ({ appointment, appointmentId }) => {
             label={t.diagnosis}
             name="diagnosis"
             value={formData.diagnosis}
-            isEditing={isEditing}
             onChange={handleInputChange}
+            type="textarea"
             t={t}
           />
           <EditableDetailField
             label={t.notes}
             name="notes"
             value={formData.notes}
-            isEditing={isEditing}
             onChange={handleInputChange}
+            type="textarea"
             t={t}
           />
         </div>
@@ -130,16 +125,16 @@ const AppointmentDetails = ({ appointment, appointmentId }) => {
             label={t.description}
             name="appointmentDescription"
             value={formData.appointmentDescription}
-            isEditing={isEditing}
             onChange={handleInputChange}
+            type="textarea"
             t={t}
           />
           <EditableDetailField
             label={t.paid}
             name="isPaid"
             value={formData.isPaid}
-            isEditing={isEditing}
             onChange={handleInputChange}
+            type="checkbox"
             t={t}
           />
         </div>
@@ -163,19 +158,38 @@ const DetailGroup = ({ title, name, onShowDetails, t }) => (
   </div>
 );
 
-const EditableDetailField = ({
-  label,
-  name,
-  value,
-  isEditing,
-  onChange,
-  t,
-}) => {
-  if (isEditing) {
+const EditableDetailField = ({ label, name, value, onChange, type, t }) => {
+  const [isFieldEditing, setIsFieldEditing] = useState(false);
+  const textareaRef = useRef(null);
+
+  const handleDoubleClick = () => {
+    setIsFieldEditing(true);
+  };
+
+  const handleBlur = () => {
+    setIsFieldEditing(false);
+  };
+
+  const handleInputChange = (e) => {
+    onChange(e);
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  };
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  }, [value]);
+
+  if (isFieldEditing) {
     return (
       <div className={styles.detailField}>
         <label className={styles.label}>{label}</label>
-        {name === "isPaid" ? (
+        {type === "checkbox" ? (
           <div className={styles.checkboxContainer}>
             <input
               type="checkbox"
@@ -183,6 +197,8 @@ const EditableDetailField = ({
               checked={value}
               onChange={onChange}
               className={styles.checkbox}
+              onBlur={handleBlur}
+              autoFocus
             />
             <span>{t.paid}</span>
           </div>
@@ -190,22 +206,34 @@ const EditableDetailField = ({
           <textarea
             name={name}
             value={value}
-            onChange={onChange}
+            onChange={handleInputChange}
             className={styles.textarea}
+            onBlur={handleBlur}
+            autoFocus
+            ref={textareaRef}
+            style={{ height: "auto", overflowY: "hidden" }}
           />
         )}
       </div>
     );
   } else {
     const displayValue =
-      name === "isPaid"
+      type === "checkbox"
         ? value
           ? t.yes
           : t.no
         : value ||
           t[`no${name.charAt(0).toUpperCase() + name.slice(1)}Provided`] ||
           t.noDataProvided;
-    return <DetailElement label={label} value={displayValue} />;
+
+    return (
+      <div
+        onDoubleClick={handleDoubleClick}
+        className={styles.nonEditableField}
+      >
+        <DetailElement label={label} value={displayValue} />
+      </div>
+    );
   }
 };
 
