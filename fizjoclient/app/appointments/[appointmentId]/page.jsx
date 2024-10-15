@@ -28,8 +28,8 @@ const Appointments = () => {
   useEffect(() => {
     if (isAuthenticated) {
       fetchAppointmentDetails();
+      fetchSavedMusclesAndJoints();
     }
-    fetchSavedMusclesAndJoints();
   }, [isAuthenticated, appointmentId]);
 
   const fetchAppointmentDetails = async () => {
@@ -39,6 +39,7 @@ const Appointments = () => {
         {},
         true
       );
+      console.log("Fetched Appointment Details:", response.data);
       setAppointment(response.data);
     } catch (error) {
       console.error("Failed to fetch appointment details:", error);
@@ -142,8 +143,10 @@ const Appointments = () => {
     <>
       <div className={styles.container}>
         <AppointmentDetails
+          key={appointment.appointmentDate}
           appointment={appointment}
           appointmentId={appointmentId}
+          fetchAppointmentDetails={fetchAppointmentDetails}
         />
       </div>
       <div className={`${styles.container} ${styles.spaceAtBottom}`}>

@@ -99,6 +99,7 @@
     top: -1.2em;
     font-size: 1em;
     font-weight: 800;
+    cursor: pointer;
   }
   .detailsGroup {
     flex-basis: 45%;
@@ -129,6 +130,7 @@
     color: $text-white;
     padding: 0.5em;
     border-radius: 5px;
+    cursor: pointer;
   }
 }
 
@@ -316,31 +318,19 @@
   cursor: pointer;
   align-self: flex-end;
   margin-top: 1em;
+  min-width: fit-content;
 }
 
 .saveButton:hover {
   background-color: $button-bg-hover;
 }
 
-.nonEditableField {
-  padding: 0.5em;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  cursor: default;
-  transition: background-color 0.2s, border-color 0.2s;
-
-  &:hover {
-    background-color: #f9f9f9;
-    border-color: #ccc;
-    cursor: text;
-  }
-}
-
-.detailField .textarea {
-  width: 100%;
-  padding: 0.5em;
-  border: 1px solid $border-color;
-  border-radius: 4px;
-  resize: none;
-  overflow: hidden;
+.statusChangeContainer {
+  flex-basis: 100%;
+  margin-top: 1em;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  flex-wrap: wrap;
 }

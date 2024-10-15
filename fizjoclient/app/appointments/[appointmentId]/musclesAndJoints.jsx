@@ -109,7 +109,7 @@ const MusclesAndJoints = ({
         disabled={isSaving}
         className={styles.saveButton}
       >
-        {isSaving ? t.saving : t.save}
+        {isSaving ? t.savingBodyDetails : t.saveBodyDetails}
       </button>
     </div>
   );

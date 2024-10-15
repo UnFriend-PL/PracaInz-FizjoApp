@@ -45,23 +45,69 @@ namespace fizjobackend.Services.AppointmentsService
         {
             try
             {
-               
                 var appointment = await _context.Appointments.FindAsync(appointmentId);
                 if (appointment == null)
                 {
                     return new ServiceResponse<bool>("Appointment not found");
                 }
-                if(appointment.PhysiotherapistId != physiotherapistId)
+                if (appointment.PhysiotherapistId != physiotherapistId)
                 {
                     return new ServiceResponse<bool>("You are not authorized to edit this appointment");
                 }
-                appointment.AppointmentDescription = editAppointmentRequest.AppointmentDescription;
-                appointment.AppointmentDate = editAppointmentRequest.AppointmentDate;
-                appointment.Notes = editAppointmentRequest.Notes;
-                appointment.Diagnosis = editAppointmentRequest.Diagnosis;
-                appointment.IsPaid = editAppointmentRequest.IsPaid;
-                appointment.Price = editAppointmentRequest.Price;
-                await _context.SaveChangesAsync();
+
+                bool isUpdated = false;
+
+                if (!string.IsNullOrEmpty(editAppointmentRequest.AppointmentDescription) &&
+                    appointment.AppointmentDescription != editAppointmentRequest.AppointmentDescription)
+                {
+                    appointment.AppointmentDescription = editAppointmentRequest.AppointmentDescription;
+                    isUpdated = true;
+                }
+
+                if (editAppointmentRequest.AppointmentDate != default &&
+                    appointment.AppointmentDate != editAppointmentRequest.AppointmentDate)
+                {
+                    appointment.AppointmentDate = editAppointmentRequest.AppointmentDate;
+                    isUpdated = true;
+                }
+
+                if (!string.IsNullOrEmpty(editAppointmentRequest.Notes) &&
+                    appointment.Notes != editAppointmentRequest.Notes)
+                {
+                    appointment.Notes = editAppointmentRequest.Notes;
+                    isUpdated = true;
+                }
+
+                if (!string.IsNullOrEmpty(editAppointmentRequest.Diagnosis) &&
+                    appointment.Diagnosis != editAppointmentRequest.Diagnosis)
+                {
+                    appointment.Diagnosis = editAppointmentRequest.Diagnosis;
+                    isUpdated = true;
+                }
+
+                if (appointment.IsPaid != editAppointmentRequest.IsPaid)
+                {
+                    appointment.IsPaid = editAppointmentRequest.IsPaid;
+                    isUpdated = true;
+                }
+
+                if (appointment.Price != editAppointmentRequest.Price)
+                {
+                    appointment.Price = editAppointmentRequest.Price;
+                    isUpdated = true;
+                }
+
+                if (editAppointmentRequest.Status != null &&
+                    appointment.AppointmentStatus != editAppointmentRequest.Status)
+                {
+                    appointment.AppointmentStatus = editAppointmentRequest.Status.Value;
+                    isUpdated = true;
+                }
+
+                if (isUpdated)
+                {
+                    await _context.SaveChangesAsync();
+                }
 
                 var response = new ServiceResponse<bool>("Appointment edited successfully");
                 response.Data = true;

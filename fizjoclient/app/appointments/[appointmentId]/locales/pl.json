@@ -21,11 +21,14 @@
   "joints": "Stawy",
   "selectMuscles": "Wybierz mięśnie",
   "selectJoints": "Wybierz stawy",
-  "save": "Zapisz",
-  "saving": "Zapisywanie...",
+  "saveDetails": "Zapisz szczegóły",
+  "saveDetailsInProgress": "Zapisywanie szczegółów...",
+  "saveBodyDetails": "Zapisz zabiegi",
+  "savingBodyDetails": "Zapisywanie...",
   "prev": "Poprzedni",
   "next": "Następny",
   "selectedItems": "Wybrane",
   "front": "Przód",
-  "back": "Tył"
+  "back": "Tył",
+  "selectNewStatus": "Wybierz nowy status i/lub date"
 }

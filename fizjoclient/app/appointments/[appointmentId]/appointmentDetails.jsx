@@ -1,57 +1,86 @@
-import React, { useState, useContext, useRef, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import styles from "./appointmentDetails.module.scss";
 import Modal from "@/app/components/common/modal/modal";
 import { format } from "date-fns";
 import { pl as plDate } from "date-fns/locale";
-import DetailElement from "@/app/components/common/detailElement/detailElement";
 import PatientDetails from "../patientDetails";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
 import pl from "./locales/pl.json";
 import en from "./locales/en.json";
 import apiService from "@/app/services/apiService/apiService";
+import DetailField from "@/app/components/common/detailField/detailField";
+import DetailGroup from "@/app/components/detailGroup/DetailGroup";
+import DetailElement from "@/app/components/common/detailElement/detailElement";
+import Calendar from "@/app/components/common/calendar/calendar";
+import TimePicker from "@/app/components/common/timePicker/timePicker";
 
 const locales = { en, pl };
 
-const AppointmentDetails = ({ appointment, appointmentId }) => {
+const AppointmentDetails = ({
+  appointment,
+  appointmentId,
+  fetchAppointmentDetails,
+}) => {
   const { language } = useContext(LanguageContext);
   const t = locales[language];
   const [isPatientModalOpen, setPatientModalOpen] = useState(false);
   const [isPhysioModalOpen, setPhysioModalOpen] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-
+  const [isSaving, setIsSaving] = useState(false);
+  const { appointmentStatusName, patient, physiotherapist, appointmentDate } =
+    appointment;
   const [formData, setFormData] = useState({
     appointmentDescription: appointment.appointmentDescription || "",
     notes: appointment.notes || "",
     diagnosis: appointment.diagnosis || "",
     isPaid: appointment.isPaid || false,
+    appointmentDate: appointmentDate,
   });
-
-  const { appointmentStatusName, patient, physiotherapist, appointmentDate } =
-    appointment;
-
-  const toggleEditing = () => setIsEditing(!isEditing);
-
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? checked : value,
-    });
+  const [selectedNewHour, setSelectedNewHour] = useState(
+    `${format(new Date(appointmentDate), "HH:mm")}`
+  );
+  const handleInputChange = (e, date) => {
+    if (date) {
+      const [hour, minute] = selectedNewHour.split(":").map(Number);
+      const newAppointmentDate = new Date(date);
+      newAppointmentDate.setHours(hour);
+      newAppointmentDate.setMinutes(minute);
+      setFormData({
+        ...formData,
+        appointmentDate: newAppointmentDate,
+      });
+    } else {
+      const { name, value, type, checked } = e.target;
+      setFormData({
+        ...formData,
+        [name]: type === "checkbox" ? checked : value,
+      });
+    }
   };
 
   const handleFormSubmit = async () => {
     try {
+      setIsSaving(true);
       const response = await apiService.put(
         `/Appointments/${appointmentId}/Edit`,
         formData,
         true
       );
+      console.log("API Response:", response); // Log API response
       if (response.success) {
-        setIsEditing(false);
+        await fetchAppointmentDetails(); // Refetch appointment details
+        setIsSaving(false);
       }
     } catch (error) {
+      setIsSaving(false);
       console.error("Failed to save appointment details:", error);
     }
+  };
+
+  const [isAppointmentStatusEditing, setIsAppointmentStatusEditing] =
+    useState(false);
+
+  const handleStatusEdit = () => {
+    setIsAppointmentStatusEditing((prev) => !prev);
   };
 
   return (
@@ -62,9 +91,31 @@ const AppointmentDetails = ({ appointment, appointmentId }) => {
         })}
       </span>
       <div className={styles.header}>
-        <span className={styles.status}>
+        <span className={styles.status} onClick={handleStatusEdit}>
           {t.appointment}: {appointmentStatusName}
         </span>
+        {isAppointmentStatusEditing && (
+          <>
+            <Modal
+              isOpen={isAppointmentStatusEditing}
+              header={t.selectNewStatus}
+              onClose={() => setIsAppointmentStatusEditing((prev) => !prev)}
+              size="medium"
+            >
+              <div className={styles.statusChangeContainer}>
+                <TimePicker
+                  initialTime={selectedNewHour}
+                  onTimeChange={setSelectedNewHour}
+                ></TimePicker>
+                <Calendar
+                  onDateSelect={(date) => {
+                    handleInputChange(null, date);
+                  }}
+                ></Calendar>
+              </div>
+            </Modal>
+          </>
+        )}
       </div>
       <div className={styles.details}>
         <DetailGroup
@@ -103,7 +154,7 @@ const AppointmentDetails = ({ appointment, appointmentId }) => {
       </Modal>
       <div className={styles.editableDetails}>
         <div className={styles.detailsGroup}>
-          <EditableDetailField
+          <DetailField
             label={t.diagnosis}
             name="diagnosis"
             value={formData.diagnosis}
@@ -111,7 +162,7 @@ const AppointmentDetails = ({ appointment, appointmentId }) => {
             type="textarea"
             t={t}
           />
-          <EditableDetailField
+          <DetailField
             label={t.notes}
             name="notes"
             value={formData.notes}
@@ -121,7 +172,7 @@ const AppointmentDetails = ({ appointment, appointmentId }) => {
           />
         </div>
         <div className={styles.detailsGroup}>
-          <EditableDetailField
+          <DetailField
             label={t.description}
             name="appointmentDescription"
             value={formData.appointmentDescription}
@@ -129,7 +180,7 @@ const AppointmentDetails = ({ appointment, appointmentId }) => {
             type="textarea"
             t={t}
           />
-          <EditableDetailField
+          <DetailField
             label={t.paid}
             name="isPaid"
             value={formData.isPaid}
@@ -138,103 +189,12 @@ const AppointmentDetails = ({ appointment, appointmentId }) => {
             t={t}
           />
         </div>
-        {isEditing && (
-          <button className={styles.saveButton} onClick={handleFormSubmit}>
-            {t.save}
-          </button>
-        )}
+        <button className={styles.saveButton} onClick={handleFormSubmit}>
+          {isSaving ? t.saveDetailsInProgress : t.saveDetails}
+        </button>
       </div>
     </div>
   );
-};
-
-const DetailGroup = ({ title, name, onShowDetails, t }) => (
-  <div className={styles.detailsGroup}>
-    <div className={styles.detailGroupName}>{title}: </div>
-    <div className={styles.header}>{name}</div>
-    <button className={styles.detailGroupButton} onClick={onShowDetails}>
-      {t.showDetails}
-    </button>
-  </div>
-);
-
-const EditableDetailField = ({ label, name, value, onChange, type, t }) => {
-  const [isFieldEditing, setIsFieldEditing] = useState(false);
-  const textareaRef = useRef(null);
-
-  const handleDoubleClick = () => {
-    setIsFieldEditing(true);
-  };
-
-  const handleBlur = () => {
-    setIsFieldEditing(false);
-  };
-
-  const handleInputChange = (e) => {
-    onChange(e);
-    if (textareaRef.current) {
-      textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-    }
-  };
-
-  useEffect(() => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-    }
-  }, [value]);
-
-  if (isFieldEditing) {
-    return (
-      <div className={styles.detailField}>
-        <label className={styles.label}>{label}</label>
-        {type === "checkbox" ? (
-          <div className={styles.checkboxContainer}>
-            <input
-              type="checkbox"
-              name={name}
-              checked={value}
-              onChange={onChange}
-              className={styles.checkbox}
-              onBlur={handleBlur}
-              autoFocus
-            />
-            <span>{t.paid}</span>
-          </div>
-        ) : (
-          <textarea
-            name={name}
-            value={value}
-            onChange={handleInputChange}
-            className={styles.textarea}
-            onBlur={handleBlur}
-            autoFocus
-            ref={textareaRef}
-            style={{ height: "auto", overflowY: "hidden" }}
-          />
-        )}
-      </div>
-    );
-  } else {
-    const displayValue =
-      type === "checkbox"
-        ? value
-          ? t.yes
-          : t.no
-        : value ||
-          t[`no${name.charAt(0).toUpperCase() + name.slice(1)}Provided`] ||
-          t.noDataProvided;
-
-    return (
-      <div
-        onDoubleClick={handleDoubleClick}
-        className={styles.nonEditableField}
-      >
-        <DetailElement label={label} value={displayValue} />
-      </div>
-    );
-  }
 };
 
 export default AppointmentDetails;
