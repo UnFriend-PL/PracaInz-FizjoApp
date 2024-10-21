@@ -115,6 +115,8 @@ const MusclesAndJoints = ({
   );
 };
 
+export default MusclesAndJoints;
+
 const Navigation = ({ currentIndex, total, onNavigate, t }) => (
   <div className={styles.navigation}>
     <button onClick={() => onNavigate("prev")}>{t.prev}</button>
@@ -122,5 +124,3 @@ const Navigation = ({ currentIndex, total, onNavigate, t }) => (
     <button onClick={() => onNavigate("next")}>{t.next}</button>
   </div>
 );
-
-export default MusclesAndJoints;

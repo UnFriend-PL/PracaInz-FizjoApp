@@ -55,32 +55,47 @@ const Appointments = () => {
       );
 
       const uniqueMusclesAndJoints = new Set();
-      const uniqueSelectedMusclesAndJoints = new Set();
       const updatedSelectedParts = { front: [], back: [] };
+      const loadedMusclesAndJointsArray = [];
 
       response.data.forEach((element) => {
         uniqueMusclesAndJoints.add(element.bodyPartMusclesAndJoints);
+
         const viewKey =
-          element.bodyPartMusclesAndJoints.viewId == (1 || 3)
+          element.bodyPartMusclesAndJoints.viewId == 1 ||
+          element.bodyPartMusclesAndJoints.viewId == 3
             ? "front"
             : "back";
+
         updatedSelectedParts[viewKey].push({
           slug: element.bodyPartMusclesAndJoints.name,
           slugPL: element.bodyPartMusclesAndJoints.namePL,
         });
+
+        const { bodyPartMusclesAndJoints, selectedMuscles, selectedJoints } =
+          element;
+        const { viewId, bodySectionId } = bodyPartMusclesAndJoints;
+
+        selectedMuscles.forEach((muscle) => {
+          loadedMusclesAndJointsArray.push({
+            muscleId: muscle.id,
+            viewId: viewId,
+            bodySectionId: bodySectionId,
+          });
+        });
+
+        selectedJoints.forEach((joint) => {
+          loadedMusclesAndJointsArray.push({
+            jointId: joint.id,
+            viewId: viewId,
+            bodySectionId: bodySectionId,
+          });
+        });
       });
-
-      response.data
-        .flatMap((element) => element.selectedMuscles)
-        .forEach((muscle) => uniqueSelectedMusclesAndJoints.add(muscle));
-
-      response.data
-        .flatMap((element) => element.selectedJoints)
-        .forEach((joint) => uniqueSelectedMusclesAndJoints.add(joint));
 
       setMusclesAndJoints(Array.from(uniqueMusclesAndJoints));
       setSelectedParts(updatedSelectedParts);
-      setLoadedMusclesAndJoints(Array.from(uniqueSelectedMusclesAndJoints));
+      setLoadedMusclesAndJoints(loadedMusclesAndJointsArray);
     } catch (error) {
       console.error("Failed to fetch saved muscles and joints:", error);
     }

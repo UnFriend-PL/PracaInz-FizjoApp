@@ -388,7 +388,7 @@ namespace fizjobackend.Services.AppointmentsService
                         BodySectionName = firstBodyPart.BodySection.BodySectionName,
                         Gender = firstBodyPart.View.Gender,
                         ViewPosition = firstBodyPart.View.Name,
-                        ViewSide = viewSide.Length > 1 ? viewSide[0] : null,
+                        ViewSide = firstBodyPart.BodySection.BodySide,
                     };
 
                     var bodyPartFromDb = await _bodyVisualizerService.GetBodyPartDetails(bodyPartDetailsRequest);

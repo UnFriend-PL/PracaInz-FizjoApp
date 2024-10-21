@@ -1,7 +1,9 @@
 const createBodyDetails = (selectedItems) => {
   const bodyDetails = [];
 
-  Object.entries(selectedItems).forEach(([bodySide, details]) => {
+  Object.entries(selectedItems).forEach(([sectionName, details]) => {
+    const bodySide = sectionName.includes("_front") ? "front" : "back";
+
     details.muscles?.forEach((muscle) => {
       bodyDetails.push({
         bodySectionId: muscle.bodySectionId,

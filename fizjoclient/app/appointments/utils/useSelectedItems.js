@@ -65,20 +65,32 @@ const useSelectedItems = (musclesAndJoints, loadedMusclesAndJoints) => {
 
   const setInitialValues = useCallback(
     (mappedData) => {
+      const initialSelectedItems = {};
       mappedData.forEach((section) => {
         const initialSelectedMuscles = section.muscles.filter((muscle) =>
-          loadedMusclesAndJoints.some((item) => item.id === muscle.muscleId)
+          loadedMusclesAndJoints.some(
+            (item) =>
+              item.muscleId === muscle.muscleId && item.viewId === muscle.viewId
+          )
         );
 
         const initialSelectedJoints = section.joints.filter((joint) =>
-          loadedMusclesAndJoints.some((item) => item.id === joint.jointId)
+          loadedMusclesAndJoints.some(
+            (item) =>
+              item.jointId === joint.jointId && item.viewId === joint.viewId
+          )
         );
 
-        handleChange(initialSelectedMuscles, section.sectionName, "muscles");
-        handleChange(initialSelectedJoints, section.sectionName, "joints");
+        if (initialSelectedMuscles.length || initialSelectedJoints.length) {
+          initialSelectedItems[section.sectionName] = {
+            muscles: initialSelectedMuscles,
+            joints: initialSelectedJoints,
+          };
+        }
       });
+      setSelectedItems(initialSelectedItems);
     },
-    [handleChange, loadedMusclesAndJoints]
+    [loadedMusclesAndJoints]
   );
 
   return {
