@@ -7,12 +7,14 @@
   flex-wrap: wrap;
   background-color: $bg-container;
   min-width: 70%;
+  max-width: 80%;
 }
 
 .dateGroup {
   display: flex;
   flex-wrap: wrap;
   flex-basis: 80%;
+  justify-content: space-between;
   .date {
     color: $text-black;
     flex-basis: 100%;
@@ -35,7 +37,7 @@
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 1.5rem;
-    width: 100%;
+    flex-basis: 45%;
     max-width: 100%;
     margin-bottom: 1rem;
     .time {
@@ -78,5 +80,8 @@
   align-content: center;
   background-color: $bg-section;
   padding: 1rem;
+  flex-basis: 100%;
+}
+.searchPanel {
   flex-basis: 100%;
 }

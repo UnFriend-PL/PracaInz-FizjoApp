@@ -8,7 +8,7 @@ const locales = { en, pl };
 const AppointmentStatusButtons = ({ getAppointments }) => {
   const { language } = useContext(LanguageContext);
   const t = locales[language];
-  const [selectedStatus, setSelectedStatus] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState("Scheduled");
   const statuses = [
     { key: "Scheduled", label: t.Scheduled },
     { key: "Completed", label: t.Completed },

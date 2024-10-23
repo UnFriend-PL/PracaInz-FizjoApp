@@ -24,7 +24,7 @@ const Appointments = () => {
   const [loadedMusclesAndJoints, setLoadedMusclesAndJoints] = useState([]);
   const { language } = useContext(LanguageContext);
   const t = locales[language];
-
+  const [readOnly, setReadOnly] = useState(false);
   useEffect(() => {
     if (isAuthenticated) {
       fetchAppointmentDetails();
@@ -41,6 +41,10 @@ const Appointments = () => {
       );
       console.log("Fetched Appointment Details:", response.data);
       setAppointment(response.data);
+      setReadOnly(
+        response.data.appointmentStatusName !== "Scheduled" &&
+          response.data.appointmentStatusName !== "Completed"
+      );
     } catch (error) {
       console.error("Failed to fetch appointment details:", error);
     }
@@ -133,10 +137,11 @@ const Appointments = () => {
         console.error("Failed to fetch muscles and joints details:", error);
       }
     },
-    [musclesAndJoints, viewPosition, appointment]
+    [musclesAndJoints, viewPosition, appointment, readOnly]
   );
 
   const handleBodyPartPress = (bodyPart) => {
+    if (readOnly) return;
     fetchMusclesAndJoints(bodyPart);
     setSelectedParts((prev) => {
       const updated = { ...prev };
@@ -185,6 +190,7 @@ const Appointments = () => {
           musclesAndJoints={musclesAndJoints}
           appointmentId={appointmentId}
           loadedMusclesAndJoints={loadedMusclesAndJoints}
+          readOnly={readOnly}
         />
       </div>
     </>

@@ -11,6 +11,7 @@ import { LanguageContext } from "@/app/contexts/lang/langContext";
 import pl from "./locales/pl.json";
 import en from "./locales/en.json";
 import AppointmentStatusButtons from "../components/common/appointmentStatusButtons/appointmentStatusButtons";
+import PatientSearch from "../components/patientSearch/patientSearch";
 const locales = { en, pl };
 
 const Appointments = () => {
@@ -68,12 +69,16 @@ const Appointments = () => {
     }
   }, [isAuthenticated]);
 
+  const [selectedPatient, setSelectedPatient] = useState(null);
   return (
     <>
       <div className={styles.container}>
         <div className={styles.appointmentsNav}>
           <AppointmentStatusButtons getAppointments={getAppointments} />
           {role == "Physiotherapist" && <AppointmentScheduler />}
+          <div className={styles.searchPanel}>
+            <PatientSearch onPatientSelect={setSelectedPatient} />
+          </div>
         </div>
       </div>
       <div className={styles.container}>
@@ -91,7 +96,6 @@ const Appointments = () => {
                     locale: language === "pl" ? plDate : undefined,
                   })}
                 </span>
-                <span>{t.appointmentTitle}</span>
                 {role === "Physiotherapist" ? (
                   <span>
                     {appointment.patientFirstName} {appointment.patientLastName}

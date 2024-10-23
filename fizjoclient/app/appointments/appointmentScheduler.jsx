@@ -6,11 +6,12 @@ import styles from "./appointmentScheduler.module.scss";
 import { VscPersonAdd } from "react-icons/vsc";
 import Modal from "../components/common/modal/modal";
 import Calendar from "../components/common/calendar/calendar";
-import PatientDeails from "./patientDetails";
+import PatientDeails from "../components/patientSearch/patientDetails";
 import TimePicker from "../components/common/timePicker/timePicker";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
 import pl from "./locales/pl.json";
 import en from "./locales/en.json";
+import PatientSearch from "../components/patientSearch/patientSearch";
 
 const locales = { en, pl };
 
@@ -22,7 +23,6 @@ const AppointmentScheduler = () => {
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [error, setError] = useState(null);
   const [searchValue, setSearchValue] = useState("");
-  const [showPatientDetails, setShowPatientDetails] = useState(false);
   const [selectedHour, setSelectedHour] = useState("12:00");
   const [appointmentDescription, setAppointmentDescription] = useState("");
   const [notes, setNotes] = useState("");
@@ -30,29 +30,6 @@ const AppointmentScheduler = () => {
   const [isPaid, setIsPaid] = useState(false);
   const [price, setPrice] = useState(99.99);
   const router = useRouter();
-
-  const searchPatient = async () => {
-    if (!searchValue) return;
-    console.log(searchValue);
-    try {
-      const searchPayload = { searchParam: searchValue };
-      const response = await apiService.post(
-        `/User/FindPatient`,
-        searchPayload,
-        true
-      );
-      if (response.success) {
-        setSelectedPatient(response.data);
-        setError(null);
-        console.log(response.data);
-      } else {
-        setError(response.message);
-      }
-    } catch (error) {
-      console.error(error);
-      setError("An error occurred while searching for the patient.");
-    }
-  };
 
   const validateAndSubmit = async () => {
     if (!selectedPatient || !selectedHour || !price) {
@@ -100,7 +77,6 @@ const AppointmentScheduler = () => {
         onClick={() => setOpenSchedulerModal(true)}
         title={t.scheduleAppointment}
       />
-
       <Modal
         isOpen={openSchedulerModal}
         header={t.scheduleAppointment}
@@ -109,50 +85,7 @@ const AppointmentScheduler = () => {
       >
         {error && <div className={styles.errorMessage}>{error}</div>}
         <div className={styles.searchPanel}>
-          <label htmlFor="search" className={styles.searchLabel}>
-            {t.patient}:
-          </label>
-          {selectedPatient ? (
-            <div className={styles.searchField}>
-              <div className={styles.searchValue}>
-                {selectedPatient.firstName} {selectedPatient.lastName}{" "}
-                <span
-                  className={styles.deletePatient}
-                  onClick={() => setSelectedPatient(null)}
-                >
-                  &times;
-                </span>
-                <span
-                  className={styles.showDetails}
-                  onClick={() => {
-                    setShowPatientDetails((prev) => !prev);
-                  }}
-                >
-                  {showPatientDetails ? t.showLess : t.showMore}
-                </span>
-                {showPatientDetails && (
-                  <PatientDeails
-                    patient={selectedPatient}
-                    className={styles.patientDeails}
-                  />
-                )}
-              </div>
-            </div>
-          ) : (
-            <div className={styles.searchField}>
-              <input
-                className={styles.searchInput}
-                type="text"
-                name="search"
-                placeholder={t.typeEmailPeselPhone}
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-              />
-              <button className={styles.searchButton} onClick={searchPatient}>
-                {t.search}
-              </button>
-            </div>
-          )}
+          <PatientSearch onPatientSelect={setSelectedPatient} t={t} />
           {selectedPatient && (
             <>
               <div className={styles.searchField}>

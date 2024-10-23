@@ -1,0 +1,14 @@
+{
+  "showMore": "show more",
+  "showLess": "show less",
+  "firstName": "First name",
+  "lastName": "Last name",
+  "email": "Email",
+  "phone": "Phone",
+  "pesel": "PESEL",
+  "address": "Address",
+  "dob": "Date of birth",
+  "insurance": "Health insurance number",
+  "search": "Search",
+  "patient": "Patient"
+}

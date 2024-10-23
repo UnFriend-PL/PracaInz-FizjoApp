@@ -17,6 +17,7 @@ const MusclesAndJoints = ({
   musclesAndJoints,
   appointmentId,
   loadedMusclesAndJoints,
+  readOnly,
 }) => {
   const { language } = useContext(LanguageContext);
   const t = locales[language];
@@ -90,27 +91,32 @@ const MusclesAndJoints = ({
       <SelectedItemsList
         selectedItems={selectedItems}
         handleRemove={handleRemove}
+        readOnly={readOnly}
       />
-      <Navigation
-        currentIndex={currentIndex}
-        total={mappedData.length}
-        onNavigate={handleNavigation}
-        t={t}
-      />
-      <BodyPartSelector
-        sectionName={sectionName}
-        muscles={muscles}
-        joints={joints}
-        selectedItems={selectedItems}
-        handleChange={handleChange}
-      />
-      <button
-        onClick={handleSave}
-        disabled={isSaving}
-        className={styles.saveButton}
-      >
-        {isSaving ? t.savingBodyDetails : t.saveBodyDetails}
-      </button>
+      {!readOnly && (
+        <>
+          <Navigation
+            currentIndex={currentIndex}
+            total={mappedData.length}
+            onNavigate={handleNavigation}
+            t={t}
+          />
+          <BodyPartSelector
+            sectionName={sectionName}
+            muscles={muscles}
+            joints={joints}
+            selectedItems={selectedItems}
+            handleChange={handleChange}
+          />
+          <button
+            onClick={handleSave}
+            disabled={isSaving}
+            className={styles.saveButton}
+          >
+            {isSaving ? t.savingBodyDetails : t.saveBodyDetails}
+          </button>
+        </>
+      )}
     </div>
   );
 };

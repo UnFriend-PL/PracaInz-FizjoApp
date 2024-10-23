@@ -3,7 +3,7 @@ import styles from "./appointmentDetails.module.scss";
 import Modal from "@/app/components/common/modal/modal";
 import { format } from "date-fns";
 import { pl as plDate } from "date-fns/locale";
-import PatientDetails from "../patientDetails";
+import PatientDetails from "../../components/patientSearch/patientDetails";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
 import pl from "./locales/pl.json";
 import en from "./locales/en.json";
