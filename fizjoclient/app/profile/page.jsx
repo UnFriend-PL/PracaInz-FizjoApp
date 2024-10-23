@@ -66,14 +66,61 @@ const Profile = () => {
     <div className={styles.container}>
       <h1 className={styles.title}>{t.profile}</h1>
       <div className={styles.profileCard}>
-        {Object.keys(user).map((key) => (
-          <div className={styles.field} key={key}>
-            <span className={styles.label}>
-              {t[key] || key.replace(/([A-Z])/g, " $1").trim()}:
-            </span>
-            <span className={styles.value}>{user[key]}</span>
-          </div>
-        ))}
+        <div className={styles.profileNav}>
+          {isEditing ? (
+            <div className={styles["button"]}>
+              <IoSaveOutline onClick={handleSave} title="Save" />
+            </div>
+          ) : (
+            <div className={styles["button"]}>
+              <CiEdit onClick={handleEdit} title="Edit" />
+            </div>
+          )}
+        </div>
+        {Object.keys(user)
+          .filter((key) => key !== "id")
+          .map((key) => (
+            <div className={styles.field} key={key}>
+              <span className={styles.label}>
+                {key.replace(/([A-Z])/g, " $1").trim()}:
+              </span>
+              {isEditing ? (
+                <>
+                  {key === "gender" ? (
+                    <select
+                      name="gender"
+                      value={userProfile.gender}
+                      onChange={handleChange}
+                      className={styles.value}
+                    >
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="other">Other</option>
+                    </select>
+                  ) : (
+                    <input
+                      type={
+                        key === "dateOfBirth"
+                          ? "date"
+                          : key === "pesel" || key === "phoneNumber"
+                          ? "number"
+                          : "text"
+                      }
+                      name={key}
+                      value={userProfile[key]}
+                      onChange={handleChange}
+                      className={styles.value}
+                    />
+                  )}
+                  {errors[key] && (
+                    <div className={styles.error}>{errors[key]}</div>
+                  )}
+                </>
+              ) : (
+                <span className={styles.profileCardEdit}>{user[key]}</span>
+              )}
+            </div>
+          ))}
       </div>
     </div>
   );
