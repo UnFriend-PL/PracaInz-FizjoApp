@@ -161,48 +161,50 @@ const Profile = () => {
             </div>
           )}
         </div>
-        {Object.keys(user).map((key) => (
-          <div className={styles.field} key={key}>
-            <span className={styles.label}>
-              {key.replace(/([A-Z])/g, " $1").trim()}:
-            </span>
-            {isEditing ? (
-              <>
-                {key === "gender" ? (
-                  <select
-                    name="gender"
-                    value={userProfile.gender}
-                    onChange={handleChange}
-                    className={styles.value}
-                  >
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
-                  </select>
-                ) : (
-                  <input
-                    type={
-                      key === "dateOfBirth"
-                        ? "date"
-                        : key === "pesel" || key === "phoneNumber"
-                        ? "number"
-                        : "text"
-                    }
-                    name={key}
-                    value={userProfile[key]}
-                    onChange={handleChange}
-                    className={styles.value}
-                  />
-                )}
-                {errors[key] && (
-                  <div className={styles.error}>{errors[key]}</div>
-                )}
-              </>
-            ) : (
-              <span className={styles.profileCardEdit}>{user[key]}</span>
-            )}
-          </div>
-        ))}
+        {Object.keys(user)
+          .filter((key) => key !== "id")
+          .map((key) => (
+            <div className={styles.field} key={key}>
+              <span className={styles.label}>
+                {key.replace(/([A-Z])/g, " $1").trim()}:
+              </span>
+              {isEditing ? (
+                <>
+                  {key === "gender" ? (
+                    <select
+                      name="gender"
+                      value={userProfile.gender}
+                      onChange={handleChange}
+                      className={styles.value}
+                    >
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="other">Other</option>
+                    </select>
+                  ) : (
+                    <input
+                      type={
+                        key === "dateOfBirth"
+                          ? "date"
+                          : key === "pesel" || key === "phoneNumber"
+                          ? "number"
+                          : "text"
+                      }
+                      name={key}
+                      value={userProfile[key]}
+                      onChange={handleChange}
+                      className={styles.value}
+                    />
+                  )}
+                  {errors[key] && (
+                    <div className={styles.error}>{errors[key]}</div>
+                  )}
+                </>
+              ) : (
+                <span className={styles.profileCardEdit}>{user[key]}</span>
+              )}
+            </div>
+          ))}
       </div>
     </div>
   );
