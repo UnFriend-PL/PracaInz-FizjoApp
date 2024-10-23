@@ -10,6 +10,7 @@ import AppointmentScheduler from "./appointmentScheduler";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
 import pl from "./locales/pl.json";
 import en from "./locales/en.json";
+import AppointmentStatusButtons from "../components/common/appointmentStatusButtons/appointmentStatusButtons";
 const locales = { en, pl };
 
 const Appointments = () => {
@@ -69,39 +70,43 @@ const Appointments = () => {
 
   return (
     <>
-      {role == "Physiotherapist" && (
-        <>
-          <div className={styles.container}>
-            <AppointmentScheduler />
-          </div>
-          <div className={styles.container}>
-            {Object.keys(appointments).map((date) => (
-              <div key={date} className={styles.dateGroup}>
-                <span className={styles.date}>{date}</span>
-                {appointments[date].map((appointment) => (
-                  <div
-                    key={appointment.appointmentId}
-                    className={styles.appointmentCard}
-                    onClick={showDetails(appointment)}
-                  >
-                    <span>
-                      {format(new Date(appointment.appointmentDate), "HH:mm", {
-                        locale: language === "pl" ? plDate : undefined,
-                      })}
-                    </span>
-                    <span>{t.appointmentTitle}</span>
-                    {role === "physiotherapist" ? (
-                      <span>{appointment.patientFirstName}</span>
-                    ) : (
-                      <span>{appointment.physiotherapistFirstName}</span>
-                    )}
-                  </div>
-                ))}
+      <div className={styles.container}>
+        <div className={styles.appointmentsNav}>
+          <AppointmentStatusButtons getAppointments={getAppointments} />
+          {role == "Physiotherapist" && <AppointmentScheduler />}
+        </div>
+      </div>
+      <div className={styles.container}>
+        {Object.keys(appointments).map((date) => (
+          <div key={date} className={styles.dateGroup}>
+            <span className={styles.date}>{date}</span>
+            {appointments[date].map((appointment) => (
+              <div
+                key={appointment.appointmentId}
+                className={styles.appointmentCard}
+                onClick={showDetails(appointment)}
+              >
+                <span>
+                  {format(new Date(appointment.appointmentDate), "HH:mm", {
+                    locale: language === "pl" ? plDate : undefined,
+                  })}
+                </span>
+                <span>{t.appointmentTitle}</span>
+                {role === "Physiotherapist" ? (
+                  <span>
+                    {appointment.patientFirstName} {appointment.patientLastName}
+                  </span>
+                ) : (
+                  <span>
+                    {appointment.physiotherapistFirstName}{" "}
+                    {appointment.physiotherapistLastName}
+                  </span>
+                )}
               </div>
             ))}
           </div>
-        </>
-      )}
+        ))}
+      </div>
     </>
   );
 };

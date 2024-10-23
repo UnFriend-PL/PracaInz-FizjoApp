@@ -32,7 +32,7 @@ namespace fizjobackend.Services.AppointmentsService
             {
                 return new ServiceResponse<bool>("Appointment not found");
             }
-            if(apoointment.PhysiotherapistId != physiotherapistId)
+            if (apoointment.PhysiotherapistId != physiotherapistId)
             {
                 return new ServiceResponse<bool>("You are not authorized to change status of this appointment");
             }
@@ -41,7 +41,7 @@ namespace fizjobackend.Services.AppointmentsService
             return new ServiceResponse<bool>("Appointment status changed successfully");
         }
 
-        public async Task<ServiceResponse<bool>> EditAppointment(Guid appointmentId,Guid physiotherapistId, EditAppointmentRequestDTO editAppointmentRequest)
+        public async Task<ServiceResponse<bool>> EditAppointment(Guid appointmentId, Guid physiotherapistId, EditAppointmentRequestDTO editAppointmentRequest)
         {
             try
             {
@@ -187,14 +187,15 @@ namespace fizjobackend.Services.AppointmentsService
             try
             {
                 _logger.LogInformation("Fetching appointments for userId: {UserId}, status: {Status}", userId, status);
+                await VerifyAppointmentStatusForSelectedUser(userId);
 
                 var appointmentsQuery = _context.Appointments
                     .Where(a => (a.PatientId == userId || a.PhysiotherapistId == userId) && a.AppointmentStatus == status);
+
                 if (status == AppointmentStatus.Scheduled)
                 {
-                    DateTime startTime = DateTime.Now.AddHours(-1);
-                    DateTime endTime = DateTime.Now.AddDays(8);
-                    appointmentsQuery = appointmentsQuery.Where(a => a.AppointmentDate >= startTime && a.AppointmentDate <= endTime);
+                    DateTime startTime = DateTime.Now.AddHours(-12);
+                    appointmentsQuery = appointmentsQuery.Where(a => a.AppointmentDate >= startTime);
                 }
 
                 var totalAppointmentsCount = await appointmentsQuery.CountAsync();
@@ -229,6 +230,29 @@ namespace fizjobackend.Services.AppointmentsService
                 _logger.LogError(e, "Error getting appointments");
                 return new ServiceResponse<ListOfAppointmentsResponseDTO>($"Error during getting appointments.");
             }
+        }
+
+        private async Task VerifyAppointmentStatusForSelectedUser(Guid userId)
+        {
+            var pastScheduledAppointments = await _context.Appointments
+                .Where(a => a.AppointmentStatus == AppointmentStatus.Scheduled
+                            && a.AppointmentDate < DateTime.Now
+                            && (a.PatientId == userId || a.PhysiotherapistId == userId))
+                .ToListAsync();
+
+            foreach (var appointment in pastScheduledAppointments)
+            {
+                if (appointment.IsPaid)
+                {
+                    appointment.AppointmentStatus = AppointmentStatus.Completed;
+                }
+                else
+                {
+                    appointment.AppointmentStatus = AppointmentStatus.NoShow;
+                }
+            }
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task<ServiceResponse<AppointmentResponseDTO>> GetAppointmentDetails(Guid userId, Guid appointmentId)
@@ -302,7 +326,6 @@ namespace fizjobackend.Services.AppointmentsService
                     appointment.AppointmentBodyDetails = new List<AppointmentBodyDetails>();
                 }
 
-                // Create a list of current body details in the database
                 var currentBodyDetails = appointment.AppointmentBodyDetails.ToList();
 
                 // Add or update body details

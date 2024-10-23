@@ -55,11 +55,7 @@ const AppointmentScheduler = () => {
   };
 
   const validateAndSubmit = async () => {
-    if (
-      !selectedPatient ||
-      !selectedHour ||
-      !price
-    ) {
+    if (!selectedPatient || !selectedHour || !price) {
       setError("All fields are required.");
       return;
     }
@@ -100,12 +96,10 @@ const AppointmentScheduler = () => {
 
   return (
     <div className={styles.appointmentScheduler}>
-      <div className={styles.appointmentSchedulerButton}>
-        <VscPersonAdd
-          onClick={() => setOpenSchedulerModal(true)}
-          title={t.scheduleAppointment}
-        />
-      </div>
+      <AppointmentSchedulerButton
+        onClick={() => setOpenSchedulerModal(true)}
+        title={t.scheduleAppointment}
+      />
 
       <Modal
         isOpen={openSchedulerModal}
@@ -244,6 +238,14 @@ const AppointmentScheduler = () => {
           </div>
         </div>
       </Modal>
+    </div>
+  );
+};
+
+const AppointmentSchedulerButton = ({ onClick, title }) => {
+  return (
+    <div className={styles.appointmentSchedulerButton}>
+      <VscPersonAdd onClick={onClick} title={title} />
     </div>
   );
 };
