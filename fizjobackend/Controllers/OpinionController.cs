@@ -58,7 +58,7 @@ namespace fizjobackend.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpGet("patient/{patientId}")]
+        [HttpGet("opinions/patient/{patientId}")]
         public async Task<IActionResult> GetOpinionsByPatientId(Guid patientId, int page = 1, int pageSize = 10)
         {
             var response = await _opinionService.GetOpinionsByPatientId(patientId, page, pageSize);
@@ -70,7 +70,7 @@ namespace fizjobackend.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpGet("physiotherapist/{physiotherapistId}")]
+        [HttpGet("opinions/physiotherapist/{physiotherapistId}")]
         public async Task<IActionResult> GetOpinionsByPhysiotherapistId(Guid physiotherapistId, int page = 1, int pageSize = 10)
         {
             var response = await _opinionService.GetOpinionsByPhysiotherapistId(physiotherapistId, page, pageSize);

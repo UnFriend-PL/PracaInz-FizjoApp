@@ -97,7 +97,7 @@ namespace fizjobackend.Services.AppointmentsService
                     .Where(a => (a.PatientId == userId || a.PhysiotherapistId == userId) && a.AppointmentStatus == status);
                 if (status == AppointmentStatus.Scheduled)
                 {
-                    DateTime startTime = DateTime.Now.AddHours(-1);
+                    DateTime startTime = DateTime.Now.AddDays(-8);
                     DateTime endTime = DateTime.Now.AddDays(8);
                     appointmentsQuery = appointmentsQuery.Where(a => a.AppointmentDate >= startTime && a.AppointmentDate <= endTime);
                 }

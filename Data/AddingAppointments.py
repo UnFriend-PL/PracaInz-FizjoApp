@@ -55,8 +55,9 @@ def find_patient(api_url, token, patient_email):
 
 def create_appointment(api_url, token, patient_id):
     headers = {"Authorization": f"Bearer {token}"}
-    
-    appointment_date = datetime(2023, random.randint(1, 12), random.randint(1, 28)).isoformat() + 'Z'
+    today = datetime.now()
+
+    appointment_date = (today - timedelta(days=random.randint(0, 7))).isoformat() + 'Z'
     
     appointment_data = {
         "patientId": patient_id,
@@ -79,16 +80,16 @@ def create_appointment(api_url, token, patient_id):
     except requests.RequestException as e:
         print(f"Error during appointment creation: {e}")
 
-physiotherapist_ids = [f"physio{index}@example.com" for index in range(1, 11)]
-for index in range(1, 11):
-    token = login_physio(API_URL_LOGIN, index)
+for patient_index in range(1, 11):
+    patient_email = f"patient{patient_index}@example.com"
     
-    if token:
-        patient_email = f"patient{index}@example.com"
-        patient_data = find_patient(API_URL_FIND_PATIENT, token, patient_email)
+    for physio_index in range(1, 11):
+        token = login_physio(API_URL_LOGIN, physio_index)
         
-        if patient_data:
-            patient_id = patient_data['id']
-            for physiotherapist_index in range(1, 11):
-                physiotherapist_email = f"physio{physiotherapist_index}@example.com"
+        if token:
+            patient_data = find_patient(API_URL_FIND_PATIENT, token, patient_email)
+            
+            if patient_data:
+                patient_id = patient_data['id']
+                
                 create_appointment(API_URL_CREATE_APPOINTMENT, token, patient_id)

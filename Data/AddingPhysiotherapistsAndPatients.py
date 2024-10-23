@@ -3,7 +3,6 @@ import random
 from datetime import datetime, timedelta
 import urllib3
 
-# Wyłączenie ostrzeżeń o certyfikacie SSL
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 API_URL_REGISTER_PATIENT = "https://localhost:7023/Account/RegisterPatient"
@@ -62,7 +61,6 @@ def add_patient(api_url, patient_data):
         return None, None
 
 def generate_pesel(date_of_birth, gender):
-    """Generowanie numeru PESEL na podstawie daty urodzenia i płci"""
     year = date_of_birth.year
     month = date_of_birth.month
     day = date_of_birth.day
@@ -81,9 +79,9 @@ def generate_pesel(date_of_birth, gender):
     random_number = random.randint(0, 999)
     gender_digit = random.randint(0, 9)
     if gender == "male":
-        gender_digit |= 1  # Ustaw ostatni bit na 1 (cyfra nieparzysta)
+        gender_digit |= 1 
     else:
-        gender_digit &= ~1  # Ustaw ostatni bit na 0 (cyfra parzysta)
+        gender_digit &= ~1
 
     pesel += f"{random_number:03d}{gender_digit}"
 
@@ -95,7 +93,6 @@ def generate_pesel(date_of_birth, gender):
     return pesel
 
 def login_patient(api_url, email, password):
-    """Wysyłanie zapytania logowania do API"""
     login_data = {
         "email": email,
         "password": password
@@ -260,7 +257,7 @@ def fizjoAdminAdd(firstname, lastname, gender):
         "postCode": random.choice(post_codes),
         "pesel": "50122671828",
         "dateOfBirth": "1950-12-26",
-        "email": f"{firstname.lower()}fizjo@wp.pl",  # Użyj lowercase w e-mailu
+        "email": f"{firstname.lower()}fizjo@wp.pl", 
         "password": "zaq1@WSX",
         "confirmPassword": "zaq1@WSX",
         "phoneNumber": f"{random.randint(100000000, 999999999)}"
@@ -279,7 +276,7 @@ def patientAdminAdd(firstname, lastname, gender):
         "postCode": random.choice(post_codes),
         "pesel": "50122671828",
         "dateOfBirth": "1950-12-26",
-        "email": f"{firstname.lower()}pacjent@wp.pl",  # Użyj lowercase w e-mailu
+        "email": f"{firstname.lower()}pacjent@wp.pl", 
         "password": "zaq1@WSX",
         "confirmPassword": "zaq1@WSX",
         "phoneNumber": f"{random.randint(100000000, 999999999)}"

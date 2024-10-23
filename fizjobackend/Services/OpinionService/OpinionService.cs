@@ -29,13 +29,13 @@ namespace fizjobackend.Services.OpinionService
             ServiceResponse<Opinion> response = new ServiceResponse<Opinion>("");
             try
             {
-                var patient = await _context.Patients.FindAsync(userId);
-                var physiotherapist = await _context.Physiotherapists.FindAsync(opinionFromBody.PhysiotherapistId);
-                var appointment = await _context.Appointments.Where(a => a.PatientId == userId && a.PhysiotherapistId== physiotherapist.Id).FirstOrDefaultAsync();
-                if(appointment==null)
+                var appointment = await _context.Appointments.FirstOrDefaultAsync(ap => ap.AppointmentId == opinionFromBody.AppointmentId);
+                var user = await _context.Users.FirstOrDefaultAsync(u=>u.Id == userId);
+                
+                if(appointment==null || user==null)
                 {
                     response.Success = false;
-                    response.Message = "Appointment not found";
+                    response.Message = "Appointment or user not found";
                     return response;
                 }
                 if (appointment.AppointmentDate > DateTime.Now)
@@ -44,7 +44,7 @@ namespace fizjobackend.Services.OpinionService
                     response.Message = "Visit does not take place";
                     return response;
                 }
-                var lastOpinion = await _context.Opinions.Where(a => a.PatientId == userId && a.PhysiotherapistId == physiotherapist.Id).FirstOrDefaultAsync();
+                var lastOpinion = await _context.Opinions.Where(a => a.PatientId == appointment.PatientId && a.PhysiotherapistId == appointment.PhysiotherapistId).FirstOrDefaultAsync();
                 if(lastOpinion!=null)
                 {
                     response.Success = false;
@@ -57,11 +57,11 @@ namespace fizjobackend.Services.OpinionService
                     response.Message = "Rating is not between 0 - 5";
                     return response;
                 }
-                string nameAndFirstLetterOfTheLastName = patient.FirstName + " " + patient.LastName[0] + ".";
+                string nameAndFirstLetterOfTheLastName = user.FirstName + " " + user.LastName[0] + ".";
                 Opinion finallyOpinion = new Opinion
                 {
                     PatientId = userId,
-                    PhysiotherapistId = opinionFromBody.PhysiotherapistId,
+                    PhysiotherapistId = appointment.PhysiotherapistId,
                     NameAndFirstLetterOfTheLastName = nameAndFirstLetterOfTheLastName,
                     Comment = opinionFromBody.Comment,
                     Rating = opinionFromBody.Rating,
