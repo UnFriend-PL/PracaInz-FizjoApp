@@ -10,5 +10,6 @@
   "dob": "Date of birth",
   "insurance": "Health insurance number",
   "search": "Search",
-  "patient": "Patient"
+  "patient": "Patient",
+  "searchPatient": "Type patient name, email, phone or PESEL"
 }

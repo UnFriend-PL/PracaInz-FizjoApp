@@ -84,4 +84,15 @@
 }
 .searchPanel {
   flex-basis: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+.searchPanelSection {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+  flex-basis: fit-content;
+  padding: 2rem 2rem 0 0;
 }

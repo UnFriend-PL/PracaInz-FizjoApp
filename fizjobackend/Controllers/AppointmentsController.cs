@@ -41,11 +41,11 @@ namespace fizjobackend.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpGet("/Appointments/All")]
-        public async Task<IActionResult> GetAllAppointments([FromQuery] ListOfAppointmentsRequestDTO appointmentsRequest)
+        [HttpPost("/Appointments/All")]
+        public async Task<IActionResult> GetAllAppointments([FromBody] ListOfAppointmentsRequestDTO appointmentsRequest)
         {
             var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            var response = await _appointmentsService.GetAppointments(userId, appointmentsRequest.Status, appointmentsRequest.Page);
+            var response = await _appointmentsService.GetAppointments(userId, appointmentsRequest);
             if (!response.Success)
             {
                 _logger.LogWarning("Failed to get all appointments: {Message}", response.Message);

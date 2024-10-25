@@ -1,8 +1,8 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import styles from "./appointmentDetails.module.scss";
 import Modal from "@/app/components/common/modal/modal";
 import { format } from "date-fns";
-import { pl as plDate } from "date-fns/locale";
+import { pl as plDate, se } from "date-fns/locale";
 import PatientDetails from "../../components/patientSearch/patientDetails";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
 import pl from "./locales/pl.json";
@@ -13,6 +13,7 @@ import DetailGroup from "@/app/components/detailGroup/DetailGroup";
 import DetailElement from "@/app/components/common/detailElement/detailElement";
 import Calendar from "@/app/components/common/calendar/calendar";
 import TimePicker from "@/app/components/common/timePicker/timePicker";
+import AppointmentStatusButtons from "@/app/components/common/appointmentStatusButtons/appointmentStatusButtons";
 
 const locales = { en, pl };
 
@@ -26,6 +27,8 @@ const AppointmentDetails = ({
   const [isPatientModalOpen, setPatientModalOpen] = useState(false);
   const [isPhysioModalOpen, setPhysioModalOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [selectedNewStatus, setSelectedNewStatus] = useState(null);
+
   const { appointmentStatusName, patient, physiotherapist, appointmentDate } =
     appointment;
   const [formData, setFormData] = useState({
@@ -34,6 +37,7 @@ const AppointmentDetails = ({
     diagnosis: appointment.diagnosis || "",
     isPaid: appointment.isPaid || false,
     appointmentDate: appointmentDate,
+    status: selectedNewStatus,
   });
   const [selectedNewHour, setSelectedNewHour] = useState(
     `${format(new Date(appointmentDate), "HH:mm")}`
@@ -56,7 +60,13 @@ const AppointmentDetails = ({
       });
     }
   };
-
+  const handleStatusChange = (newStatus) => {
+    setSelectedNewStatus(newStatus);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      status: newStatus,
+    }));
+  };
   const handleFormSubmit = async () => {
     try {
       setIsSaving(true);
@@ -65,9 +75,8 @@ const AppointmentDetails = ({
         formData,
         true
       );
-      console.log("API Response:", response); // Log API response
       if (response.success) {
-        await fetchAppointmentDetails(); // Refetch appointment details
+        await fetchAppointmentDetails();
         setIsSaving(false);
       }
     } catch (error) {
@@ -103,6 +112,12 @@ const AppointmentDetails = ({
               size="medium"
             >
               <div className={styles.statusChangeContainer}>
+                <div className={styles.statusButtons}>
+                  <AppointmentStatusButtons
+                    defaultStatus={selectedNewStatus}
+                    onStatusChange={handleStatusChange}
+                  ></AppointmentStatusButtons>
+                </div>
                 <TimePicker
                   initialTime={selectedNewHour}
                   onTimeChange={setSelectedNewHour}

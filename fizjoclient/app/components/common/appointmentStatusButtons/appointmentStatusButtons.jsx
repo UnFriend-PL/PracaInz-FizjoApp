@@ -5,20 +5,26 @@ import en from "./locales/en.json";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
 
 const locales = { en, pl };
-const AppointmentStatusButtons = ({ getAppointments }) => {
+const AppointmentStatusButtons = ({
+  getAppointments,
+  onStatusChange,
+  defaultStatus,
+}) => {
   const { language } = useContext(LanguageContext);
   const t = locales[language];
-  const [selectedStatus, setSelectedStatus] = useState("Scheduled");
+  const [selectedStatus, setSelectedStatus] = useState(defaultStatus);
   const statuses = [
-    { key: "Scheduled", label: t.Scheduled },
-    { key: "Completed", label: t.Completed },
-    { key: "Canceled", label: t.Canceled },
-    { key: "NoShow", label: t.NoShow },
-    { key: "Archived", label: t.Archived },
+    { key: "Scheduled", label: t.Scheduled, value: 0 },
+    { key: "Completed", label: t.Completed, value: 1 },
+    { key: "Canceled", label: t.Canceled, value: 2 },
+    { key: "NoShow", label: t.NoShow, value: 3 },
+    { key: "Archived", label: t.Archived, value: 4 },
   ];
   const handleStatusClick = async (status) => {
     setSelectedStatus(status);
-    await getAppointments(status);
+    if (onStatusChange) {
+      onStatusChange(status);
+    } else await getAppointments(status);
   };
 
   return (
@@ -27,9 +33,9 @@ const AppointmentStatusButtons = ({ getAppointments }) => {
         <button
           key={status.key}
           className={`${styles.statusButton} ${
-            selectedStatus === status.key ? styles.selected : ""
+            selectedStatus === status.value ? styles.selected : ""
           }`}
-          onClick={() => handleStatusClick(status.key)}
+          onClick={() => handleStatusClick(status.value)}
         >
           {status.label}
         </button>

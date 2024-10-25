@@ -9,6 +9,7 @@ using fizjobackend.Models.AppointmentsDTOs;
 using fizjobackend.Models.BodyVisualizerDTOs;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace fizjobackend.Services.AppointmentsService
 {
@@ -181,55 +182,69 @@ namespace fizjobackend.Services.AppointmentsService
             }
         }
 
-        public async Task<ServiceResponse<ListOfAppointmentsResponseDTO>> GetAppointments(Guid userId, AppointmentStatus status, int page)
+        public async Task<ServiceResponse<ListOfAppointmentsResponseDTO>> GetAppointments(Guid userId, ListOfAppointmentsRequestDTO appointmentsRequest)
         {
-            var serviceResponse = new ServiceResponse<ListOfAppointmentsResponseDTO>($"{nameof(status)} Appointments");
+            var serviceResponse = new ServiceResponse<ListOfAppointmentsResponseDTO>($"{nameof(appointmentsRequest.Status)} Appointments");
             try
             {
-                _logger.LogInformation("Fetching appointments for userId: {UserId}, status: {Status}", userId, status);
+                _logger.LogInformation("Fetching appointments for userId: {UserId}, status: {Status}", userId, appointmentsRequest.Status);
                 await VerifyAppointmentStatusForSelectedUser(userId);
 
                 var appointmentsQuery = _context.Appointments
-                    .Where(a => (a.PatientId == userId || a.PhysiotherapistId == userId) && a.AppointmentStatus == status);
+                    .Where(a => (a.PatientId == userId || a.PhysiotherapistId == userId) && a.AppointmentStatus == appointmentsRequest.Status);
 
-                if (status == AppointmentStatus.Scheduled)
+                if (appointmentsRequest.Status == AppointmentStatus.Scheduled)
                 {
                     DateTime startTime = DateTime.Now.AddHours(-12);
                     appointmentsQuery = appointmentsQuery.Where(a => a.AppointmentDate >= startTime);
                 }
-
-                var totalAppointmentsCount = await appointmentsQuery.CountAsync();
-                var appointments = await appointmentsQuery
-                    .OrderBy(a => a.AppointmentDate)
-                    .Skip(page * 10)
-                    .Take(10)
-                    .Include(a => a.Patient)
-                    .Include(a => a.Physiotherapist)
-                    .ToListAsync();
-
-                var preparedAppointments = appointments.Select(appointment =>
-                    new AppointmentInListResponseDTO(
-                        appointment,
-                        appointment.Patient,
-                        appointment.Physiotherapist)
-                    ).ToList();
-
-                ListOfAppointmentsResponseDTO appointmentsResponse = new ListOfAppointmentsResponseDTO()
+                if (appointmentsRequest.Date != default)
                 {
-                    Appointments = preparedAppointments,
-                    CurrentPage = page,
-                    TotalPages = (int)Math.Ceiling(totalAppointmentsCount / 10.0),
-                    TotalAppointments = totalAppointmentsCount
-                };
+                    appointmentsQuery = appointmentsQuery.Where(a => a.AppointmentDate.Date == appointmentsRequest.Date);
+                }
 
-                serviceResponse.Data = appointmentsResponse;
-                return serviceResponse;
+                if (!string.IsNullOrEmpty(appointmentsRequest.PatientId))
+                {
+                    appointmentsQuery = appointmentsQuery.Where(a => a.PatientId == Guid.Parse(appointmentsRequest.PatientId));
+                }
+
+                return await GetAppointmentsWithConditions(appointmentsRequest.Page, serviceResponse, appointmentsQuery);
             }
             catch (Exception e)
             {
                 _logger.LogError(e, "Error getting appointments");
                 return new ServiceResponse<ListOfAppointmentsResponseDTO>($"Error during getting appointments.");
             }
+        }
+
+        private static async Task<ServiceResponse<ListOfAppointmentsResponseDTO>> GetAppointmentsWithConditions(int page, ServiceResponse<ListOfAppointmentsResponseDTO> serviceResponse, IQueryable<Appointment> appointmentsQuery)
+        {
+            var totalAppointmentsCount = await appointmentsQuery.CountAsync();
+            var appointments = await appointmentsQuery
+                .OrderBy(a => a.AppointmentDate)
+                .Skip(page * 10)
+                .Take(10)
+                .Include(a => a.Patient)
+                .Include(a => a.Physiotherapist)
+                .ToListAsync();
+
+            var preparedAppointments = appointments.Select(appointment =>
+                new AppointmentInListResponseDTO(
+                    appointment,
+                    appointment.Patient,
+                    appointment.Physiotherapist)
+                ).ToList();
+
+            ListOfAppointmentsResponseDTO appointmentsResponse = new ListOfAppointmentsResponseDTO()
+            {
+                Appointments = preparedAppointments,
+                CurrentPage = page,
+                TotalPages = (int)Math.Ceiling(totalAppointmentsCount / 10.0),
+                TotalAppointments = totalAppointmentsCount
+            };
+
+            serviceResponse.Data = appointmentsResponse;
+            return serviceResponse;
         }
 
         private async Task VerifyAppointmentStatusForSelectedUser(Guid userId)

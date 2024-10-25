@@ -23,16 +23,34 @@ const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [selectedDate, setSelectedDate] = useState("");
   const t = locales[language];
 
-  const getAppointments = async (status = "Scheduled") => {
+  const handleDateChange = (event) => {
+    setSelectedDate(event.target.value);
+  };
+  const [selectedPatient, setSelectedPatient] = useState(null);
+
+  const getAppointments = async (status = 0) => {
     try {
-      const response = await apiService.get(
-        `/Appointments/All?Status=${status}&?Page=${page}`,
-        {},
+      const formattedDate = selectedDate
+        ? format(new Date(selectedDate), "yyyy-MM-dd")
+        : null;
+      const payload = {
+        status: status,
+        page: page || 0,
+      };
+      if (selectedPatient) {
+        payload.patientId = selectedPatient.id;
+      }
+      if (formattedDate) {
+        payload.date = formattedDate;
+      }
+      const response = await apiService.post(
+        `/Appointments/All`,
+        payload,
         true
       );
-
       const formattedAppointments = response.data.appointments.reduce(
         (acc, appointment) => {
           const date = format(
@@ -50,6 +68,7 @@ const Appointments = () => {
         },
         {}
       );
+
       setAppointments(formattedAppointments);
       setPage(response.data.currentPage);
       setTotalPages(response.data.totalPages);
@@ -67,9 +86,8 @@ const Appointments = () => {
     if (isAuthenticated) {
       getAppointments();
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, selectedDate, selectedPatient]);
 
-  const [selectedPatient, setSelectedPatient] = useState(null);
   return (
     <>
       <div className={styles.container}>
@@ -77,7 +95,20 @@ const Appointments = () => {
           <AppointmentStatusButtons getAppointments={getAppointments} />
           {role == "Physiotherapist" && <AppointmentScheduler />}
           <div className={styles.searchPanel}>
-            <PatientSearch onPatientSelect={setSelectedPatient} />
+            <div className={styles.searchPanelSection}>
+              <input
+                type="date"
+                value={selectedDate}
+                onChange={handleDateChange}
+              />
+            </div>
+            <div className={styles.searchPanelSection}>
+              <PatientSearch
+                onPatientSelect={setSelectedPatient}
+                buttonText={t.select}
+                displayLabel={false}
+              />
+            </div>
           </div>
         </div>
       </div>

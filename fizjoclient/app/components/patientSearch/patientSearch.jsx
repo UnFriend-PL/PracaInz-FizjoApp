@@ -8,7 +8,11 @@ import { LanguageContext } from "@/app/contexts/lang/langContext";
 
 const locales = { en, pl };
 
-const PatientSearch = ({ onPatientSelect }) => {
+const PatientSearch = ({
+  onPatientSelect,
+  buttonText,
+  displayLabel = true,
+}) => {
   const [searchValue, setSearchValue] = useState("");
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [showPatientDetails, setShowPatientDetails] = useState(false);
@@ -30,7 +34,7 @@ const PatientSearch = ({ onPatientSelect }) => {
         setSelectedPatient(response.data);
         setError(null);
         if (onPatientSelect) {
-          onPatientSelect(response.data); // Informacja o znalezieniu pacjenta
+          onPatientSelect(response.data);
         }
       } else {
         setError(response.message);
@@ -44,14 +48,14 @@ const PatientSearch = ({ onPatientSelect }) => {
   const removeSelectedPatient = () => {
     setSelectedPatient(null);
     if (onPatientSelect) {
-      onPatientSelect(null); // Informacja o usunięciu pacjenta
+      onPatientSelect(null);
     }
   };
 
   return (
     <div className={styles.patientSearch}>
       <div className={styles.searchField}>
-        <div className={styles.searchLabel}>{t.patient}:</div>
+        {displayLabel && <div className={styles.searchLabel}>{t.patient}:</div>}
 
         {selectedPatient ? (
           <div className={styles.searchValue}>
@@ -83,12 +87,12 @@ const PatientSearch = ({ onPatientSelect }) => {
               className={styles.searchInput}
               type="text"
               name="search"
-              placeholder={t.typeEmailPeselPhone}
+              placeholder={t.searchPatient}
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
             />
             <button className={styles.searchButton} onClick={searchPatient}>
-              {t.search}
+              {buttonText ?? t.search}
             </button>
           </>
         )}
