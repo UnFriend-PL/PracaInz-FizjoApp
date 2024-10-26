@@ -5,17 +5,24 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const { isAuthenticated } = useContext(AuthContext);
+
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser != null && isAuthenticated) {
-      setUser(JSON.parse(storedUser));
-    }
-    if (!isAuthenticated) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+      } catch (error) {
+        console.error("Failed to parse user from localStorage:", error);
+        localStorage.removeItem("user");
+        setUser(null);
+      }
+    } else if (!isAuthenticated) {
       setUser(null);
     }
   }, [isAuthenticated]);
 
-  const updateUser = (newUser) => {
+  const updateUser = async (newUser) => {
     localStorage.setItem("user", JSON.stringify(newUser));
     setUser(newUser);
   };

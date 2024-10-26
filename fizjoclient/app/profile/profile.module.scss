@@ -32,6 +32,7 @@
 .field {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 0.8rem 0;
   border-bottom: 1px solid $border-color;
 }
@@ -39,10 +40,60 @@
 .label {
   font-weight: bold;
   color: $label-color;
-  text-decoration: cap;
   text-transform: capitalize;
 }
 
 .value {
   color: $text-black;
+  cursor: pointer;
+}
+
+.editIcon {
+  margin-right: 8px;
+  color: $text-dark-green;
+}
+
+.editableInput {
+  border: 1px solid $border-color;
+  padding: 0.3rem;
+  border-radius: 4px;
+  width: 60%;
+}
+
+.editButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  background-color: $button-bg;
+  padding: 0.6rem 0.6rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+.editButton svg {
+  color: $text-white;
+  font-weight: bold;
+  padding: 0;
+  margin: 0;
+}
+
+.editButton:hover {
+  background-color: $button-bg-hover;
+}
+
+.saveButton {
+  background-color: $button-bg;
+  color: $text-white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  margin-top: 1rem;
+  align-self: center;
+}
+
+.saveButton:hover {
+  background-color: $button-bg-hover;
 }
