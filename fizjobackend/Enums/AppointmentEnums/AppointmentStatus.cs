@@ -5,6 +5,7 @@
         Scheduled,    // Zaplanowana
         Completed,    // Odbyła się
         Canceled,     // Anulowana
-        NoShow        // Nieobecna
+        NoShow,        // Nieobecna
+        Archived      // Zarchiwizowana
     }
 }

@@ -17,5 +17,6 @@
   "pesel": "PESEL",
   "address": "Adres",
   "dob": "Data urodzenia",
-  "insurance": "Numer ubezpieczenia zdrowotnego"
+  "insurance": "Numer ubezpieczenia zdrowotnego",
+  "saveChanges": "Zapisz"
 }

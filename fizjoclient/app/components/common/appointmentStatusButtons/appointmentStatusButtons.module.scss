@@ -1,0 +1,27 @@
+@import "@/app/utils/globalColors.scss";
+
+.statusButtonContainer {
+  display: flex;
+  gap: 1rem;
+}
+
+.statusButton {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  border: 2px solid $text-dark-green;
+  background-color: $text-white;
+  color: $text-dark-green;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+
+  &:hover {
+    background-color: $bg-light-green;
+  }
+}
+
+.selected {
+  background-color: $text-dark-green;
+  color: $text-white;
+  border-color: $text-dark-green;
+}

@@ -6,12 +6,13 @@ import en from "./locales/en.json";
 
 const locales = { en, pl };
 
-const SelectedItemsList = ({ selectedItems, handleRemove }) => {
+const SelectedItemsList = ({ selectedItems, handleRemove, readOnly }) => {
   const { language } = useContext(LanguageContext);
   const t = locales[language];
 
   return (
     <div className={styles.selectedItemsList}>
+      {console.log("ReadOnly:", readOnly)}
       <span className={styles.selectedItemsHeader}>{t.selectedItems}:</span>
       {Object.entries(selectedItems).map(([sectionName, items]) => (
         <div key={sectionName} className={styles.selectedSection}>
@@ -22,12 +23,14 @@ const SelectedItemsList = ({ selectedItems, handleRemove }) => {
             items[type]?.map((item) => (
               <div key={item.value} className={styles.selectedItem}>
                 <div className={styles.selectedItemLabel}>{item.label}</div>
-                <button
-                  onClick={() => handleRemove(sectionName, type, item.value)}
-                  className={styles.removeButton}
-                >
-                  &times;
-                </button>
+                {!readOnly && (
+                  <button
+                    onClick={() => handleRemove(sectionName, type, item.value)}
+                    className={styles.removeButton}
+                  >
+                    &times;
+                  </button>
+                )}
               </div>
             ))
           )}

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import DetailElement from "../components/common/detailElement/detailElement";
+import DetailElement from "../common/detailElement/detailElement";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
 import pl from "./locales/pl.json";
 import en from "./locales/en.json";
