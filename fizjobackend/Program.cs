@@ -22,6 +22,7 @@ using fizjobackend.Services.AppointmentsService;
 using fizjobackend.Seeders.BodySeeder;
 using fizjobackend.Interfaces.BodyVisualizerInterfaces;
 using fizjobackend.Services.BodyVisualizerService;
+using fizjobackend.Seeders.TreatmentSeeder;
 
 namespace fizjobackend
 {
@@ -116,6 +117,7 @@ namespace fizjobackend
                 var logger = services.GetRequiredService<ILogger<Program>>();
                 await RoleSeeder.SeedRolesAsync(services, logger);
                 await BodySeeder.SeedBodyAsync(services, logger);
+                await TreatmentSeeder.SeedTreatmentsAsync(services, logger);
             }
             if (app.Environment.IsDevelopment())
             {

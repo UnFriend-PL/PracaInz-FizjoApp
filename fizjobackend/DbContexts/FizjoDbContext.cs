@@ -3,6 +3,7 @@ using fizjobackend.Entities.BodyEntities;
 using fizjobackend.Entities.ConectorsEntities;
 using fizjobackend.Entities.PatientEntities;
 using fizjobackend.Entities.PhysiotherapistEntities;
+using fizjobackend.Entities.TreatmentsEntities;
 using fizjobackend.Entities.UserEntities;
 using fizjobackend.Seeders.BodySeeder;
 using Microsoft.AspNetCore.Identity;
@@ -43,10 +44,29 @@ namespace fizjobackend.DbContexts
             modelBuilder.Entity<Patient>().ToTable("Patients");
             modelBuilder.Entity<Physiotherapist>().ToTable("Physiotherapists");
 
+            modelBuilder.Entity<Treatment>()
+                .HasMany(t => t.Muscles)
+                .WithMany(m => m.Treatments)
+                .UsingEntity(j => j.ToTable("TreatmentMuscles"));
+
+            modelBuilder.Entity<Treatment>()
+                .HasMany(t => t.Joints)
+                .WithMany(j => j.Treatments)
+                .UsingEntity(j => j.ToTable("TreatmentJoints"));
+
+            modelBuilder.Entity<Treatment>()
+                .HasKey(t => t.Id);
+            modelBuilder.Entity<Treatment>()
+                .HasOne(t => t.Physiotherapist)
+                .WithMany(p => p.Treatments)
+                .HasForeignKey(t => t.OwnerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
             BuildPhysiotherapistSpecializationEntity(modelBuilder);
             BuildAppointmentEntity(modelBuilder);
             BuildBodyEntities(modelBuilder);
-            BuildAppointmentBodyDetailsEntity(modelBuilder); // Add this method to configure AppointmentBodyDetails
+            BuildAppointmentBodyDetailsEntity(modelBuilder); 
         }
 
         private static void BuildBodyEntities(ModelBuilder modelBuilder)
@@ -149,5 +169,9 @@ namespace fizjobackend.DbContexts
 
         // Appointment body details
         public DbSet<AppointmentBodyDetails> AppointmentBodyDetails { get; set; }
+
+        // Treatment db entities
+        public DbSet<Treatment> Treatments { get; set; }
+
     }
 }

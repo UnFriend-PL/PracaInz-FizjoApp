@@ -1,0 +1,35 @@
+﻿{
+  "treatments": [
+    {
+      "isDefault": false,
+      "description": "Terapia manualna głowy",
+      "name": "Terapia manualna głowy",
+      "duration": "00:30:00",
+      "createDate": "2024-01-01T00:00:00Z",
+      "updateDate": "2024-01-01T00:00:00Z",
+      "isDeleted": false,
+      "muscles": [
+        "Occipitofrontalis muscle",
+        "Temporoparietalis muscle"
+      ],
+      "joints": [
+        "Temporomandibular joint"
+      ]
+    },
+    {
+      "isDefault": true,
+      "description": "Masaż relaksacyjny szyi",
+      "name": "Masaż szyi",
+      "duration": "00:20:00",
+      "createDate": "2024-02-01T00:00:00Z",
+      "updateDate": "2024-02-01T00:00:00Z",
+      "isDeleted": false,
+      "muscles": [
+        "Sternocleidomastoid muscle"
+      ],
+      "joints": [
+        "Atlanto-occipital joint"
+      ]
+    }
+  ]
+}

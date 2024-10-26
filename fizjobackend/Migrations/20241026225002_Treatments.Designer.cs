@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using fizjobackend.DbContexts;
 
@@ -11,9 +12,11 @@ using fizjobackend.DbContexts;
 namespace fizjobackend.Migrations
 {
     [DbContext(typeof(FizjoDbContext))]
-    partial class FizjoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241026225002_Treatments")]
+    partial class Treatments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -452,10 +455,10 @@ namespace fizjobackend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("OwnerId")
+                    b.Property<Guid>("OwnerId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("UpdateDate")
+                    b.Property<DateTime>("UpdateDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -751,7 +754,8 @@ namespace fizjobackend.Migrations
                     b.HasOne("fizjobackend.Entities.PhysiotherapistEntities.Physiotherapist", "Physiotherapist")
                         .WithMany("Treatments")
                         .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Physiotherapist");
                 });
