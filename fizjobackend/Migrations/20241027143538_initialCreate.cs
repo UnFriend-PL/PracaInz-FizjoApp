@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace fizjobackend.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class initialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -148,6 +148,21 @@ namespace fizjobackend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Views",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NamePL = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Views", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Patients",
                 columns: table => new
                 {
@@ -180,6 +195,29 @@ namespace fizjobackend.Migrations
                         name: "FK_Physiotherapists_Users_Id",
                         column: x => x.Id,
                         principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BodySections",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BodySectionName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BodySectionNamePL = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BodySide = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BodySidePL = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ViewId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BodySections", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BodySections_Views_ViewId",
+                        column: x => x.ViewId,
+                        principalTable: "Views",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -218,7 +256,12 @@ namespace fizjobackend.Migrations
                     AppointmentDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Diagnosis = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Diagnosis = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsPaid = table.Column<bool>(type: "bit", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    PainLevelBeofore = table.Column<int>(type: "int", nullable: true),
+                    PainLevelAfter = table.Column<int>(type: "int", nullable: true),
+                    InitialCondition = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -261,6 +304,195 @@ namespace fizjobackend.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Treatments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDefault = table.Column<bool>(type: "bit", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DescriptionPL = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NamePL = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Duration = table.Column<TimeSpan>(type: "time", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Treatments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Treatments_Physiotherapists_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "Physiotherapists",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Joints",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NamePL = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BodySectionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Joints", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Joints_BodySections_BodySectionId",
+                        column: x => x.BodySectionId,
+                        principalTable: "BodySections",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Muscles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NamePL = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BodySectionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Muscles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Muscles_BodySections_BodySectionId",
+                        column: x => x.BodySectionId,
+                        principalTable: "BodySections",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TreatmentJoints",
+                columns: table => new
+                {
+                    JointsId = table.Column<int>(type: "int", nullable: false),
+                    TreatmentsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TreatmentJoints", x => new { x.JointsId, x.TreatmentsId });
+                    table.ForeignKey(
+                        name: "FK_TreatmentJoints_Joints_JointsId",
+                        column: x => x.JointsId,
+                        principalTable: "Joints",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TreatmentJoints_Treatments_TreatmentsId",
+                        column: x => x.TreatmentsId,
+                        principalTable: "Treatments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppointmentBodyDetails",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AppointmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BodySectionId = table.Column<int>(type: "int", nullable: false),
+                    ViewId = table.Column<int>(type: "int", nullable: false),
+                    MuscleId = table.Column<int>(type: "int", nullable: true),
+                    JointId = table.Column<int>(type: "int", nullable: true),
+                    BodySide = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppointmentBodyDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppointmentBodyDetails_Appointments_AppointmentId",
+                        column: x => x.AppointmentId,
+                        principalTable: "Appointments",
+                        principalColumn: "AppointmentId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AppointmentBodyDetails_BodySections_BodySectionId",
+                        column: x => x.BodySectionId,
+                        principalTable: "BodySections",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_AppointmentBodyDetails_Joints_JointId",
+                        column: x => x.JointId,
+                        principalTable: "Joints",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_AppointmentBodyDetails_Muscles_MuscleId",
+                        column: x => x.MuscleId,
+                        principalTable: "Muscles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_AppointmentBodyDetails_Views_ViewId",
+                        column: x => x.ViewId,
+                        principalTable: "Views",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TreatmentMuscles",
+                columns: table => new
+                {
+                    MusclesId = table.Column<int>(type: "int", nullable: false),
+                    TreatmentsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TreatmentMuscles", x => new { x.MusclesId, x.TreatmentsId });
+                    table.ForeignKey(
+                        name: "FK_TreatmentMuscles_Muscles_MusclesId",
+                        column: x => x.MusclesId,
+                        principalTable: "Muscles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TreatmentMuscles_Treatments_TreatmentsId",
+                        column: x => x.TreatmentsId,
+                        principalTable: "Treatments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppointmentBodyDetails_AppointmentId",
+                table: "AppointmentBodyDetails",
+                column: "AppointmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppointmentBodyDetails_BodySectionId",
+                table: "AppointmentBodyDetails",
+                column: "BodySectionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppointmentBodyDetails_JointId",
+                table: "AppointmentBodyDetails",
+                column: "JointId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppointmentBodyDetails_MuscleId",
+                table: "AppointmentBodyDetails",
+                column: "MuscleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppointmentBodyDetails_ViewId",
+                table: "AppointmentBodyDetails",
+                column: "ViewId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Appointments_PatientId",
                 table: "Appointments",
@@ -272,21 +504,51 @@ namespace fizjobackend.Migrations
                 column: "PhysiotherapistId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BodySections_ViewId",
+                table: "BodySections",
+                column: "ViewId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Joints_BodySectionId",
+                table: "Joints",
+                column: "BodySectionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MedicalRaport_PatientId",
                 table: "MedicalRaport",
                 column: "PatientId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Muscles_BodySectionId",
+                table: "Muscles",
+                column: "BodySectionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PhysiotherapistSpecializations_PhysiotherapySpecializationsPhysiotherapySpecializationId",
                 table: "PhysiotherapistSpecializations",
                 column: "PhysiotherapySpecializationsPhysiotherapySpecializationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TreatmentJoints_TreatmentsId",
+                table: "TreatmentJoints",
+                column: "TreatmentsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TreatmentMuscles_TreatmentsId",
+                table: "TreatmentMuscles",
+                column: "TreatmentsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Treatments_OwnerId",
+                table: "Treatments",
+                column: "OwnerId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Appointments");
+                name: "AppointmentBodyDetails");
 
             migrationBuilder.DropTable(
                 name: "MedicalRaport");
@@ -301,6 +563,12 @@ namespace fizjobackend.Migrations
                 name: "Roles");
 
             migrationBuilder.DropTable(
+                name: "TreatmentJoints");
+
+            migrationBuilder.DropTable(
+                name: "TreatmentMuscles");
+
+            migrationBuilder.DropTable(
                 name: "UserClaims");
 
             migrationBuilder.DropTable(
@@ -313,13 +581,31 @@ namespace fizjobackend.Migrations
                 name: "UserTokens");
 
             migrationBuilder.DropTable(
+                name: "Appointments");
+
+            migrationBuilder.DropTable(
+                name: "PhysiotherapySpecializationEntities");
+
+            migrationBuilder.DropTable(
+                name: "Joints");
+
+            migrationBuilder.DropTable(
+                name: "Muscles");
+
+            migrationBuilder.DropTable(
+                name: "Treatments");
+
+            migrationBuilder.DropTable(
                 name: "Patients");
+
+            migrationBuilder.DropTable(
+                name: "BodySections");
 
             migrationBuilder.DropTable(
                 name: "Physiotherapists");
 
             migrationBuilder.DropTable(
-                name: "PhysiotherapySpecializationEntities");
+                name: "Views");
 
             migrationBuilder.DropTable(
                 name: "Users");

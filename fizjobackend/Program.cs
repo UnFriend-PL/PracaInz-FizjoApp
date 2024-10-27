@@ -23,6 +23,8 @@ using fizjobackend.Seeders.BodySeeder;
 using fizjobackend.Interfaces.BodyVisualizerInterfaces;
 using fizjobackend.Services.BodyVisualizerService;
 using fizjobackend.Seeders.TreatmentSeeder;
+using fizjobackend.Interfaces.TreatmentsInterfaces;
+using fizjobackend.Services.Treatments;
 
 namespace fizjobackend
 {
@@ -36,6 +38,7 @@ namespace fizjobackend
                 .ReadFrom.Configuration(builder.Configuration)
                 .CreateLogger();
             builder.Host.UseSerilog();
+            builder.Services.AddMemoryCache();
             builder.Services.AddControllers();
             builder.Services.AddHttpClient();
             builder.Services.AddEndpointsApiExplorer();
@@ -87,6 +90,7 @@ namespace fizjobackend
             builder.Services.AddScoped<IBodyVisualizerService, BodyVisualizerService>();
             var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY")!);
             builder.Services.AddScoped<IAccountValidationHelper, AccountValidationHelper>();
+            builder.Services.AddScoped<ITreatmentsService, TreatmentsService>();
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

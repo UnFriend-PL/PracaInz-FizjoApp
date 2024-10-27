@@ -55,7 +55,6 @@ const Profile = () => {
     setEditableFields({});
     setIsDirty(false);
     try {
-      console.log(user);
       const response = await apiService.post("/User/UpdateInfo", user, true);
       if (response.success) {
         return response.data;

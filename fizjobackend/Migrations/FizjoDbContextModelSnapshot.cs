@@ -22,6 +22,21 @@ namespace fizjobackend.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("BodySectionTreatment", b =>
+                {
+                    b.Property<int>("BodySectionsId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("TreatmentsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("BodySectionsId", "TreatmentsId");
+
+                    b.HasIndex("TreatmentsId");
+
+                    b.ToTable("TreatmentBodySections", (string)null);
+                });
+
             modelBuilder.Entity("JointTreatment", b =>
                 {
                     b.Property<int>("JointsId")
@@ -180,6 +195,21 @@ namespace fizjobackend.Migrations
                     b.HasIndex("PhysiotherapySpecializationsPhysiotherapySpecializationId");
 
                     b.ToTable("PhysiotherapistSpecializations", (string)null);
+                });
+
+            modelBuilder.Entity("TreatmentView", b =>
+                {
+                    b.Property<Guid>("TreatmentsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ViewsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TreatmentsId", "ViewsId");
+
+                    b.HasIndex("ViewsId");
+
+                    b.ToTable("TreatmentViews", (string)null);
                 });
 
             modelBuilder.Entity("fizjobackend.Entities.AppointmentEntities.Appointment", b =>
@@ -439,6 +469,10 @@ namespace fizjobackend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("DescriptionPL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<TimeSpan>("Duration")
                         .HasColumnType("time");
 
@@ -449,6 +483,10 @@ namespace fizjobackend.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NamePL")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -599,6 +637,21 @@ namespace fizjobackend.Migrations
                     b.ToTable("Physiotherapists", (string)null);
                 });
 
+            modelBuilder.Entity("BodySectionTreatment", b =>
+                {
+                    b.HasOne("fizjobackend.Entities.BodyEntities.BodySection", null)
+                        .WithMany()
+                        .HasForeignKey("BodySectionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("fizjobackend.Entities.TreatmentsEntities.Treatment", null)
+                        .WithMany()
+                        .HasForeignKey("TreatmentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("JointTreatment", b =>
                 {
                     b.HasOne("fizjobackend.Entities.BodyEntities.Joint", null)
@@ -640,6 +693,21 @@ namespace fizjobackend.Migrations
                     b.HasOne("fizjobackend.Entities.PhysiotherapistEntities.PhysiotherapySpecializationEntity", null)
                         .WithMany()
                         .HasForeignKey("PhysiotherapySpecializationsPhysiotherapySpecializationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TreatmentView", b =>
+                {
+                    b.HasOne("fizjobackend.Entities.TreatmentsEntities.Treatment", null)
+                        .WithMany()
+                        .HasForeignKey("TreatmentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("fizjobackend.Entities.BodyEntities.View", null)
+                        .WithMany()
+                        .HasForeignKey("ViewsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -10,6 +10,7 @@ import useSelectedItems from "../utils/useSelectedItems";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
 import pl from "./locales/pl.json";
 import en from "./locales/en.json";
+import TreatmentsAutoComplete from "@/app/components/treatments/treatments";
 
 const locales = { en, pl };
 
@@ -88,6 +89,7 @@ const MusclesAndJoints = ({
 
   return (
     <div className={styles.musclesAndJointsWrapper}>
+      <TreatmentsAutoComplete />
       <SelectedItemsList
         selectedItems={selectedItems}
         handleRemove={handleRemove}

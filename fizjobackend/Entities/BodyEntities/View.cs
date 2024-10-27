@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using fizjobackend.Entities.TreatmentsEntities;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace fizjobackend.Entities.BodyEntities
@@ -12,5 +13,6 @@ namespace fizjobackend.Entities.BodyEntities
         public string Gender { get; set; }
 
         public ICollection<BodySection> BodySections { get; set; }
+        public virtual ICollection<Treatment> Treatments { get; set; } = new List<Treatment>();
     }
 }

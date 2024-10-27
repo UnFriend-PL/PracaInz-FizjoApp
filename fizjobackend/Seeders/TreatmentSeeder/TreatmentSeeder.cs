@@ -32,7 +32,9 @@ namespace fizjobackend.Seeders.TreatmentSeeder
                         OwnerId = null,
                         IsDefault = treatmentData.IsDefault,
                         Description = treatmentData.Description,
+                        DescriptionPL = treatmentData.DescriptionPL,
                         Name = treatmentData.Name,
+                        NamePL = treatmentData.NamePL,
                         Duration = TimeSpan.Parse(treatmentData.Duration),
                         CreateDate = DateTime.Parse(treatmentData.CreateDate),
                         UpdateDate = DateTime.Parse(treatmentData.UpdateDate),
@@ -49,6 +51,14 @@ namespace fizjobackend.Seeders.TreatmentSeeder
 
                     treatment.Muscles = muscles;
                     treatment.Joints = joints;
+
+                    var bodySections = await context.BodySections
+                        .Where(bs => bs.Muscles.Any(m => muscles.Contains(m)) || bs.Joints.Any(j => joints.Contains(j))).ToListAsync();
+                    var views = await context.Views
+                        .Where(v => v.BodySections.Any(bs => bodySections.Contains(bs))).Distinct().ToListAsync();
+
+                    treatment.BodySections = bodySections;
+                    treatment.Views = views;
 
                     await context.Treatments.AddAsync(treatment);
                 }
@@ -72,7 +82,9 @@ namespace fizjobackend.Seeders.TreatmentSeeder
     {
         public bool IsDefault { get; set; }
         public string Description { get; set; }
+        public string DescriptionPL { get; set; }
         public string Name { get; set; }
+        public string NamePL { get; set; }
         public string Duration { get; set; }
         public string CreateDate { get; set; }
         public string UpdateDate { get; set; }
