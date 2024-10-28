@@ -10,6 +10,7 @@ const locales = { en, pl };
 
 const BodyPartSelector = ({
   sectionName,
+  sectionNamePL,
   muscles,
   joints,
   selectedItems,
@@ -18,20 +19,34 @@ const BodyPartSelector = ({
   const { language } = useContext(LanguageContext);
   const t = locales[language];
 
+  const selectedSection = selectedItems.find(
+    (item) => item.sectionName === sectionName
+  );
+
   return (
     <div className={styles.bodyPartContainer}>
       <div className={styles.bodyPart}>
         <div className={styles.bodyPartHeader}>
-          {sectionName.replace("-", " ")}
+          {language == "en"
+            ? sectionName.replace("-", " ")
+            : sectionNamePL.replace("-", " ")}
         </div>
         <div className={styles.bodyPartSubHeader}>{t.muscles}:</div>
         <Select
           options={muscles}
           isMulti
           onChange={(selected) =>
-            handleChange(selected, sectionName, "muscles")
+            handleChange(
+              selected.map((option) => ({
+                ...option,
+                value: option.value,
+                label: option.label,
+              })),
+              { sectionName },
+              "muscles"
+            )
           }
-          value={selectedItems[sectionName]?.muscles || []}
+          value={selectedSection?.muscles || []}
           className={styles.select}
           placeholder={t.selectMuscles}
         />
@@ -39,8 +54,18 @@ const BodyPartSelector = ({
         <Select
           options={joints}
           isMulti
-          onChange={(selected) => handleChange(selected, sectionName, "joints")}
-          value={selectedItems[sectionName]?.joints || []}
+          onChange={(selected) =>
+            handleChange(
+              selected.map((option) => ({
+                ...option,
+                value: option.value,
+                label: option.label,
+              })),
+              { sectionName },
+              "joints"
+            )
+          }
+          value={selectedSection?.joints || []}
           className={styles.select}
           placeholder={t.selectJoints}
         />

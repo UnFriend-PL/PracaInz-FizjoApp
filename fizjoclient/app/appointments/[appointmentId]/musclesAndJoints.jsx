@@ -83,6 +83,7 @@ const MusclesAndJoints = ({
 
   const {
     sectionName = "",
+    sectionNamePL = "",
     muscles = [],
     joints = [],
   } = mappedData[currentIndex] || {};
@@ -105,6 +106,7 @@ const MusclesAndJoints = ({
           />
           <BodyPartSelector
             sectionName={sectionName}
+            sectionNamePL={sectionNamePL}
             muscles={muscles}
             joints={joints}
             selectedItems={selectedItems}

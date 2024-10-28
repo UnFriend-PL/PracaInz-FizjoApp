@@ -27,7 +27,6 @@ const TreatmentsAutoComplete = () => {
   }));
   const handleChange = (options) => {
     setSelectedOptions(options);
-    console.log("Wybrane zabiegi:", options);
   };
 
   return (

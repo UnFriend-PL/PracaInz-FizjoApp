@@ -31,7 +31,7 @@ namespace fizjobackend.Services.Treatments
                     .Include(v => v.Views)
                     .ToListAsync();
                 var treatmentsDTO = treatments.Select(t => new TreatmentsAutoCompleteResponseDTO(t)).ToList();
-                response = new ServiceResponse<IEnumerable<TreatmentsAutoCompleteResponseDTO>>("Treatments retrieved");
+                response = new ServiceResponse<IEnumerable<TreatmentsAutoCompleteResponseDTO>>(" Treatments retrieved");
                 response.Data = treatmentsDTO;
                 response.Success = true;
                 response.Message = "Treatments retrieved";

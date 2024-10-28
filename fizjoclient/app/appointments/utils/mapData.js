@@ -6,7 +6,12 @@ const mapData = (data) => {
 
   return data.map((section) => {
     const viewName =
-      section.viewName || (section.viewId === 1 ? "front" : "back");
+      section.viewName ||
+      (section.viewId === 1
+        ? "front"
+        : section.viewId === 3
+        ? "front"
+        : "back");
 
     const muscles = section.muscles.map((muscle) => ({
       section: `${section.name}_${viewName}`,
