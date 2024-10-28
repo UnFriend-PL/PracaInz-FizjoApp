@@ -1,78 +1,58 @@
+// bodyPartSelector.jsx
 import React, { useContext } from "react";
 import Select from "react-select";
 import styles from "./appointmentDetails.module.scss";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
-
 import pl from "./locales/pl.json";
 import en from "./locales/en.json";
+import { BodyContext } from "./bodyContext";
 
 const locales = { en, pl };
 
-const BodyPartSelector = ({
-  sectionName,
-  sectionNamePL,
-  muscles,
-  joints,
-  selectedItems,
-  handleChange,
-}) => {
+const BodyPartSelector = () => {
+  const { mappedData, selectedItems, handleChange } = useContext(BodyContext);
   const { language } = useContext(LanguageContext);
   const t = locales[language];
 
-  const selectedSection = selectedItems.find(
-    (item) => item.sectionName === sectionName
-  );
+  if (!mappedData || mappedData.length === 0) {
+    return <div>{t.noData}</div>; // Wyświetl komunikat, jeśli brak danych
+  }
 
   return (
     <div className={styles.bodyPartContainer}>
-      <div className={styles.bodyPart}>
-        <div className={styles.bodyPartHeader}>
-          {language == "en"
-            ? sectionName.replace("-", " ")
-            : sectionNamePL
-                .replace("-", " ")
-                .replace("front", "przód")
-                .replace("back", "tył")}
+      {mappedData.map((section) => (
+        <div key={section.sectionName} className={styles.bodyPart}>
+          <div className={styles.bodyPartHeader}>
+            {language === "en" ? section.sectionName : section.sectionNamePL}
+          </div>
+          <div className={styles.bodyPartSubHeader}>{t.muscles}:</div>
+          <Select
+            options={section.muscles}
+            isMulti
+            onChange={(selected) => handleChange(selected, section, "muscles")}
+            value={
+              selectedItems.find(
+                (item) => item.sectionName === section.sectionName
+              )?.muscles || []
+            }
+            className={styles.select}
+            placeholder={t.selectMuscles}
+          />
+          <div className={styles.bodyPartSubHeader}>{t.joints}:</div>
+          <Select
+            options={section.joints}
+            isMulti
+            onChange={(selected) => handleChange(selected, section, "joints")}
+            value={
+              selectedItems.find(
+                (item) => item.sectionName === section.sectionName
+              )?.joints || []
+            }
+            className={styles.select}
+            placeholder={t.selectJoints}
+          />
         </div>
-        <div className={styles.bodyPartSubHeader}>{t.muscles}:</div>
-        <Select
-          options={muscles}
-          isMulti
-          onChange={(selected) =>
-            handleChange(
-              selected.map((option) => ({
-                ...option,
-                value: option.value,
-                label: option.label,
-              })),
-              { sectionName },
-              "muscles"
-            )
-          }
-          value={selectedSection?.muscles || []}
-          className={styles.select}
-          placeholder={t.selectMuscles}
-        />
-        <div className={styles.bodyPartSubHeader}>{t.joints}:</div>
-        <Select
-          options={joints}
-          isMulti
-          onChange={(selected) =>
-            handleChange(
-              selected.map((option) => ({
-                ...option,
-                value: option.value,
-                label: option.label,
-              })),
-              { sectionName },
-              "joints"
-            )
-          }
-          value={selectedSection?.joints || []}
-          className={styles.select}
-          placeholder={t.selectJoints}
-        />
-      </div>
+      ))}
     </div>
   );
 };

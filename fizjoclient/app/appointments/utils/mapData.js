@@ -1,8 +1,8 @@
-import { LanguageContext } from "@/app/contexts/lang/langContext";
-import { useContext } from "react";
-
-const mapData = (data) => {
-  const { language } = useContext(LanguageContext);
+// mapData.js
+const mapData = (data, language) => {
+  if (!Array.isArray(data)) {
+    return []; // Zwraca pustą tablicę, jeśli `data` jest `undefined` lub nie jest tablicą
+  }
 
   return data.map((section) => {
     const viewName =

@@ -11,6 +11,7 @@ import AppointmentDetails from "./appointmentDetails";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
 import pl from "./locales/pl.json";
 import en from "./locales/en.json";
+import BodyProvider from "./bodyContext";
 
 const locales = { en, pl };
 
@@ -161,38 +162,40 @@ const Appointments = () => {
 
   return (
     <>
-      <div className={styles.container}>
-        <AppointmentDetails
-          key={appointment.appointmentDate}
-          appointment={appointment}
-          appointmentId={appointmentId}
-          fetchAppointmentDetails={fetchAppointmentDetails}
-        />
-      </div>
-      <div className={`${styles.container} ${styles.spaceAtBottom}`}>
-        <div className={styles.bodyContainer}>
-          <SwitchSelector
-            onChange={setViewPosition}
-            options={[
-              { label: t.front, value: "front" },
-              { label: t.back, value: "back" },
-            ]}
-          />
-          <HumanBody
-            side={viewPosition}
-            gender={appointment.patient.gender}
-            data={selectedParts[viewPosition]}
-            scale={1.6}
-            onBodyPartPress={handleBodyPartPress}
+      <BodyProvider>
+        <div className={styles.container}>
+          <AppointmentDetails
+            key={appointment.appointmentDate}
+            appointment={appointment}
+            appointmentId={appointmentId}
+            fetchAppointmentDetails={fetchAppointmentDetails}
           />
         </div>
-        <MusclesAndJoints
-          musclesAndJoints={musclesAndJoints}
-          appointmentId={appointmentId}
-          loadedMusclesAndJoints={loadedMusclesAndJoints}
-          readOnly={readOnly}
-        />
-      </div>
+        <div className={`${styles.container} ${styles.spaceAtBottom}`}>
+          <div className={styles.bodyContainer}>
+            <SwitchSelector
+              onChange={setViewPosition}
+              options={[
+                { label: t.front, value: "front" },
+                { label: t.back, value: "back" },
+              ]}
+            />
+            <HumanBody
+              side={viewPosition}
+              gender={appointment.patient.gender}
+              data={selectedParts[viewPosition]}
+              scale={1.6}
+              onBodyPartPress={handleBodyPartPress}
+            />
+          </div>
+          <MusclesAndJoints
+            musclesAndJoints={musclesAndJoints}
+            appointmentId={appointmentId}
+            loadedMusclesAndJoints={loadedMusclesAndJoints}
+            readOnly={readOnly}
+          />
+        </div>
+      </BodyProvider>
     </>
   );
 };
