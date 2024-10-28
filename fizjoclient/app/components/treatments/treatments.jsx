@@ -30,14 +30,18 @@ const TreatmentsAutoComplete = () => {
   };
 
   return (
-    <Select
-      options={options}
-      value={selectedOptions}
-      onChange={handleChange}
-      placeholder="Wyszukaj i wybierz zabiegi..."
-      isClearable
-      isMulti
-    />
+    <>
+      <div className={styles.container}>
+        <Select
+          options={options}
+          value={selectedOptions}
+          onChange={handleChange}
+          placeholder="Wyszukaj i wybierz zabiegi..."
+          isClearable
+          isMulti
+        />
+      </div>
+    </>
   );
 };
 

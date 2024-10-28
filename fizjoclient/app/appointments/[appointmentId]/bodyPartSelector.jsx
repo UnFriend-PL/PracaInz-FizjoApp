@@ -29,7 +29,10 @@ const BodyPartSelector = ({
         <div className={styles.bodyPartHeader}>
           {language == "en"
             ? sectionName.replace("-", " ")
-            : sectionNamePL.replace("-", " ")}
+            : sectionNamePL
+                .replace("-", " ")
+                .replace("front", "przód")
+                .replace("back", "tył")}
         </div>
         <div className={styles.bodyPartSubHeader}>{t.muscles}:</div>
         <Select

@@ -13,7 +13,7 @@ const useSelectedItems = (musclesAndJoints, loadedMusclesAndJoints) => {
         const updatedSection = { ...prevState[sectionIndex] };
         updatedSection[type] = selected || [];
 
-        if (!updatedSection.muscles.length && !updatedSection.joints.length) {
+        if (!updatedSection.muscles?.length && !updatedSection.joints?.length) {
           return prevState.filter((_, index) => index !== sectionIndex);
         }
 

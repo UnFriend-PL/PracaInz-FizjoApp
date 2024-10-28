@@ -90,7 +90,6 @@ const MusclesAndJoints = ({
 
   return (
     <div className={styles.musclesAndJointsWrapper}>
-      <TreatmentsAutoComplete />
       <SelectedItemsList
         selectedItems={selectedItems}
         handleRemove={handleRemove}
