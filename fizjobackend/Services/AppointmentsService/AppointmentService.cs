@@ -9,6 +9,7 @@ using fizjobackend.Models.AppointmentsDTOs;
 using fizjobackend.Models.BodyVisualizerDTOs;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace fizjobackend.Services.AppointmentsService
 {
@@ -23,6 +24,101 @@ namespace fizjobackend.Services.AppointmentsService
             _context = context;
             _logger = logger;
             _bodyVisualizerService = bodyVisualizerService;
+        }
+
+        public async Task<ServiceResponse<bool>> ChangeAppointmentStatus(Guid appointmentId, Guid physiotherapistId, ChangeAppointmentStatusRequestDTO status)
+        {
+            var apoointment = await _context.Appointments.FindAsync(appointmentId);
+            if (apoointment == null)
+            {
+                return new ServiceResponse<bool>("Appointment not found");
+            }
+            if (apoointment.PhysiotherapistId != physiotherapistId)
+            {
+                return new ServiceResponse<bool>("You are not authorized to change status of this appointment");
+            }
+            apoointment.AppointmentStatus = status.Status;
+            await _context.SaveChangesAsync();
+            return new ServiceResponse<bool>("Appointment status changed successfully");
+        }
+
+        public async Task<ServiceResponse<bool>> EditAppointment(Guid appointmentId, Guid physiotherapistId, EditAppointmentRequestDTO editAppointmentRequest)
+        {
+            try
+            {
+                var appointment = await _context.Appointments.FindAsync(appointmentId);
+                if (appointment == null)
+                {
+                    return new ServiceResponse<bool>("Appointment not found");
+                }
+                if (appointment.PhysiotherapistId != physiotherapistId)
+                {
+                    return new ServiceResponse<bool>("You are not authorized to edit this appointment");
+                }
+
+                bool isUpdated = false;
+
+                if (!string.IsNullOrEmpty(editAppointmentRequest.AppointmentDescription) &&
+                    appointment.AppointmentDescription != editAppointmentRequest.AppointmentDescription)
+                {
+                    appointment.AppointmentDescription = editAppointmentRequest.AppointmentDescription;
+                    isUpdated = true;
+                }
+
+                if (editAppointmentRequest.AppointmentDate != default &&
+                    appointment.AppointmentDate != editAppointmentRequest.AppointmentDate)
+                {
+                    appointment.AppointmentDate = editAppointmentRequest.AppointmentDate;
+                    isUpdated = true;
+                }
+
+                if (!string.IsNullOrEmpty(editAppointmentRequest.Notes) &&
+                    appointment.Notes != editAppointmentRequest.Notes)
+                {
+                    appointment.Notes = editAppointmentRequest.Notes;
+                    isUpdated = true;
+                }
+
+                if (!string.IsNullOrEmpty(editAppointmentRequest.Diagnosis) &&
+                    appointment.Diagnosis != editAppointmentRequest.Diagnosis)
+                {
+                    appointment.Diagnosis = editAppointmentRequest.Diagnosis;
+                    isUpdated = true;
+                }
+
+                if (appointment.IsPaid != editAppointmentRequest.IsPaid)
+                {
+                    appointment.IsPaid = editAppointmentRequest.IsPaid;
+                    isUpdated = true;
+                }
+
+                if (appointment.Price != editAppointmentRequest.Price)
+                {
+                    appointment.Price = editAppointmentRequest.Price;
+                    isUpdated = true;
+                }
+
+                if (editAppointmentRequest.Status != null &&
+                    appointment.AppointmentStatus != editAppointmentRequest.Status)
+                {
+                    appointment.AppointmentStatus = editAppointmentRequest.Status.Value;
+                    isUpdated = true;
+                }
+
+                if (isUpdated)
+                {
+                    await _context.SaveChangesAsync();
+                }
+
+                var response = new ServiceResponse<bool>("Appointment edited successfully");
+                response.Data = true;
+                return response;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error editing appointment");
+                return new ServiceResponse<bool>($"Error during editing appointment.");
+            }
         }
 
         public async Task<ServiceResponse<AppointmentResponseDTO>> CreateAppointment(CreateAppointmentRequestDTO newAppointmentRequest)
@@ -86,54 +182,92 @@ namespace fizjobackend.Services.AppointmentsService
             }
         }
 
-        public async Task<ServiceResponse<ListOfAppointmentsResponseDTO>> GetAppointments(Guid userId, AppointmentStatus status, int page)
+        public async Task<ServiceResponse<ListOfAppointmentsResponseDTO>> GetAppointments(Guid userId, ListOfAppointmentsRequestDTO appointmentsRequest)
         {
-            var serviceResponse = new ServiceResponse<ListOfAppointmentsResponseDTO>($"{nameof(status)} Appointments");
+            var serviceResponse = new ServiceResponse<ListOfAppointmentsResponseDTO>($"{nameof(appointmentsRequest.Status)} Appointments");
             try
             {
-                _logger.LogInformation("Fetching appointments for userId: {UserId}, status: {Status}", userId, status);
+                _logger.LogInformation("Fetching appointments for userId: {UserId}, status: {Status}", userId, appointmentsRequest.Status);
+                await VerifyAppointmentStatusForSelectedUser(userId);
 
                 var appointmentsQuery = _context.Appointments
-                    .Where(a => (a.PatientId == userId || a.PhysiotherapistId == userId) && a.AppointmentStatus == status);
-                if (status == AppointmentStatus.Scheduled)
+                    .Where(a => (a.PatientId == userId || a.PhysiotherapistId == userId) && a.AppointmentStatus == appointmentsRequest.Status);
+
+                if (appointmentsRequest.Status == AppointmentStatus.Scheduled)
                 {
-                    DateTime startTime = DateTime.Now.AddHours(-1);
-                    DateTime endTime = DateTime.Now.AddDays(8);
-                    appointmentsQuery = appointmentsQuery.Where(a => a.AppointmentDate >= startTime && a.AppointmentDate <= endTime);
+                    DateTime startTime = DateTime.Now.AddHours(-12);
+                    appointmentsQuery = appointmentsQuery.Where(a => a.AppointmentDate >= startTime);
+                }
+                if (appointmentsRequest.Date != default)
+                {
+                    appointmentsQuery = appointmentsQuery.Where(a => a.AppointmentDate.Date == appointmentsRequest.Date);
                 }
 
-                var totalAppointmentsCount = await appointmentsQuery.CountAsync();
-                var appointments = await appointmentsQuery
-                    .OrderBy(a => a.AppointmentDate)
-                    .Skip(page * 10)
-                    .Take(10)
-                    .Include(a => a.Patient)
-                    .Include(a => a.Physiotherapist)
-                    .ToListAsync();
-
-                var preparedAppointments = appointments.Select(appointment =>
-                    new AppointmentInListResponseDTO(
-                        appointment,
-                        appointment.Patient,
-                        appointment.Physiotherapist)
-                    ).ToList();
-
-                ListOfAppointmentsResponseDTO appointmentsResponse = new ListOfAppointmentsResponseDTO()
+                if (!string.IsNullOrEmpty(appointmentsRequest.PatientId))
                 {
-                    Appointments = preparedAppointments,
-                    CurrentPage = page,
-                    TotalPages = (int)Math.Ceiling(totalAppointmentsCount / 10.0),
-                    TotalAppointments = totalAppointmentsCount
-                };
+                    appointmentsQuery = appointmentsQuery.Where(a => a.PatientId == Guid.Parse(appointmentsRequest.PatientId));
+                }
 
-                serviceResponse.Data = appointmentsResponse;
-                return serviceResponse;
+                return await GetAppointmentsWithConditions(appointmentsRequest.Page, serviceResponse, appointmentsQuery);
             }
             catch (Exception e)
             {
                 _logger.LogError(e, "Error getting appointments");
                 return new ServiceResponse<ListOfAppointmentsResponseDTO>($"Error during getting appointments.");
             }
+        }
+
+        private static async Task<ServiceResponse<ListOfAppointmentsResponseDTO>> GetAppointmentsWithConditions(int page, ServiceResponse<ListOfAppointmentsResponseDTO> serviceResponse, IQueryable<Appointment> appointmentsQuery)
+        {
+            var totalAppointmentsCount = await appointmentsQuery.CountAsync();
+            var appointments = await appointmentsQuery
+                .OrderBy(a => a.AppointmentDate)
+                .Skip(page * 10)
+                .Take(10)
+                .Include(a => a.Patient)
+                .Include(a => a.Physiotherapist)
+                .ToListAsync();
+
+            var preparedAppointments = appointments.Select(appointment =>
+                new AppointmentInListResponseDTO(
+                    appointment,
+                    appointment.Patient,
+                    appointment.Physiotherapist)
+                ).ToList();
+
+            ListOfAppointmentsResponseDTO appointmentsResponse = new ListOfAppointmentsResponseDTO()
+            {
+                Appointments = preparedAppointments,
+                CurrentPage = page,
+                TotalPages = (int)Math.Ceiling(totalAppointmentsCount / 10.0),
+                TotalAppointments = totalAppointmentsCount
+            };
+
+            serviceResponse.Data = appointmentsResponse;
+            return serviceResponse;
+        }
+
+        private async Task VerifyAppointmentStatusForSelectedUser(Guid userId)
+        {
+            var pastScheduledAppointments = await _context.Appointments
+                .Where(a => a.AppointmentStatus == AppointmentStatus.Scheduled
+                            && a.AppointmentDate < DateTime.Now
+                            && (a.PatientId == userId || a.PhysiotherapistId == userId))
+                .ToListAsync();
+
+            foreach (var appointment in pastScheduledAppointments)
+            {
+                if (appointment.IsPaid)
+                {
+                    appointment.AppointmentStatus = AppointmentStatus.Completed;
+                }
+                else
+                {
+                    appointment.AppointmentStatus = AppointmentStatus.NoShow;
+                }
+            }
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task<ServiceResponse<AppointmentResponseDTO>> GetAppointmentDetails(Guid userId, Guid appointmentId)
@@ -207,7 +341,6 @@ namespace fizjobackend.Services.AppointmentsService
                     appointment.AppointmentBodyDetails = new List<AppointmentBodyDetails>();
                 }
 
-                // Create a list of current body details in the database
                 var currentBodyDetails = appointment.AppointmentBodyDetails.ToList();
 
                 // Add or update body details
@@ -293,7 +426,7 @@ namespace fizjobackend.Services.AppointmentsService
                         BodySectionName = firstBodyPart.BodySection.BodySectionName,
                         Gender = firstBodyPart.View.Gender,
                         ViewPosition = firstBodyPart.View.Name,
-                        ViewSide = viewSide.Length >1? viewSide[0] : null,
+                        ViewSide = firstBodyPart.BodySection.BodySide,
                     };
 
                     var bodyPartFromDb = await _bodyVisualizerService.GetBodyPartDetails(bodyPartDetailsRequest);

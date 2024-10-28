@@ -1,25 +1,12 @@
 "use client";
 
 const baseURL = "https://localhost:7023/api/v1";
-const cache = {};
-const cacheExpiry = 5 * 60 * 1000; // Cache time - (5 min)
 
 const apiService = {
-  get: async (endpoint, params = {}, withAuth = false, forceCache = false) => {
-    const cacheKey = `${endpoint}?${new URLSearchParams(params).toString()}`;
-    const cachedResponse = cache[cacheKey];
-
-    if (
-      !forceCache &&
-      cachedResponse &&
-      Date.now() - cachedResponse.timestamp < cacheExpiry
-    ) {
-      return cachedResponse.data;
-    }
-
+  get: async (endpoint, params = {}, withAuth = false) => {
     try {
       const url = `${baseURL}${endpoint}${
-        params ? `? ${new URLSearchParams(params).toString()}` : ""
+        params ? `?${new URLSearchParams(params).toString()}` : ""
       }`;
       const config = {
         method: "GET",
@@ -36,10 +23,6 @@ const apiService = {
 
       const response = await fetch(url, config);
       const data = await response.json();
-      cache[cacheKey] = {
-        data,
-        timestamp: Date.now(),
-      };
       return data;
     } catch (error) {
       console.error("API GET request failed:", error);
@@ -66,13 +49,6 @@ const apiService = {
 
       const response = await fetch(url, config);
       const responseData = await response.json();
-
-      Object.keys(cache).forEach((key) => {
-        if (key.startsWith(endpoint)) {
-          delete cache[key];
-        }
-      });
-
       return responseData;
     } catch (error) {
       console.error("POST request error:", error);
@@ -99,13 +75,6 @@ const apiService = {
 
       const response = await fetch(url, config);
       const responseData = await response.json();
-
-      Object.keys(cache).forEach((key) => {
-        if (key.startsWith(endpoint)) {
-          delete cache[key];
-        }
-      });
-
       return responseData;
     } catch (error) {
       console.error("PUT request error:", error);
@@ -131,13 +100,6 @@ const apiService = {
 
       const response = await fetch(url, config);
       const responseData = await response.json();
-
-      Object.keys(cache).forEach((key) => {
-        if (key.startsWith(endpoint)) {
-          delete cache[key];
-        }
-      });
-
       return responseData;
     } catch (error) {
       console.error("DELETE request error:", error);

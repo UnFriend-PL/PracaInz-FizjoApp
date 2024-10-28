@@ -1,15 +1,6 @@
 @import "@/app/utils/globalColors.scss";
 
 .appointmentScheduler {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  align-items: center;
-  align-content: center;
-  background-color: $bg-section;
-  padding: 1rem;
-  flex-basis: 100%;
   .appointmentSchedulerButton {
     background-color: $button-submit-bg;
     color: $text-white;

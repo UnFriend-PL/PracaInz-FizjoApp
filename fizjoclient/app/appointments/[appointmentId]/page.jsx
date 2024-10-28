@@ -22,23 +22,33 @@ const Appointments = () => {
   const [viewPosition, setViewPosition] = useState("front");
   const [musclesAndJoints, setMusclesAndJoints] = useState([]);
   const [loadedMusclesAndJoints, setLoadedMusclesAndJoints] = useState([]);
-  const [isFirstLoad, setIsFirstLoad] = useState(true);
   const { language } = useContext(LanguageContext);
   const t = locales[language];
+  const [readOnly, setReadOnly] = useState(false);
   useEffect(() => {
     if (isAuthenticated) {
-      apiService
-        .get(`/Appointments/${appointmentId}`, {}, true)
-        .then((response) => setAppointment(response.data))
-        .catch((error) =>
-          console.error("Failed to fetch appointment details:", error)
-        );
-    }
-    if (isFirstLoad) {
+      fetchAppointmentDetails();
       fetchSavedMusclesAndJoints();
-      setIsFirstLoad(false);
     }
-  }, [isAuthenticated, appointmentId, isFirstLoad]);
+  }, [isAuthenticated, appointmentId]);
+
+  const fetchAppointmentDetails = async () => {
+    try {
+      const response = await apiService.get(
+        `/Appointments/${appointmentId}`,
+        {},
+        true
+      );
+      console.log("Fetched Appointment Details:", response.data);
+      setAppointment(response.data);
+      setReadOnly(
+        response.data.appointmentStatusName !== "Scheduled" &&
+          response.data.appointmentStatusName !== "Completed"
+      );
+    } catch (error) {
+      console.error("Failed to fetch appointment details:", error);
+    }
+  };
 
   const fetchSavedMusclesAndJoints = useCallback(async () => {
     try {
@@ -49,38 +59,51 @@ const Appointments = () => {
       );
 
       const uniqueMusclesAndJoints = new Set();
-      const uniqueSelectedMusclesAndJoints = new Set();
       const updatedSelectedParts = { front: [], back: [] };
+      const loadedMusclesAndJointsArray = [];
 
       response.data.forEach((element) => {
         uniqueMusclesAndJoints.add(element.bodyPartMusclesAndJoints);
-        updatedSelectedParts[
-          element.bodyPartMusclesAndJoints.viewId == (1 || 3) ? "front" : "back"
-        ].push({
+
+        const viewKey =
+          element.bodyPartMusclesAndJoints.viewId == 1 ||
+          element.bodyPartMusclesAndJoints.viewId == 3
+            ? "front"
+            : "back";
+
+        updatedSelectedParts[viewKey].push({
           slug: element.bodyPartMusclesAndJoints.name,
           slugPL: element.bodyPartMusclesAndJoints.namePL,
         });
+
+        const { bodyPartMusclesAndJoints, selectedMuscles, selectedJoints } =
+          element;
+        const { viewId, bodySectionId } = bodyPartMusclesAndJoints;
+
+        selectedMuscles.forEach((muscle) => {
+          loadedMusclesAndJointsArray.push({
+            muscleId: muscle.id,
+            viewId: viewId,
+            bodySectionId: bodySectionId,
+          });
+        });
+
+        selectedJoints.forEach((joint) => {
+          loadedMusclesAndJointsArray.push({
+            jointId: joint.id,
+            viewId: viewId,
+            bodySectionId: bodySectionId,
+          });
+        });
       });
-
-      response.data
-        .flatMap((element) => element.selectedMuscles)
-        .forEach((muscle) => {
-          uniqueSelectedMusclesAndJoints.add(muscle);
-        });
-
-      response.data
-        .flatMap((element) => element.selectedJoints)
-        .forEach((joint) => {
-          uniqueSelectedMusclesAndJoints.add(joint);
-        });
 
       setMusclesAndJoints(Array.from(uniqueMusclesAndJoints));
       setSelectedParts(updatedSelectedParts);
-      setLoadedMusclesAndJoints(Array.from(uniqueSelectedMusclesAndJoints));
+      setLoadedMusclesAndJoints(loadedMusclesAndJointsArray);
     } catch (error) {
-      console.error("Failed to fetch appointment details:", error);
+      console.error("Failed to fetch saved muscles and joints:", error);
     }
-  }, [appointmentId, viewPosition]);
+  }, [appointmentId]);
 
   const fetchMusclesAndJoints = useCallback(
     async (bodyPart) => {
@@ -93,10 +116,9 @@ const Appointments = () => {
         );
         return;
       }
-      const { slug } = bodyPart;
-      const [viewSide, bodySectionName] = slug.includes("-")
-        ? slug.split(/-(.+)/)
-        : [null, slug];
+      const [viewSide, bodySectionName] = bodyPart.slug.includes("-")
+        ? bodyPart.slug.split(/-(.+)/)
+        : [null, bodyPart.slug];
       const requestBody = {
         bodySectionName,
         viewPosition,
@@ -109,27 +131,30 @@ const Appointments = () => {
           requestBody,
           true
         );
-        if (!response.success) {
-          throw new Error(response.message);
-        }
+        if (!response.success) throw new Error(response.message);
         setMusclesAndJoints((prev) => [...prev, response.data]);
       } catch (error) {
         console.error("Failed to fetch muscles and joints details:", error);
       }
     },
-    [musclesAndJoints, viewPosition, appointment]
+    [musclesAndJoints, viewPosition, appointment, readOnly]
   );
 
   const handleBodyPartPress = (bodyPart) => {
+    if (readOnly) return;
     fetchMusclesAndJoints(bodyPart);
-    setSelectedParts((prev) => ({
-      ...prev,
-      [viewPosition]: prev[viewPosition].some(
-        (part) => part.slug === bodyPart.slug
-      )
-        ? prev[viewPosition].filter((part) => part.slug !== bodyPart.slug)
-        : [...prev[viewPosition], bodyPart],
-    }));
+    setSelectedParts((prev) => {
+      const updated = { ...prev };
+      const parts = prev[viewPosition];
+      if (parts.some((part) => part.slug === bodyPart.slug)) {
+        updated[viewPosition] = parts.filter(
+          (part) => part.slug !== bodyPart.slug
+        );
+      } else {
+        updated[viewPosition] = [...parts, bodyPart];
+      }
+      return updated;
+    });
   };
 
   if (!isAuthenticated || !appointment) return null;
@@ -137,7 +162,12 @@ const Appointments = () => {
   return (
     <>
       <div className={styles.container}>
-        <AppointmentDetails appointment={appointment} />
+        <AppointmentDetails
+          key={appointment.appointmentDate}
+          appointment={appointment}
+          appointmentId={appointmentId}
+          fetchAppointmentDetails={fetchAppointmentDetails}
+        />
       </div>
       <div className={`${styles.container} ${styles.spaceAtBottom}`}>
         <div className={styles.bodyContainer}>
@@ -160,6 +190,7 @@ const Appointments = () => {
           musclesAndJoints={musclesAndJoints}
           appointmentId={appointmentId}
           loadedMusclesAndJoints={loadedMusclesAndJoints}
+          readOnly={readOnly}
         />
       </div>
     </>
