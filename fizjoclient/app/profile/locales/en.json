@@ -8,7 +8,7 @@
   "gender": "gender",
   "country": "Country",
   "city": "City",
-  "streetWithHouseNumber": "Street with house number",
+  "streetWithHouseNumber": "Adress",
   "postCode": "Post Code",
   "dateOfBirth": "Date of Birth",
   "phoneNumber": "Phone Number",
@@ -18,5 +18,11 @@
   "address": "Address",
   "dob": "Date of Birth",
   "insurance": "Health Insurance Number",
-  "saveChanges": "Save"
+  "saveChanges": "Save",
+  "editButton": "Edit",
+  "cancelButton": "Cancel",
+  "appointments": "Appointments",
+  "opinions": "Opinions",
+  "invalidPeselError": "Incorrect pesel",
+  "peselError": "Pesel must consist of 11 numbers"
 }

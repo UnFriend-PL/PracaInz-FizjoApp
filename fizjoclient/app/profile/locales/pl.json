@@ -18,5 +18,11 @@
   "address": "Adres",
   "dob": "Data urodzenia",
   "insurance": "Numer ubezpieczenia zdrowotnego",
-  "saveChanges": "Zapisz"
+  "saveChanges": "Zapisz",
+  "editButton": "Edytuj",
+  "cancelButton": "Anuluj",
+  "appointments": "Wizyty",
+  "opinions": "Opinie",
+  "invalidPeselError": "Błędny pesel",
+  "peselError": "Pesel musi sie składać z 11 liczb"
 }
