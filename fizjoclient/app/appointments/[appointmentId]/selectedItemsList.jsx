@@ -17,7 +17,7 @@ const SelectedItemsList = ({ selectedItems, handleRemove, readOnly }) => {
         <div key={sectionName} className={styles.selectedSection}>
           <div className={styles.selectedSectionHeader}>
             {language === "pl"
-              ? sectionNamePL.replace("front", "przód").replace("back", "tył")
+              ? sectionNamePL?.replace("front", "przód").replace("back", "tył")
               : sectionName}
           </div>
           {["muscles", "joints"].map((type) =>

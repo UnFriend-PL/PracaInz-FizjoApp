@@ -46,7 +46,7 @@ const useSelectedItems = (musclesAndJoints, loadedMusclesAndJoints) => {
           ),
         };
 
-        if (!updatedSection.muscles.length && !updatedSection.joints.length) {
+        if (!updatedSection.muscles?.length && !updatedSection.joints?.length) {
           return prevState.filter((_, index) => index !== sectionIndex);
         }
 
