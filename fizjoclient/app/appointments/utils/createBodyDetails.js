@@ -26,7 +26,6 @@ const createBodyDetails = (selectedItems) => {
       });
     }
   }
-
   return { bodyDetails };
 };
 

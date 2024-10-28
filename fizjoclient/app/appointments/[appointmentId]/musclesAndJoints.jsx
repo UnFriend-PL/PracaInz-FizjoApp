@@ -10,7 +10,6 @@ import useSelectedItems from "../utils/useSelectedItems";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
 import pl from "./locales/pl.json";
 import en from "./locales/en.json";
-
 const locales = { en, pl };
 
 const MusclesAndJoints = ({
@@ -23,7 +22,7 @@ const MusclesAndJoints = ({
 
   const { selectedItems, handleChange, handleRemove, setSelectedItems } =
     useSelectedItems();
-
+  const [isSaving, setIsSaving] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const mappedData = mapData(musclesAndJoints);
 
@@ -73,7 +72,7 @@ const MusclesAndJoints = ({
     }
   }, [currentIndex, mappedData.length]);
 
-  useEffect(() => {
+  function setInitialValues(mappedData, loadedMusclesAndJoints, handleChange) {
     mappedData.forEach((section) => {
       const initialSelectedMuscles = section.muscles.filter((muscle) =>
         loadedMusclesAndJoints.some((item) => item.id === muscle.muscleId)
@@ -86,9 +85,14 @@ const MusclesAndJoints = ({
       handleChange(initialSelectedMuscles, section.sectionName, "muscles");
       handleChange(initialSelectedJoints, section.sectionName, "joints");
     });
-  }, [loadedMusclesAndJoints]);
+  }
+
+  useEffect(() => {
+    setInitialValues(mappedData, loadedMusclesAndJoints, handleChange);
+  }, [loadedMusclesAndJoints, language]);
 
   const handleSave = async () => {
+    setIsSaving(true);
     const bodyDetailsPayload = createBodyDetails(selectedItems);
     try {
       const response = await apiService.post(
@@ -99,6 +103,8 @@ const MusclesAndJoints = ({
       if (!response.success) throw new Error("Network response was not ok");
     } catch (error) {
       console.error("Save failed:", error);
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -129,8 +135,12 @@ const MusclesAndJoints = ({
         selectedItems={selectedItems}
         handleChange={handleChange}
       />
-      <button onClick={handleSave} className={styles.saveButton}>
-        {t.save}
+      <button
+        onClick={handleSave}
+        disabled={isSaving}
+        className={styles.saveButton}
+      >
+        {isSaving ? t.saving : t.save}
       </button>
     </div>
   );

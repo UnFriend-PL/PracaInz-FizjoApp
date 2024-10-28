@@ -76,5 +76,15 @@
         flex-basis: 15%;
       }
     }
+    .submitButton {
+      margin-top: 2rem;
+      background-color: $button-submit-bg;
+      color: $text-white;
+      padding: 0.5rem;
+      font-weight: 800;
+      border-radius: 5px;
+      cursor: pointer;
+      flex-basis: 100%;
+    }
   }
 }
