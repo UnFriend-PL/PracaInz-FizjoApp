@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import styles from "./profile.module.scss";
 import apiService from "../services/apiService/apiService";
+import { useRouter } from "next/navigation";
 import { AuthContext } from "../contexts/auth/authContext";
 import { UserContext } from "../contexts/user/userContext";
 import { LanguageContext } from "../contexts/lang/langContext";
@@ -12,6 +13,8 @@ import en from "./locales/en.json";
 const locales = { en, pl };
 
 const Profile = () => {
+  const router = useRouter();
+
   const [loading, setLoading] = useState(true);
   const { isAuthenticated } = useContext(AuthContext);
   const { user, updateUser } = useContext(UserContext);
@@ -149,7 +152,9 @@ const Profile = () => {
     }
     setShowDropdown(false);
   };
-
+  const showDetails = () => {
+    router.push("/opinion");
+  };
   const cancelChanges = () => {
     setIsEditing(false);
     setEditableFields({});
@@ -200,7 +205,6 @@ const Profile = () => {
         console.log("Navigate to Appointments");
         break;
       case "opinion":
-        console.log("Navigate to Opinion");
         break;
       default:
         break;
@@ -240,7 +244,7 @@ const Profile = () => {
               <div onClick={() => handleMenuClick("appointments")}>
                 {t.appointments}
               </div>
-              <div onClick={() => handleMenuClick("opinion")}>{t.opinions}</div>
+              <div onClick={() => showDetails()}>{t.opinions}</div>
             </div>
           )}
         </div>
