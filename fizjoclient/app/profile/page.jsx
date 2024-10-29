@@ -27,15 +27,52 @@ const Profile = () => {
     setEditedUser(user);
   }, [user]);
 
-  const handleEditToggle = (key) => {
-    setEditableFields((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
+  const hasValidationErrors = () => {
+    return Object.keys(validationErrors).length > 0;
   };
 
   const validateField = (key, value) => {
-    const errors = {};
+    const errors = { ...validationErrors };
+
+    if (key === "firstName" || key === "lastName") {
+      if (!/^[A-Za-zĄąĆćĘęŁłŃńÓóŚśŹźŻż]+$/.test(value)) {
+        errors[key] = t.invalidNameError;
+      } else {
+        delete errors[key];
+      }
+    }
+
+    if (key === "city" || key === "country") {
+      if (!/^[A-Za-zĄąĆćĘęŁłŃńÓóŚśŹźŻż]+$/.test(value)) {
+        errors[key] = t.invalidAdressError;
+      } else {
+        delete errors[key];
+      }
+    }
+
+    if (key === "gender") {
+      if (!["male", "female", "other"].includes(value)) {
+        errors.gender = t.invalidGenderError;
+      } else {
+        delete errors.gender;
+      }
+    }
+
+    if (key === "email") {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        errors.email = t.invalidEmailError;
+      } else {
+        delete errors.email;
+      }
+    }
+
+    if (key === "phoneNumber") {
+      if (!/^\d{9}$/.test(value)) {
+        errors.phoneNumber = t.invalidPhoneError;
+      } else {
+        delete errors.phoneNumber;
+      }
+    }
 
     if (key === "pesel") {
       if (value.length !== 11) {
@@ -43,25 +80,19 @@ const Profile = () => {
       } else {
         const weights = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3];
         let sum = 0;
-
         for (let i = 0; i < 10; i++) {
           sum += parseInt(value[i], 10) * weights[i];
         }
-
         const controlDigit = (10 - (sum % 10)) % 10;
-
         if (controlDigit !== parseInt(value[10], 10)) {
           errors.pesel = t.invalidPeselError;
         } else {
-          errors.pesel = "";
+          delete errors.pesel;
         }
       }
     }
 
-    setValidationErrors((prevErrors) => ({
-      ...prevErrors,
-      ...errors,
-    }));
+    setValidationErrors(errors);
   };
 
   const handleInputChange = (key, value) => {
@@ -94,11 +125,12 @@ const Profile = () => {
   };
 
   const saveChanges = async () => {
+    if (hasValidationErrors()) return;
+
     setIsEditing(false);
     setEditableFields({});
     setValidationErrors({});
     try {
-      console.log(editedUser);
       const response = await apiService.post(
         "/User/UpdateInfo",
         editedUser,
@@ -122,7 +154,7 @@ const Profile = () => {
     setIsEditing(false);
     setEditableFields({});
     setValidationErrors({});
-    setEditedUser(user); // Reset editedUser back to the original user data
+    setEditedUser(user);
     setShowDropdown(false);
   };
 
@@ -234,6 +266,16 @@ const Profile = () => {
                       onChange={(e) => handleInputChange(key, e.target.value)}
                       className={styles.editableInput}
                     />
+                  ) : key === "gender" ? (
+                    <select
+                      value={editedUser[key]}
+                      onChange={(e) => handleInputChange(key, e.target.value)}
+                      className={styles.editableInput}
+                    >
+                      <option value="male">{t.male}</option>
+                      <option value="female">{t.female}</option>
+                      <option value="other">{t.other}</option>
+                    </select>
                   ) : (
                     <input
                       type="text"
@@ -251,7 +293,6 @@ const Profile = () => {
                 )}
               </div>
 
-              {/* Komunikat błędu poniżej pola */}
               {validationErrors[key] && (
                 <div className={styles.error}>{validationErrors[key]}</div>
               )}
@@ -269,7 +310,15 @@ const Profile = () => {
             <button onClick={cancelChanges} className={styles.cancelButton}>
               {t.cancelButton}
             </button>
-            <button onClick={saveChanges} className={styles.saveButton}>
+            <button
+              onClick={saveChanges}
+              disabled={hasValidationErrors()}
+              className={
+                hasValidationErrors()
+                  ? styles.locksavebutton
+                  : styles.saveButton
+              }
+            >
               {t.saveChanges}
             </button>
           </div>

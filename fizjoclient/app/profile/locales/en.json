@@ -24,5 +24,13 @@
   "appointments": "Appointments",
   "opinions": "Opinions",
   "invalidPeselError": "Incorrect pesel",
-  "peselError": "Pesel must consist of 11 numbers"
+  "peselError": "Pesel must consist of 11 numbers",
+  "male": "male",
+  "female": "female",
+  "other": "other",
+  "invalidNameError": "The Fist Name and Last Name must consist of the letters themselves",
+  "invalidEmailError": "Incorrect Email",
+  "invalidPhoneError": "Number must consist of 9 numbers",
+  "invalidGenderError": "Choose one of three options",
+  "invalidAdressError": "The adress and country must consist of the letters themselves"
 }

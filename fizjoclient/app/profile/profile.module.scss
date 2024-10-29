@@ -105,7 +105,7 @@
 
 .dropdownMenu {
   position: absolute;
-  top: 25px; // Dostosuj, aby pojawiało się pod ikonką
+  top: 25px;
   right: 0;
   background-color: #fff;
   border: 1px solid #ccc;
@@ -122,7 +122,7 @@
 }
 
 .dropdownMenu div:hover {
-  background-color: #f5f5f5; // Efekt podświetlenia po najechaniu
+  background-color: #f5f5f5;
 }
 .saveButton {
   background-color: $button-submit-bg;
@@ -138,18 +138,28 @@
 .saveButton:hover {
   background-color: $button-bg-hover;
 }
+.lockSaveButton {
+  background-color: $button-bg-hover;
+  color: $text-white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: 1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  align-self: center;
+}
 .cancelButton {
-  background-color: $button-cancel-bg; // Kolor przycisku Anuluj
+  background-color: $button-cancel-bg;
   color: $text-white;
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 4px;
   cursor: pointer;
   margin-top: 1rem;
-  margin-right: 3rem; // Margines od przycisku Zapisz
+  margin-right: 3rem;
 
   &:hover {
-    background-color: $button-cancel-bg-hover; // Kolor po najechaniu
+    background-color: $button-cancel-bg-hover;
   }
 }
 

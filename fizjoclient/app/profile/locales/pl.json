@@ -24,5 +24,13 @@
   "appointments": "Wizyty",
   "opinions": "Opinie",
   "invalidPeselError": "Błędny pesel",
-  "peselError": "Pesel musi sie składać z 11 liczb"
+  "peselError": "Pesel musi sie składać z 11 liczb",
+  "male": "mężczyzna",
+  "female": "kobieta",
+  "other": "inna",
+  "invalidNameError": "Imię i nazwisko musi sie składać tylko z liter.",
+  "invalidEmailError": "Niepoprawny Email",
+  "invalidPhoneError": "Numer musi sie składać z 9 liczb",
+  "invalidGenderError": "Wybierz jedną z trzech opcji",
+  "invalidAdressError": "Adres i kraj musi sie składać tylko z liter."
 }
