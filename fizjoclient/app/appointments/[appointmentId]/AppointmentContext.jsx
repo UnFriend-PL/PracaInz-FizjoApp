@@ -22,8 +22,6 @@ export const AppointmentProvider = ({ children }) => {
   const { appointmentId } = useParams();
   const t = locales[language];
   const [selectedItems, setSelectedItems] = useState([]);
-
-  // State variables
   const [appointment, setAppointment] = useState(null);
   const [selectedParts, setSelectedParts] = useState({
     front: [],
@@ -38,7 +36,7 @@ export const AppointmentProvider = ({ children }) => {
     if (musclesAndJoints.length > 0 && loadedMusclesAndJoints.length > 0) {
       initializeSelectedItems();
     }
-  }, [musclesAndJoints, loadedMusclesAndJoints]);
+  }, [musclesAndJoints, loadedMusclesAndJoints, language]);
 
   const initializeSelectedItems = () => {
     const mappedData = mapData(musclesAndJoints, language);
@@ -268,7 +266,6 @@ export const AppointmentProvider = ({ children }) => {
         const bodyPartData = await fetchBodyPartDetails(bodyPart);
         console.log(bodyPartData, "Body Part Data");
         updateMusclesAndJoints(bodyPartData);
-        updateLoadedMusclesAndJoints(bodyPartData); /// -< to usuniecia
       } catch (error) {
         console.error("Failed to fetch muscles and joints details:", error);
       }

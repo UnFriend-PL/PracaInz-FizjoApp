@@ -8,6 +8,7 @@ import { AppointmentContext, AppointmentProvider } from "./AppointmentContext";
 import { AuthContext } from "@/app/contexts/auth/authContext";
 import SelectedItemsList from "./selectedItemsList";
 import BodyPartSelector from "./bodyPartSelector";
+import TreatmentsAutoComplete from "@/app/components/treatments/treatments";
 
 const Appointments = () => {
   const { isAuthenticated } = useContext(AuthContext);
@@ -26,6 +27,9 @@ const Appointments = () => {
     <div className={styles.container}>
       <AppointmentDetails />
       <div className={`${styles.container} ${styles.spaceAtBottom}`}>
+        <div className={styles.treatmentsWrapper}>
+          <TreatmentsAutoComplete />
+        </div>
         <div className={styles.bodyContainer}>
           <SwitchSelector
             onChange={setViewPosition}
@@ -42,7 +46,7 @@ const Appointments = () => {
             onBodyPartPress={handleBodyPartPress}
           />
         </div>
-        <div className={styles.musclesAndJointsWrapper}>
+        <div className={styles.sectionWrapper}>
           <SelectedItemsList />
           {!readOnly && <BodyPartSelector />}
         </div>
