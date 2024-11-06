@@ -5,8 +5,7 @@ import pl from "./locales/pl.json";
 import en from "./locales/en.json";
 
 const locales = { en, pl };
-
-const SelectedItemsList = ({ selectedItems, handleRemove, readOnly }) => {
+const SelectedItemsList = ({ selectedItems, handleRemove }) => {
   const { language } = useContext(LanguageContext);
   const t = locales[language];
 

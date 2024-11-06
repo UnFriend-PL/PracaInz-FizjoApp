@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import styles from "./appointmentDetails.module.scss";
 import Modal from "@/app/components/common/modal/modal";
 import { format } from "date-fns";
-import { pl as plDate, se } from "date-fns/locale";
+import { pl as plDate } from "date-fns/locale";
 import PatientDetails from "../../components/patientSearch/patientDetails";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
 import pl from "./locales/pl.json";
@@ -14,34 +14,53 @@ import DetailElement from "@/app/components/common/detailElement/detailElement";
 import Calendar from "@/app/components/common/calendar/calendar";
 import TimePicker from "@/app/components/common/timePicker/timePicker";
 import AppointmentStatusButtons from "@/app/components/common/appointmentStatusButtons/appointmentStatusButtons";
+import { AppointmentContext } from "./AppointmentContext";
 
 const locales = { en, pl };
 
-const AppointmentDetails = ({
-  appointment,
-  appointmentId,
-  fetchAppointmentDetails,
-}) => {
+const AppointmentDetails = () => {
   const { language } = useContext(LanguageContext);
   const t = locales[language];
+
+  // Access context
+  const {
+    appointment,
+    appointmentId,
+    fetchAppointmentDetails,
+    readOnly,
+    t: contextT,
+  } = useContext(AppointmentContext);
+
+  // Component-specific state
   const [isPatientModalOpen, setPatientModalOpen] = useState(false);
   const [isPhysioModalOpen, setPhysioModalOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [selectedNewStatus, setSelectedNewStatus] = useState(null);
-
-  const { appointmentStatusName, patient, physiotherapist, appointmentDate } =
-    appointment;
+  const [selectedNewStatus, setSelectedNewStatus] = useState(
+    appointment.appointmentStatus
+  );
   const [formData, setFormData] = useState({
     appointmentDescription: appointment.appointmentDescription || "",
     notes: appointment.notes || "",
     diagnosis: appointment.diagnosis || "",
     isPaid: appointment.isPaid || false,
-    appointmentDate: appointmentDate,
-    status: selectedNewStatus,
+    appointmentDate: new Date(appointment.appointmentDate),
+    status: appointment.appointmentStatus,
   });
+
   const [selectedNewHour, setSelectedNewHour] = useState(
-    `${format(new Date(appointmentDate), "HH:mm")}`
+    `${format(new Date(appointment.appointmentDate), "HH:mm")}`
   );
+  const [isAppointmentStatusEditing, setIsAppointmentStatusEditing] =
+    useState(false);
+
+  if (!appointment) {
+    return <div>{t.loading}</div>;
+  }
+
+  const { appointmentStatusName, patient, physiotherapist, appointmentDate } =
+    appointment;
+
+  // Handle input changes
   const handleInputChange = (e, date) => {
     if (date) {
       const [hour, minute] = selectedNewHour.split(":").map(Number);
@@ -60,6 +79,8 @@ const AppointmentDetails = ({
       });
     }
   };
+
+  // Handle status change
   const handleStatusChange = (newStatus) => {
     setSelectedNewStatus(newStatus);
     setFormData((prevFormData) => ({
@@ -67,6 +88,8 @@ const AppointmentDetails = ({
       status: newStatus,
     }));
   };
+
+  // Handle form submit
   const handleFormSubmit = async () => {
     try {
       setIsSaving(true);
@@ -85,9 +108,7 @@ const AppointmentDetails = ({
     }
   };
 
-  const [isAppointmentStatusEditing, setIsAppointmentStatusEditing] =
-    useState(false);
-
+  // Handle status edit
   const handleStatusEdit = () => {
     setIsAppointmentStatusEditing((prev) => !prev);
   };
@@ -104,32 +125,30 @@ const AppointmentDetails = ({
           {t.appointment}: {appointmentStatusName}
         </span>
         {isAppointmentStatusEditing && (
-          <>
-            <Modal
-              isOpen={isAppointmentStatusEditing}
-              header={t.selectNewStatus}
-              onClose={() => setIsAppointmentStatusEditing((prev) => !prev)}
-              size="medium"
-            >
-              <div className={styles.statusChangeContainer}>
-                <div className={styles.statusButtons}>
-                  <AppointmentStatusButtons
-                    defaultStatus={selectedNewStatus}
-                    onStatusChange={handleStatusChange}
-                  ></AppointmentStatusButtons>
-                </div>
-                <TimePicker
-                  initialTime={selectedNewHour}
-                  onTimeChange={setSelectedNewHour}
-                ></TimePicker>
-                <Calendar
-                  onDateSelect={(date) => {
-                    handleInputChange(null, date);
-                  }}
-                ></Calendar>
+          <Modal
+            isOpen={isAppointmentStatusEditing}
+            header={t.selectNewStatus}
+            onClose={() => setIsAppointmentStatusEditing((prev) => !prev)}
+            size="medium"
+          >
+            <div className={styles.statusChangeContainer}>
+              <div className={styles.statusButtons}>
+                <AppointmentStatusButtons
+                  defaultStatus={selectedNewStatus}
+                  onStatusChange={handleStatusChange}
+                />
               </div>
-            </Modal>
-          </>
+              <TimePicker
+                initialTime={selectedNewHour}
+                onTimeChange={setSelectedNewHour}
+              />
+              <Calendar
+                onDateSelect={(date) => {
+                  handleInputChange(null, date);
+                }}
+              />
+            </div>
+          </Modal>
         )}
       </div>
       <div className={styles.details}>
