@@ -32,6 +32,20 @@ namespace fizjobackend.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpPost("UpdateInfo")]
+        public async Task<IActionResult> UpdateUserInfo([FromBody] UpdateUserInfoRequestDTO updateUserInfoRequest)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userRoles = User.FindAll(ClaimTypes.Role).Select(c => c.Value);
+            var response = await _userService.UpdateInfo(Guid.Parse(userId), updateUserInfoRequest, userRoles);
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("FindPatient")]
         public async Task<IActionResult> FindPatient([FromBody] SearchPatientRequestDTO searchParam)
         {

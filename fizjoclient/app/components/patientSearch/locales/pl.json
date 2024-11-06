@@ -1,0 +1,15 @@
+{
+  "showMore": "pokaż więcej",
+  "showLess": "pokaż mniej",
+  "firstName": "Imię",
+  "lastName": "Nazwisko",
+  "email": "Email",
+  "phone": "Telefon",
+  "pesel": "PESEL",
+  "address": "Adres",
+  "dob": "Data urodzenia",
+  "insurance": "Numer ubezpieczenia zdrowotnego",
+  "search": "Szukaj",
+  "patient": "Pacjent",
+  "searchPatient": "Wpisz imię pacjenta, email, telefon lub PESEL"
+}

@@ -10,19 +10,27 @@ import useSelectedItems from "../utils/useSelectedItems";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
 import pl from "./locales/pl.json";
 import en from "./locales/en.json";
-import { set } from "date-fns";
+
 const locales = { en, pl };
 
 const MusclesAndJoints = ({
   musclesAndJoints,
   appointmentId,
   loadedMusclesAndJoints,
+  readOnly,
 }) => {
   const { language } = useContext(LanguageContext);
   const t = locales[language];
 
-  const { selectedItems, handleChange, handleRemove, setSelectedItems } =
-    useSelectedItems();
+  const {
+    selectedItems,
+    handleChange,
+    handleRemove,
+    setSelectedItems,
+    validateSelectedItems,
+    setInitialValues,
+  } = useSelectedItems(musclesAndJoints, loadedMusclesAndJoints);
+
   const [isSaving, setIsSaving] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const mappedData = mapData(musclesAndJoints);
@@ -30,38 +38,13 @@ const MusclesAndJoints = ({
   const handleNavigation = useCallback(
     (direction) => {
       setCurrentIndex((prevIndex) => {
-        const maxIndex = mappedData.length - 1;
-        if (direction === "prev")
-          return prevIndex === 0 ? maxIndex : prevIndex - 1;
-        return prevIndex === maxIndex ? 0 : prevIndex + 1;
+        return direction === "prev"
+          ? (prevIndex - 1 + mappedData.length) % mappedData.length
+          : (prevIndex + 1) % mappedData.length;
       });
     },
     [mappedData.length]
   );
-
-  const validateSelectedItems = useCallback(() => {
-    const currentIds = new Set(
-      musclesAndJoints.flatMap((section) => [
-        ...section.muscles.map((m) => m.id),
-        ...section.joints.map((j) => j.id),
-      ])
-    );
-
-    setSelectedItems((prevSelectedItems) => {
-      const newSelectedItems = {};
-      for (const [sectionName, items] of Object.entries(prevSelectedItems)) {
-        const muscles = (items.muscles || []).filter((item) =>
-          currentIds.has(item.muscleId)
-        );
-        const joints = (items.joints || []).filter((item) =>
-          currentIds.has(item.jointId)
-        );
-        if (muscles.length || joints.length)
-          newSelectedItems[sectionName] = { muscles, joints };
-      }
-      return newSelectedItems;
-    });
-  }, [musclesAndJoints]);
 
   useEffect(() => {
     validateSelectedItems();
@@ -73,28 +56,9 @@ const MusclesAndJoints = ({
     }
   }, [currentIndex, mappedData.length]);
 
-  function setInitialValues(mappedData, loadedMusclesAndJoints, handleChange) {
-    mappedData.forEach((section) => {
-      const initialSelectedMuscles = section.muscles.filter((muscle) => {
-        loadedMusclesAndJoints.some((item) => item.id === muscle.muscleId);
-      });
-
-      const initialSelectedJoints = section.joints.filter((joint) =>
-        loadedMusclesAndJoints.some((item) => item.id === joint.jointId)
-      );
-
-      handleChange(initialSelectedMuscles, section.sectionName, "muscles");
-      handleChange(initialSelectedJoints, section.sectionName, "joints");
-    });
-  }
-
   useEffect(() => {
-    setInitialValues(mappedData, loadedMusclesAndJoints, handleChange);
-  }, [language]);
-
-  useEffect(() => {
-    setInitialValues(mappedData, loadedMusclesAndJoints, handleChange);
-  }, [loadedMusclesAndJoints]);
+    setInitialValues(mappedData);
+  }, [loadedMusclesAndJoints, language]);
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -127,28 +91,42 @@ const MusclesAndJoints = ({
       <SelectedItemsList
         selectedItems={selectedItems}
         handleRemove={handleRemove}
+        readOnly={readOnly}
       />
-      <div className={styles.navigation}>
-        <button onClick={() => handleNavigation("prev")}>{t.prev}</button>
-        <span>{`${currentIndex + 1} / ${mappedData.length}`}</span>
-        <button onClick={() => handleNavigation("next")}>{t.next}</button>
-      </div>
-      <BodyPartSelector
-        sectionName={sectionName}
-        muscles={muscles}
-        joints={joints}
-        selectedItems={selectedItems}
-        handleChange={handleChange}
-      />
-      <button
-        onClick={handleSave}
-        disabled={isSaving}
-        className={styles.saveButton}
-      >
-        {isSaving ? t.saving : t.save}
-      </button>
+      {!readOnly && (
+        <>
+          <Navigation
+            currentIndex={currentIndex}
+            total={mappedData.length}
+            onNavigate={handleNavigation}
+            t={t}
+          />
+          <BodyPartSelector
+            sectionName={sectionName}
+            muscles={muscles}
+            joints={joints}
+            selectedItems={selectedItems}
+            handleChange={handleChange}
+          />
+          <button
+            onClick={handleSave}
+            disabled={isSaving}
+            className={styles.saveButton}
+          >
+            {isSaving ? t.savingBodyDetails : t.saveBodyDetails}
+          </button>
+        </>
+      )}
     </div>
   );
 };
 
 export default MusclesAndJoints;
+
+const Navigation = ({ currentIndex, total, onNavigate, t }) => (
+  <div className={styles.navigation}>
+    <button onClick={() => onNavigate("prev")}>{t.prev}</button>
+    <span>{`${currentIndex + 1} / ${total}`}</span>
+    <button onClick={() => onNavigate("next")}>{t.next}</button>
+  </div>
+);
