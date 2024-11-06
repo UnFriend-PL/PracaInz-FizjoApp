@@ -51,12 +51,12 @@ const Appointments = () => {
             onBodyPartPress={handleBodyPartPress}
           />
         </div>
-        {/* <MusclesAndJoints
-          musclesAndJoints={musclesAndJoints}
-          appointmentId={appointmentId}
-          loadedMusclesAndJoints={loadedMusclesAndJoints}
-          readOnly={readOnly}
-        /> */}
+        <MusclesAndJoints
+        // musclesAndJoints={musclesAndJoints}
+        // appointmentId={appointmentId}
+        // loadedMusclesAndJoints={loadedMusclesAndJoints}
+        // readOnly={readOnly}
+        />
       </div>
     </div>
   );

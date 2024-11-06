@@ -11,15 +11,12 @@ import { LanguageContext } from "@/app/contexts/lang/langContext";
 import pl from "./locales/pl.json";
 import en from "./locales/en.json";
 import TreatmentsAutoComplete from "@/app/components/treatments/treatments";
-
+import { AppointmentContext } from "./AppointmentContext";
 const locales = { en, pl };
 
-const MusclesAndJoints = ({
-  musclesAndJoints,
-  appointmentId,
-  loadedMusclesAndJoints,
-  readOnly,
-}) => {
+const MusclesAndJoints = () => {
+  const { musclesAndJoints, appointmentId, loadedMusclesAndJoints, readOnly } =
+    useContext(AppointmentContext);
   const { language } = useContext(LanguageContext);
   const t = locales[language];
 
