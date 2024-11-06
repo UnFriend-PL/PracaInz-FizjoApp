@@ -1,9 +1,4 @@
-import { LanguageContext } from "@/app/contexts/lang/langContext";
-import { useContext } from "react";
-
-const mapData = (data) => {
-  const { language } = useContext(LanguageContext);
-
+const mapData = (data, language) => {
   return data.map((section) => {
     const viewName =
       section.viewName ||

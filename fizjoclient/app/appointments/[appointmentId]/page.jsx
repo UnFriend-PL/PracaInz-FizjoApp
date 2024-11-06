@@ -1,23 +1,13 @@
 "use client";
-import { useParams } from "next/navigation";
-import React, { useState, useEffect, useContext, useCallback } from "react";
+import React, { useContext } from "react";
 import HumanBody from "@/app/components/common/humanBody/humanBody";
 import styles from "./appointmentDetails.module.scss";
-import apiService from "@/app/services/apiService/apiService";
 import SwitchSelector from "react-switch-selector";
-import MusclesAndJoints from "./musclesAndJoints";
 import AppointmentDetails from "./appointmentDetails";
-import { LanguageContext } from "@/app/contexts/lang/langContext";
-import pl from "./locales/pl.json";
-import en from "./locales/en.json";
-import {
-  AppointmentContext,
-  AppointmentProvider,
-  useAppointmentContext,
-} from "./AppointmentContext";
+import { AppointmentContext, AppointmentProvider } from "./AppointmentContext";
 import { AuthContext } from "@/app/contexts/auth/authContext";
-
-const locales = { en, pl };
+import SelectedItemsList from "./selectedItemsList";
+import BodyPartSelector from "./bodyPartSelector";
 
 const Appointments = () => {
   const { isAuthenticated } = useContext(AuthContext);
@@ -27,6 +17,7 @@ const Appointments = () => {
     appointment,
     selectedParts,
     handleBodyPartPress,
+    readOnly,
   } = useContext(AppointmentContext);
 
   if (!isAuthenticated || !appointment) return null;
@@ -51,12 +42,10 @@ const Appointments = () => {
             onBodyPartPress={handleBodyPartPress}
           />
         </div>
-        <MusclesAndJoints
-        // musclesAndJoints={musclesAndJoints}
-        // appointmentId={appointmentId}
-        // loadedMusclesAndJoints={loadedMusclesAndJoints}
-        // readOnly={readOnly}
-        />
+        <div className={styles.musclesAndJointsWrapper}>
+          <SelectedItemsList />
+          {!readOnly && <BodyPartSelector />}
+        </div>
       </div>
     </div>
   );

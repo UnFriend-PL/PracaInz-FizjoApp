@@ -1,14 +1,14 @@
 import React, { useContext } from "react";
 import styles from "./appointmentDetails.module.scss";
+import useSelectedItems from "../utils/useSelectedItems";
+import { AppointmentContext } from "./AppointmentContext";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
-import pl from "./locales/pl.json";
-import en from "./locales/en.json";
 
-const locales = { en, pl };
-
-const SelectedItemsList = ({ selectedItems, handleRemove, readOnly }) => {
+const SelectedItemsList = () => {
+  const { readOnly, t } = useContext(AppointmentContext);
   const { language } = useContext(LanguageContext);
-  const t = locales[language];
+
+  const { selectedItems, handleRemove } = useSelectedItems();
 
   return (
     <div className={styles.selectedItemsList}>

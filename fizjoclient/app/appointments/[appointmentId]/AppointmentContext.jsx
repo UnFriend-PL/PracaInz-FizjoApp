@@ -11,6 +11,7 @@ import React, {
 import pl from "./locales/pl.json";
 import en from "./locales/en.json";
 import apiService from "@/app/services/apiService/apiService";
+import mapData from "../utils/mapData";
 const locales = { en, pl };
 
 export const AppointmentContext = createContext();
@@ -20,6 +21,7 @@ export const AppointmentProvider = ({ children }) => {
   const { language } = useContext(LanguageContext);
   const { appointmentId } = useParams();
   const t = locales[language];
+  const [selectedItems, setSelectedItems] = useState([]);
 
   // State variables
   const [appointment, setAppointment] = useState(null);
@@ -31,6 +33,42 @@ export const AppointmentProvider = ({ children }) => {
   const [musclesAndJoints, setMusclesAndJoints] = useState([]);
   const [loadedMusclesAndJoints, setLoadedMusclesAndJoints] = useState([]);
   const [readOnly, setReadOnly] = useState(false);
+
+  useEffect(() => {
+    if (musclesAndJoints.length > 0 && loadedMusclesAndJoints.length > 0) {
+      initializeSelectedItems();
+    }
+  }, [musclesAndJoints, loadedMusclesAndJoints]);
+
+  const initializeSelectedItems = () => {
+    const mappedData = mapData(musclesAndJoints, language);
+
+    const initialSelectedItems = mappedData
+      .map((section) => {
+        const initialSelectedMuscles = section.muscles.filter((muscle) =>
+          loadedMusclesAndJoints.some(
+            (item) =>
+              item.muscleId === muscle.muscleId && item.viewId === muscle.viewId
+          )
+        );
+
+        const initialSelectedJoints = section.joints.filter((joint) =>
+          loadedMusclesAndJoints.some(
+            (item) =>
+              item.jointId === joint.jointId && item.viewId === joint.viewId
+          )
+        );
+
+        return {
+          ...section,
+          muscles: initialSelectedMuscles,
+          joints: initialSelectedJoints,
+        };
+      })
+      .filter((section) => section.muscles.length || section.joints.length);
+
+    setSelectedItems(initialSelectedItems);
+  };
 
   // Fetch appointment details
   const fetchAppointmentDetails = async () => {
@@ -182,8 +220,6 @@ export const AppointmentProvider = ({ children }) => {
   const updateMusclesAndJoints = (bodyPartData) => {
     setMusclesAndJoints((prev) => {
       const updatedMusclesAndJoints = [...prev, bodyPartData];
-
-      // Ensure uniqueness
       const uniqueMusclesAndJoints = Array.from(
         new Map(
           updatedMusclesAndJoints.map((item) => [item.name, item])
@@ -230,8 +266,9 @@ export const AppointmentProvider = ({ children }) => {
 
       try {
         const bodyPartData = await fetchBodyPartDetails(bodyPart);
+        console.log(bodyPartData, "Body Part Data");
         updateMusclesAndJoints(bodyPartData);
-        updateLoadedMusclesAndJoints(bodyPartData);
+        updateLoadedMusclesAndJoints(bodyPartData); /// -< to usuniecia
       } catch (error) {
         console.error("Failed to fetch muscles and joints details:", error);
       }
@@ -261,6 +298,8 @@ export const AppointmentProvider = ({ children }) => {
         readOnly,
         t,
         handleBodyPartPress,
+        selectedItems,
+        setSelectedItems,
       }}
     >
       {children}

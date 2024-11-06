@@ -2,10 +2,12 @@ import { useState, useCallback, useContext } from "react";
 import { AppointmentContext } from "../[appointmentId]/AppointmentContext";
 
 const useSelectedItems = () => {
-  const { musclesAndJoints, loadedMusclesAndJoints } =
-    useContext(AppointmentContext);
-
-  const [selectedItems, setSelectedItems] = useState([]);
+  const {
+    musclesAndJoints,
+    loadedMusclesAndJoints,
+    selectedItems,
+    setSelectedItems,
+  } = useContext(AppointmentContext);
 
   // Helper function to find the index of a section
   const findSectionIndex = (sections, sectionName) =>
@@ -135,8 +137,6 @@ const useSelectedItems = () => {
     selectedItems,
     handleChange,
     handleRemove,
-    validateSelectedItems,
-    setInitialValues,
   };
 };
 
