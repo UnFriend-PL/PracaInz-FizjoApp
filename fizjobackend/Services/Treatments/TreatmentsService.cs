@@ -1,5 +1,6 @@
 ﻿using fizjobackend.DbContexts;
 using fizjobackend.Interfaces.TreatmentsInterfaces;
+using fizjobackend.Models.BodyVisualizerDTOs;
 using fizjobackend.Models.TreatmentsDTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -57,14 +58,15 @@ namespace fizjobackend.Services.Treatments
                     .Where(t => t.Id == treatmentRequest.Id)
                     .Include(t => t.Muscles)
                     .Include(t => t.Joints)
+                    .Include(t => t.Views)
+                    .Include(t => t.BodySections)
                     .FirstOrDefaultAsync();
                 if (treatment == null)
                 {
                     response = new ServiceResponse<TreatmentResponseDTO>("Treatment not found") { Success = false };
                     return response;
                 }
-
-                var treatmentDTO = new TreatmentResponseDTO(treatment);
+                var treatmentDTO = new TreatmentResponseDTO(treatment, treatmentRequest.Gender);
                 response = new ServiceResponse<TreatmentResponseDTO>("Treatment retrieved");
                 response.Data = treatmentDTO;
                 response.Success = true;

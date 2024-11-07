@@ -227,28 +227,6 @@ export const AppointmentProvider = ({ children }) => {
     });
   };
 
-  const updateLoadedMusclesAndJoints = (bodyPartData) => {
-    const newLoadedItems = [];
-
-    bodyPartData.muscles.forEach((muscle) => {
-      newLoadedItems.push({
-        muscleId: muscle.id,
-        viewId: bodyPartData.viewId,
-        bodySectionId: bodyPartData.bodySectionId,
-      });
-    });
-
-    bodyPartData.joints.forEach((joint) => {
-      newLoadedItems.push({
-        jointId: joint.id,
-        viewId: bodyPartData.viewId,
-        bodySectionId: bodyPartData.bodySectionId,
-      });
-    });
-
-    setLoadedMusclesAndJoints((prev) => [...prev, ...newLoadedItems]);
-  };
-
   const handleBodyPartPress = useCallback(
     async (bodyPart) => {
       if (readOnly) return;

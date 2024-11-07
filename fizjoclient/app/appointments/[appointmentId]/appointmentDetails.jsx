@@ -14,7 +14,7 @@ import DetailElement from "@/app/components/common/detailElement/detailElement";
 import Calendar from "@/app/components/common/calendar/calendar";
 import TimePicker from "@/app/components/common/timePicker/timePicker";
 import AppointmentStatusButtons from "@/app/components/common/appointmentStatusButtons/appointmentStatusButtons";
-import { AppointmentContext } from "./AppointmentContext";
+import { AppointmentContext } from "./appointmentContext";
 
 const locales = { en, pl };
 

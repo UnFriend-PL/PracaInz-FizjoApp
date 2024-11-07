@@ -4,7 +4,7 @@ import HumanBody from "@/app/components/common/humanBody/humanBody";
 import styles from "./appointmentDetails.module.scss";
 import SwitchSelector from "react-switch-selector";
 import AppointmentDetails from "./appointmentDetails";
-import { AppointmentContext, AppointmentProvider } from "./AppointmentContext";
+import { AppointmentContext, AppointmentProvider } from "./appointmentContext";
 import { AuthContext } from "@/app/contexts/auth/authContext";
 import SelectedItemsList from "./selectedItemsList";
 import BodyPartSelector from "./bodyPartSelector";

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import styles from "./appointmentDetails.module.scss";
 import useSelectedItems from "../utils/useSelectedItems";
-import { AppointmentContext } from "./AppointmentContext";
+import { AppointmentContext } from "./appointmentContext";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
 
 const SelectedItemsList = () => {

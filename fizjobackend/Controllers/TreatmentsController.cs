@@ -1,4 +1,5 @@
 ﻿using fizjobackend.Interfaces.TreatmentsInterfaces;
+using fizjobackend.Models.TreatmentsDTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -26,6 +27,18 @@ namespace fizjobackend.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var response = await _treatmentsService.GetTreatments(Guid.Parse(userId));
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
+        [HttpPost("Treatment")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        public async Task<IActionResult> CreateTreatment([FromBody] TreatmentRequestDTO treatmentRequest)
+        {
+            var response = await _treatmentsService.GetTreatment(treatmentRequest);
             if (!response.Success)
             {
                 return BadRequest(response);

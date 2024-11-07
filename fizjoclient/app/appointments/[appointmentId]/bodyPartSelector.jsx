@@ -4,7 +4,7 @@ import styles from "./appointmentDetails.module.scss";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
 import pl from "./locales/pl.json";
 import en from "./locales/en.json";
-import { AppointmentContext } from "./AppointmentContext";
+import { AppointmentContext } from "./appointmentContext";
 import mapData from "../utils/mapData";
 import useSelectedItems from "../utils/useSelectedItems";
 import createBodyDetails from "../utils/createBodyDetails";

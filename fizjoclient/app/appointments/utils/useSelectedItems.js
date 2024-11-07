@@ -1,13 +1,8 @@
-import { useState, useCallback, useContext } from "react";
-import { AppointmentContext } from "../[appointmentId]/AppointmentContext";
+import { useCallback, useContext } from "react";
+import { AppointmentContext } from "../[appointmentId]/appointmentContext";
 
 const useSelectedItems = () => {
-  const {
-    musclesAndJoints,
-    loadedMusclesAndJoints,
-    selectedItems,
-    setSelectedItems,
-  } = useContext(AppointmentContext);
+  const { selectedItems, setSelectedItems } = useContext(AppointmentContext);
 
   // Helper function to find the index of a section
   const findSectionIndex = (sections, sectionName) =>
@@ -74,64 +69,6 @@ const useSelectedItems = () => {
       return prevState;
     });
   }, []);
-
-  // Validate selected items against the current muscles and joints
-  const validateSelectedItems = useCallback(() => {
-    const currentMuscleIds = new Set(
-      musclesAndJoints.flatMap((section) => section.muscles.map((m) => m.id))
-    );
-    const currentJointIds = new Set(
-      musclesAndJoints.flatMap((section) => section.joints.map((j) => j.id))
-    );
-
-    setSelectedItems((prevSelectedItems) =>
-      prevSelectedItems
-        .map((section) => {
-          const muscles = section.muscles.filter((item) =>
-            currentMuscleIds.has(item.muscleId)
-          );
-          const joints = section.joints.filter((item) =>
-            currentJointIds.has(item.jointId)
-          );
-
-          return { ...section, muscles, joints };
-        })
-        .filter((section) => section.muscles.length || section.joints.length)
-    );
-  }, [musclesAndJoints]);
-
-  // Set initial values based on loaded muscles and joints
-  const setInitialValues = useCallback(
-    (mappedData) => {
-      const initialSelectedItems = mappedData
-        .map((section) => {
-          const initialSelectedMuscles = section.muscles.filter((muscle) =>
-            loadedMusclesAndJoints.some(
-              (item) =>
-                item.muscleId === muscle.muscleId &&
-                item.viewId === muscle.viewId
-            )
-          );
-
-          const initialSelectedJoints = section.joints.filter((joint) =>
-            loadedMusclesAndJoints.some(
-              (item) =>
-                item.jointId === joint.jointId && item.viewId === joint.viewId
-            )
-          );
-
-          return {
-            ...section,
-            muscles: initialSelectedMuscles,
-            joints: initialSelectedJoints,
-          };
-        })
-        .filter((section) => section.muscles.length || section.joints.length);
-
-      setSelectedItems(initialSelectedItems);
-    },
-    [loadedMusclesAndJoints]
-  );
 
   return {
     selectedItems,

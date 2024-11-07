@@ -3,6 +3,6 @@
     public class TreatmentRequestDTO
     {
         public Guid Id { get; set; }
-        public Guid OwnerId { get; set; }
+        public string Gender { get; set; }
     }
 }
