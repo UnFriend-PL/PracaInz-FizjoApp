@@ -1,6 +1,7 @@
 ﻿using fizjobackend.DbContexts;
 using fizjobackend.Entities.OpinionEntities;
 using fizjobackend.Entities.PatientEntities;
+using fizjobackend.Entities.PhysiotherapistEntities;
 using fizjobackend.Entities.UserEntities;
 using fizjobackend.Interfaces.AccountInterfaces;
 using fizjobackend.Interfaces.DTOInterfaces.UserDTOInterfaces;
@@ -8,21 +9,30 @@ using fizjobackend.Interfaces.EmailInterface;
 using fizjobackend.Interfaces.HelpersInterfaces;
 using fizjobackend.Interfaces.OpinionInterfaces;
 using fizjobackend.Models.AccountDTOs;
+using fizjobackend.Models.AppointmentsDTOs;
 using fizjobackend.Models.OpinionDTOs;
+using fizjobackend.Models.UserDTOs;
 using fizjobackend.Services.AccountService;
+using fizjobackend.Services.AppointmentsService;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Sprache;
+using System.Linq;
 
 namespace fizjobackend.Services.OpinionService
 {
     public class OpinionService : IOpinionService
     {
         private readonly FizjoDbContext _context;
+        private readonly ILogger<OpinionService> _logger;
 
-        public OpinionService(FizjoDbContext context)
+
+        public OpinionService(FizjoDbContext context, ILogger<OpinionService> logger)
         {
             _context = context;
+            _logger = logger;
+
         }
         public async Task<ServiceResponse<Opinion>> AddOpinion(Guid userId, OpinionRequestDTOs opinionFromBody)
         {
@@ -164,27 +174,79 @@ namespace fizjobackend.Services.OpinionService
 
             return response;
         }
-        public async Task<ServiceResponse<List<Opinion>>> GetOpinionsByPatientId(Guid patientId, int page, int pageSize)
+        private string GetBaseRoleFromUserRoles(IEnumerable<string> userRoles)
         {
-            var response = new ServiceResponse<List<Opinion>>("");
+            var validRoles = new[] { "patient", "physiotherapist" };
+            var userRole = userRoles.FirstOrDefault(role => validRoles.Contains(role.ToLower()));
 
+            if (userRole == null || userRoles.Count(role => validRoles.Contains(role.ToLower())) > 1)
+            {
+                throw new ArgumentException("User must have exactly one role: either 'patient' or 'physiotherapist'");
+            }
+
+            return userRole;
+        }
+        public async Task<ServiceResponse<ListOfOpinionResponseDTO>> GetAllOpinions(IEnumerable<string> userRoles,string userId, int page, int pageSize)
+        {
+            var response = new ServiceResponse<ListOfOpinionResponseDTO>("");
             try
             {
-                var opinions = await _context.Opinions
-                    .Where(o => o.PatientId == patientId)
-                    .Skip((page - 1) * pageSize)
-                    .Take(pageSize)
-                    .ToListAsync();
-
-                if (opinions == null || opinions.Count == 0)
+                ListOfOpinionResponseDTO opinionResponse = new ListOfOpinionResponseDTO();
+                if (!Guid.TryParse(userId, out Guid userGuidId))
                 {
                     response.Success = false;
-                    response.Message = "No opinions found for this patient.";
+                    response.Message = "ERROR WITH GUID";
                     return response;
                 }
+                var isUser = await _context.Users.FindAsync(userGuidId);
+                if (isUser == null)
+                {
+                    response.Success = false;
+                    response.Message = "User not found";
+                    return response;
+                }
+                var userRole = GetBaseRoleFromUserRoles(userRoles);
+                List<Opinion> opinions;
+
+                switch (userRole.ToLower())
+                {
+                    case "patient":
+                        opinions = await _context.Opinions
+                            .Where(o => o.PatientId == userGuidId)
+                            .Skip((page - 1) * pageSize)
+                            .Take(pageSize)
+                            .ToListAsync();
+                        break;
+
+                    case "physiotherapist":
+                        opinions = await _context.Opinions
+                            .Where(o => o.PhysiotherapistId == userGuidId)
+                            .Skip((page - 1) * pageSize)
+                            .Take(pageSize)
+                            .ToListAsync();
+                        break;
+
+                    default:
+                        throw new ArgumentException("Invalid user role");
+                }
+                if (opinions == null || opinions.Count == 0)
+                    {
+                        response.Success = false;
+                        response.Message = "No opinions found for this patient.";
+                        return response;
+                    }
+
+                opinionResponse.Opinions = opinions.Select(o => new OpinionListDTO
+                {
+                    OpinionId = o.OpinionId,
+                    NameAndFirstLetterOfTheLastName = o.NameAndFirstLetterOfTheLastName,
+                    Comment = o.Comment,
+                    Rating = o.Rating,
+                    UploadDate = o.UploadDate
+                }).ToList();
 
                 response.Success = true;
-                response.Data = opinions;
+                response.Data = opinionResponse;
             }
             catch (Exception ex)
             {
@@ -194,38 +256,5 @@ namespace fizjobackend.Services.OpinionService
 
             return response;
         }
-
-        public async Task<ServiceResponse<List<Opinion>>> GetOpinionsByPhysiotherapistId(Guid physiotherapistId, int page, int pageSize)
-        {
-            var response = new ServiceResponse<List<Opinion>>("");
-
-            try
-            {
-                var opinions = await _context.Opinions
-                    .Where(o => o.PhysiotherapistId == physiotherapistId)
-                    .Skip((page - 1) * pageSize)
-                    .Take(pageSize)
-                    .ToListAsync();
-
-                if (opinions == null || opinions.Count == 0)
-                {
-                    response.Success = false;
-                    response.Message = "No opinions found for this physiotherapist.";
-                    return response;
-                }
-
-                response.Success = true;
-                response.Data = opinions;
-            }
-            catch (Exception ex)
-            {
-                response.Success = false;
-                response.Message = $"An error occurred: {ex.Message}";
-            }
-
-            return response;
-        }
-
-
     }
 }

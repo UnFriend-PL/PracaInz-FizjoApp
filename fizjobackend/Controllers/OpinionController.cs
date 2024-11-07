@@ -1,4 +1,5 @@
 ﻿using fizjobackend.Entities.OpinionEntities;
+using fizjobackend.Entities.UserEntities;
 using fizjobackend.Interfaces.OpinionInterfaces;
 using fizjobackend.Interfaces.UsersInterfaces;
 using fizjobackend.Models.AccountDTOs;
@@ -58,28 +59,18 @@ namespace fizjobackend.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpGet("patient/{patientId}")]
-        public async Task<IActionResult> GetOpinionsByPatientId(Guid patientId, int page = 1, int pageSize = 10)
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllOpinions( int page = 1, int pageSize = 10)
         {
-            var response = await _opinionService.GetOpinionsByPatientId(patientId, page, pageSize);
+            var userRoles = User.FindAll(ClaimTypes.Role).Select(c => c.Value);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var response = await _opinionService.GetAllOpinions(userRoles, userId, page, pageSize);
             if (!response.Success)
             {
                 return NotFound(response.Message);
             }
             return Ok(response.Data);
         }
-
-        [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpGet("physiotherapist/{physiotherapistId}")]
-        public async Task<IActionResult> GetOpinionsByPhysiotherapistId(Guid physiotherapistId, int page = 1, int pageSize = 10)
-        {
-            var response = await _opinionService.GetOpinionsByPhysiotherapistId(physiotherapistId, page, pageSize);
-            if (!response.Success)
-            {
-                return NotFound(response.Message);
-            }
-            return Ok(response.Data);
-        }
-
     }
 }

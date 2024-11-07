@@ -8,8 +8,7 @@ namespace fizjobackend.Interfaces.OpinionInterfaces
     {
         Task<ServiceResponse<Opinion>> AddOpinion(Guid userId, OpinionRequestDTOs opinion);
         Task<ServiceResponse<Opinion>> DeleteOpinion(Guid guid, Guid opinionId);
-        Task<ServiceResponse<List<Opinion>>> GetOpinionsByPatientId(Guid patientId, int page, int pageSize);
-        Task<ServiceResponse<List<Opinion>>> GetOpinionsByPhysiotherapistId(Guid physiotherapistId, int page, int pageSize);
+        Task<ServiceResponse<ListOfOpinionResponseDTO>> GetAllOpinions(IEnumerable<string> userRoles,string userId, int page, int pageSize);
         Task<ServiceResponse<Opinion>> UpdateOpinion(Guid guid, Guid opinionId, UpdateOpinionRequestDTO updateOpinion);
     }
 }
