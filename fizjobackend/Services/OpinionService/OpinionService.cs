@@ -207,7 +207,7 @@ namespace fizjobackend.Services.OpinionService
                 }
                 var userRole = GetBaseRoleFromUserRoles(userRoles);
                 List<Opinion> opinions;
-
+                double opinionsCount;
                 switch (userRole.ToLower())
                 {
                     case "patient":
@@ -216,6 +216,9 @@ namespace fizjobackend.Services.OpinionService
                             .Skip((page - 1) * pageSize)
                             .Take(pageSize)
                             .ToListAsync();
+                        opinionsCount = await _context.Opinions
+                            .Where(o => o.PatientId == userGuidId)
+                            .CountAsync(); 
                         break;
 
                     case "physiotherapist":
@@ -224,6 +227,9 @@ namespace fizjobackend.Services.OpinionService
                             .Skip((page - 1) * pageSize)
                             .Take(pageSize)
                             .ToListAsync();
+                        opinionsCount = await _context.Opinions
+                            .Where(o => o.PhysiotherapistId == userGuidId)
+                            .CountAsync();
                         break;
 
                     default:
@@ -244,9 +250,9 @@ namespace fizjobackend.Services.OpinionService
                     Rating = o.Rating,
                     UploadDate = o.UploadDate
                 }).ToList();
-
+                opinionResponse.Page = page;
+                opinionResponse.TotalPage = (int)Math.Ceiling((double)opinionsCount / pageSize); response.Data = opinionResponse;
                 response.Success = true;
-                response.Data = opinionResponse;
             }
             catch (Exception ex)
             {

@@ -1,0 +1,90 @@
+@import "../utils/globalColors.scss";
+
+.container {
+  max-width: 800px;
+  margin: 0 auto; /* Wyśrodkowanie kontenera */
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: $bg-container;
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 20px;
+  color: $text-black;
+}
+
+.opinionCard {
+  background-color: $bg-white;
+  border: 1px solid $border-color;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0px 4px 8px $box-shadow-color;
+}
+
+.opinionAuthor,
+.opinionRating,
+.opinionDate {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: $text-black;
+}
+
+.opinionComment {
+  font-size: 1em;
+  line-height: 1.6;
+  color: $label-color;
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+.opinionAuthor strong,
+.opinionComment strong,
+.opinionRating strong,
+.opinionDate strong {
+  color: $text-dark-green;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.paginationButton {
+  background-color: $button-bg;
+  color: $text-white;
+  border: none;
+  padding: 10px 15px;
+  margin: 0 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease;
+}
+
+.paginationButton:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+.paginationButton:hover:not(:disabled) {
+  background-color: $button-bg-hover;
+}
+
+.pageInfo {
+  font-size: 0.9em;
+  color: $text-dark-green;
+  margin: 0 10px;
+}
+.star {
+  color: $star-color;
+  margin-right: 2px;
+}
+
+.stars {
+  display: inline-flex;
+}

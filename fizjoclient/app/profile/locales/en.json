@@ -32,5 +32,6 @@
   "invalidEmailError": "Incorrect Email",
   "invalidPhoneError": "Number must consist of 9 numbers",
   "invalidGenderError": "Choose one of three options",
-  "invalidAdressError": "The adress and country must consist of the letters themselves"
+  "invalidAdressError": "The adress and country must consist of the letters themselves",
+  "opinionsTitle": "Opinions"
 }
