@@ -59,13 +59,6 @@ namespace fizjobackend.Services.Treatments
                     .Where(t => t.Id == treatmentRequest.Id)
                     .AsQueryable()
                     .FirstOrDefaultAsync();
-                //var treatment = await _context.Treatments
-                //    .Where(t => t.Id == treatmentRequest.Id)
-                //    .Include(t => t.Views.Where(v => v.Gender == treatmentRequest.Gender))
-                //    .ThenInclude(t => t.BodySections)
-                //    .ThenInclude(t => t.Joints)
-                //    .Include(t => t.Muscles)
-                //    .FirstOrDefaultAsync();
                 if (treatment == null)
                 {
                     response = new ServiceResponse<TreatmentResponseDTO>("Treatment not found") { Success = false };

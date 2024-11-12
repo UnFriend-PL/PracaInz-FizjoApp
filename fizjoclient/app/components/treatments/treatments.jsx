@@ -1,18 +1,15 @@
-import React, {
-  useContext,
-  useEffect,
-  useState,
-  useRef,
-  useCallback,
-} from "react";
+import React, { useContext, useState, useRef, useCallback } from "react";
 import styles from "./treatments.module.scss";
 import apiService from "@/app/services/apiService/apiService";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
-import { AppointmentContext } from "@/app/appointments/[appointmentId]/appointmentContext";
+import { UserContext } from "@/app/contexts/user/userContext";
 import AsyncSelect from "react-select/async";
 import useSelectedItems from "@/app/appointments/utils/useSelectedItems";
-import { UserContext } from "@/app/contexts/user/userContext";
 import debounce from "lodash.debounce";
+import pl from "./locales/pl.json";
+import en from "./locales/en.json";
+
+const locales = { en, pl };
 
 const TreatmentsAutoComplete = () => {
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -21,14 +18,47 @@ const TreatmentsAutoComplete = () => {
   const [options, setOptions] = useState([]);
   const { user } = useContext(UserContext);
   const treatmentDetailsCache = useRef({});
-  console.log(user, "user");
+  const treatmentsCache = useRef(null);
   const { selectedItems, handleChange } = useSelectedItems();
+  const t = locales[language];
 
   const fetchTreatments = async () => {
+    if (treatmentsCache.current) {
+      setTreatments(treatmentsCache.current);
+      setOptions(
+        treatmentsCache.current.map((treatment) => ({
+          value: treatment.id,
+          label:
+            language === "en"
+              ? `${treatment.name} (${treatment.bodySectionName}, ${treatment.viewName})`
+              : `${treatment.namePL} (${
+                  treatment.bodySectionNamePL
+                }, ${treatment.viewName
+                  .replace("front", "przód")
+                  .replace("back", "tył")})`,
+        }))
+      );
+      return;
+    }
+
     try {
       const response = await apiService.get(`/Treatments`, {}, true);
       if (response.success) {
+        treatmentsCache.current = response.data;
         setTreatments(response.data);
+        setOptions(
+          response.data.map((treatment) => ({
+            value: treatment.id,
+            label:
+              language === "en"
+                ? `${treatment.name} (${treatment.bodySectionName}, ${treatment.viewName})`
+                : `${treatment.namePL} (${
+                    treatment.bodySectionNamePL
+                  }, ${treatment.viewName
+                    .replace("front", "przód")
+                    .replace("back", "tył")})`,
+          }))
+        );
       }
     } catch (error) {
       console.error(error);
@@ -52,43 +82,6 @@ const TreatmentsAutoComplete = () => {
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    fetchTreatments();
-  }, []);
-
-  useEffect(() => {
-    setOptions(
-      treatments.map((treatment) => ({
-        value: treatment.id,
-        label:
-          language == "en"
-            ? `${treatment.name} (${treatment.bodySectionName}, ${treatment.viewName})`
-            : `${treatment.namePL} (${
-                treatment.bodySectionNamePL
-              }, ${treatment.viewName
-                .replace("front", "przód")
-                .replace("back", "tył")})`,
-      }))
-    );
-    setSelectedOptions((prevSelectedOptions) =>
-      prevSelectedOptions.map((option) => {
-        const treatment = treatments.find((t) => t.id === option.value);
-        if (!treatment) return option;
-        return {
-          ...option,
-          label:
-            language === "en"
-              ? `${treatment.name} (${treatment.bodySectionName}, ${treatment.viewName})`
-              : `${treatment.namePL} (${
-                  treatment.bodySectionNamePL
-                }, ${treatment.viewName
-                  .replace("front", "przód")
-                  .replace("back", "tył")})`,
-        };
-      })
-    );
-  }, [language, treatments]);
 
   const getTreatmentDetails = async (id) => {
     if (treatmentDetailsCache.current[id]) {
@@ -114,7 +107,7 @@ const TreatmentsAutoComplete = () => {
   const filterTreatments = (inputValue) => {
     return options
       .filter((i) => i.label.toLowerCase().includes(inputValue.toLowerCase()))
-      .slice(0, 50); // Limit results to 50
+      .slice(0, 50);
   };
 
   const loadOptions = useCallback(
@@ -122,24 +115,25 @@ const TreatmentsAutoComplete = () => {
       let filteredOptions = filterTreatments(inputValue);
       console.log(filteredOptions.length, "filteredOptions");
       callback(filteredOptions);
-    }, 300), // Debounce with 300ms delay
+    }, 300),
     [options]
   );
 
   return (
-    <>
-      <div className={styles.container}>
-        <AsyncSelect
-          cacheOptions
-          loadOptions={loadOptions}
-          value={selectedOptions}
-          onChange={handleTreatmentSelectChange}
-          placeholder="Wyszukaj i wybierz zabiegi..."
-          isClearable
-          isMulti
-        />
-      </div>
-    </>
+    <div className={styles.container}>
+      <AsyncSelect
+        className={styles.selectTreatments}
+        cacheOptions
+        loadOptions={loadOptions}
+        value={selectedOptions}
+        onChange={handleTreatmentSelectChange}
+        onMenuOpen={fetchTreatments}
+        placeholder={t.treatmentSearch}
+        noOptionsMessage={() => t.treatmentTypeToSearch}
+        isClearable
+        isMulti
+      />
+    </div>
   );
 };
 

@@ -1,0 +1,41 @@
+﻿### Rejestracja pacjenta
+POST https://localhost:7023/Account/RegisterPatient
+Content-Type: application/json
+
+{
+  "insuranceNumber": "IN-654321",
+  "firstName": "Anna",
+  "lastName": "Nowak",
+  "gender": "Female",
+  "country": "Poland",
+  "city": "Kraków",
+  "streetWithHouseNumber": "Second Street 20",
+  "postCode": "30-002",
+  "pesel": "04311212341",
+  "dateOfBirth": "2004-11-12T00:00:00Z",
+  "email": "szymonecki@gmail.com",
+  "password": "Kolo1212#",
+  "confirmPassword": "Kolo1212#",
+  "phoneNumber": "555555555"
+}
+
+### Rejestracja fizjoterapeuty
+POST https://localhost:7023/Account/RegisterPhysiotherapist
+Content-Type: application/json
+
+{
+  "licenseNumber": "FT-123456",
+  "firstName": "Szymon",
+  "lastName": "Ecki",
+  "gender": "Male",
+  "country": "Poland",
+  "city": "Warsaw",
+  "streetWithHouseNumber": "Main Street 10",
+  "postCode": "00-001",
+  "pesel": "90111212393",
+  "dateOfBirth": "1990-11-12T00:00:00Z",
+  "email": "Szymonecki1233@gmail.com",
+  "password": "Kolo1212#",
+  "confirmPassword": "Kolo1212#",
+  "phoneNumber": "123456789"
+}
