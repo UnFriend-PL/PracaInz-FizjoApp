@@ -1,162 +1,164 @@
 'use client';
-
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';  // używamy next/router do przekierowań
+import React, { useState, useContext } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import styles from './staff.module.scss';
-import { FaSearch } from 'react-icons/fa'; // Dodajemy ikonę wyszukiwania
+import { FaSearch } from 'react-icons/fa';
+import { LanguageContext } from "@/app/contexts/lang/langContext"; 
+import pl from './locales/pl.json';
+import en from './locales/en.json';
+
+const locales = { en, pl }; 
 
 const specialists = [
     {
         id: 1,
         name: 'Anna',
         surname: 'Nowak',
-        specialization: 'Fizjoterapeutka',
+        specialization: 'fizjoterapeutka',
         city: 'Warszawa',
-        imageUrl: '/path_to_image1.jpg',
+        imageUrl: '/AnnaNowak.jpg',
         description: 'Specjalizuje się w rehabilitacji pourazowej.',
         education: 'Uniwersytet Medyczny w Warszawie',
-        experience: '8 lat doświadczenia w rehabilitacji sportowej'
+        experience: '8'
     },
     {
         id: 2,
         name: 'Jan',
         surname: 'Kowalski',
-        specialization: 'Masażysta',
+        specialization: 'masażysta',
         city: 'Kraków',
-        imageUrl: '/path_to_image2.jpg',
+        imageUrl: '/JanKowalski.jpg',
         description: 'Zajmuje się masażem relaksacyjnym i leczniczym.',
         education: 'Akademia Wychowania Fizycznego w Krakowie',
-        experience: '5 lat doświadczenia w masażu'
+        experience: '5'
     },
     {
         id: 3,
         name: 'Katarzyna',
         surname: 'Wiśniewska',
-        specialization: 'Fizjoterapeutka',
+        specialization: 'fizjoterapeutka',
         city: 'Gdańsk',
-        imageUrl: '/path_to_image3.jpg',
+        imageUrl: '/KatarzynaWisniewska.jpg',
         description: 'Specjalizuje się w terapii manualnej.',
         education: 'Gdański Uniwersytet Medyczny',
-        experience: '6 lat doświadczenia w fizjoterapii'
+        experience: '6'
     },
     {
         id: 4,
         name: 'Michał',
         surname: 'Zieliński',
-        specialization: 'Fizjoterapeuta',
+        specialization: 'fizjoterapeuta',
         city: 'Wrocław',
-        imageUrl: '/path_to_image4.jpg',
+        imageUrl: '/MichalZielinski.jpg',
         description: 'Zajmuje się rehabilitacją neurologiczną.',
         education: 'Uniwersytet Medyczny we Wrocławiu',
-        experience: '7 lat doświadczenia w rehabilitacji'
+        experience: '7'
     },
     {
         id: 5,
         name: 'Magdalena',
         surname: 'Kamińska',
-        specialization: 'Masażystka',
+        specialization: 'masażystka',
         city: 'Poznań',
-        imageUrl: '/path_to_image5.jpg',
+        imageUrl: '/MagdalenaKaminska.jpg',
         description: 'Zajmuje się masażem sportowym i relaksacyjnym.',
         education: 'Uniwersytet Medyczny w Poznaniu',
-        experience: '4 lata doświadczenia w masażu'
+        experience: '4'
     },
     {
         id: 6,
         name: 'Paweł',
         surname: 'Dąbrowski',
-        specialization: 'Fizjoterapeuta',
+        specialization: 'fizjoterapeuta',
         city: 'Łódź',
-        imageUrl: '/path_to_image6.jpg',
+        imageUrl: '/PawelDabrowski.jpg',
         description: 'Specjalizuje się w rehabilitacji ortopedycznej.',
         education: 'Uniwersytet Medyczny w Łodzi',
-        experience: '9 lat doświadczenia w fizjoterapii'
+        experience: '9'
     },
     {
         id: 7,
         name: 'Aleksandra',
         surname: 'Wróbel',
-        specialization: 'Fizjoterapeutka',
+        specialization: 'fizjoterapeutka',
         city: 'Szczecin',
-        imageUrl: '/path_to_image7.jpg',
+        imageUrl: '/AleksandraWrobel.jpg',
         description: 'Zajmuje się rehabilitacją pourazową i sportową.',
         education: 'Pomorski Uniwersytet Medyczny w Szczecinie',
-        experience: '10 lat doświadczenia w fizjoterapii'
+        experience: '10'
     },
     {
         id: 8,
         name: 'Piotr',
         surname: 'Woźniak',
-        specialization: 'Masażysta',
+        specialization: 'masażysta',
         city: 'Gdańsk',
-        imageUrl: '/path_to_image8.jpg',
+        imageUrl: '/PiotrWozniak.jpg',
         description: 'Specjalizuje się w masażu leczniczym.',
         education: 'Uniwersytet Kazimierza Wielkiego w Bydgoszczy',
-        experience: '6 lat doświadczenia w masażu'
+        experience: '6'
     },
     {
         id: 9,
         name: 'Joanna',
         surname: 'Kaczmarek',
-        specialization: 'Fizjoterapeutka',
+        specialization: 'fizjoterapeutka',
         city: 'Lublin',
-        imageUrl: '/path_to_image9.jpg',
+        imageUrl: '/JoannaKaczmarek.jpg',
         description: 'Zajmuje się terapią manualną i rehabilitacją sportową.',
         education: 'Uniwersytet Medyczny w Lublinie',
-        experience: '8 lat doświadczenia w fizjoterapii'
+        experience: '8'
     },
     {
         id: 10,
         name: 'Łukasz',
         surname: 'Pawlak',
-        specialization: 'Fizjoterapeuta',
+        specialization: 'fizjoterapeuta',
         city: 'Katowice',
-        imageUrl: '/path_to_image10.jpg',
+        imageUrl: '/LukaszPawlak.jpg',
         description: 'Specjalizuje się w rehabilitacji neurologicznej.',
         education: 'Śląski Uniwersytet Medyczny w Katowicach',
-        experience: '5 lat doświadczenia w fizjoterapii'
+        experience: '5'
     },
     {
         id: 11,
         name: 'Ewa',
         surname: 'Szymańska',
-        specialization: 'Masażystka',
+        specialization: 'masażystka',
         city: 'Rzeszów',
-        imageUrl: '/path_to_image11.jpg',
+        imageUrl: '/EwaSzymanska.jpg',
         description: 'Zajmuje się masażem relaksacyjnym i leczniczym.',
         education: 'Uniwersytet Rzeszowski',
-        experience: '3 lata doświadczenia w masażu'
+        experience: '3'
     },
     {
         id: 12,
         name: 'Piotr',
         surname: 'Wójcik',
-        specialization: 'Fizjoterapeuta',
+        specialization: 'fizjoterapeuta',
         city: 'Białystok',
-        imageUrl: '/path_to_image12.jpg',
+        imageUrl: '/PiotrWojcik.jpg',
         description: 'Specjalizuje się w rehabilitacji ortopedycznej.',
         education: 'Uniwersytet Medyczny w Białymstoku',
-        experience: '4 lata doświadczenia w fizjoterapii'
+        experience: '4'
     }
 ];
 
-
-const HomePage = () => {
-    const [searchQuery, setSearchQuery] = useState(''); // Stan zapytania wyszukiwania (imię/nazwisko)
-    const [searchCity, setSearchCity] = useState('');   // Stan wyszukiwania po mieście
+const Staff = () => {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchCity, setSearchCity] = useState('');
     const router = useRouter();
 
-    // Filtrowanie specjalistów na podstawie imienia/nazwiska oraz miasta
+    const { language } = useContext(LanguageContext); 
+    const t = locales[language]; 
+
     const filteredSpecialists = specialists.filter(specialist =>
-        // Sprawdzamy, czy imię lub nazwisko zaczyna się na zapytanie
         (specialist.name.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
-         specialist.surname.toLowerCase().startsWith(searchQuery.toLowerCase())) &&
-        // Sprawdzamy, czy miasto zaczyna się na zapytanie
+            specialist.surname.toLowerCase().startsWith(searchQuery.toLowerCase())) &&
         (searchCity === '' || specialist.city.toLowerCase().startsWith(searchCity.toLowerCase()))
     );
 
-    // Obsługa kliknięcia na specjalistę (przekierowanie do dynamicznej strony)
     const handleSelectSpecialist = (id) => {
         router.push(`/staff/${id}`);
     };
@@ -164,53 +166,50 @@ const HomePage = () => {
     return (
         <div className={styles.specialistsContainer}>
             <div className={styles.searchContainer}>
-                {/* Pole wyszukiwania po imieniu/nazwisku */}
                 <div className={styles.searchInputContainer}>
-                    <FaSearch className={styles.searchIcon} />  {/* Ikona wyszukiwania */}
+                    <FaSearch className={styles.searchIcon} />
                     <input
                         type="text"
-                        placeholder="Szukaj po imieniu lub nazwisku..."
+                        placeholder={t.searchByName}
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)} // Aktualizacja zapytania wyszukiwania
+                        onChange={(e) => setSearchQuery(e.target.value)}
                         className={styles.searchInput}
                     />
                 </div>
-
-                {/* Pole wyszukiwania po mieście */}
                 <div className={styles.searchInputContainer}>
-                    <FaSearch className={styles.searchIcon} />  {/* Ikona wyszukiwania */}
+                    <FaSearch className={styles.searchIcon} />
                     <input
                         type="text"
-                        placeholder="Szukaj po mieście..."
+                        placeholder={t.searchByCity}
                         value={searchCity}
-                        onChange={(e) => setSearchCity(e.target.value)} // Aktualizacja miasta
+                        onChange={(e) => setSearchCity(e.target.value)}
                         className={styles.searchInput}
                     />
                 </div>
             </div>
 
             <div className={styles.specialistsList}>
-                {/* Wyświetlanie przefiltrowanych specjalistów */}
                 {filteredSpecialists.length > 0 ? (
                     filteredSpecialists.map(specialist => (
                         <div
                             key={specialist.id}
                             className={styles.specialistCard}
-                            onClick={() => handleSelectSpecialist(specialist.id)} // Przekierowanie do strony specjalisty
+                            onClick={() => handleSelectSpecialist(specialist.id)}
                         >
                             <Image src={specialist.imageUrl} alt={specialist.name} className={styles.specialistImage} width={100} height={100} />
-                            <h3 className={styles.specialistName}>{specialist.name}</h3>
-                            <p className={styles.specialistInfo}>{specialist.specialization}</p>
+                            <h3 className={styles.specialistName}>{specialist.name} {specialist.surname}</h3>
+                            <p className={styles.specialistInfo}>{t.specialists[specialist.specialization]}</p>
                             <p className={styles.specialistInfo}>{specialist.description}</p>
-                            <p className={styles.specialistCity}>{specialist.city}</p>  {/* Dodajemy miasto */}
+                            <p className={styles.specialistCity}>{specialist.city}</p>
+                            <p className={styles.specialistExperience}>{specialist.experience} {t.experience}</p>
                         </div>
                     ))
                 ) : (
-                    <p className={styles.noResults}>Brak wyników.</p>
+                    <p className={styles.noResults}>{t.noResults}</p>
                 )}
             </div>
         </div>
     );
 };
 
-export default HomePage;
+export default Staff;

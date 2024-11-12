@@ -254,21 +254,21 @@ const questions = [
   {
     id: 36,
     text: "36.Czy ma Pan(i) skazę naczyniową?",
-    checked: null,
+    checked: false,
     followUp: "",
     answer: "",
   }, 
   {
     id: 37,
     text: "37.Czy ma Pan(i) chorobę Birgera III°IV°?",
-    checked: null,
+    checked: false,
     followUp: "",
     answer: "",
   }, 
   {
     id: 38,
     text: "38.Czy ma Pan(i) chorobę Reunalda III°IV°?",
-    checked: null,
+    checked: false,
     followUp: "",
     answer: "",
   }, 
@@ -298,63 +298,55 @@ const MedicalSurvey = () => {
     });
   }, [formData]);
 
-  
-
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-  
-    // Jeśli zmiana dotyczy zgody, aktualizuj stan agreements
     if (name.startsWith("agreement")) {
       setAgreements((prev) => ({ ...prev, [name]: checked }));
       return;
     }
-  
+
     const [field, id] = name.split("-");
     const questionId = parseInt(id, 10);
-  
-    // Ograniczamy tekst do 500 znaków, jeśli użytkownik próbuje wpisać więcej
+
     const trimmedValue = value.slice(0, MAX_TEXT_LENGTH);
-  
-    // Aktualizacja stanu dla pól formularza
+
     setFormData((prev) =>
       prev.map((q) =>
         q.id === questionId
           ? {
               ...q,
-              [field]: type === "checkbox"
-                ? checked
-                : type === "radio"
-                ? value === "true"
-                : trimmedValue // Zastosowanie przyciętego tekstu
+              [field]:
+                type === "checkbox"
+                  ? checked
+                  : type === "radio"
+                  ? value === "true"
+                  : trimmedValue,
             }
           : q
       )
     );
-  
-    // Aktualizacja liczby znaków w stanie
+
     if (type === "textarea") {
       setCharCounts((prevCounts) => ({
         ...prevCounts,
         [name]: trimmedValue.length,
       }));
-  
-      // Sprawdzanie przekroczenia limitu znaków
+
       if (value.length > MAX_TEXT_LENGTH) {
         setError(`Tekst nie może przekraczać ${MAX_TEXT_LENGTH} znaków.`);
-        setShowModal(true);  // Wyświetlanie modalu
+        setShowModal(true);
       } else {
         setError("");
-        setShowModal(false);  // Ukrywanie modalu, jeśli nie ma błędu
+        setShowModal(false);
       }
     }
   };
-  
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
     setShowModal(false);
 
-    // Sprawdzanie, czy wszystkie pytania mają uzupełnione odpowiedzi
     const unanswered = formData.filter((q) => q.checked && !q.answer.trim());
     if (unanswered.length > 0) {
       setError("Proszę odpowiedzieć na wszystkie pytania.");
@@ -362,8 +354,12 @@ const MedicalSurvey = () => {
       return;
     }
 
-    // Sprawdzanie, czy wszystkie zgody zostały zaznaczone
-    const requiredAgreements = ["agreement1", "agreement2", "agreement3", "agreement4"];
+    const requiredAgreements = [
+      "agreement1",
+      "agreement2",
+      "agreement3",
+      "agreement4",
+    ];
     const missingAgreements = requiredAgreements.filter(
       (agreement) => !agreements[agreement]
     );
@@ -386,7 +382,9 @@ const MedicalSurvey = () => {
             <label
               className={`${styles.label} ${
                 question.checked && !question.answer.trim()
-                  ? question.followUp ? styles.unanswered : ''
+                  ? question.followUp
+                    ? styles.unanswered
+                    : ""
                   : ""
               }`}
               htmlFor={`text-${question.id}`}
@@ -416,47 +414,46 @@ const MedicalSurvey = () => {
               </label>
             </div>
 
-             {/* Jeśli pytanie ma follow-up, wyświetl pole tekstowe */}
-    {question.checked && question.followUp && (
-      <div
-        className={`${styles.followUpQuestion} ${
-          textAreaErrors[`answer-${question.id}`]
-            ? styles.textAreaError
-            : ""
-        }`}
-      >
-        <label
-          className={`${styles.label} ${
-            textAreaErrors[`answer-${question.id}`]
-              ? styles.unanswered
-              : ""
-          }`}
-          htmlFor={`answer-${question.id}`}
-        >
-          {question.followUp}
-        </label>
-        <textarea
-          className={`${styles.textarea} ${
-            textAreaErrors[`answer-${question.id}`]
-              ? styles.textareaError
-              : ""
-          }`}
-          name={`answer-${question.id}`}
-          value={question.answer}
-          onChange={handleChange}
-          ref={(el) => (textAreasRef.current[question.id] = el)}
-        />
-        <div className={styles.errorMessage}>
-          {textAreaErrors[`answer-${question.id}`]}
-        </div>
-        <div className={styles.charCount}>
-          {charCounts[`answer-${question.id}`] || 0} / {MAX_TEXT_LENGTH} znaków
-        </div>
-      </div>
-    )}
-  </div>
-))}
-        {/* Sekcja zgód */}
+            {question.checked && question.followUp && (
+              <div
+                className={`${styles.followUpQuestion} ${
+                  textAreaErrors[`answer-${question.id}`]
+                    ? styles.textAreaError
+                    : ""
+                }`}
+              >
+                <label
+                  className={`${styles.label} ${
+                    textAreaErrors[`answer-${question.id}`]
+                      ? styles.unanswered
+                      : ""
+                  }`}
+                  htmlFor={`answer-${question.id}`}
+                >
+                  {question.followUp}
+                </label>
+                <textarea
+                  className={`${styles.textarea} ${
+                    textAreaErrors[`answer-${question.id}`]
+                      ? styles.textareaError
+                      : ""
+                  }`}
+                  name={`answer-${question.id}`}
+                  value={question.answer}
+                  onChange={handleChange}
+                  ref={(el) => (textAreasRef.current[question.id] = el)}
+                />
+                <div className={styles.errorMessage}>
+                  {textAreaErrors[`answer-${question.id}`]}
+                </div>
+                <div className={styles.charCount}>
+                  {charCounts[`answer-${question.id}`] || 0} / {MAX_TEXT_LENGTH} znaków
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
+
         <fieldset className={styles.agreements}>
           <legend className={styles.agreementsHeading}>
             ZGODA NA UDZIELENIE MASAŻU
@@ -531,4 +528,3 @@ const MedicalSurvey = () => {
 };
 
 export default MedicalSurvey;
-

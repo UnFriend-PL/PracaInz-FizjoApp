@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../staff.module.scss';  // Zaktualizuj plik CSS, aby uwzględnić styl gwiazdek.
+import styles from '../staff.module.scss'; 
 
 const StarRating = ({ rating }) => {
     const maxStars = 5;

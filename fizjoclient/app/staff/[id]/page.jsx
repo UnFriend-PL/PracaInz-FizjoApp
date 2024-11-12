@@ -1,6 +1,6 @@
-'use client'; 
+'use client';
 import Image from 'next/image';
-import StarRating from './StarRating';  
+import StarRating from './StarRating';
 import styles from '../staff.module.scss';
 
 const specialists = [
@@ -8,7 +8,7 @@ const specialists = [
         id: 1,
         name: 'Anna Nowak',
         specialization: 'Fizjoterapeutka, Warszawa',
-        imageUrl: '/path_to_image1.jpg',
+        imageUrl: '/AnnaNowak.jpg',
         description: 'Specjalizuje się w rehabilitacji pourazowej.',
         education: 'Uniwersytet Medyczny w Warszawie',
         experience: '8 lat doświadczenia w rehabilitacji sportowej',
@@ -23,7 +23,7 @@ const specialists = [
         id: 2,
         name: 'Jan Kowalski',
         specialization: 'Masażysta, Kraków',
-        imageUrl: '/path_to_image2.jpg',
+        imageUrl: '/JanKowalski.jpg',
         description: 'Zajmuje się masażem relaksacyjnym i leczniczym.',
         education: 'Akademia Wychowania Fizycznego w Krakowie',
         experience: '5 lat doświadczenia w masażu',
@@ -38,7 +38,7 @@ const specialists = [
         id: 3,
         name: 'Katarzyna Wiśniewska',
         specialization: 'Fizjoterapeutka, Gdańsk',
-        imageUrl: '/path_to_image3.jpg',
+        imageUrl: '/KatarzynaWisniewska.jpg',
         description: 'Specjalizuje się w terapii manualnej.',
         education: 'Gdański Uniwersytet Medyczny',
         experience: '6 lat doświadczenia w fizjoterapii',
@@ -52,7 +52,7 @@ const specialists = [
         id: 4,
         name: 'Michał Zieliński',
         specialization: 'Fizjoterapeuta, Wrocław',
-        imageUrl: '/path_to_image4.jpg',
+        imageUrl: '/MichalZielinski.jpg',
         description: 'Zajmuje się rehabilitacją neurologiczną.',
         education: 'Uniwersytet Medyczny we Wrocławiu',
         experience: '7 lat doświadczenia w rehabilitacji',
@@ -65,7 +65,7 @@ const specialists = [
         id: 5,
         name: 'Magdalena Kamińska',
         specialization: 'Masażystka, Poznań',
-        imageUrl: '/path_to_image5.jpg',
+        imageUrl: '/MagdalenaKaminska.jpg',
         description: 'Zajmuje się masażem sportowym i relaksacyjnym.',
         education: 'Uniwersytet Medyczny w Poznaniu',
         experience: '4 lata doświadczenia w masażu',
@@ -79,7 +79,7 @@ const specialists = [
         id: 6,
         name: 'Paweł Dąbrowski',
         specialization: 'Fizjoterapeuta, Łódź',
-        imageUrl: '/path_to_image6.jpg',
+        imageUrl: '/PawelDabrowski.jpg',
         description: 'Specjalizuje się w rehabilitacji ortopedycznej.',
         education: 'Uniwersytet Medyczny w Łodzi',
         experience: '9 lat doświadczenia w fizjoterapii',
@@ -92,7 +92,7 @@ const specialists = [
         id: 7,
         name: 'Aleksandra Wróbel',
         specialization: 'Fizjoterapeutka, Szczecin',
-        imageUrl: '/path_to_image7.jpg',
+        imageUrl: '/AleksandraWrobel.jpg',
         description: 'Zajmuje się rehabilitacją pourazową i sportową.',
         education: 'Pomorski Uniwersytet Medyczny w Szczecinie',
         experience: '10 lat doświadczenia w fizjoterapii',
@@ -105,7 +105,7 @@ const specialists = [
         id: 8,
         name: 'Piotr Woźniak',
         specialization: 'Masażysta, Bydgoszcz',
-        imageUrl: '/path_to_image8.jpg',
+        imageUrl: '/PiotrWozniak.jpg',
         description: 'Specjalizuje się w masażu leczniczym.',
         education: 'Uniwersytet Kazimierza Wielkiego w Bydgoszczy',
         experience: '6 lat doświadczenia w masażu',
@@ -118,7 +118,7 @@ const specialists = [
         id: 9,
         name: 'Joanna Kaczmarek',
         specialization: 'Fizjoterapeutka, Lublin',
-        imageUrl: '/path_to_image9.jpg',
+        imageUrl: '/JoannaKaczmarek.jpg',
         description: 'Zajmuje się terapią manualną i rehabilitacją sportową.',
         education: 'Uniwersytet Medyczny w Lublinie',
         experience: '8 lat doświadczenia w fizjoterapii',
@@ -131,7 +131,7 @@ const specialists = [
         id: 10,
         name: 'Łukasz Pawlak',
         specialization: 'Fizjoterapeuta, Katowice',
-        imageUrl: '/path_to_image10.jpg',
+        imageUrl: '/LukaszPawlak.jpg',
         description: 'Specjalizuje się w rehabilitacji neurologicznej.',
         education: 'Śląski Uniwersytet Medyczny w Katowicach',
         experience: '5 lat doświadczenia w fizjoterapii',
@@ -144,7 +144,7 @@ const specialists = [
         id: 11,
         name: 'Ewa Szymańska',
         specialization: 'Masażystka, Rzeszów',
-        imageUrl: '/path_to_image11.jpg',
+        imageUrl: '/EwaSzymanska.jpg',
         description: 'Zajmuje się masażem relaksacyjnym i leczniczym.',
         education: 'Uniwersytet Rzeszowski',
         experience: '3 lata doświadczenia w masażu',
@@ -157,7 +157,7 @@ const specialists = [
         id: 12,
         name: 'Piotr Wójcik',
         specialization: 'Fizjoterapeuta, Białystok',
-        imageUrl: '/path_to_image12.jpg',
+        imageUrl: '/PiotrWojcik.jpg',
         description: 'Specjalizuje się w rehabilitacji ortopedycznej.',
         education: 'Uniwersytet Medyczny w Białymstoku',
         experience: '4 lata doświadczenia w fizjoterapii',
@@ -168,35 +168,9 @@ const specialists = [
     }
 ];
 
-
-// export default function SpecialistProfile({ params }) {
-//     const { id } = params;  // Pobieramy ID z URL
-
-//     // Znalezienie specjalisty na podstawie dynamicznego id
-//     const specialist = specialists.find(spec => spec.id === parseInt(id));
-
-//     if (!specialist) {
-//         return <p>Nie znaleziono specjalisty.</p>;
-//     }
-
-//     return (
-//         <div className={styles.specialistProfile}>
-//             <Image src={specialist.imageUrl} alt={specialist.name} className={styles.specialistImage} width={150} height={150} />
-//             <h1>{specialist.name}</h1>
-//             <p className={styles.specialistInfo}>{specialist.specialization}</p>
-//             <p className={styles.specialistInfo}>{specialist.description}</p>
-//             <p className={styles.specialistInfo}><strong>Wykształcenie:</strong> {specialist.education}</p>
-//             <p className={styles.specialistInfo}><strong>Doświadczenie:</strong> {specialist.experience}</p>
-//             <button onClick={() => window.history.back()} className={styles.backLink}>Wróć</button>
-//         </div>
-//     );
-// }
-
-
 export default function SpecialistProfile({ params }) {
-    const { id } = params;  // Pobieramy ID z URL
+    const { id } = params; 
 
-    // Znalezienie specjalisty na podstawie dynamicznego id
     const specialist = specialists.find(spec => spec.id === parseInt(id));
 
     if (!specialist) {
@@ -232,3 +206,4 @@ export default function SpecialistProfile({ params }) {
         </div>
     );
 }
+
