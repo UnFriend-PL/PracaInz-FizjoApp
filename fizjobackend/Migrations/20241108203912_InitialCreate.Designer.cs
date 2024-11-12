@@ -12,8 +12,8 @@ using fizjobackend.DbContexts;
 namespace fizjobackend.Migrations
 {
     [DbContext(typeof(FizjoDbContext))]
-    [Migration("20241027143538_initialCreate")]
-    partial class initialCreate
+    [Migration("20241108203912_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -435,6 +435,12 @@ namespace fizjobackend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("BodySectionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("BodySide")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
@@ -466,8 +472,25 @@ namespace fizjobackend.Migrations
                     b.Property<Guid?>("OwnerId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("SectionName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SectionNamePL")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("ViewId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ViewName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ViewNamePL")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

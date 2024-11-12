@@ -61,14 +61,18 @@ const BodyPartSelector = () => {
   console.log(selectedSection, "selectedSection");
   console.log(selectedItems, "selectedItems");
 
+  useEffect(() => {}, [selectedItems]);
+
   return (
     <>
-      <Navigation
-        currentIndex={currentIndex}
-        total={mappedData.length}
-        onNavigate={handleNavigation}
-        t={t}
-      />
+      {selectedItems && (
+        <Navigation
+          currentIndex={currentIndex}
+          total={mappedData.length}
+          onNavigate={handleNavigation}
+          t={t}
+        />
+      )}
       <div className={styles.bodyPartContainer}>
         <div className={styles.bodyPart}>
           <div className={styles.bodyPartHeader}>

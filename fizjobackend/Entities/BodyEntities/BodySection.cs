@@ -15,7 +15,5 @@ namespace fizjobackend.Entities.BodyEntities
         public View View { get; set; }
         public ICollection<Muscle> Muscles { get; set; }
         public ICollection<Joint> Joints { get; set; }
-        public virtual ICollection<Treatment> Treatments { get; set; } = new List<Treatment>();
-
     }
 }

@@ -9,7 +9,9 @@ public class TreatmentsAutoCompleteResponseDTO
     public string Name { get; set; }
     public string NamePL { get; set; }
     public TimeSpan Duration { get; set; }
-    public string viewName { get; set; }
+    public string ViewName { get; set; }
+    public string ViewNamePL { get; set; }
+    public string BodySide { get; set; }
     public string bodySectionName { get; set; }
     public string bodySectionNamePL { get; set; }
 
@@ -20,9 +22,11 @@ public class TreatmentsAutoCompleteResponseDTO
         Name = treatment.Name;
         NamePL = treatment.NamePL;
         Duration = treatment.Duration;
-        viewName = treatment.Views.FirstOrDefault()?.Name;
-        bodySectionName = treatment.BodySections.FirstOrDefault()?.BodySectionName;
-        bodySectionNamePL = treatment.BodySections.FirstOrDefault()?.BodySectionNamePL;
+        ViewName = treatment.ViewName;
+        BodySide = treatment.BodySide;
+        ViewNamePL = treatment.ViewNamePL;
+        bodySectionName = treatment.SectionName;
+        bodySectionNamePL = treatment.SectionNamePL;
     }
 
     public TreatmentsAutoCompleteResponseDTO()

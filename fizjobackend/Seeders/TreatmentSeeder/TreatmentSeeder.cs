@@ -1,12 +1,16 @@
 ﻿using fizjobackend.DbContexts;
+using fizjobackend.Entities.BodyEntities;
 using fizjobackend.Entities.TreatmentsEntities;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System;
 
 namespace fizjobackend.Seeders.TreatmentSeeder
 {
     public static class TreatmentSeeder
     {
+
+
         public static async Task SeedTreatmentsAsync(IServiceProvider serviceProvider, ILogger<Program> logger)
         {
             try
@@ -24,23 +28,11 @@ namespace fizjobackend.Seeders.TreatmentSeeder
                 var jsonData = await File.ReadAllTextAsync(filePath);
                 var seedData = JsonConvert.DeserializeObject<SeedData>(jsonData);
 
+                var treatmentsToAdd = new List<Treatment>();
+
                 foreach (var treatmentData in seedData.Treatments)
                 {
-                    var treatment = new Treatment
-                    {
-                        Id = Guid.NewGuid(),
-                        OwnerId = null,
-                        IsDefault = treatmentData.IsDefault,
-                        Description = treatmentData.Description,
-                        DescriptionPL = treatmentData.DescriptionPL,
-                        Name = treatmentData.Name,
-                        NamePL = treatmentData.NamePL,
-                        Duration = TimeSpan.Parse(treatmentData.Duration),
-                        CreateDate = DateTime.Parse(treatmentData.CreateDate),
-                        UpdateDate = DateTime.Parse(treatmentData.UpdateDate),
-                        IsDeleted = treatmentData.IsDeleted
-                    };
-
+                    // Load muscles, joints, body sections, and views related to the treatment data
                     var muscles = await context.Muscles
                         .Where(m => treatmentData.Muscles.Contains(m.Name))
                         .ToListAsync();
@@ -49,21 +41,52 @@ namespace fizjobackend.Seeders.TreatmentSeeder
                         .Where(j => treatmentData.Joints.Contains(j.Name))
                         .ToListAsync();
 
-                    treatment.Muscles = muscles;
-                    treatment.Joints = joints;
-
                     var bodySections = await context.BodySections
-                        .Where(bs => bs.Muscles.Any(m => muscles.Contains(m)) || bs.Joints.Any(j => joints.Contains(j))).ToListAsync();
+                        .Where(bs => bs.Muscles.Any(m => muscles.Contains(m)) || bs.Joints.Any(j => joints.Contains(j)))
+                        .ToListAsync();
+
                     var views = await context.Views
-                        .Where(v => v.BodySections.Any(bs => bodySections.Contains(bs))).Distinct().ToListAsync();
+                        .Where(v => v.BodySections.Any(bs => bodySections.Contains(bs)))
+                        .Distinct()
+                        .ToListAsync();
 
-                    treatment.BodySections = bodySections;
-                    treatment.Views = views;
+                    foreach (var view in views)
+                    {
+                        foreach (var bodySection in bodySections)
+                        {
+                            var treatment = new Treatment
+                            {
+                                Id = Guid.NewGuid(),
+                                OwnerId = null,
+                                IsDefault = treatmentData.IsDefault,
+                                Description = treatmentData.Description,
+                                DescriptionPL = treatmentData.DescriptionPL,
+                                Name = treatmentData.Name,
+                                NamePL = treatmentData.NamePL,
+                                Duration = TimeSpan.Parse(treatmentData.Duration),
+                                CreateDate = DateTime.Parse(treatmentData.CreateDate),
+                                UpdateDate = DateTime.Parse(treatmentData.UpdateDate),
+                                IsDeleted = treatmentData.IsDeleted,
+                                BodySectionId = bodySection.Id,
+                                ViewId = view.Id,
+                                ViewName = view.Name,
+                                ViewNamePL = view.NamePL,
+                                BodySide = bodySection.BodySide,
+                                SectionName = bodySection.BodySectionName,
+                                SectionNamePL = bodySection.BodySectionNamePL,
+                                Muscles = muscles,
+                                Joints = joints
+                            };
 
-                    await context.Treatments.AddAsync(treatment);
+                            treatmentsToAdd.Add(treatment);
+                        }
+                    }
                 }
 
+                // Bulk insert treatments in one go
+                await context.Treatments.AddRangeAsync(treatmentsToAdd);
                 await context.SaveChangesAsync();
+
                 logger.LogInformation("Treatments seeded successfully");
             }
             catch (Exception ex)

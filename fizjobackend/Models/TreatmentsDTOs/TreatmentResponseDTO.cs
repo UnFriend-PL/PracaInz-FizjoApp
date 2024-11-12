@@ -20,7 +20,7 @@ namespace fizjobackend.Models.TreatmentsDTOs;
     public DateTime? UpdateDate { get; set; }
     public bool IsDeleted { get; set; }
     public IEnumerable<string> SectionNames { get; set;}
-    public IEnumerable<string> SectionNamePL { get; set;}
+    public IEnumerable<string> SectionNamesPL { get; set;}
     public IEnumerable<int> BodySectionIds { get; set;}
     public IEnumerable<int> ViewIds { get; set;}
     public IEnumerable<MuscleResponseDTO> Muscles { get; set; }
@@ -43,10 +43,15 @@ namespace fizjobackend.Models.TreatmentsDTOs;
         Muscles = treatment.Muscles.Select(m => new MuscleResponseDTO(m)).Distinct();
         Joints = treatment.Joints.Select(j => new JointResponseDTO(j)).Distinct();
 
-        SectionNames = treatment.BodySections.Where(s => s.View.Gender == gender).Select(s => s.BodySectionName).Distinct();
-        SectionNamePL = treatment.BodySections.Select(s => s.BodySectionNamePL).Distinct();
-        BodySectionIds = treatment.BodySections.Select(s => s.Id).Distinct();
-        ViewIds = treatment.BodySections.Select(s => s.ViewId).Distinct();
+        //SectionNamesPL = treatment.BodySections.Select(s => s.BodySectionNamePL);
+        //SectionNames = treatment.BodySections.Select(s => s.BodySectionName);
+        //BodySectionIds = treatment.BodySections.Select(b => b.Id);
+        //ViewIds = treatment.Views.Select(v => v.Id);
+
+        //SectionNames = treatment.BodySections.Where(s => s.View.Gender == gender).Select(s => s.BodySectionName).Distinct();
+        //SectionNamePL = treatment.BodySections.Select(s => s.BodySectionNamePL).Distinct();
+        //BodySectionIds = treatment.BodySections.Select(s => s.Id).Distinct();
+        //ViewIds = treatment.BodySections.Select(s => s.ViewId).Distinct();
     }
 
     public TreatmentResponseDTO()

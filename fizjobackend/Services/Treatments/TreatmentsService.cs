@@ -28,8 +28,7 @@ namespace fizjobackend.Services.Treatments
             {
                 var treatments = await _context.Treatments
                     .AsNoTracking()
-                    .Include(bs => bs.BodySections)
-                    .Include(v => v.Views)
+                    .AsQueryable()
                     .ToListAsync();
                 var treatmentsDTO = treatments.Select(t => new TreatmentsAutoCompleteResponseDTO(t)).ToList();
                 response = new ServiceResponse<IEnumerable<TreatmentsAutoCompleteResponseDTO>>(" Treatments retrieved");
@@ -55,12 +54,18 @@ namespace fizjobackend.Services.Treatments
             try
             {
                 var treatment = await _context.Treatments
-                    .Where(t => t.Id == treatmentRequest.Id)
                     .Include(t => t.Muscles)
                     .Include(t => t.Joints)
-                    .Include(t => t.Views)
-                    .Include(t => t.BodySections)
+                    .Where(t => t.Id == treatmentRequest.Id)
+                    .AsQueryable()
                     .FirstOrDefaultAsync();
+                //var treatment = await _context.Treatments
+                //    .Where(t => t.Id == treatmentRequest.Id)
+                //    .Include(t => t.Views.Where(v => v.Gender == treatmentRequest.Gender))
+                //    .ThenInclude(t => t.BodySections)
+                //    .ThenInclude(t => t.Joints)
+                //    .Include(t => t.Muscles)
+                //    .FirstOrDefaultAsync();
                 if (treatment == null)
                 {
                     response = new ServiceResponse<TreatmentResponseDTO>("Treatment not found") { Success = false };

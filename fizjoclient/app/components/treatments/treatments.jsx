@@ -1,11 +1,18 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+} from "react";
 import styles from "./treatments.module.scss";
-import Select from "react-select";
 import apiService from "@/app/services/apiService/apiService";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
 import { AppointmentContext } from "@/app/appointments/[appointmentId]/appointmentContext";
+import AsyncSelect from "react-select/async";
 import useSelectedItems from "@/app/appointments/utils/useSelectedItems";
 import { UserContext } from "@/app/contexts/user/userContext";
+import debounce from "lodash.debounce";
 
 const TreatmentsAutoComplete = () => {
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -13,6 +20,7 @@ const TreatmentsAutoComplete = () => {
   const { language } = useContext(LanguageContext);
   const [options, setOptions] = useState([]);
   const { user } = useContext(UserContext);
+  const treatmentDetailsCache = useRef({});
   console.log(user, "user");
   const { selectedItems, handleChange } = useSelectedItems();
 
@@ -96,15 +104,34 @@ const TreatmentsAutoComplete = () => {
   const handleTreatmentSelectChange = async (options) => {
     setSelectedOptions(options);
     console.log(options, "treatments");
-    const selectedTreatment = await fetchTreatment(options[0].value);
-    console.log(selectedTreatment, "selectedTreatment");
+
+    if (options && options.length > 0) {
+      const selectedTreatment = await fetchTreatment(options[0].value);
+      console.log(selectedTreatment, "selectedTreatment");
+    }
   };
+
+  const filterTreatments = (inputValue) => {
+    return options
+      .filter((i) => i.label.toLowerCase().includes(inputValue.toLowerCase()))
+      .slice(0, 50); // Limit results to 50
+  };
+
+  const loadOptions = useCallback(
+    debounce((inputValue, callback) => {
+      let filteredOptions = filterTreatments(inputValue);
+      console.log(filteredOptions.length, "filteredOptions");
+      callback(filteredOptions);
+    }, 300), // Debounce with 300ms delay
+    [options]
+  );
 
   return (
     <>
       <div className={styles.container}>
-        <Select
-          options={options}
+        <AsyncSelect
+          cacheOptions
+          loadOptions={loadOptions}
           value={selectedOptions}
           onChange={handleTreatmentSelectChange}
           placeholder="Wyszukaj i wybierz zabiegi..."

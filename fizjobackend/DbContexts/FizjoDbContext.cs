@@ -69,16 +69,6 @@ namespace fizjobackend.DbContexts
                     .WithMany(p => p.Treatments)
                     .HasForeignKey(t => t.OwnerId)
                     .OnDelete(DeleteBehavior.Restrict);
-
-                modelBuilder.Entity<Treatment>()
-                    .HasMany(v => v.Views)
-                    .WithMany(v => v.Treatments)
-                    .UsingEntity(j => j.ToTable("TreatmentViews"));
-
-                modelBuilder.Entity<Treatment>()
-                    .HasMany(bs => bs.BodySections)
-                    .WithMany(bs => bs.Treatments)
-                    .UsingEntity(j => j.ToTable("TreatmentBodySections"));
             }
         }
 

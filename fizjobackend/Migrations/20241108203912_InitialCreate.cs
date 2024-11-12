@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace fizjobackend.Migrations
 {
     /// <inheritdoc />
-    public partial class initialCreate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -318,7 +318,14 @@ namespace fizjobackend.Migrations
                     Duration = table.Column<TimeSpan>(type: "time", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    ViewId = table.Column<int>(type: "int", nullable: false),
+                    ViewName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ViewNamePL = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BodySide = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SectionName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SectionNamePL = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BodySectionId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

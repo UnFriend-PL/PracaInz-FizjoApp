@@ -13,6 +13,5 @@ namespace fizjobackend.Entities.BodyEntities
         public string Gender { get; set; }
 
         public ICollection<BodySection> BodySections { get; set; }
-        public virtual ICollection<Treatment> Treatments { get; set; } = new List<Treatment>();
     }
 }
