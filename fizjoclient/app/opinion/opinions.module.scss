@@ -22,6 +22,14 @@
   margin-bottom: 15px;
   box-shadow: 0px 4px 8px $box-shadow-color;
 }
+.opinionCardEdit {
+  background-color: $bg-white;
+  border: 1px solid $border-edit-color;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0px 4px 8px $box-shadow-color;
+}
 
 .opinionAuthor,
 .opinionRating,
@@ -33,18 +41,88 @@
 }
 
 .opinionComment {
-  font-size: 1em;
-  line-height: 1.6;
-  color: $label-color;
-  margin-top: 10px;
-  margin-bottom: 15px;
+  font-style: italic;
+  color: #667799;
+  //$text-muted;
 }
 
-.opinionAuthor strong,
-.opinionComment strong,
-.opinionRating strong,
-.opinionDate strong {
-  color: $text-dark-green;
+.commentInput {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid $border-color;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.filled {
+  color: gold;
+}
+
+.empty {
+  color: #ddd;
+}
+
+.editButtons {
+  display: flex;
+  gap: 10px;
+}
+
+.editButton {
+  display: flex;
+  align-items: center;
+  background-color: $button-edit-bg;
+  color: white;
+  padding: 7px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.saveButton {
+  display: flex;
+  align-items: center;
+  background-color: $button-submit-bg;
+  color: white;
+  padding: 7px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.cancelButton {
+  display: flex;
+  align-items: center;
+  background-color: $button-cancel-bg-hover;
+  color: white;
+  padding: 7px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.saveButton {
+  background-color: #28a745;
+}
+
+.cancelButton {
+  background-color: #dc3545;
+}
+
+.editButton:hover {
+  background-color: darken($button-edit-bg-hover, 10%);
+}
+.saveButton:hover {
+  background-color: darken($button-submit-bg-hover, 10%);
+}
+.cancelButton:hover {
+  background-color: darken($button-cancel-bg-hover, 10%);
+}
+
+.editIcon,
+.saveIcon,
+.cancelIcon {
+  margin-right: 5px;
 }
 
 .pagination {
@@ -55,15 +133,12 @@
 }
 
 .paginationButton {
-  background-color: $button-bg;
-  color: $text-white;
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
   border: none;
-  padding: 10px 15px;
-  margin: 0 5px;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 0.9em;
-  transition: background-color 0.3s ease;
 }
 
 .paginationButton:disabled {
@@ -71,14 +146,8 @@
   cursor: not-allowed;
 }
 
-.paginationButton:hover:not(:disabled) {
-  background-color: $button-bg-hover;
-}
-
 .pageInfo {
-  font-size: 0.9em;
-  color: $text-dark-green;
-  margin: 0 10px;
+  margin: 0 15px;
 }
 .star {
   color: $star-color;
@@ -86,5 +155,6 @@
 }
 
 .stars {
+  color: $star-color;
   display: inline-flex;
 }
