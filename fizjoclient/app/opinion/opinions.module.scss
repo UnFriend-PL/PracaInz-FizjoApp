@@ -15,6 +15,7 @@
 }
 
 .opinionCard {
+  position: relative;
   background-color: $bg-white;
   border: 1px solid $border-color;
   border-radius: 10px;
@@ -32,14 +33,31 @@
 }
 
 .opinionAuthor,
-.opinionRating,
-.opinionDate {
+.opinionRating {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
   color: $text-black;
 }
-
+.opinionDate {
+  position: absolute;
+  top: 8px; /* Adjust as necessary for spacing */
+  right: 8px; /* Adjust as necessary for spacing */
+  font-size: 0.9em; /* Optional: make the font size slightly smaller */
+  color: #888; /* Optional: a lighter color for subtlety */
+}
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end; /* Aligns buttons to the right */
+  margin-top: 10px; /* Adds spacing above buttons */
+  gap: 10px;
+}
+.opinionAbout {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: $text-black;
+}
 .opinionComment {
   font-style: italic;
   color: #667799;
@@ -150,11 +168,13 @@
   margin: 0 15px;
 }
 .star {
+  display: block;
   color: $star-color;
   margin-right: 2px;
 }
 
 .stars {
+  display: block;
   color: $star-color;
   display: inline-flex;
 }

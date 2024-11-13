@@ -17,7 +17,7 @@ namespace fizjobackend.Models.OpinionDTOs
         public string Comment { get; set; } = string.Empty;
         public int Rating { get; set; }
         public DateTime UploadDate { get; set; } = DateTime.Now;
-
+        public string About { get; set; } = string.Empty;
         public OpinionListDTO() { }
 
         public OpinionListDTO(Opinion opinion)

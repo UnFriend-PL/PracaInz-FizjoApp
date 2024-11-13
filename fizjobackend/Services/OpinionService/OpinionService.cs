@@ -186,6 +186,16 @@ namespace fizjobackend.Services.OpinionService
 
             return userRole;
         }
+        private string GetFistNameAndLastNamePhysio(Guid userId)
+        {
+            var physiotherapist = _context.Users.Find(userId);
+            string FirstNameAndLastNamePhysio = $"{physiotherapist.FirstName} {physiotherapist.LastName}";
+            if (physiotherapist == null)
+            {
+                throw new ArgumentException("Physiotherapist not found");
+            }
+            return FirstNameAndLastNamePhysio;
+        }
         public async Task<ServiceResponse<ListOfOpinionResponseDTO>> GetAllOpinions(IEnumerable<string> userRoles,string userId, int page, int pageSize)
         {
             var response = new ServiceResponse<ListOfOpinionResponseDTO>("");
@@ -248,7 +258,8 @@ namespace fizjobackend.Services.OpinionService
                     NameAndFirstLetterOfTheLastName = o.NameAndFirstLetterOfTheLastName,
                     Comment = o.Comment,
                     Rating = o.Rating,
-                    UploadDate = o.UploadDate
+                    UploadDate = o.UploadDate,
+                    About = GetFistNameAndLastNamePhysio(o.PhysiotherapistId)
                 }).ToList();
                 opinionResponse.Page = page;
                 opinionResponse.TotalPage = (int)Math.Ceiling((double)opinionsCount / pageSize); response.Data = opinionResponse;

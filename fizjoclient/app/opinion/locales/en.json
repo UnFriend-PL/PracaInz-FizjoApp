@@ -37,7 +37,7 @@
   "noOpinions": "No opinions available",
   "opinionAuthor": "Author",
   "opinionComment": "Comment",
-  "opinionRating": "Rating",
+  "opinionRating": "Your rating",
   "opinionDate": "Date",
   "nextPage": "Next Page",
   "prevPage": "Previous Page",
@@ -51,5 +51,6 @@
   "errorSubmittingOpinion": "Error submitting opinion. Please try again later.",
   "averageRating": "Average Rating",
   "totalOpinions": "Total Opinions",
-  "viewAllOpinions": "View All Opinions"
+  "viewAllOpinions": "View All Opinions",
+  "about": "About physiotherapist"
 }

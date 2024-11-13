@@ -38,7 +38,7 @@
   "noOpinions": "Brak dostępnych opinii",
   "opinionAuthor": "Autor",
   "opinionComment": "Komentarz",
-  "opinionRating": "Ocena",
+  "opinionRating": "Twoja ocena",
   "opinionDate": "Data",
   "nextPage": "Następna strona",
   "prevPage": "Poprzednia strona",
@@ -52,5 +52,6 @@
   "errorSubmittingOpinion": "Błąd podczas wysyłania opinii. Spróbuj ponownie później.",
   "averageRating": "Średnia ocena",
   "totalOpinions": "Łączna liczba opinii",
-  "viewAllOpinions": "Zobacz wszystkie opinie"
+  "viewAllOpinions": "Zobacz wszystkie opinie",
+  "about": "Dotyczy fizjoterapeuty"
 }

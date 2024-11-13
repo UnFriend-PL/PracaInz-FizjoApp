@@ -70,6 +70,7 @@ const Opinions = () => {
       setPage(newPage);
     }
   };
+
   const renderStars = (rating) => {
     const stars = [];
     for (let i = 0; i < 5; i++) {
@@ -81,6 +82,7 @@ const Opinions = () => {
     }
     return stars;
   };
+
   const handleEditOpinion = (opinion) => {
     if (role === "Patient" && opinion.PatientId === userId) {
       setEditingOpinion(opinion); // Ustawienie opinii do edycji
@@ -108,7 +110,7 @@ const Opinions = () => {
               : opinion
           )
         );
-        setEditingOpinion(null); // Po zapisaniu edycji ustawiamy editingOpinion na null, żeby wrócić do widoku opinii
+        setEditingOpinion(null);
       } else {
         console.error("Nie udało się zaktualizować opinii");
       }
@@ -118,7 +120,7 @@ const Opinions = () => {
   };
 
   const cancelEdit = () => {
-    setEditingOpinion(null); // Anulowanie edycji
+    setEditingOpinion(null);
   };
 
   const handleCommentChange = (e) => {
@@ -146,31 +148,30 @@ const Opinions = () => {
         <div>
           {opinions.map((opinion) => (
             <div key={opinion.opinionId} className={styles.opinionCard}>
-              <span className={styles.opinionAuthor}>
-                <strong>{t.opinionAuthor}:</strong>{" "}
-                {opinion.nameAndFirstLetterOfTheLastName}
+              <span className={styles.opinionDetail}>
+                <strong></strong>{" "}
+                {role === "Patient"
+                  ? opinion.about
+                  : opinion.nameAndFirstLetterOfTheLastName}
               </span>
-
-              {/* Renderowanie gwiazdek (wyświetlanie gwiazdek przed edycją) */}
-              <div className={styles.stars}>
-                {editingOpinion?.opinionId === opinion.opinionId
-                  ? // Zmiana gwiazdek podczas edycji
-                    [1, 2, 3, 4, 5].map((star) => (
-                      <span
-                        key={star}
-                        onClick={() => handleRatingChange(star)} // Zmieniamy rating po kliknięciu
-                      >
-                        {star <= editingOpinion.rating ? (
-                          <FaStar className={styles.filledStar} />
-                        ) : (
-                          <FaRegStar className={styles.emptyStar} />
-                        )}
-                      </span>
-                    ))
-                  : // Renderowanie gwiazdek bez możliwości edycji
-                    renderStars(opinion.rating)}
+              <div className={styles.rating}>
+                <div className={styles.stars}>
+                  {editingOpinion?.opinionId === opinion.opinionId
+                    ? [1, 2, 3, 4, 5].map((star) => (
+                        <span
+                          key={star}
+                          onClick={() => handleRatingChange(star)}
+                        >
+                          {star <= editingOpinion.rating ? (
+                            <FaStar className={styles.filledStar} />
+                          ) : (
+                            <FaRegStar className={styles.emptyStar} />
+                          )}
+                        </span>
+                      ))
+                    : renderStars(opinion.rating)}
+                </div>
               </div>
-
               {editingOpinion?.opinionId === opinion.opinionId ? (
                 <textarea
                   value={editingOpinion.comment}
@@ -182,26 +183,23 @@ const Opinions = () => {
                   <strong>{t.opinionComment}:</strong> {opinion.comment}
                 </p>
               )}
-
               <span className={styles.opinionDate}>
-                <strong>{t.opinionDate}:</strong>{" "}
                 {new Date(opinion.uploadDate).toLocaleDateString()}
               </span>
-
               {role === "Patient" && opinion.PatientId === userId && (
-                <div className={styles.editButtons}>
+                <div className={styles.buttonContainer}>
                   {editingOpinion &&
                   editingOpinion.opinionId === opinion.opinionId ? (
                     <>
                       <button
-                        onClick={() => updateOpinion(editingOpinion)} // Funkcja zapisania opinii
+                        onClick={() => updateOpinion(editingOpinion)}
                         className={styles.saveButton}
                       >
                         <FaRegSave className={styles.saveIcon} />
                         {t.save}
                       </button>
                       <button
-                        onClick={cancelEdit} // Funkcja anulowania edycji
+                        onClick={cancelEdit}
                         className={styles.cancelButton}
                       >
                         <FaRegTrashAlt className={styles.cancelIcon} />
@@ -210,7 +208,7 @@ const Opinions = () => {
                     </>
                   ) : (
                     <button
-                      onClick={() => handleEditOpinion(opinion)} // Funkcja rozpoczynająca edycję
+                      onClick={() => handleEditOpinion(opinion)}
                       className={styles.editButton}
                     >
                       <FaRegEdit className={styles.editIcon} />
