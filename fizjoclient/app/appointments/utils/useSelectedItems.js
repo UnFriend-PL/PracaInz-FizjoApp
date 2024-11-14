@@ -1,105 +1,79 @@
-import { useState, useCallback } from "react";
+import { useCallback, useContext } from "react";
+import { AppointmentContext } from "../[appointmentId]/appointmentContext";
 
-const useSelectedItems = (musclesAndJoints, loadedMusclesAndJoints) => {
-  const [selectedItems, setSelectedItems] = useState({});
+const useSelectedItems = () => {
+  const { selectedItems, setSelectedItems } = useContext(AppointmentContext);
 
-  const handleChange = useCallback((selected, sectionName, type) => {
-    setSelectedItems((prevState) => {
-      const updatedSection = {
-        ...prevState[sectionName],
-        [type]: selected || [],
-      };
-      if (!updatedSection.muscles?.length && !updatedSection.joints?.length) {
-        const { [sectionName]: _, ...rest } = prevState;
-        return rest;
-      }
-      return {
-        ...prevState,
-        [sectionName]: updatedSection,
-      };
-    });
-  }, []);
+  // Helper function to find the index of a section
+  const findSectionIndex = (sections, sectionName) =>
+    sections.findIndex((item) => item.sectionName === sectionName);
 
-  const handleRemove = useCallback((sectionName, type, value) => {
-    setSelectedItems((prevState) => {
-      const updatedSection = {
-        ...prevState[sectionName],
-        [type]: prevState[sectionName][type].filter(
-          (item) => item.value !== value
-        ),
-      };
-      if (!updatedSection.muscles?.length && !updatedSection.joints?.length) {
-        const { [sectionName]: _, ...rest } = prevState;
-        return rest;
-      }
-      return {
-        ...prevState,
-        [sectionName]: updatedSection,
-      };
-    });
-  }, []);
+  // Helper function to check if a section is empty
+  const isSectionEmpty = (section) =>
+    !section.muscles?.length && !section.joints?.length;
 
-  const validateSelectedItems = useCallback(() => {
-    const currentIds = new Set(
-      musclesAndJoints.flatMap((section) => [
-        ...section.muscles.map((m) => m.id),
-        ...section.joints.map((j) => j.id),
-      ])
+  // Helper function to update a section in the selectedItems array
+  const updateSelectedItems = (prevState, sectionIndex, updatedSection) =>
+    prevState.map((item, index) =>
+      index === sectionIndex ? updatedSection : item
     );
 
-    setSelectedItems((prevSelectedItems) => {
-      const newSelectedItems = {};
-      for (const [sectionName, items] of Object.entries(prevSelectedItems)) {
-        const muscles = (items.muscles || []).filter((item) =>
-          currentIds.has(item.muscleId)
-        );
-        const joints = (items.joints || []).filter((item) =>
-          currentIds.has(item.jointId)
-        );
-        if (muscles.length || joints.length)
-          newSelectedItems[sectionName] = { muscles, joints };
-      }
-      return newSelectedItems;
-    });
-  }, [musclesAndJoints]);
+  // Handle change when muscles or joints are selected or deselected
+  const handleChange = useCallback((selected, section, type) => {
+    setSelectedItems((prevState) => {
+      const sectionIndex = findSectionIndex(prevState, section.sectionName);
 
-  const setInitialValues = useCallback(
-    (mappedData) => {
-      const initialSelectedItems = {};
-      mappedData.forEach((section) => {
-        const initialSelectedMuscles = section.muscles.filter((muscle) =>
-          loadedMusclesAndJoints.some(
-            (item) =>
-              item.muscleId === muscle.muscleId && item.viewId === muscle.viewId
-          )
-        );
+      if (sectionIndex > -1) {
+        const updatedSection = {
+          ...prevState[sectionIndex],
+          [type]: selected || [],
+        };
 
-        const initialSelectedJoints = section.joints.filter((joint) =>
-          loadedMusclesAndJoints.some(
-            (item) =>
-              item.jointId === joint.jointId && item.viewId === joint.viewId
-          )
-        );
-
-        if (initialSelectedMuscles.length || initialSelectedJoints.length) {
-          initialSelectedItems[section.sectionName] = {
-            muscles: initialSelectedMuscles,
-            joints: initialSelectedJoints,
-          };
+        if (isSectionEmpty(updatedSection)) {
+          // Remove the section if both muscles and joints are empty
+          return prevState.filter((_, index) => index !== sectionIndex);
         }
-      });
-      setSelectedItems(initialSelectedItems);
-    },
-    [loadedMusclesAndJoints]
-  );
+
+        // Update the existing section
+        return updateSelectedItems(prevState, sectionIndex, updatedSection);
+      } else {
+        // Add a new section
+        const newSection = { ...section, [type]: selected || [] };
+        return [...prevState, newSection];
+      }
+    });
+  }, []);
+
+  // Handle removal of a specific muscle or joint
+  const handleRemove = useCallback((section, type, value) => {
+    setSelectedItems((prevState) => {
+      const sectionIndex = findSectionIndex(prevState, section.sectionName);
+
+      if (sectionIndex > -1) {
+        const updatedSection = {
+          ...prevState[sectionIndex],
+          [type]: prevState[sectionIndex][type].filter(
+            (item) => item.value !== value
+          ),
+        };
+
+        if (isSectionEmpty(updatedSection)) {
+          // Remove the section if both muscles and joints are empty
+          return prevState.filter((_, index) => index !== sectionIndex);
+        }
+
+        // Update the existing section
+        return updateSelectedItems(prevState, sectionIndex, updatedSection);
+      }
+
+      return prevState;
+    });
+  }, []);
 
   return {
     selectedItems,
     handleChange,
     handleRemove,
-    setSelectedItems,
-    validateSelectedItems,
-    setInitialValues,
   };
 };
 
