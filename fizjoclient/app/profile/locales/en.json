@@ -18,5 +18,8 @@
   "address": "Address",
   "dob": "Date of Birth",
   "insurance": "Health Insurance Number",
-  "saveChanges": "Save"
+  "saveChanges": "Save",
+  "replaceAvatar": "Change profile picture",
+  "uploadAvatar": "Choose a picture",
+  "uploading": "Uploading..."
 }

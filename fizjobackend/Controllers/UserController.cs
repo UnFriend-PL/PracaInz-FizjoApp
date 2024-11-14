@@ -58,5 +58,29 @@ namespace fizjobackend.Controllers
             return Ok(response);
         }
 
+
+        [HttpPost("Avatar/Upload")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        public async Task<IActionResult> UploadImage(IFormFile file)
+        {
+            var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var response = await _userService.UploadAvatar(userId, file);
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
+        [HttpGet("Avatar/Get/{avatarPath}")]
+        public async Task<IActionResult> GetAvatar(string avatarPath)
+        {
+            var response = await _userService.GetAvatarFile(avatarPath);
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
     }
 }

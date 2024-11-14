@@ -19,6 +19,7 @@ namespace fizjobackend.Models.UserDTOs
         public string Email { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
         public string HealthInsuranceNumber { get; set; } = string.Empty;
+        public string AvatarPath { get; set; } = string.Empty;
 
         public PatientInfoResponseDTO() { }
 
@@ -37,6 +38,7 @@ namespace fizjobackend.Models.UserDTOs
             Email = patient.Email;
             PhoneNumber = patient.PhoneNumber;
             HealthInsuranceNumber = patient.HealthInsuranceNumber;
+            AvatarPath = patient.AvatarPath;
         }
     }
 }

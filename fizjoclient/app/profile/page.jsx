@@ -8,6 +8,7 @@ import { LanguageContext } from "../contexts/lang/langContext";
 import { FaRegEdit } from "react-icons/fa";
 import pl from "./locales/pl.json";
 import en from "./locales/en.json";
+import Image from "next/image";
 
 const locales = { en, pl };
 
@@ -20,6 +21,7 @@ const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editableFields, setEditableFields] = useState({});
   const [isDirty, setIsDirty] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   const handleEditToggle = (key) => {
     setEditableFields((prev) => ({
@@ -40,7 +42,10 @@ const Profile = () => {
     setIsEditing(!isEditing);
     if (!isEditing) {
       const newEditableFields = Object.keys(user).reduce((acc, key) => {
-        acc[key] = true;
+        if (key !== "avatarPath") {
+          // Exclude avatarPath from being editable here
+          acc[key] = true;
+        }
         return acc;
       }, {});
       setEditableFields(newEditableFields);
@@ -57,41 +62,69 @@ const Profile = () => {
     try {
       const response = await apiService.post("/User/UpdateInfo", user, true);
       if (response.success) {
-        return response.data;
+        updateUser(response.data);
       } else {
-        throw new Error(response.data);
+        throw new Error(response.message || "Failed to update user info");
       }
     } catch (error) {
-      console.error("Error fetching user info:", error);
+      console.error("Error updating user info:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  const getUserInfo = async (e) => {
-    e.preventDefault();
+  const getUserInfo = async () => {
     try {
       const response = await apiService.get("/User/GetInfo", null, true);
       if (response.success) {
         return response.data;
       } else {
-        throw new Error(response.data);
+        throw new Error(response.message || "Failed to fetch user info");
       }
     } catch (error) {
       console.error("Error fetching user info:", error);
-      return [];
+      return null;
+    }
+  };
+
+  const handleAvatarChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    setUploading(true);
+    try {
+      const response = await apiService.post(
+        "/User/Avatar/Upload",
+        formData,
+        true
+      );
+
+      if (response.success) {
+        updateUser({ ...user, avatarPath: response.data.avatarPath });
+      } else {
+        throw new Error(response.message || "Failed to upload avatar");
+      }
+    } catch (error) {
+      console.error("Error uploading avatar:", error);
     } finally {
-      setLoading(false);
+      setUploading(false);
     }
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getUserInfo({ preventDefault: () => {} });
-        updateUser(data);
+        const data = await getUserInfo();
+        if (data) {
+          updateUser(data);
+        }
       } catch (error) {
         console.error("Error fetching user info:", error);
+      } finally {
+        setLoading(false);
       }
     };
     if (isAuthenticated) fetchData();
@@ -120,12 +153,42 @@ const Profile = () => {
       <h1 className={styles.title}>{t.profile}</h1>
 
       <div className={styles.profileCard}>
+        {/* Avatar Section */}
+        <div className={styles.avatarSection}>
+          {user.avatarPath && (
+            <Image
+              src={`/User/Avatar/Get/${user.avatarPath}`}
+              alt="User Avatar"
+              width={150}
+              height={150}
+              className={styles.avatar}
+            />
+          )}
+        </div>
+        <div className={styles.avatarSection}>
+          <div className={styles.uploadSection}>
+            <label htmlFor="avatarUpload" className={styles.uploadLabel}>
+              {user.avatarPath ? t.replaceAvatar : t.uploadAvatar}
+            </label>
+            <input
+              type="file"
+              id="avatarUpload"
+              accept="image/*"
+              onChange={handleAvatarChange}
+              className={styles.uploadInput}
+            />
+            {uploading && (
+              <span className={styles.uploading}>{t.uploading}</span>
+            )}
+          </div>
+        </div>
+
         <button onClick={enableEditAllFields} className={styles.editButton}>
-          <FaRegEdit className={styles.editIcon} />{" "}
-          {isEditing ? t.saveChanges : t.editAllFields}
+          <FaRegEdit className={styles.editIcon} /> {t.editAllFields}
         </button>
+
         {Object.keys(user)
-          .filter((key) => key !== "Id")
+          .filter((key) => key !== "Id" && key !== "avatarPath")
           .map((key) => (
             <div className={styles.field} key={key}>
               <span className={styles.label}>
@@ -149,12 +212,13 @@ const Profile = () => {
               )}
             </div>
           ))}
+
+        {isDirty && (
+          <button onClick={saveChanges} className={styles.saveButton}>
+            {t.saveChanges}
+          </button>
+        )}
       </div>
-      {isDirty && (
-        <button onClick={saveChanges} className={styles.saveButton}>
-          {t.saveChanges}
-        </button>
-      )}
     </div>
   );
 };

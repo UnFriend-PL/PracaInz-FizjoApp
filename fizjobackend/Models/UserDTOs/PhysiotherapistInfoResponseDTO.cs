@@ -18,6 +18,7 @@ namespace fizjobackend.Models.UserDTOs
         public string Email { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
         public string LicenseNumber { get; set; } = string.Empty;
+        public string AvatarPath { get; set; } = string.Empty;
 
         public PhysiotherapistInfoResponseDTO() { }
 
@@ -36,6 +37,7 @@ namespace fizjobackend.Models.UserDTOs
             Email = physiotherapist.Email;
             PhoneNumber = physiotherapist.PhoneNumber;
             LicenseNumber = physiotherapist.LicenseNumber;
+            AvatarPath = physiotherapist.AvatarPath;
         }
     }
 }

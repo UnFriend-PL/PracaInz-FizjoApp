@@ -10,9 +10,7 @@ const apiService = {
       }`;
       const config = {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: {},
       };
       if (withAuth) {
         const token = localStorage.getItem("token");
@@ -22,7 +20,20 @@ const apiService = {
       }
 
       const response = await fetch(url, config);
-      const data = await response.json();
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`HTTP error! status: ${response.status}`, errorText);
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const contentType = response.headers.get("content-type");
+      let data;
+      if (contentType && contentType.includes("application/json")) {
+        data = await response.json();
+      } else {
+        data = await response.text();
+      }
       return data;
     } catch (error) {
       console.error("API GET request failed:", error);
@@ -31,66 +42,40 @@ const apiService = {
   },
 
   post: async (endpoint, data, withAuth = false) => {
-    try {
-      const url = `${baseURL}${endpoint}`;
-      const config = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      };
-      if (withAuth) {
-        const token = localStorage.getItem("token");
-        if (token) {
-          config.headers["Authorization"] = `Bearer ${token}`;
-        }
-      }
-
-      const response = await fetch(url, config);
-      const responseData = await response.json();
-      return responseData;
-    } catch (error) {
-      console.error("POST request error:", error);
-      throw error;
-    }
+    return await apiService._requestWithBody("POST", endpoint, data, withAuth);
   },
 
   put: async (endpoint, data, withAuth = false) => {
-    try {
-      const url = `${baseURL}${endpoint}`;
-      const config = {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      };
-      if (withAuth) {
-        const token = localStorage.getItem("token");
-        if (token) {
-          config.headers["Authorization"] = `Bearer ${token}`;
-        }
-      }
-
-      const response = await fetch(url, config);
-      const responseData = await response.json();
-      return responseData;
-    } catch (error) {
-      console.error("PUT request error:", error);
-      throw error;
-    }
+    return await apiService._requestWithBody("PUT", endpoint, data, withAuth);
   },
 
-  delete: async (endpoint, withAuth = false) => {
+  delete: async (endpoint, data = null, withAuth = false) => {
+    return await apiService._requestWithBody(
+      "DELETE",
+      endpoint,
+      data,
+      withAuth
+    );
+  },
+
+  _requestWithBody: async (method, endpoint, data, withAuth = false) => {
     try {
       const url = `${baseURL}${endpoint}`;
       const config = {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        method: method,
+        headers: {},
+        body: null,
       };
+
+      if (data) {
+        if (data instanceof FormData) {
+          config.body = data;
+        } else {
+          config.headers["Content-Type"] = "application/json";
+          config.body = JSON.stringify(data);
+        }
+      }
+
       if (withAuth) {
         const token = localStorage.getItem("token");
         if (token) {
@@ -99,10 +84,24 @@ const apiService = {
       }
 
       const response = await fetch(url, config);
-      const responseData = await response.json();
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`HTTP error! status: ${response.status}`, errorText);
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const contentType = response.headers.get("content-type");
+      let responseData;
+      if (contentType && contentType.includes("application/json")) {
+        responseData = await response.json();
+      } else {
+        responseData = await response.text();
+      }
+
       return responseData;
     } catch (error) {
-      console.error("DELETE request error:", error);
+      console.error(`${method} request error:`, error);
       throw error;
     }
   },

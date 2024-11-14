@@ -18,5 +18,8 @@
   "address": "Adres",
   "dob": "Data urodzenia",
   "insurance": "Numer ubezpieczenia zdrowotnego",
-  "saveChanges": "Zapisz"
+  "saveChanges": "Zapisz",
+  "replaceAvatar": "Zmień zdjęcie profilowe",
+  "uploadAvatar": "Wybierz zdjęcie",
+  "uploading": "Wysyłanie..."
 }
