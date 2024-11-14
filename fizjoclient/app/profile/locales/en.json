@@ -17,5 +17,6 @@
   "pesel": "PESEL",
   "address": "Address",
   "dob": "Date of Birth",
-  "insurance": "Health Insurance Number"
+  "insurance": "Health Insurance Number",
+  "saveChanges": "Save"
 }

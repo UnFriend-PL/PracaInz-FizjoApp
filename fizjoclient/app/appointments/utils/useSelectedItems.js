@@ -1,45 +1,80 @@
-import { useState, useCallback } from "react";
+import { useCallback, useContext } from "react";
+import { AppointmentContext } from "../[appointmentId]/appointmentContext";
 
 const useSelectedItems = () => {
-  const [selectedItems, setSelectedItems] = useState({});
+  const { selectedItems, setSelectedItems } = useContext(AppointmentContext);
 
-  const handleChange = useCallback((selected, sectionName, type) => {
+  // Helper function to find the index of a section
+  const findSectionIndex = (sections, sectionName) =>
+    sections.findIndex((item) => item.sectionName === sectionName);
+
+  // Helper function to check if a section is empty
+  const isSectionEmpty = (section) =>
+    !section.muscles?.length && !section.joints?.length;
+
+  // Helper function to update a section in the selectedItems array
+  const updateSelectedItems = (prevState, sectionIndex, updatedSection) =>
+    prevState.map((item, index) =>
+      index === sectionIndex ? updatedSection : item
+    );
+
+  // Handle change when muscles or joints are selected or deselected
+  const handleChange = useCallback((selected, section, type) => {
     setSelectedItems((prevState) => {
-      const updatedSection = {
-        ...prevState[sectionName],
-        [type]: selected || [],
-      };
-      if (!updatedSection.muscles?.length && !updatedSection.joints?.length) {
-        const { [sectionName]: _, ...rest } = prevState;
-        return rest;
+      const sectionIndex = findSectionIndex(prevState, section.sectionName);
+
+      if (sectionIndex > -1) {
+        const updatedSection = {
+          ...prevState[sectionIndex],
+          [type]: selected || [],
+        };
+
+        if (isSectionEmpty(updatedSection)) {
+          // Remove the section if both muscles and joints are empty
+          return prevState.filter((_, index) => index !== sectionIndex);
+        }
+
+        // Update the existing section
+        return updateSelectedItems(prevState, sectionIndex, updatedSection);
+      } else {
+        // Add a new section
+        const newSection = { ...section, [type]: selected || [] };
+        return [...prevState, newSection];
       }
-      return {
-        ...prevState,
-        [sectionName]: updatedSection,
-      };
     });
   }, []);
 
-  const handleRemove = useCallback((sectionName, type, value) => {
+  // Handle removal of a specific muscle or joint
+  const handleRemove = useCallback((section, type, value) => {
     setSelectedItems((prevState) => {
-      const updatedSection = {
-        ...prevState[sectionName],
-        [type]: prevState[sectionName][type].filter(
-          (item) => item.value !== value
-        ),
-      };
-      if (!updatedSection.muscles?.length && !updatedSection.joints?.length) {
-        const { [sectionName]: _, ...rest } = prevState;
-        return rest;
+      const sectionIndex = findSectionIndex(prevState, section.sectionName);
+
+      if (sectionIndex > -1) {
+        const updatedSection = {
+          ...prevState[sectionIndex],
+          [type]: prevState[sectionIndex][type].filter(
+            (item) => item.value !== value
+          ),
+        };
+
+        if (isSectionEmpty(updatedSection)) {
+          // Remove the section if both muscles and joints are empty
+          return prevState.filter((_, index) => index !== sectionIndex);
+        }
+
+        // Update the existing section
+        return updateSelectedItems(prevState, sectionIndex, updatedSection);
       }
-      return {
-        ...prevState,
-        [sectionName]: updatedSection,
-      };
+
+      return prevState;
     });
   }, []);
 
-  return { selectedItems, handleChange, handleRemove, setSelectedItems };
+  return {
+    selectedItems,
+    handleChange,
+    handleRemove,
+  };
 };
 
 export default useSelectedItems;

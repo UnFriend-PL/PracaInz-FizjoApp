@@ -21,6 +21,8 @@ namespace fizjobackend.Services.BodyVisualizerService
             var serviceResponse = new ServiceResponse<BodyPartDetailsResponseDTO>("Body part details retrieved successfully");
             try
             {
+
+                _logger.LogDebug("Attempting to find view with Gender: {Gender}, ViewPosition: {ViewPosition}", bodyRequest.Gender, bodyRequest.ViewPosition);
                 var view = await _context.Views
                     .FirstOrDefaultAsync(v => v.Gender == bodyRequest.Gender && v.Name == bodyRequest.ViewPosition);
 
@@ -28,12 +30,23 @@ namespace fizjobackend.Services.BodyVisualizerService
                 {
                     serviceResponse.Success = false;
                     serviceResponse.Message = "View not found";
+                    _logger.LogWarning("View not found for Gender: {Gender}, ViewPosition: {ViewPosition}", bodyRequest.Gender, bodyRequest.ViewPosition);
                     return serviceResponse;
                 }
 
+                _logger.LogDebug("View found with Id: {ViewId}. Attempting to find body section with BodySectionName: {BodySectionName}, ViewId: {ViewId}, ViewSide: {ViewSide}", bodyRequest.BodySectionName, view.Id, bodyRequest.ViewSide);
                 var bodySection = await _context.BodySections
                     .FirstOrDefaultAsync(bs => bs.BodySectionName == bodyRequest.BodySectionName && bs.ViewId == view.Id && bs.BodySide == bodyRequest.ViewSide);
 
+                if (bodySection == null)
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "Body part not found";
+                    _logger.LogWarning("Body part not found for BodySectionName: {BodySectionName}, ViewId: {ViewId}, ViewSide: {ViewSide}", bodyRequest.BodySectionName, view.Id, bodyRequest.ViewSide);
+                    return serviceResponse;
+                }
+
+                _logger.LogDebug("Body section found with Id: {BodySectionId}", bodySection.Id);
                 if (bodySection == null)
                 {
                     serviceResponse.Success = false;

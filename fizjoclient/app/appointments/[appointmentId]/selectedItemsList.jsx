@@ -1,33 +1,48 @@
 import React, { useContext } from "react";
 import styles from "./appointmentDetails.module.scss";
+import useSelectedItems from "../utils/useSelectedItems";
+import { AppointmentContext } from "./appointmentContext";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
-import pl from "./locales/pl.json";
-import en from "./locales/en.json";
 
-const locales = { en, pl };
-
-const SelectedItemsList = ({ selectedItems, handleRemove }) => {
+const SelectedItemsList = () => {
+  const { readOnly, t } = useContext(AppointmentContext);
   const { language } = useContext(LanguageContext);
-  const t = locales[language];
+
+  const { selectedItems, handleRemove } = useSelectedItems();
 
   return (
     <div className={styles.selectedItemsList}>
       <span className={styles.selectedItemsHeader}>{t.selectedItems}:</span>
-      {Object.entries(selectedItems).map(([sectionName, items]) => (
+      {selectedItems.map(({ sectionName, sectionNamePL, muscles, joints }) => (
         <div key={sectionName} className={styles.selectedSection}>
           <div className={styles.selectedSectionHeader}>
-            {sectionName.replace("-", " ")}:
+            {language === "pl"
+              ? sectionNamePL?.replace("front", "przód").replace("back", "tył")
+              : sectionName}
           </div>
           {["muscles", "joints"].map((type) =>
-            items[type]?.map((item) => (
-              <div key={item.value} className={styles.selectedItem}>
-                <div className={styles.selectedItemLabel}>{item.label}</div>
-                <button
-                  onClick={() => handleRemove(sectionName, type, item.value)}
-                  className={styles.removeButton}
-                >
-                  &times;
-                </button>
+            (type === "muscles" ? muscles : joints)?.map((item, index) => (
+              <div
+                key={item?.value || `index-${index}`}
+                className={styles.selectedItem}
+              >
+                <div className={styles.selectedItemLabel}>
+                  {item?.label || "Unknown"}
+                </div>
+                {!readOnly && item && (
+                  <button
+                    onClick={() =>
+                      handleRemove(
+                        { sectionName, sectionNamePL },
+                        type,
+                        item.value
+                      )
+                    }
+                    className={styles.removeButton}
+                  >
+                    &times;
+                  </button>
+                )}
               </div>
             ))
           )}

@@ -21,11 +21,14 @@
   "joints": "Joints",
   "selectMuscles": "Select muscles",
   "selectJoints": "Select joints",
-  "save": "Save",
-  "saving": "Saving...",
+  "saveDetails": "Save details",
+  "saveDetailsInProgress": "Saving details...",
+  "saveBodyDetails": "Save treatments",
+  "savingBodyDetails": "Saving...",
   "prev": "Previous",
   "next": "Next",
-  "selectedItems": "Selected items",
+  "selectedItems": "Selected",
   "front": "Front",
-  "back": "Back"
+  "back": "Back",
+  "selectNewStatus": "Select new status and/or date"
 }

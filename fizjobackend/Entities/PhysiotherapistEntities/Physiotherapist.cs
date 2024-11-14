@@ -1,4 +1,5 @@
 ﻿using fizjobackend.Entities.AppointmentEntities;
+using fizjobackend.Entities.TreatmentsEntities;
 using fizjobackend.Entities.UserEntities;
 using fizjobackend.Models.AccountDTOs;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,6 +14,7 @@ namespace fizjobackend.Entities.PhysiotherapistEntities
         public ICollection<PhysiotherapySpecializationEntity> PhysiotherapySpecializations { get; set; } = [];
         [InverseProperty("Physiotherapist")]
         public ICollection<Appointment> Appointments { get; set; } = [];
+        public virtual ICollection<Treatment> Treatments { get; set; } = new List<Treatment>();
 
         public Physiotherapist() { }
 

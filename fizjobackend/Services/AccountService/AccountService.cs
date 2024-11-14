@@ -138,7 +138,7 @@ namespace fizjobackend.Services.AccountService
                 {
                     return new ServiceResponse<bool>("Invalid user type") { Success = false };
                 }
-                user.VerificationToken = CreateRandomConfirmationToken();                
+                user.VerificationToken = CreateRandomConfirmationToken();
                 var validateErrors = _accountValidationHelper.Validate(user);
                 if (validateErrors.Length > 0)
                 {
@@ -150,8 +150,13 @@ namespace fizjobackend.Services.AccountService
                     var errors = result.Errors.Select(e => e.Description).ToArray();
                     return new ServiceResponse<bool>("User creation failed") { Success = false, Errors = errors };
                 }
-                await _emailService.SendVerificationEmail(user.Email, user.VerificationToken);
-                await _userManager.AddToRoleAsync(user, role);
+                //_emailService.SendVerificationEmail(user.Email, user.VerificationToken);
+                var roleResult = await _userManager.AddToRoleAsync(user, role);
+                if (!roleResult.Succeeded)
+                {
+                    var errors = roleResult.Errors.Select(e => e.Description).ToArray();
+                    return new ServiceResponse<bool>("Adding role failed") { Success = false, Errors = errors };
+                }
                 return new ServiceResponse<bool>("User registered successfully") { Data = true };
             }
             catch (Exception ex)
