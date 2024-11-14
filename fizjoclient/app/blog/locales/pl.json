@@ -1,0 +1,20 @@
+{
+    "questionAboutPhysiotherapy": "Masz pytanie dotyczące fizjoterapii?",
+    "blogDescription1": "Nasz blog to miejsce, w którym możesz zadawać pytania i dzielić się swoimi wątpliwościami na temat fizjoterapii i masażu.",
+    "blogDescription2": "Zadaj pytanie, a nasi specjaliści postara się na nie odpowiedzieć.",
+    "howToAskQuestion": "Jak zadawać pytania?",
+    "stepThinkQuestion": "1. Przemyśl swoje pytanie:",
+    "stepThinkDescription": "Upewnij się, że jest jasne i zrozumiałe.",
+    "stepLogin": "2. Zaloguj się:",
+    "stepLoginDescription": "Musisz być zalogowany, aby zadać pytanie.",
+    "stepFillForm": "3. Wypełnij formularz:",
+    "stepFillDescription": "Wprowadź swoje pytanie w formularzu poniżej.",
+    "stepSubmitQuestion": "4. Wyślij pytanie:",
+    "stepSubmitDescription": "Kliknij przycisk 'Zadaj pytanie' i czekaj na odpowiedź.",
+    "askQuestion": "Zadaj pytanie",
+    "enterQuestion": "Wpisz swoje pytanie...",
+    "submitQuestion": "Zadaj pytanie",
+    "errorLoginRequired": "Musisz być zalogowany, aby zadać pytanie.",
+    "recentQuestions": "Ostatnio zadane pytania:",
+    "noQuestions": "Brak pytań. Zadaj pierwsze pytanie!"
+}
