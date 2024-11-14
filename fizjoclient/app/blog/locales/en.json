@@ -1,0 +1,20 @@
+{
+    "questionAboutPhysiotherapy": "Do you have a question about physiotherapy?",
+    "blogDescription1": "Our blog is a place where you can ask questions and share your doubts about physiotherapy and massage.",
+    "blogDescription2": "Ask a question, and our specialists will do their best to answer.",
+    "howToAskQuestion": "How to ask questions?",
+    "stepThinkQuestion": "1. Think about your question:",
+    "stepThinkDescription": "Make sure it is clear and understandable.",
+    "stepLogin": "2. Log in:",
+    "stepLoginDescription": "You must be logged in to ask a question.",
+    "stepFillForm": "3. Fill out the form:",
+    "stepFillDescription": "Enter your question in the form below.",
+    "stepSubmitQuestion": "4. Submit your question:",
+    "stepSubmitDescription": "Click the 'Ask Question' button and wait for an answer.",
+    "askQuestion": "Ask a question",
+    "enterQuestion": "Type your question...",
+    "submitQuestion": "Ask Question",
+    "errorLoginRequired": "You must be logged in to ask a question.",
+    "recentQuestions": "Recently asked questions:",
+    "noQuestions": "No questions yet. Ask the first question!"
+}

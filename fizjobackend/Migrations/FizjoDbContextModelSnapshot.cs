@@ -22,6 +22,21 @@ namespace fizjobackend.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("JointTreatment", b =>
+                {
+                    b.Property<int>("JointsId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("TreatmentsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("JointsId", "TreatmentsId");
+
+                    b.HasIndex("TreatmentsId");
+
+                    b.ToTable("TreatmentJoints", (string)null);
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
                 {
                     b.Property<Guid>("Id")
@@ -135,6 +150,21 @@ namespace fizjobackend.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("UserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("MuscleTreatment", b =>
+                {
+                    b.Property<int>("MusclesId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("TreatmentsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("MusclesId", "TreatmentsId");
+
+                    b.HasIndex("TreatmentsId");
+
+                    b.ToTable("TreatmentMuscles", (string)null);
                 });
 
             modelBuilder.Entity("PhysiotherapistPhysiotherapySpecializationEntity", b =>
@@ -436,6 +466,76 @@ namespace fizjobackend.Migrations
                     b.ToTable("PhysiotherapySpecializationEntities");
                 });
 
+            modelBuilder.Entity("fizjobackend.Entities.TreatmentsEntities.Treatment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("BodySectionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("BodySide")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescriptionPL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeSpan>("Duration")
+                        .HasColumnType("time");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NamePL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("OwnerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("SectionName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SectionNamePL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ViewId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ViewName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ViewNamePL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Treatments");
+                });
+
             modelBuilder.Entity("fizjobackend.Entities.UserEntities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -568,6 +668,36 @@ namespace fizjobackend.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.ToTable("Physiotherapists", (string)null);
+                });
+
+            modelBuilder.Entity("JointTreatment", b =>
+                {
+                    b.HasOne("fizjobackend.Entities.BodyEntities.Joint", null)
+                        .WithMany()
+                        .HasForeignKey("JointsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("fizjobackend.Entities.TreatmentsEntities.Treatment", null)
+                        .WithMany()
+                        .HasForeignKey("TreatmentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MuscleTreatment", b =>
+                {
+                    b.HasOne("fizjobackend.Entities.BodyEntities.Muscle", null)
+                        .WithMany()
+                        .HasForeignKey("MusclesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("fizjobackend.Entities.TreatmentsEntities.Treatment", null)
+                        .WithMany()
+                        .HasForeignKey("TreatmentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PhysiotherapistPhysiotherapySpecializationEntity", b =>
@@ -714,6 +844,16 @@ namespace fizjobackend.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("fizjobackend.Entities.TreatmentsEntities.Treatment", b =>
+                {
+                    b.HasOne("fizjobackend.Entities.PhysiotherapistEntities.Physiotherapist", "Physiotherapist")
+                        .WithMany("Treatments")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Physiotherapist");
+                });
+
             modelBuilder.Entity("fizjobackend.Entities.PatientEntities.Patient", b =>
                 {
                     b.HasOne("fizjobackend.Entities.UserEntities.User", null)
@@ -761,6 +901,8 @@ namespace fizjobackend.Migrations
             modelBuilder.Entity("fizjobackend.Entities.PhysiotherapistEntities.Physiotherapist", b =>
                 {
                     b.Navigation("Appointments");
+
+                    b.Navigation("Treatments");
 
                     b.Navigation("Opinions");
                 });

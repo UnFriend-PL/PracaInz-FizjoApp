@@ -19,7 +19,18 @@
   flex-wrap: wrap;
   justify-content: center;
 }
-.musclesAndJointsWrapper {
+.treatmentsWrapper {
+  flex-basis: 80%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  background-color: $bg-section;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  margin: 1rem;
+}
+.sectionWrapper {
   flex-basis: 45%;
   align-self: stretch;
   display: flex;

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using fizjobackend.Entities.TreatmentsEntities;
+using System.ComponentModel.DataAnnotations;
 
 namespace fizjobackend.Entities.BodyEntities
 {

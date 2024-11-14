@@ -1,12 +1,12 @@
-import { LanguageContext } from "@/app/contexts/lang/langContext";
-import { useContext } from "react";
-
-const mapData = (data) => {
-  const { language } = useContext(LanguageContext);
-
+const mapData = (data, language) => {
   return data.map((section) => {
     const viewName =
-      section.viewName || (section.viewId === 1 ? "front" : "back");
+      section.viewName ||
+      (section.viewId === 1
+        ? "front"
+        : section.viewId === 3
+        ? "front"
+        : "back");
 
     const muscles = section.muscles.map((muscle) => ({
       section: `${section.name}_${viewName}`,

@@ -1,9 +1,11 @@
 {
-    "home": "Home",
-    "appointments": "Appointments",
-    "contact": "Contact",
-    "profile": "Profile",
-    "signIn": "Sign In",
-    "logOut": "Log out",
-    "logo": "Logo"
-  }
+  "home": "Home",
+  "appointments": "Appointments",
+  "staff": "Staff",
+  "blog": "Blog",
+  "contact": "Contact",
+  "profile": "Profile",
+  "signIn": "Sign In",
+  "logOut": "Log out",
+  "logo": "Logo"
+}

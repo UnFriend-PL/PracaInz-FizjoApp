@@ -29,7 +29,7 @@ export default function Navbar() {
 
   const MENU_LINKS = {
     Home: {
-      href: "/",
+      href: "/home",
       className: styles["nav-link"],
       name: t.home,
       action: undefined,
@@ -40,6 +40,18 @@ export default function Navbar() {
       name: t.appointments,
       action: undefined,
     },
+    Staff: {  
+      href: "/staff",
+      className: styles["nav-link"],
+      name: t.staff,
+      action: undefined,
+  },
+  Blog: {
+    href: "/blog",
+    className: styles["nav-link"],
+    name: t.blog,
+    action: undefined,
+  },
     Contact: {
       href: "/contact",
       className: styles["nav-link"],
