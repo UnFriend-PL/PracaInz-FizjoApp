@@ -204,15 +204,19 @@ namespace fizjobackend.Services.UserServices
             {
                 if (avatarFile == null || avatarFile.Length == 0)
                 {
-                    response = new ServiceResponse<string>("No file uploaded");
-                    response.Success = false;
+                    response = new ServiceResponse<string>("No file uploaded")
+                    {
+                        Success = false
+                    };
                     return response;
                 }
 
                 if (avatarFile.Length > MaxFileSize)
                 {
-                    response = new ServiceResponse<string>("File is too large");
-                    response.Success = false;
+                    response = new ServiceResponse<string>("File is too large")
+                    {
+                        Success = false
+                    };
                     return response;
                 }
 
@@ -221,8 +225,10 @@ namespace fizjobackend.Services.UserServices
 
                 if (string.IsNullOrEmpty(extension) || !permittedExtensions.Contains(extension))
                 {
-                    response = new ServiceResponse<string>("Invalid file type");
-                    response.Success = false;
+                    response = new ServiceResponse<string>("Invalid file type")
+                    {
+                        Success = false
+                    };
                     return response;
                 }
 
@@ -230,58 +236,77 @@ namespace fizjobackend.Services.UserServices
 
                 if (user == null)
                 {
-                    response = new ServiceResponse<string>("User not found");
-                    response.Success = false;
+                    response = new ServiceResponse<string>("User not found")
+                    {
+                        Success = false
+                    };
                     return response;
                 }
 
                 if (!Directory.Exists(_imageAvatarDirectory))
                     Directory.CreateDirectory(_imageAvatarDirectory);
+
                 var filename = GetAvatarPath(userId, extension, true);
                 var avatarPath = Path.Combine(_imageAvatarDirectory, filename);
                 using (var stream = new FileStream(avatarPath, FileMode.Create))
                 {
                     await avatarFile.CopyToAsync(stream);
                 }
+
+                // Save only the relative path
                 user.AvatarPath = filename;
                 await _context.SaveChangesAsync();
-                response = new ServiceResponse<string>("Avatar uploaded");
-                response.Data = avatarPath;
+
+                response = new ServiceResponse<string>("Avatar uploaded")
+                {
+                    Success = true,
+                    Data = filename // Return the relative path
+                };
             }
             catch (UnauthorizedAccessException ex)
             {
                 _logger.LogError(ex, "Unauthorized access while uploading avatar");
-                response = new ServiceResponse<string>("Unauthorized access");
-                response.Success = false;
-                response.Errors = new[] { ex.Message };
+                response = new ServiceResponse<string>("Unauthorized access")
+                {
+                    Success = false,
+                    Errors = new[] { ex.Message }
+                };
             }
             catch (PathTooLongException ex)
             {
                 _logger.LogError(ex, "Path too long while uploading avatar");
-                response = new ServiceResponse<string>("Path too long");
-                response.Success = false;
-                response.Errors = new[] { ex.Message };
+                response = new ServiceResponse<string>("Path too long")
+                {
+                    Success = false,
+                    Errors = new[] { ex.Message }
+                };
             }
             catch (DirectoryNotFoundException ex)
             {
                 _logger.LogError(ex, "Directory not found while uploading avatar");
-                response = new ServiceResponse<string>("Directory not found");
-                response.Success = false;
-                response.Errors = new[] { ex.Message };
+                response = new ServiceResponse<string>("Directory not found")
+                {
+                    Success = false,
+                    Errors = new[] { ex.Message }
+                };
             }
             catch (IOException ex)
             {
                 _logger.LogError(ex, "IO error while uploading avatar");
-                response = new ServiceResponse<string>("IO error");
-                response.Success = false;
-                response.Errors = new[] { ex.Message };
+                response = new ServiceResponse<string>("IO error")
+                {
+                    Success = false,
+                    Errors = new[] { ex.Message }
+                };
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while uploading avatar");
-                response = new ServiceResponse<string>("An error occurred while uploading avatar");
-                response.Success = false;
-                response.Errors = new[] { ex.Message };
+                response = new ServiceResponse<string>("An error occurred while uploading avatar")
+                {
+                    Success = false,
+                    Errors = new[] { ex.Message }
+                };
             }
 
             return response;
@@ -296,21 +321,23 @@ namespace fizjobackend.Services.UserServices
                 {
                     response = new ServiceResponse<FileStreamResult>("No avatar path provided")
                     {
-                        Success = false,
+                        Success = false
                     };
                     return response;
                 }
 
-                if (!File.Exists(avatarPath))
+                var fullPath = Path.Combine(_imageAvatarDirectory, avatarPath);
+
+                if (!File.Exists(fullPath))
                 {
                     response = new ServiceResponse<FileStreamResult>("Avatar not found")
                     {
-                        Success = false,
+                        Success = false
                     };
                     return response;
                 }
 
-                var imageStream = File.OpenRead(avatarPath);
+                var imageStream = File.OpenRead(fullPath);
                 var fileResult = new FileStreamResult(imageStream, "image/jpeg");
                 response = new ServiceResponse<FileStreamResult>("Avatar found")
                 {
@@ -369,12 +396,14 @@ namespace fizjobackend.Services.UserServices
 
         private string GetAvatarPath(Guid userId, string extension, bool creatingPathMode = false)
         {
-            var avatarPath = Path.Combine(_imageAvatarDirectory, $"avatar-{userId}{extension}");
-            if (!File.Exists(avatarPath) && !creatingPathMode)
+            var avatarPath = $"avatar-{userId}{extension}";
+            var fullPath = Path.Combine(_imageAvatarDirectory, avatarPath);
+            if (!File.Exists(fullPath) && !creatingPathMode)
             {
                 return "avatar-default.png";
             }
             return avatarPath;
         }
+
     }
 }

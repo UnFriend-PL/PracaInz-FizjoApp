@@ -3,7 +3,7 @@
 const baseURL = "https://localhost:7023/api/v1";
 
 const apiService = {
-  get: async (endpoint, params = {}, withAuth = false) => {
+  get: async (endpoint, params = {}, withAuth = false, options = {}) => {
     try {
       const url = `${baseURL}${endpoint}${
         params ? `?${new URLSearchParams(params).toString()}` : ""
@@ -12,6 +12,7 @@ const apiService = {
         method: "GET",
         headers: {},
       };
+
       if (withAuth) {
         const token = localStorage.getItem("token");
         if (token) {
@@ -19,7 +20,16 @@ const apiService = {
         }
       }
 
+      // Merge any additional headers
+      if (options.headers) {
+        config.headers = {
+          ...config.headers,
+          ...options.headers,
+        };
+      }
+
       const response = await fetch(url, config);
+      console.log("Response:", response);
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -27,13 +37,21 @@ const apiService = {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const contentType = response.headers.get("content-type");
+      // Handle different response types
       let data;
-      if (contentType && contentType.includes("application/json")) {
-        data = await response.json();
+      if (options.responseType === "blob") {
+        data = await response.blob();
+      } else if (options.responseType === "arraybuffer") {
+        data = await response.arrayBuffer();
       } else {
-        data = await response.text();
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          data = await response.json();
+        } else {
+          data = await response.text();
+        }
       }
+
       return data;
     } catch (error) {
       console.error("API GET request failed:", error);

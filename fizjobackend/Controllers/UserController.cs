@@ -80,7 +80,11 @@ namespace fizjobackend.Controllers
             {
                 return BadRequest(response);
             }
-            return Ok(response);
+            if(response.Data == null)
+            {
+                return NotFound();
+            }
+            return response.Data;
         }
     }
 }

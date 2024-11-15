@@ -22,6 +22,9 @@ const Profile = () => {
   const [editableFields, setEditableFields] = useState({});
   const [isDirty, setIsDirty] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState(null);
+  const [avatarLoading, setAvatarLoading] = useState(false);
+  const [avatarError, setAvatarError] = useState(null);
 
   const handleEditToggle = (key) => {
     setEditableFields((prev) => ({
@@ -60,6 +63,7 @@ const Profile = () => {
     setEditableFields({});
     setIsDirty(false);
     try {
+      setLoading(true);
       const response = await apiService.post("/User/UpdateInfo", user, true);
       if (response.success) {
         updateUser(response.data);
@@ -99,11 +103,14 @@ const Profile = () => {
       const response = await apiService.post(
         "/User/Avatar/Upload",
         formData,
-        true
+        true,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
       );
-
       if (response.success) {
-        updateUser({ ...user, avatarPath: response.data.avatarPath });
+        updateUser({ ...user, avatarPath: response.data });
+        fetchAvatar(response.data.avatarPath);
       } else {
         throw new Error(response.message || "Failed to upload avatar");
       }
@@ -111,6 +118,43 @@ const Profile = () => {
       console.error("Error uploading avatar:", error);
     } finally {
       setUploading(false);
+      await fetchAvatar(user.avatarPath);
+    }
+  };
+
+  const fetchAvatar = async (avatarPath) => {
+    if (!avatarPath) {
+      setAvatarUrl(null);
+      return;
+    }
+
+    setAvatarLoading(true);
+    setAvatarError(null);
+    try {
+      const blob = await apiService.get(
+        `/User/Avatar/Get/${avatarPath}`,
+        null,
+        true,
+        {
+          responseType: "blob",
+        }
+      );
+
+      console.log("Blob:", blob);
+      console.log("Blob type:", blob.type);
+      console.log("Instance of Blob:", blob instanceof Blob);
+
+      if (blob instanceof Blob && blob.size > 0) {
+        const imageUrl = URL.createObjectURL(blob);
+        setAvatarUrl(imageUrl);
+      } else {
+        throw new Error("Received invalid Blob data");
+      }
+    } catch (error) {
+      console.error("Error fetching avatar:", error);
+      setAvatarError("Failed to load avatar.");
+    } finally {
+      setAvatarLoading(false);
     }
   };
 
@@ -120,6 +164,9 @@ const Profile = () => {
         const data = await getUserInfo();
         if (data) {
           updateUser(data);
+          if (data.avatarPath) {
+            fetchAvatar(data.avatarPath);
+          }
         }
       } catch (error) {
         console.error("Error fetching user info:", error);
@@ -128,6 +175,12 @@ const Profile = () => {
       }
     };
     if (isAuthenticated) fetchData();
+
+    return () => {
+      if (avatarUrl) {
+        URL.revokeObjectURL(avatarUrl);
+      }
+    };
   }, [isAuthenticated]);
 
   if (!isAuthenticated) {
@@ -153,22 +206,25 @@ const Profile = () => {
       <h1 className={styles.title}>{t.profile}</h1>
 
       <div className={styles.profileCard}>
-        {/* Avatar Section */}
         <div className={styles.avatarSection}>
-          {user.avatarPath && (
+          {avatarLoading ? (
+            <div className={styles.loading}>{t.loadingAvatar}</div>
+          ) : avatarUrl ? (
             <Image
-              src={`/User/Avatar/Get/${user.avatarPath}`}
+              src={avatarUrl}
               alt="User Avatar"
               width={150}
               height={150}
               className={styles.avatar}
             />
+          ) : (
+            <></>
           )}
         </div>
         <div className={styles.avatarSection}>
           <div className={styles.uploadSection}>
             <label htmlFor="avatarUpload" className={styles.uploadLabel}>
-              {user.avatarPath ? t.replaceAvatar : t.uploadAvatar}
+              {t.uploadAvatar}
             </label>
             <input
               type="file"
@@ -180,11 +236,12 @@ const Profile = () => {
             {uploading && (
               <span className={styles.uploading}>{t.uploading}</span>
             )}
+            {avatarError && <span className={styles.error}>{avatarError}</span>}
           </div>
         </div>
-
         <button onClick={enableEditAllFields} className={styles.editButton}>
-          <FaRegEdit className={styles.editIcon} /> {t.editAllFields}
+          <FaRegEdit className={styles.editIcon} />{" "}
+          {isEditing ? t.saveChanges : t.editAllFields}
         </button>
 
         {Object.keys(user)
