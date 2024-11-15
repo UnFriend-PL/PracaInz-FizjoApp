@@ -2,9 +2,7 @@
 using fizjobackend;
 using fizjobackend.DbContexts;
 using fizjobackend.Entities.UserEntities;
-using fizjobackend.Interfaces.DTOInterfaces.UserDTOInterfaces;
-using fizjobackend.Interfaces.HelpersInterfaces;
-using fizjobackend.Interfaces.UsersInterfaces;
+using fizjobackend.Helpers;
 using fizjobackend.Models.UserDTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

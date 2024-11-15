@@ -1,5 +1,4 @@
 ﻿using fizjobackend.DbContexts;
-using fizjobackend.Interfaces.BodyVisualizerInterfaces;
 using fizjobackend.Models.BodyVisualizerDTOs;
 using Microsoft.EntityFrameworkCore;
 

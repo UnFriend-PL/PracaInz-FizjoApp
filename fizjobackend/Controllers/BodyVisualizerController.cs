@@ -1,5 +1,5 @@
-﻿using fizjobackend.Interfaces.BodyVisualizerInterfaces;
-using fizjobackend.Models.BodyVisualizerDTOs;
+﻿using fizjobackend.Models.BodyVisualizerDTOs;
+using fizjobackend.Services.BodyVisualizerService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

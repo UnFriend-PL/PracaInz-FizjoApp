@@ -1,7 +1,7 @@
 ﻿using fizjobackend.Entities.UserEntities;
 using System.Security.Claims;
 
-namespace fizjobackend.Interfaces.AccountInterfaces
+namespace fizjobackend.Services.AccountService
 {
     public interface IJwtGenerator
     {

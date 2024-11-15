@@ -1,5 +1,4 @@
 ﻿using fizjobackend.Entities.UserEntities;
-using fizjobackend.Interfaces.AccountInterfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

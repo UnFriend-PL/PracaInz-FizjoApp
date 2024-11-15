@@ -1,5 +1,4 @@
 ﻿using fizjobackend.Entities.PhysiotherapistEntities;
-using fizjobackend.Interfaces.DTOInterfaces.UserDTOInterfaces;
 
 namespace fizjobackend.Models.UserDTOs
 {

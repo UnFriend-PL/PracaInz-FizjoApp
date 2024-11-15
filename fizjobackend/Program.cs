@@ -1,7 +1,5 @@
 using fizjobackend.DbContexts;
 using fizjobackend.Entities.UserEntities;
-using fizjobackend.Interfaces.AccountInterfaces;
-using fizjobackend.Interfaces.UsersInterfaces;
 using fizjobackend.Services.AccountService;
 using fizjobackend.Services.UserServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,20 +9,16 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using Serilog;
-using fizjobackend.Interfaces.EmailInterface;
 using fizjobackend.Services.EmailService;
 using DotNetEnv;
 using fizjobackend.Helpers;
-using fizjobackend.Interfaces.HelpersInterfaces;
 using fizjobackend.Seeders;
-using fizjobackend.Interfaces.AppointmentsInterfaces;
 using fizjobackend.Services.AppointmentsService;
 using fizjobackend.Seeders.BodySeeder;
-using fizjobackend.Interfaces.BodyVisualizerInterfaces;
 using fizjobackend.Services.BodyVisualizerService;
 using fizjobackend.Seeders.TreatmentSeeder;
-using fizjobackend.Interfaces.TreatmentsInterfaces;
 using fizjobackend.Services.Treatments;
+using fizjobackend.Services.BlogService;
 
 namespace fizjobackend
 {
@@ -83,6 +77,7 @@ namespace fizjobackend
                 options.UseSqlServer(Environment.GetEnvironmentVariable("CONNECTION_STRING"));
             });
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IBlogService, BlogService>();
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IJwtGenerator, JwtGenerator>();
             builder.Services.AddScoped<IEmailService, EmailService>();

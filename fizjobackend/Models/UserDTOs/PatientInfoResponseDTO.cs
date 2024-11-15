@@ -1,6 +1,5 @@
 ﻿using fizjobackend.Entities.PatientEntities;
 using fizjobackend.Entities.UserEntities;
-using fizjobackend.Interfaces.DTOInterfaces.UserDTOInterfaces;
 
 namespace fizjobackend.Models.UserDTOs
 {

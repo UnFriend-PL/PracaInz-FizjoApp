@@ -1,5 +1,4 @@
-﻿using fizjobackend.Interfaces.DTOInterfaces.RegisterDTOInterfaces;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace fizjobackend.Models.AccountDTOs
 {

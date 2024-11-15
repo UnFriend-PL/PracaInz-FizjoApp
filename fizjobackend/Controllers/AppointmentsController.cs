@@ -1,7 +1,7 @@
 ﻿using fizjobackend.Entities.AppointmentEntities;
 using fizjobackend.Enums.AppointmentEnums;
-using fizjobackend.Interfaces.AppointmentsInterfaces;
 using fizjobackend.Models.AppointmentsDTOs;
+using fizjobackend.Services.AppointmentsService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;

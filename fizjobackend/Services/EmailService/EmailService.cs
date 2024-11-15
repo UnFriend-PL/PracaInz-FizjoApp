@@ -1,5 +1,4 @@
-﻿using fizjobackend.Interfaces.EmailInterface;
-using MailKit.Net.Smtp;
+﻿using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
 

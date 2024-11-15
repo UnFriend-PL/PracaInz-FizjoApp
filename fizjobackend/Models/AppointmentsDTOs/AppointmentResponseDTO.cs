@@ -1,6 +1,5 @@
 ﻿using fizjobackend.Enums.AppointmentEnums;
 using fizjobackend.Entities.AppointmentEntities;
-using fizjobackend.Interfaces.DTOInterfaces.UserDTOInterfaces;
 
 namespace fizjobackend.Models.AppointmentsDTOs
 {

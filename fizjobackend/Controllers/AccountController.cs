@@ -1,5 +1,5 @@
-﻿using fizjobackend.Interfaces.AccountInterfaces;
-using fizjobackend.Models.AccountDTOs;
+﻿using fizjobackend.Models.AccountDTOs;
+using fizjobackend.Services.AccountService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

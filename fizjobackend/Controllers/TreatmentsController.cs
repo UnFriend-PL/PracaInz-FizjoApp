@@ -1,5 +1,5 @@
-﻿using fizjobackend.Interfaces.TreatmentsInterfaces;
-using fizjobackend.Models.TreatmentsDTOs;
+﻿using fizjobackend.Models.TreatmentsDTOs;
+using fizjobackend.Services.Treatments;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

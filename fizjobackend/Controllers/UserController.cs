@@ -1,5 +1,5 @@
-﻿using fizjobackend.Interfaces.UsersInterfaces;
-using fizjobackend.Models.UserDTOs;
+﻿using fizjobackend.Models.UserDTOs;
+using fizjobackend.Services.UserServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;

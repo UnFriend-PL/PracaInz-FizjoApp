@@ -1,6 +1,6 @@
 ﻿using fizjobackend.Models.AccountDTOs;
 
-namespace fizjobackend.Interfaces.AccountInterfaces
+namespace fizjobackend.Services.AccountService
 {
     public interface IAccountService
     {

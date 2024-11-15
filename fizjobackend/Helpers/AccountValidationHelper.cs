@@ -1,6 +1,5 @@
 ﻿using fizjobackend.Entities.UserEntities;
 using fizjobackend.Enums.UserEnums;
-using fizjobackend.Interfaces.HelpersInterfaces;
 using System.Text.RegularExpressions;
 
 namespace fizjobackend.Helpers

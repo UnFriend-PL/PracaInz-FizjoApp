@@ -1,4 +1,4 @@
-﻿using fizjobackend.Interfaces.EmailInterface;
+﻿using fizjobackend.Services.EmailService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fizjobackend.Controllers
