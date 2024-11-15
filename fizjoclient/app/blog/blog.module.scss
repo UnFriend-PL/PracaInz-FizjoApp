@@ -1,150 +1,197 @@
-@import "../utils/globalColors.scss"; 
+@import "../utils/globalColors.scss";
 
 .blogContainer {
-    font-family: 'Inter', sans-serif;
-    color: #2c2c2c;
-    line-height: 1.6;
-    padding: 20px;
-    max-width: 800px; 
-    margin: 0 auto; 
+  font-family: "Inter", sans-serif;
+  color: #2c2c2c;
+  line-height: 1.6;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .introSection {
-    margin-bottom: 20px;
-    text-align: center; 
+  margin-bottom: 20px;
+  text-align: center;
 
-    h1 {
-        font-size: 2rem;
-        margin-bottom: 10px;
-        color: #333;
-    }
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #333;
+  }
 
-    p {
-        margin: 5px 0;
-        font-size: 1rem;
-        color: #666;
-    }
+  p {
+    margin: 5px 0;
+    font-size: 1rem;
+    color: #666;
+  }
 }
 
 .guideSection {
-    padding: 60px 20px; 
-    background-color: white; 
+  padding: 60px 20px;
+  background-color: white;
+  text-align: center;
+
+  h2 {
+    font-size: 1.75rem;
+    font-weight: 500;
+    color: #2c2c2c;
+    margin-bottom: 40px;
+  }
+
+  .stepsContainer {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+
+  .stepCard {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    max-width: 250px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
-    h2 {
-        font-size: 1.75rem;
-        font-weight: 500;
-        color: #2c2c2c;
-        margin-bottom: 40px;
+    .stepIcon {
+      margin-bottom: 15px;
+      font-size: 2.5rem;
+      color: #a8d5ba;
     }
 
-    .stepsContainer {
-        display: flex;
-        justify-content: center;
-        gap: 40px; 
-        flex-wrap: wrap;
+    h3 {
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-bottom: 10px;
+      color: #333;
     }
 
-    .stepCard {
-        background-color: #f9f9f9;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); 
-        max-width: 250px; 
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-
-        .stepIcon {
-            margin-bottom: 15px;
-            font-size: 2.5rem;
-            color: #A8D5BA;
-        }
-
-        h3 {
-            font-size: 1.5rem;
-            font-weight: 400;
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        p {
-            font-size: 1rem;
-            color: #666;
-            margin-top: 5px;
-        }
+    p {
+      font-size: 1rem;
+      color: #666;
+      margin-top: 5px;
     }
+  }
 }
 
-
 .questionFormSection {
-    text-align: center;
+  text-align: center;
 
-    textarea {
-        width: 100%;
-        max-width: 600px;
-        height: 100px;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 1rem;
-        margin-bottom: 10px;
-        display: block;
-        margin: 0 auto;
+  input,
+  textarea {
+    width: 100%;
+    max-width: 600px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-bottom: 10px;
+    display: block;
+    margin: 0 auto;
+  }
+
+  textarea {
+    height: 100px;
+  }
+
+  button {
+    padding: 10px 25px;
+    background-color: #333;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #555;
     }
-
-    button {
-        padding: 10px 25px;
-        background-color: #333;
-        border: none;
-        color: white;
-        font-size: 1rem;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-
-        &:hover {
-            background-color: #555;
-        }
-    }
+  }
 }
 
 .questionsList {
+  margin-top: 20px;
+  text-align: left;
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  .questionItem {
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    .questionText {
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: #333;
+    }
+
+    .questionUsername {
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 5px;
+    }
+
+    .questionBody {
+      margin-top: 10px;
+      font-size: 1rem;
+      color: #2c2c2c;
+    }
+
+    img {
+      margin-top: 10px;
+      max-width: 100%;
+      border-radius: 4px;
+    }
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-top: 20px;
-    text-align: left; 
-    
-    ul {
-        list-style-type: none;
-        padding: 0;
+    gap: 10px;
+
+    button {
+      padding: 8px 16px;
+      background-color: #333;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+
+      &:hover:not(:disabled) {
+        background-color: #555;
+      }
     }
 
-    .questionItem {
-        margin-bottom: 15px; 
-        padding: 15px;
-        background-color: #f9f9f9; 
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        display: block; 
-        
-        .questionText {
-            font-weight: bold;
-            font-size: 1.1rem;
-            color: #333;
-        }
-
-        .questionUsername {
-            font-size: 0.9rem;
-            color: #666;
-            margin-top: 5px;
-        }
+    span {
+      font-size: 1rem;
+      color: #333;
     }
+  }
 }
 
 .errorMessage {
-    color: #ff0000;  
-    font-weight: bold;
-    margin-top: 20px;
-    text-align: center;
+  color: #ff0000;
+  font-weight: bold;
+  margin-top: 20px;
+  text-align: center;
 }

@@ -1,4 +1,5 @@
 ﻿using fizjobackend.Services.EmailService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fizjobackend.Controllers
@@ -15,7 +16,8 @@ namespace fizjobackend.Controllers
             _emailService = emailService;
         }
 
-        [HttpPost]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpPost("SendEmail")]
         public async Task<IActionResult> SendEmail([FromBody] string emailRequest)
         {
             var response = await _emailService.SendVerificationEmail(emailRequest, "sad");

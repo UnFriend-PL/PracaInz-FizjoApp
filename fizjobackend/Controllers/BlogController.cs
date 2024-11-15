@@ -1,21 +1,42 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using fizjobackend.Models.BlogDTOs;
+using fizjobackend.Services.BlogService;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace fizjobackend.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("[controller]")]
     public class BlogController : ControllerBase
     {
-        [HttpGet]
-        public IActionResult GetPosts()
+        private readonly IBlogService _blogService;
+
+        public BlogController(IBlogService blogService)
         {
-            return Ok("BlogController");
+            _blogService = blogService;
         }
 
-        [HttpPost]
-        public IActionResult CreatePost()
+        [HttpGet("/Post/All")]
+        public async Task<IActionResult> GetPosts([FromQuery] int page)
         {
-            return Ok("BlogController");
+            var response = await _blogService.GetBlogPage(page);
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpPost("/Post/Create")]
+        public async Task<IActionResult> CreatePost([FromBody] PostCreateRequestDTO post)
+        {
+            var response = await _blogService.CreatePost(post);
+            if(!response.Success)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
         }
     }
 }
