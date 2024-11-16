@@ -152,9 +152,6 @@ const Blog = () => {
                   <div className={styles.questionText}>{post.title}</div>
                   <div className={styles.questionUsername}>{post.author}</div>
                   <div className={styles.questionBody}>{post.body}</div>
-                  {post.imagePath && (
-                    <img src={post.imagePath} alt={post.title} />
-                  )}
                 </li>
               ))}
             </ul>

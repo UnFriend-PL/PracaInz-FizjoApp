@@ -1,6 +1,5 @@
 import { useCallback, useContext } from "react";
 import { AppointmentContext } from "../[appointmentId]/appointmentContext";
-
 const useSelectedItems = () => {
   const { selectedItems, setSelectedItems } = useContext(AppointmentContext);
 

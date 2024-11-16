@@ -70,5 +70,33 @@ namespace fizjobackend.Services.BlogService
             }
             return response;
         }
+
+        public async Task<ServiceResponse<PostResponseDTO>> AddCommentWithRating(Guid postId, CommentCreateRequest comment)
+        {
+            var response = new ServiceResponse<PostResponseDTO>("Comment with rating added");
+
+            try
+            {
+                var post = await _context.Posts.FindAsync(postId);
+                if (post == null)
+                {
+                    response.Success = false;
+                    response.Message = "Post not found";
+                    return response;
+                }
+            /// to be continued
+
+                await _context.SaveChangesAsync();
+                response.Data = new PostResponseDTO(post);
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+            return response;
+        }
+
     }
 }

@@ -1,5 +1,3 @@
-"use client";
-
 const baseURL = "https://localhost:7023/api/v1";
 
 const apiService = {
@@ -20,7 +18,6 @@ const apiService = {
         }
       }
 
-      // Merge any additional headers
       if (options.headers) {
         config.headers = {
           ...config.headers,

@@ -27,6 +27,7 @@ const BodyPartSelector = () => {
     muscles = [],
     joints = [],
   } = mappedData[currentIndex] || {};
+
   const handleSave = async () => {
     setIsSaving(true);
     const bodyDetailsPayload = createBodyDetails(selectedItems);
@@ -46,6 +47,8 @@ const BodyPartSelector = () => {
 
   const handleNavigation = useCallback(
     (direction) => {
+      if (mappedData.length === 0) return;
+
       setCurrentIndex((prevIndex) => {
         return direction === "prev"
           ? (prevIndex - 1 + mappedData.length) % mappedData.length
@@ -70,6 +73,7 @@ const BodyPartSelector = () => {
           currentIndex={currentIndex}
           total={mappedData.length}
           onNavigate={handleNavigation}
+          setCurrentIndex={setCurrentIndex}
           t={t}
         />
       )}
@@ -136,10 +140,26 @@ const BodyPartSelector = () => {
 
 export default BodyPartSelector;
 
-const Navigation = ({ currentIndex, total, onNavigate, t }) => (
-  <div className={styles.navigation}>
-    <button onClick={() => onNavigate("prev")}>{t.prev}</button>
-    <span>{`${currentIndex + 1} / ${total}`}</span>
-    <button onClick={() => onNavigate("next")}>{t.next}</button>
-  </div>
-);
+const Navigation = ({
+  setCurrentIndex,
+  currentIndex,
+  total,
+  onNavigate,
+  t,
+}) => {
+  useEffect(() => {
+    if (currentIndex >= total) {
+      console.log(currentIndex);
+      setCurrentIndex(total > 0 ? total - 1 : 0);
+      console.log(currentIndex);
+    }
+  }, [total, currentIndex]);
+
+  return (
+    <div className={styles.navigation}>
+      <button onClick={() => onNavigate("prev")}>{t.prev}</button>
+      <span>{`${total == 0 ? 0 : currentIndex + 1} / ${total}`}</span>
+      <button onClick={() => onNavigate("next")}>{t.next}</button>
+    </div>
+  );
+};
