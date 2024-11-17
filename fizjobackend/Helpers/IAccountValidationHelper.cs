@@ -1,6 +1,6 @@
-﻿using fizjobackend.Entities.UserEntities;
+﻿using Fizjobackend.Entities.UserEntities;
 
-namespace fizjobackend.Helpers
+namespace Fizjobackend.Helpers
 {
     public interface IAccountValidationHelper
     {

@@ -1,4 +1,6 @@
-﻿namespace fizjobackend.Entities.BlogEntities
+﻿using Fizjobackend.Models.BlogDTOs;
+
+namespace Fizjobackend.Entities.BlogEntities
 {
     public class Comment
     {
@@ -8,6 +10,17 @@
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public Post Post { get; set; }
-        public Usability Usability { get; set; }
+        public Guid PostId { get; set; }
+        
+        public Comment() { }
+        
+        public Comment(CommentCreateRequest commentCreateRequest, Post post)
+        {
+            Body = commentCreateRequest.Body;
+            Author = commentCreateRequest.Author;
+            CreatedAt = DateTime.Now;
+            UpdatedAt = DateTime.Now;
+            Post = post;
+        }
     }
 }

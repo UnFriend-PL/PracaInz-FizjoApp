@@ -1,4 +1,4 @@
-﻿namespace fizjobackend.Models.AccountDTOs
+﻿namespace Fizjobackend.Models.AccountDTOs
 {
     public interface IUserRegisterDTO
     {

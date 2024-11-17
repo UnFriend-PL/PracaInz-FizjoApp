@@ -1,9 +1,10 @@
-﻿using fizjobackend.Models.BlogDTOs;
-using fizjobackend.Services.BlogService;
+﻿using System.Security.Claims;
+using Fizjobackend.Models.BlogDTOs;
+using Fizjobackend.Services.BlogService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace fizjobackend.Controllers
+namespace Fizjobackend.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -33,6 +34,19 @@ namespace fizjobackend.Controllers
         {
             var response = await _blogService.CreatePost(post);
             if(!response.Success)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+        
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpPost("/Post/Comment/{postId}")]
+        public async Task<IActionResult> AddCommentWithRating(Guid postId, [FromBody] CommentCreateRequest comment)
+        {
+            var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var response = await _blogService.AddCommentWithRating(userId, postId, comment);
+            if (!response.Success)
             {
                 return BadRequest(response);
             }

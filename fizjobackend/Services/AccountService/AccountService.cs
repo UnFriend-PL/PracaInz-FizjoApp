@@ -1,15 +1,15 @@
-﻿using fizjobackend.DbContexts;
-using fizjobackend.Entities.PatientEntities;
-using fizjobackend.Entities.PhysiotherapistEntities;
-using fizjobackend.Entities.UserEntities;
-using fizjobackend.Helpers;
-using fizjobackend.Models.AccountDTOs;
-using fizjobackend.Services.EmailService;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using Fizjobackend.DbContexts;
+using Fizjobackend.Entities.PatientEntities;
+using Fizjobackend.Entities.PhysiotherapistEntities;
+using Fizjobackend.Entities.UserEntities;
+using Fizjobackend.Helpers;
+using Fizjobackend.Models.AccountDTOs;
+using Fizjobackend.Services.EmailService;
 
-namespace fizjobackend.Services.AccountService
+namespace Fizjobackend.Services.AccountService
 {
     public class AccountService : IAccountService
     {

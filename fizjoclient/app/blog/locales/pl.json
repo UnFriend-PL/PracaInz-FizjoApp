@@ -20,5 +20,9 @@
   "previousPage": "Poprzednia strona",
   "nextPage": "Następna strona",
   "page": "Strona",
-  "of": "z"
+  "of": "z",
+  "addComment": "Dodaj komentarz",
+  "add": "Dodaj",
+  "comments": "Komentarze",
+  "noComments": "Brak komentarzy. Bądź pierwszy!"
 }

@@ -1,10 +1,10 @@
-﻿using fizjobackend.Entities.AppointmentEntities;
-using fizjobackend.Entities.TreatmentsEntities;
-using fizjobackend.Entities.UserEntities;
-using fizjobackend.Models.AccountDTOs;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Fizjobackend.Entities.AppointmentEntities;
+using Fizjobackend.Entities.TreatmentsEntities;
+using Fizjobackend.Entities.UserEntities;
+using Fizjobackend.Models.AccountDTOs;
 
-namespace fizjobackend.Entities.PhysiotherapistEntities
+namespace Fizjobackend.Entities.PhysiotherapistEntities
 {
     public class Physiotherapist : User
     {

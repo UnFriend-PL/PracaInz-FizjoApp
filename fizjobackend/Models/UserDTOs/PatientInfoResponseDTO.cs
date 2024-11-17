@@ -1,7 +1,7 @@
-﻿using fizjobackend.Entities.PatientEntities;
-using fizjobackend.Entities.UserEntities;
+﻿using Fizjobackend.Entities.PatientEntities;
+using Fizjobackend.Entities.UserEntities;
 
-namespace fizjobackend.Models.UserDTOs
+namespace Fizjobackend.Models.UserDTOs
 {
     public class PatientInfoResponseDTO : IUserInfoResponseDTO
     {

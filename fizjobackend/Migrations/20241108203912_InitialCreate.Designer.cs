@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using fizjobackend.DbContexts;
+using Fizjobackend.DbContexts;
 
 #nullable disable
 
-namespace fizjobackend.Migrations
+namespace Fizjobackend.Migrations
 {
     [DbContext(typeof(FizjoDbContext))]
     [Migration("20241108203912_InitialCreate")]

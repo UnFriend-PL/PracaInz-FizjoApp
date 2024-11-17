@@ -1,8 +1,8 @@
-﻿using fizjobackend.Enums.AppointmentEnums;
-using fizjobackend.Entities.AppointmentEntities;
-using fizjobackend.Entities.UserEntities;
+﻿using Fizjobackend.Entities.AppointmentEntities;
+using Fizjobackend.Entities.UserEntities;
+using Fizjobackend.Enums.AppointmentEnums;
 
-namespace fizjobackend.Models.AppointmentsDTOs
+namespace Fizjobackend.Models.AppointmentsDTOs
 {
     public class AppointmentInListResponseDTO
     {

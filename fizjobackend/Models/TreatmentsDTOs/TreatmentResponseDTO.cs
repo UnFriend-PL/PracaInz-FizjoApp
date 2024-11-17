@@ -1,9 +1,9 @@
-﻿using fizjobackend.Entities.BodyEntities;
-using fizjobackend.Entities.PhysiotherapistEntities;
-using fizjobackend.Entities.TreatmentsEntities;
-using fizjobackend.Models.BodyVisualizerDTOs;
+﻿using Fizjobackend.Entities.BodyEntities;
+using Fizjobackend.Entities.PhysiotherapistEntities;
+using Fizjobackend.Entities.TreatmentsEntities;
+using Fizjobackend.Models.BodyVisualizerDTOs;
 
-namespace fizjobackend.Models.TreatmentsDTOs;
+namespace Fizjobackend.Models.TreatmentsDTOs;
 
     public class TreatmentResponseDTO
 {

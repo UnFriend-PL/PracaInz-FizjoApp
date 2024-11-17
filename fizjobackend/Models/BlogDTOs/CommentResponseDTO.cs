@@ -1,6 +1,6 @@
-﻿using fizjobackend.Entities.BlogEntities;
+﻿using Fizjobackend.Entities.BlogEntities;
 
-namespace fizjobackend.Models.BlogDTOs
+namespace Fizjobackend.Models.BlogDTOs
 {
     public class CommentResponseDTO
     {
@@ -9,16 +9,14 @@ namespace fizjobackend.Models.BlogDTOs
         public string Author { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public int UsabilityRating { get; set; }
 
         public CommentResponseDTO(Comment comment)
         {
-           Id = comment.Id;
+            Id = comment.Id;
             Body = comment.Body;
             Author = comment.Author;
             CreatedAt = comment.CreatedAt;
             UpdatedAt = comment.UpdatedAt;
-            UsabilityRating = comment.Usability.Rating;
         }
     }
 }

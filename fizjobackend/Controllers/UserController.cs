@@ -1,10 +1,10 @@
-﻿using fizjobackend.Models.UserDTOs;
-using fizjobackend.Services.UserServices;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Fizjobackend.Models.UserDTOs;
+using Fizjobackend.Services.UserServices;
 
-namespace fizjobackend.Controllers
+namespace Fizjobackend.Controllers
 {
     [ApiController]
     [Route("[controller]")]

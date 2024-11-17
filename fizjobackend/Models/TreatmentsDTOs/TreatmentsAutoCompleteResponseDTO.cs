@@ -1,6 +1,6 @@
-﻿using fizjobackend.Entities.TreatmentsEntities;
+﻿using Fizjobackend.Entities.TreatmentsEntities;
 
-namespace fizjobackend.Models.TreatmentsDTOs;
+namespace Fizjobackend.Models.TreatmentsDTOs;
 
 public class TreatmentsAutoCompleteResponseDTO
 {

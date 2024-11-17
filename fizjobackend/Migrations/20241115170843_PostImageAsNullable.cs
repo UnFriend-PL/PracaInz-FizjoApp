@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace fizjobackend.Migrations
+namespace Fizjobackend.Migrations
 {
     /// <inheritdoc />
     public partial class PostImageAsNullable : Migration

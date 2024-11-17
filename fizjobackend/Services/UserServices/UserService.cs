@@ -1,14 +1,14 @@
 ﻿using Azure;
-using fizjobackend;
-using fizjobackend.DbContexts;
-using fizjobackend.Entities.UserEntities;
-using fizjobackend.Helpers;
-using fizjobackend.Models.UserDTOs;
+using Fizjobackend;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using Fizjobackend.DbContexts;
+using Fizjobackend.Entities.UserEntities;
+using Fizjobackend.Helpers;
+using Fizjobackend.Models.UserDTOs;
 
-namespace fizjobackend.Services.UserServices
+namespace Fizjobackend.Services.UserServices
 {
     public class UserService : IUserService
     {

@@ -1,7 +1,7 @@
-﻿using fizjobackend.Enums.PhysiotherapistEnums;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using Fizjobackend.Enums.PhysiotherapistEnums;
 
-namespace fizjobackend.Entities.PhysiotherapistEntities
+namespace Fizjobackend.Entities.PhysiotherapistEntities
 {
     public class PhysiotherapySpecializationEntity
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace fizjobackend.Models.AccountDTOs
+namespace Fizjobackend.Models.AccountDTOs
 {
     public class PatientRegisterRequestDTO : IUserRegisterDTO
     {

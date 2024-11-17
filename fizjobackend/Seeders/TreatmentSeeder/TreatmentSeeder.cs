@@ -1,11 +1,11 @@
-﻿using fizjobackend.DbContexts;
-using fizjobackend.Entities.BodyEntities;
-using fizjobackend.Entities.TreatmentsEntities;
+﻿using Fizjobackend.Entities.BodyEntities;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
+using Fizjobackend.DbContexts;
+using Fizjobackend.Entities.TreatmentsEntities;
 
-namespace fizjobackend.Seeders.TreatmentSeeder
+namespace Fizjobackend.Seeders.TreatmentSeeder
 {
     public static class TreatmentSeeder
     {

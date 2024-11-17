@@ -1,7 +1,3 @@
-using fizjobackend.DbContexts;
-using fizjobackend.Entities.UserEntities;
-using fizjobackend.Services.AccountService;
-using fizjobackend.Services.UserServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -9,18 +5,22 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using Serilog;
-using fizjobackend.Services.EmailService;
 using DotNetEnv;
-using fizjobackend.Helpers;
-using fizjobackend.Seeders;
-using fizjobackend.Services.AppointmentsService;
-using fizjobackend.Seeders.BodySeeder;
-using fizjobackend.Services.BodyVisualizerService;
-using fizjobackend.Seeders.TreatmentSeeder;
-using fizjobackend.Services.Treatments;
-using fizjobackend.Services.BlogService;
+using Fizjobackend.DbContexts;
+using Fizjobackend.Entities.UserEntities;
+using Fizjobackend.Helpers;
+using Fizjobackend.Seeders;
+using Fizjobackend.Seeders.BodySeeder;
+using Fizjobackend.Seeders.TreatmentSeeder;
+using Fizjobackend.Services.AccountService;
+using Fizjobackend.Services.AppointmentsService;
+using Fizjobackend.Services.BlogService;
+using Fizjobackend.Services.BodyVisualizerService;
+using Fizjobackend.Services.EmailService;
+using Fizjobackend.Services.Treatments;
+using Fizjobackend.Services.UserServices;
 
-namespace fizjobackend
+namespace Fizjobackend
 {
     public class Program
     {

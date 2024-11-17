@@ -1,8 +1,8 @@
-﻿using fizjobackend.Services.EmailService;
+﻿using Fizjobackend.Services.EmailService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace fizjobackend.Controllers
+namespace Fizjobackend.Controllers
 {
     [Route("[controller]")]
     [ApiController]

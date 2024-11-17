@@ -1,10 +1,13 @@
-﻿using fizjobackend.Models.BlogDTOs;
+﻿using Fizjobackend.Models.BlogDTOs;
 
-namespace fizjobackend.Services.BlogService
+namespace Fizjobackend.Services.BlogService
 {
     public interface IBlogService
     {
         Task<ServiceResponse<PostResponseDTO>> CreatePost(PostCreateRequestDTO post);
         Task<ServiceResponse<BlogPage>> GetBlogPage(int page);
+
+        Task<ServiceResponse<PostResponseDTO>> AddCommentWithRating(Guid owenrId, Guid postId,
+            CommentCreateRequest comment);
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace fizjobackend.Models.AppointmentsDTOs
+﻿namespace Fizjobackend.Models.AppointmentsDTOs
 {
     public class ListOfAppointmentsResponseDTO
     {

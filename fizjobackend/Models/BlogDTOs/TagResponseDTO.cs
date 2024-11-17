@@ -1,6 +1,6 @@
-﻿using fizjobackend.Entities.BlogEntities;
+﻿using Fizjobackend.Entities.BlogEntities;
 
-namespace fizjobackend.Models.BlogDTOs
+namespace Fizjobackend.Models.BlogDTOs
 {
     public class TagResponseDTO
     {

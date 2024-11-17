@@ -1,8 +1,8 @@
-﻿using fizjobackend.DbContexts;
-using fizjobackend.Models.BodyVisualizerDTOs;
+﻿using Fizjobackend.DbContexts;
+using Fizjobackend.Models.BodyVisualizerDTOs;
 using Microsoft.EntityFrameworkCore;
 
-namespace fizjobackend.Services.BodyVisualizerService
+namespace Fizjobackend.Services.BodyVisualizerService
 {
     public class BodyVisualizerService : IBodyVisualizerService
     {

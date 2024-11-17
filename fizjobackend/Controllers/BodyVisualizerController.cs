@@ -1,10 +1,10 @@
-﻿using fizjobackend.Models.BodyVisualizerDTOs;
-using fizjobackend.Services.BodyVisualizerService;
+﻿using Fizjobackend.Models.BodyVisualizerDTOs;
+using Fizjobackend.Services.BodyVisualizerService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace fizjobackend.Controllers
+namespace Fizjobackend.Controllers
 {
     [Route("[controller]")]
     [ApiController]

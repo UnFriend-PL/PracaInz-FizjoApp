@@ -1,6 +1,6 @@
-﻿using fizjobackend.Models.BodyVisualizerDTOs;
+﻿using Fizjobackend.Models.BodyVisualizerDTOs;
 
-namespace fizjobackend.Services.BodyVisualizerService
+namespace Fizjobackend.Services.BodyVisualizerService
 {
     public interface IBodyVisualizerService
     {

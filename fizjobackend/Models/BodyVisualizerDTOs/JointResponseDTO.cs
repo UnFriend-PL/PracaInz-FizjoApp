@@ -1,6 +1,6 @@
-﻿using fizjobackend.Entities.BodyEntities;
+﻿using Fizjobackend.Entities.BodyEntities;
 
-namespace fizjobackend.Models.BodyVisualizerDTOs
+namespace Fizjobackend.Models.BodyVisualizerDTOs
 {
     public class JointResponseDTO
     {

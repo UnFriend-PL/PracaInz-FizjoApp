@@ -1,6 +1,6 @@
-﻿using fizjobackend.Models.TreatmentsDTOs;
+﻿using Fizjobackend.Models.TreatmentsDTOs;
 
-namespace fizjobackend.Services.Treatments
+namespace Fizjobackend.Services.Treatments
 {
     public interface ITreatmentsService
     {

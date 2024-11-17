@@ -1,9 +1,9 @@
-﻿using fizjobackend.DbContexts;
-using fizjobackend.Entities.BlogEntities;
-using fizjobackend.Models.BlogDTOs;
+﻿using Fizjobackend.DbContexts;
+using Fizjobackend.Entities.BlogEntities;
+using Fizjobackend.Models.BlogDTOs;
 using Microsoft.EntityFrameworkCore;
 
-namespace fizjobackend.Services.BlogService
+namespace Fizjobackend.Services.BlogService
 {
     public class BlogService : IBlogService
     {
@@ -21,12 +21,14 @@ namespace fizjobackend.Services.BlogService
             var response = new ServiceResponse<BlogPage>("Blog Page fetched");
             try
             {
-                int pageSize = 4;
-                page = page < 1 ? 1 : page; 
+                int pageSize = 1;
+                page = page < 1 ? 1 : page;
                 int skip = (page - 1) * pageSize;
 
                 var posts = await _context.Posts
                     .OrderByDescending(p => p.CreatedAt)
+                    .Include(p => p.Comments)
+                    .Include(u => u.Usabilities)
                     .Skip(skip)
                     .Take(pageSize)
                     .ToListAsync();
@@ -48,6 +50,7 @@ namespace fizjobackend.Services.BlogService
                 response.Message = ex.Message;
                 _logger.LogError(ex.Message);
             }
+
             return response;
         }
 
@@ -68,10 +71,12 @@ namespace fizjobackend.Services.BlogService
                 response.Message = ex.Message;
                 _logger.LogError(ex.Message);
             }
+
             return response;
         }
 
-        public async Task<ServiceResponse<PostResponseDTO>> AddCommentWithRating(Guid postId, CommentCreateRequest comment)
+        public async Task<ServiceResponse<PostResponseDTO>> AddCommentWithRating(Guid owenrId, Guid postId,
+            CommentCreateRequest comment)
         {
             var response = new ServiceResponse<PostResponseDTO>("Comment with rating added");
 
@@ -84,8 +89,25 @@ namespace fizjobackend.Services.BlogService
                     response.Message = "Post not found";
                     return response;
                 }
-            /// to be continued
 
+                var newComment = new Comment(comment, post);
+                var usability = await _context.Usabilities.Where(u => u.OwnerId == owenrId && u.PostId == comment.PostId).FirstOrDefaultAsync();
+                if (usability == null)
+                {
+                    usability = new Usability()
+                    {
+                        OwnerId = owenrId,
+                        PostId = postId,
+                        Rating = comment.UsabilityRating
+                    };
+                    await _context.Usabilities.AddAsync(usability);
+                }
+                else
+                {
+                    usability.Rating = comment.UsabilityRating;
+                    _context.Usabilities.Update(usability);
+                }
+                await _context.Comments.AddAsync(newComment);
                 await _context.SaveChangesAsync();
                 response.Data = new PostResponseDTO(post);
             }
@@ -95,8 +117,8 @@ namespace fizjobackend.Services.BlogService
                 response.Message = ex.Message;
                 _logger.LogError(ex.Message);
             }
+
             return response;
         }
-
     }
 }

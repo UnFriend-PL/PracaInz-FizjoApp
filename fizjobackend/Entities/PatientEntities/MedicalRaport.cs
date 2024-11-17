@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace fizjobackend.Entities.PatientEntities
+namespace Fizjobackend.Entities.PatientEntities
 {
     public class MedicalRaport
     {

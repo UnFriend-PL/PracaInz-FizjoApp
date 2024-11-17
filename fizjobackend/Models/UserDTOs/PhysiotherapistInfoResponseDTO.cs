@@ -1,6 +1,6 @@
-﻿using fizjobackend.Entities.PhysiotherapistEntities;
+﻿using Fizjobackend.Entities.PhysiotherapistEntities;
 
-namespace fizjobackend.Models.UserDTOs
+namespace Fizjobackend.Models.UserDTOs
 {
     public class PhysiotherapistInfoResponseDTO : IUserInfoResponseDTO
     {

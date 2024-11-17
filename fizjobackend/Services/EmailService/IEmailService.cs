@@ -1,6 +1,6 @@
-﻿using fizjobackend.Entities.UserEntities;
+﻿using Fizjobackend.Entities.UserEntities;
 
-namespace fizjobackend.Services.EmailService
+namespace Fizjobackend.Services.EmailService
 {
     public interface IEmailService
     {

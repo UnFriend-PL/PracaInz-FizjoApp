@@ -1,14 +1,14 @@
-﻿using fizjobackend.Entities.AppointmentEntities;
-using fizjobackend.Entities.BlogEntities;
-using fizjobackend.Entities.BodyEntities;
-using fizjobackend.Entities.PatientEntities;
-using fizjobackend.Entities.PhysiotherapistEntities;
-using fizjobackend.Entities.TreatmentsEntities;
-using fizjobackend.Entities.UserEntities;
+﻿using Fizjobackend.Entities.AppointmentEntities;
+using Fizjobackend.Entities.BlogEntities;
+using Fizjobackend.Entities.BodyEntities;
+using Fizjobackend.Entities.PatientEntities;
+using Fizjobackend.Entities.PhysiotherapistEntities;
+using Fizjobackend.Entities.TreatmentsEntities;
+using Fizjobackend.Entities.UserEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace fizjobackend.DbContexts
+namespace Fizjobackend.DbContexts
 {
     public class FizjoDbContext : DbContext
     {
@@ -90,23 +90,23 @@ namespace fizjobackend.DbContexts
             modelBuilder.Entity<Post>()
                 .HasMany(p => p.Tags)
                 .WithOne(t => t.Post)
+                .HasForeignKey(t => t.PostId)
                 .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Post>()
                 .HasMany(p => p.Comments)
                 .WithOne(c => c.Post)
+                .HasForeignKey(c=> c.PostId)
                 .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Comment>()
                 .HasOne(c => c.Post)
                 .WithMany(p => p.Comments)
+                .HasForeignKey(c=> c.PostId)
                 .OnDelete(DeleteBehavior.Cascade);
-            modelBuilder.Entity<Comment>()
-              .HasOne(c => c.Usability)
-              .WithOne(u => u.Comment)
-              .HasForeignKey<Usability>(u => u.CommentId)
-              .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Post>()
                 .HasMany(p => p.Usabilities)
-                .WithOne(u => u.Post);
+                .WithOne(u => u.Post)
+                .HasForeignKey(u => u.PostId);
+            
         }
 
         private static void BuildBodyEntities(ModelBuilder modelBuilder)

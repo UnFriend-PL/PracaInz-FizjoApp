@@ -1,7 +1,7 @@
-﻿using fizjobackend.Models.UserDTOs;
+﻿using Fizjobackend.Models.UserDTOs;
 using Microsoft.AspNetCore.Mvc;
 
-namespace fizjobackend.Services.UserServices
+namespace Fizjobackend.Services.UserServices
 {
     public interface IUserService
     {

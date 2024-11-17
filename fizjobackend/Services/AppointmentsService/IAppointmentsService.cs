@@ -1,8 +1,8 @@
-﻿using fizjobackend.Entities.AppointmentEntities;
-using fizjobackend.Enums.AppointmentEnums;
-using fizjobackend.Models.AppointmentsDTOs;
+﻿using Fizjobackend.Entities.AppointmentEntities;
+using Fizjobackend.Enums.AppointmentEnums;
+using Fizjobackend.Models.AppointmentsDTOs;
 
-namespace fizjobackend.Services.AppointmentsService
+namespace Fizjobackend.Services.AppointmentsService
 {
     public interface IAppointmentsService
     {

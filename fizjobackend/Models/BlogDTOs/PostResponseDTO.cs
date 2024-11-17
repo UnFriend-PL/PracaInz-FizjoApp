@@ -1,7 +1,7 @@
-﻿using fizjobackend.Entities.BlogEntities;
-using System.Linq;
+﻿using System.Linq;
+using Fizjobackend.Entities.BlogEntities;
 
-namespace fizjobackend.Models.BlogDTOs
+namespace Fizjobackend.Models.BlogDTOs
 {
     public class PostResponseDTO
     {
@@ -17,12 +17,14 @@ namespace fizjobackend.Models.BlogDTOs
 
         public PostResponseDTO(Post post)
         {
-            var comments = post.Comments?.Select(comment => new CommentResponseDTO(comment)).ToList();
-            int rating;
-            if (comments == null || comments.Count == 0)
-                rating = 0;
-            else
-                rating = comments.Sum(c => c.UsabilityRating) / comments.Count;
+            var comments = post.Comments?
+                .Where(comment => comment != null)
+                .Select(comment => new CommentResponseDTO(comment))
+                .ToList() ?? new List<CommentResponseDTO>();
+    
+            int rating = comments.Count == 0 
+                ? 0 
+                : post.Usabilities.Sum(u => u.Rating);
 
             Id = post.Id;
             Title = post.Title;
@@ -32,7 +34,7 @@ namespace fizjobackend.Models.BlogDTOs
             CreatedAt = post.CreatedAt;
             UsabilityRating = rating;
             Tags = post.Tags?.Select(tag => new TagResponseDTO(tag)).ToList() ?? new List<TagResponseDTO>();
-            Comments = comments ?? new List<CommentResponseDTO>();
+            Comments = comments;
         }
     }
 }

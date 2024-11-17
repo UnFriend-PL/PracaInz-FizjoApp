@@ -1,6 +1,6 @@
-﻿using fizjobackend.Models.BlogDTOs;
+﻿using Fizjobackend.Models.BlogDTOs;
 
-namespace fizjobackend.Entities.BlogEntities
+namespace Fizjobackend.Entities.BlogEntities
 {
     public class Post
     {
@@ -20,8 +20,6 @@ namespace fizjobackend.Entities.BlogEntities
 
         public Post(PostCreateRequestDTO post)
         {
-
-            Id = Guid.NewGuid();
             Title = post.Title;
             Body = post.Body;
             ImagePath = post.ImagePath;
