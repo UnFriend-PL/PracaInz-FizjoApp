@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useContext } from "react";
 import styles from "./profile.module.scss";
-import apiService from "../services/apiService/apiService";
+import apiService, {fetchAvatar} from "../services/apiService/apiService";
 import { AuthContext } from "../contexts/auth/authContext";
 import { UserContext } from "../contexts/user/userContext";
 import { LanguageContext } from "../contexts/lang/langContext";
@@ -110,7 +110,7 @@ const Profile = () => {
       );
       if (response.success) {
         updateUser({ ...user, avatarPath: response.data });
-        fetchAvatar(response.data.avatarPath);
+        fetchProfilePicture(response.data.avatarPath);
       } else {
         throw new Error(response.message || "Failed to upload avatar");
       }
@@ -118,39 +118,17 @@ const Profile = () => {
       console.error("Error uploading avatar:", error);
     } finally {
       setUploading(false);
-      await fetchAvatar(user.avatarPath);
+      await fetchProfilePicture(user.avatarPath);
     }
   };
 
-  const fetchAvatar = async (avatarPath) => {
+  const fetchProfilePicture = async (avatarPath) => {
     if (!avatarPath) {
       setAvatarUrl(null);
       return;
     }
-
-    setAvatarLoading(true);
-    setAvatarError(null);
-    try {
-      const blob = await apiService.get(
-        `/User/Avatar/Get/${avatarPath}`,
-        null,
-        true,
-        {
-          responseType: "blob",
-        }
-      );
-      if (blob instanceof Blob && blob.size > 0) {
-        const imageUrl = URL.createObjectURL(blob);
-        setAvatarUrl(imageUrl);
-      } else {
-        throw new Error("Received invalid Blob data");
-      }
-    } catch (error) {
-      console.error("Error fetching avatar:", error);
-      setAvatarError("Failed to load avatar.");
-    } finally {
-      setAvatarLoading(false);
-    }
+    setAvatarUrl(await fetchAvatar(avatarPath));
+    setAvatarLoading(false);
   };
 
   useEffect(() => {
@@ -160,7 +138,7 @@ const Profile = () => {
         if (data) {
           updateUser(data);
           if (data.avatarPath) {
-            fetchAvatar(data.avatarPath);
+            fetchProfilePicture(data.avatarPath);
           }
         }
       } catch (error) {

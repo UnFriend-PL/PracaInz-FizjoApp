@@ -7,6 +7,7 @@ namespace Fizjobackend.Entities.BlogEntities
         public Guid Id { get; set; }
         public string Body { get; set; }
         public string Author { get; set; }
+        public Guid AuthorId { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public Post Post { get; set; }
@@ -14,12 +15,13 @@ namespace Fizjobackend.Entities.BlogEntities
         
         public Comment() { }
         
-        public Comment(CommentCreateRequest commentCreateRequest, Post post)
+        public Comment(CommentCreateRequest commentCreateRequest, Post post, Guid authorId)
         {
             Body = commentCreateRequest.Body;
             Author = commentCreateRequest.Author;
             CreatedAt = DateTime.Now;
             UpdatedAt = DateTime.Now;
+            AuthorId = authorId;
             Post = post;
         }
     }

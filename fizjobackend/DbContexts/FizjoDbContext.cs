@@ -5,6 +5,7 @@ using Fizjobackend.Entities.PatientEntities;
 using Fizjobackend.Entities.PhysiotherapistEntities;
 using Fizjobackend.Entities.TreatmentsEntities;
 using Fizjobackend.Entities.UserEntities;
+using Fizjobackend.Enums.PhysiotherapistEnums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,6 +40,9 @@ namespace Fizjobackend.DbContexts
                 .HasKey(ut => new { ut.UserId, ut.LoginProvider, ut.Name });
 
             modelBuilder.Entity<User>().ToTable("Users");
+            modelBuilder.Entity<User>()
+                .Property(p => p.AvatarPath)
+                .HasDefaultValue("default-avatar.png");
             modelBuilder.Entity<Patient>().ToTable("Patients");
             modelBuilder.Entity<Physiotherapist>().ToTable("Physiotherapists");
 
@@ -193,6 +197,16 @@ namespace Fizjobackend.DbContexts
                  .HasMany(p => p.PhysiotherapySpecializations)
                  .WithMany(s => s.Physiotherapists)
                  .UsingEntity(j => j.ToTable("PhysiotherapistSpecializations"));
+
+            modelBuilder.Entity<PhysiotherapySpecializationEntity>().HasData(
+                Enum.GetValues(typeof(PhysiotherapySpecialization))
+                    .Cast<PhysiotherapySpecialization>()
+                    .Select(e => new PhysiotherapySpecializationEntity
+                    {
+                        PhysiotherapySpecializationId = Guid.NewGuid(),
+                        PhysiotherapySpecialization = e
+                    })
+            );
         }
 
         public DbSet<User> Users { get; set; }

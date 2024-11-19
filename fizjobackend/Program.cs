@@ -17,6 +17,7 @@ using Fizjobackend.Services.AppointmentsService;
 using Fizjobackend.Services.BlogService;
 using Fizjobackend.Services.BodyVisualizerService;
 using Fizjobackend.Services.EmailService;
+using Fizjobackend.Services.StaffService;
 using Fizjobackend.Services.Treatments;
 using Fizjobackend.Services.UserServices;
 
@@ -81,6 +82,7 @@ namespace Fizjobackend
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IJwtGenerator, JwtGenerator>();
             builder.Services.AddScoped<IEmailService, EmailService>();
+            builder.Services.AddScoped<IStaffService, StaffService>();
             builder.Services.AddScoped<IAppointmentsService, AppointmentService>();
             builder.Services.AddScoped<IBodyVisualizerService, BodyVisualizerService>();
             var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY")!);

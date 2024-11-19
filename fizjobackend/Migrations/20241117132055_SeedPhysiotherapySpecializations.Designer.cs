@@ -4,6 +4,7 @@ using Fizjobackend.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fizjobackend.Migrations
 {
     [DbContext(typeof(FizjoDbContext))]
-    partial class FizjoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241117132055_SeedPhysiotherapySpecializations")]
+    partial class SeedPhysiotherapySpecializations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -132,9 +135,6 @@ namespace Fizjobackend.Migrations
                     b.Property<string>("Author")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("AuthorId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Body")
                         .IsRequired()
@@ -378,52 +378,52 @@ namespace Fizjobackend.Migrations
                     b.HasData(
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("00332f5c-64ca-462e-a876-3ce07e35cd62"),
+                            PhysiotherapySpecializationId = new Guid("e1ac8c17-4bb8-4d30-b054-c3d76b76ef65"),
                             PhysiotherapySpecialization = "Orthopedic"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("441ad959-0a04-4c0c-9964-11424d4543bb"),
+                            PhysiotherapySpecializationId = new Guid("daab6592-dacc-4f6f-9612-92c81b8845d6"),
                             PhysiotherapySpecialization = "Neurological"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("65850569-d61f-4200-bcb1-87875699ebad"),
+                            PhysiotherapySpecializationId = new Guid("7cafd9d7-2d5a-4fd4-9b50-600123d57c1b"),
                             PhysiotherapySpecialization = "Pediatric"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("698f1e30-4199-4278-ae37-5a0810a4c89c"),
+                            PhysiotherapySpecializationId = new Guid("fe594244-6f26-4574-bd4e-e3f973ba006e"),
                             PhysiotherapySpecialization = "CardiovascularAndPulmonary"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("37cf5274-5aa0-4733-a517-dba9d69ef75a"),
+                            PhysiotherapySpecializationId = new Guid("7946b21d-df79-4c59-9cde-e6999c51cf1a"),
                             PhysiotherapySpecialization = "Geriatric"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("b852386f-476c-45de-ac95-58526aa6b64f"),
+                            PhysiotherapySpecializationId = new Guid("60fdadb6-7a83-4251-9a38-2b235aef5b55"),
                             PhysiotherapySpecialization = "Sports"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("913de6cf-78ee-44a2-b7cc-95bf365ca35f"),
+                            PhysiotherapySpecializationId = new Guid("5be5992e-a0ea-4f47-9872-ef6532cd8023"),
                             PhysiotherapySpecialization = "Urogynecological"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("192b28cb-295c-47f1-9c82-6c31943df366"),
+                            PhysiotherapySpecializationId = new Guid("3f7365e9-8cb9-4873-a3b8-604abdf3a6aa"),
                             PhysiotherapySpecialization = "Oncological"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("f1e03f8f-9eae-4b7a-825f-7ac7e0ed7f1d"),
+                            PhysiotherapySpecializationId = new Guid("a40a56f5-5e68-4818-b152-ff4c399ea9dc"),
                             PhysiotherapySpecialization = "Dental"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("9f2633bd-c9d6-4095-b077-d5effd39210e"),
+                            PhysiotherapySpecializationId = new Guid("c24970d1-7351-4473-acab-7c89c85c74fe"),
                             PhysiotherapySpecialization = "Occupational"
                         });
                 });
@@ -509,9 +509,7 @@ namespace Fizjobackend.Migrations
 
                     b.Property<string>("AvatarPath")
                         .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue("default-avatar.png");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -786,13 +784,6 @@ namespace Fizjobackend.Migrations
             modelBuilder.Entity("Fizjobackend.Entities.PhysiotherapistEntities.Physiotherapist", b =>
                 {
                     b.HasBaseType("Fizjobackend.Entities.UserEntities.User");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Experience")
-                        .HasColumnType("int");
 
                     b.Property<string>("LicenseNumber")
                         .IsRequired()

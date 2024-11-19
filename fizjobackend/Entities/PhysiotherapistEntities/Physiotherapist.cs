@@ -9,7 +9,9 @@ namespace Fizjobackend.Entities.PhysiotherapistEntities
     public class Physiotherapist : User
     {
         public string LicenseNumber { get; set; } = string.Empty;
-
+        public string Description { get; set; } = string.Empty;
+        public int Experience { get; set; }
+        
         [InverseProperty("Physiotherapists")]
         public ICollection<PhysiotherapySpecializationEntity> PhysiotherapySpecializations { get; set; } = [];
         [InverseProperty("Physiotherapist")]

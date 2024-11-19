@@ -251,14 +251,13 @@ namespace Fizjobackend.Services.UserServices
                     await avatarFile.CopyToAsync(stream);
                 }
 
-                // Save only the relative path
                 user.AvatarPath = filename;
                 await _context.SaveChangesAsync();
 
                 response = new ServiceResponse<string>("Avatar uploaded")
                 {
                     Success = true,
-                    Data = filename // Return the relative path
+                    Data = filename 
                 };
             }
             catch (UnauthorizedAccessException ex)
@@ -323,8 +322,9 @@ namespace Fizjobackend.Services.UserServices
                     };
                     return response;
                 }
-
-                var fullPath = Path.Combine(_imageAvatarDirectory, avatarPath);
+                
+                var fullPath = Path.Combine(_imageAvatarDirectory, string.IsNullOrEmpty(avatarPath)? "avatar-default.jpg" : avatarPath);
+                
 
                 if (!File.Exists(fullPath))
                 {

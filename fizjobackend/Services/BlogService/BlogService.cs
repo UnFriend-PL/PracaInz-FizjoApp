@@ -31,6 +31,8 @@ namespace Fizjobackend.Services.BlogService
                     .Include(u => u.Usabilities)
                     .Skip(skip)
                     .Take(pageSize)
+                    .AsSplitQuery()
+                    .AsNoTracking()
                     .ToListAsync();
 
                 var totalPosts = await _context.Posts.CountAsync();
@@ -75,7 +77,7 @@ namespace Fizjobackend.Services.BlogService
             return response;
         }
 
-        public async Task<ServiceResponse<PostResponseDTO>> AddCommentWithRating(Guid owenrId, Guid postId,
+        public async Task<ServiceResponse<PostResponseDTO>> AddCommentWithRating(Guid ownerId, Guid postId,
             CommentCreateRequest comment)
         {
             var response = new ServiceResponse<PostResponseDTO>("Comment with rating added");
@@ -90,13 +92,13 @@ namespace Fizjobackend.Services.BlogService
                     return response;
                 }
 
-                var newComment = new Comment(comment, post);
-                var usability = await _context.Usabilities.Where(u => u.OwnerId == owenrId && u.PostId == comment.PostId).FirstOrDefaultAsync();
+                var newComment = new Comment(comment, post, ownerId);
+                var usability = await _context.Usabilities.Where(u => u.OwnerId == ownerId && u.PostId == comment.PostId).FirstOrDefaultAsync();
                 if (usability == null)
                 {
                     usability = new Usability()
                     {
-                        OwnerId = owenrId,
+                        OwnerId = ownerId,
                         PostId = postId,
                         Rating = comment.UsabilityRating
                     };

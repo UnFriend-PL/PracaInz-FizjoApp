@@ -25,8 +25,8 @@ Content-Type: application/json
 
 {
   "licenseNumber": "FT-123456",
-  "firstName": "Szymon",
-  "lastName": "Ecki",
+  "firstName": "Kasia",
+  "lastName": "Rogowska",
   "gender": "Male",
   "country": "Poland",
   "city": "Warsaw",
@@ -34,8 +34,8 @@ Content-Type: application/json
   "postCode": "00-001",
   "pesel": "90111212393",
   "dateOfBirth": "1990-11-12T00:00:00Z",
-  "email": "Szymonecki1233@gmail.com",
+  "email": "tadest@gmail.com",
   "password": "Kolo1212#",
   "confirmPassword": "Kolo1212#",
-  "phoneNumber": "123456789"
+  "phoneNumber": "123416789"
 }

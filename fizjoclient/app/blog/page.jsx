@@ -9,6 +9,8 @@ import pl from "./locales/pl.json";
 import en from "./locales/en.json";
 import apiService from "../services/apiService/apiService";
 import { UserContext } from "../contexts/user/userContext";
+import {format} from "date-fns";
+import {pl as plDate} from "date-fns/locale/pl";
 
 const locales = { en, pl };
 
@@ -110,7 +112,6 @@ const Blog = () => {
         true
       );
       if (data.success) {
-        console.log(data.data);
         setPosts((prevPosts) =>
           prevPosts.map((post) =>
             post.id === postId
@@ -230,87 +231,72 @@ const Blog = () => {
           <>
             <ul>
               {posts.map((post) => (
-                <li key={post.id} className={styles.questionItem}>
-                  <div className={styles.questionText}>{post.title}</div>
-                  <div className={styles.starRating}>
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <FaStar
-                        key={star}
-                        className={
-                          (post.usabilityRating || 1) >= star
-                            ? styles.starSelected
-                            : styles.star
-                        }
-                      />
-                    ))}
-                  </div>
-                  <div className={styles.questionUsername}>{post.author}</div>
-                  <div className={styles.questionBody}>{post.body}</div>
-                  {/* Sekcja Komentarzy */}
-                  <div className={styles.commentsSection}>
-                    <h4>{t.comments}</h4>
-                    {post.comments.length > 0 ? (
-                      <>
-                        {post.comments
-                          .slice(0, visibleComments[post.id] || 3)
-                          .map((comment) => (
-                            <div key={comment.id} className={styles.comment}>
-                              <strong>
-                                {comment?.author ? comment.author : ""}:
-                              </strong>
-                              <p>{comment?.body}</p>
-                            </div>
-                          ))}
-                        {post.comments.length >
-                          (visibleComments[post.id] || 3) && (
-                          <button
-                            onClick={() => showMoreComments(post.id)}
-                          >
-                            Pokaż więcej
-                          </button>
-                        )}
-                      </>
-                    ) : (
-                      <p>{t.noComments}</p>
-                    )}
-                    <textarea
-                      value={newComment[post.id] || ""}
-                      onChange={(e) =>
-                        setNewComment({
-                          ...newComment,
-                          [post.id]: e.target.value,
-                        })
-                      }
-                      placeholder={t.addComment}
-                    />
-                    <div className={styles.starRating}>
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <FaStar
-                          key={star}
-                          className={
-                            (newCommentRating[post.id] || 4) >= star
-                              ? styles.starSelected
-                              : styles.star
+                  <li key={`post-${post.id}`} className={styles.questionItem}>
+                    {/* Post content */}
+                    <div className={styles.commentsSection}>
+                      <h4>{t.comments}</h4>
+                      {post.comments.length > 0 ? (
+                          <>
+                            {post.comments
+                                .slice(0, visibleComments[post.id] || 3)
+                                .map((comment) => (
+                                    <div key={`comment-${comment.id}`} className={styles.comment}>
+                                      <strong>{comment?.author ? comment.author : ""}:</strong>
+                                      <div className={styles.questionDate}>
+                                        {format(new Date(comment.createdAt), "dd.MM.yyyy HH:mm", {
+                                          locale: language === "pl" ? plDate : undefined,
+                                        })}
+                                      </div>
+                                      <p>{comment?.body}</p>
+                                    </div>
+                                ))}
+                            {post.comments.length > (visibleComments[post.id] || 3) && (
+                                <button onClick={() => showMoreComments(post.id)}>
+                                  Pokaż więcej
+                                </button>
+                            )}
+                          </>
+                      ) : (
+                          <p>{t.noComments}</p>
+                      )}
+                      <textarea
+                          value={newComment[post.id] || ""}
+                          onChange={(e) =>
+                              setNewComment({
+                                ...newComment,
+                                [post.id]: e.target.value,
+                              })
                           }
-                          onClick={() => handleStarClick(post.id, star)}
-                        />
-                      ))}
+                          placeholder={t.addComment}
+                      />
+                      <div className={styles.starRating}>
+                        {[1, 2, 3, 4, 5].map((star) => (
+                            <FaStar
+                                key={`star-${post.id}-${star}`}
+                                className={
+                                  (newCommentRating[post.id] || 4) >= star
+                                      ? styles.starSelected
+                                      : styles.star
+                                }
+                                onClick={() => handleStarClick(post.id, star)}
+                            />
+                        ))}
+                      </div>
+                      <button
+                          type="button"
+                          onClick={() => handleAddComment(post.id)}
+                          className={styles.addCommentButton}
+                      >
+                        <FaCommentAlt/> {t.add}
+                      </button>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => handleAddComment(post.id)}
-                      className={styles.addCommentButton}
-                    >
-                      <FaCommentAlt /> {t.add}
-                    </button>
-                  </div>
-                </li>
+                  </li>
               ))}
             </ul>
             <div className={styles.pagination}>
               <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
               >
                 {t.previousPage}
               </button>
@@ -318,15 +304,15 @@ const Blog = () => {
                 {t.page} {currentPage} {t.of} {totalPages}
               </span>
               <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
               >
                 {t.nextPage}
               </button>
             </div>
           </>
         ) : (
-          <p>{t.noQuestions}</p>
+            <p>{t.noQuestions}</p>
         )}
       </section>
     </div>

@@ -4,6 +4,7 @@ using Fizjobackend.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fizjobackend.Migrations
 {
     [DbContext(typeof(FizjoDbContext))]
-    partial class FizjoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241117133514_PhysiotherapistAdditionalFields")]
+    partial class PhysiotherapistAdditionalFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -132,9 +135,6 @@ namespace Fizjobackend.Migrations
                     b.Property<string>("Author")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("AuthorId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Body")
                         .IsRequired()
@@ -378,52 +378,52 @@ namespace Fizjobackend.Migrations
                     b.HasData(
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("00332f5c-64ca-462e-a876-3ce07e35cd62"),
+                            PhysiotherapySpecializationId = new Guid("edc16061-2bda-4f03-bb49-e69b4b21bf72"),
                             PhysiotherapySpecialization = "Orthopedic"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("441ad959-0a04-4c0c-9964-11424d4543bb"),
+                            PhysiotherapySpecializationId = new Guid("1135f5f6-c79c-4442-87ee-03c8a805c2a7"),
                             PhysiotherapySpecialization = "Neurological"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("65850569-d61f-4200-bcb1-87875699ebad"),
+                            PhysiotherapySpecializationId = new Guid("456f4983-80f7-49fe-85c8-b845ea4292c8"),
                             PhysiotherapySpecialization = "Pediatric"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("698f1e30-4199-4278-ae37-5a0810a4c89c"),
+                            PhysiotherapySpecializationId = new Guid("1561653d-b792-478c-b941-7067f753cad4"),
                             PhysiotherapySpecialization = "CardiovascularAndPulmonary"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("37cf5274-5aa0-4733-a517-dba9d69ef75a"),
+                            PhysiotherapySpecializationId = new Guid("d1449272-7b16-4295-9b05-08bb5a048144"),
                             PhysiotherapySpecialization = "Geriatric"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("b852386f-476c-45de-ac95-58526aa6b64f"),
+                            PhysiotherapySpecializationId = new Guid("8383d303-2fa2-4524-b3a5-ce706e30a2a2"),
                             PhysiotherapySpecialization = "Sports"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("913de6cf-78ee-44a2-b7cc-95bf365ca35f"),
+                            PhysiotherapySpecializationId = new Guid("a27580bf-4f09-4367-9fc8-d78f2e8f2b90"),
                             PhysiotherapySpecialization = "Urogynecological"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("192b28cb-295c-47f1-9c82-6c31943df366"),
+                            PhysiotherapySpecializationId = new Guid("5a2f8eac-5c0b-45e2-8e09-8dbd24ff4c3b"),
                             PhysiotherapySpecialization = "Oncological"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("f1e03f8f-9eae-4b7a-825f-7ac7e0ed7f1d"),
+                            PhysiotherapySpecializationId = new Guid("00600f31-317d-4162-a1ac-b96922a7201a"),
                             PhysiotherapySpecialization = "Dental"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("9f2633bd-c9d6-4095-b077-d5effd39210e"),
+                            PhysiotherapySpecializationId = new Guid("49553c2a-916b-47a0-a148-a3e58a49c96d"),
                             PhysiotherapySpecialization = "Occupational"
                         });
                 });
@@ -509,9 +509,7 @@ namespace Fizjobackend.Migrations
 
                     b.Property<string>("AvatarPath")
                         .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue("default-avatar.png");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("City")
                         .IsRequired()

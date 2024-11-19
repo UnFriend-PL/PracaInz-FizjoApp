@@ -7,7 +7,7 @@ namespace Fizjobackend.Services.BlogService
         Task<ServiceResponse<PostResponseDTO>> CreatePost(PostCreateRequestDTO post);
         Task<ServiceResponse<BlogPage>> GetBlogPage(int page);
 
-        Task<ServiceResponse<PostResponseDTO>> AddCommentWithRating(Guid owenrId, Guid postId,
+        Task<ServiceResponse<PostResponseDTO>> AddCommentWithRating(Guid ownerId, Guid postId,
             CommentCreateRequest comment);
     }
 }

@@ -96,11 +96,8 @@ const TreatmentsAutoComplete = () => {
 
   const handleTreatmentSelectChange = async (options) => {
     setSelectedOptions(options);
-    console.log(options, "treatments");
-
     if (options && options.length > 0) {
       const selectedTreatment = await fetchTreatment(options[0].value);
-      console.log(selectedTreatment, "selectedTreatment");
     }
   };
 
@@ -113,7 +110,6 @@ const TreatmentsAutoComplete = () => {
   const loadOptions = useCallback(
     debounce((inputValue, callback) => {
       let filteredOptions = filterTreatments(inputValue);
-      console.log(filteredOptions.length, "filteredOptions");
       callback(filteredOptions);
     }, 300),
     [options]
