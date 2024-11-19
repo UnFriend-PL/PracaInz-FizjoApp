@@ -40,18 +40,18 @@ export default function Navbar() {
       name: t.appointments,
       action: undefined,
     },
-    Staff: {  
+    Staff: {
       href: "/staff",
       className: styles["nav-link"],
       name: t.staff,
       action: undefined,
-  },
-  Blog: {
-    href: "/blog",
-    className: styles["nav-link"],
-    name: t.blog,
-    action: undefined,
-  },
+    },
+    Blog: {
+      href: "/blog",
+      className: styles["nav-link"],
+      name: t.blog,
+      action: undefined,
+    },
     Contact: {
       href: "/contact",
       className: styles["nav-link"],

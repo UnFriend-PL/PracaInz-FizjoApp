@@ -2,7 +2,7 @@
 {
     public class UpdateUserInfoRequestDTO
     {
-        public Guid userId { get; set; }
+        public Guid Id { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string Gender { get; set; } = string.Empty;

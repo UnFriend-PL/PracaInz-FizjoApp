@@ -138,7 +138,7 @@ namespace fizjobackend.Services.UserServices
             try
             {
                 var userRole = GetBaseRoleFromUserRoles(userRoles);
-                if (userRole.ToLower() == "patient" && userId != updateUserInfoRequest.userId)
+                if (userRole.ToLower() == "patient" && userId != updateUserInfoRequest.Id)
                 {
                     response = new ServiceResponse<IUserInfoResponseDTO>("You can only update your own info");
                     response.Success = false;
