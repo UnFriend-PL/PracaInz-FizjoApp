@@ -99,7 +99,7 @@ const Blog = () => {
     const commentData = {
       postId: postId,
       body: newComment[postId],
-      author: "Użytkownik",
+      author: user.firstName,
       usabilityRating: newCommentRating[postId] || 1,
     };
 
@@ -187,21 +187,39 @@ const Blog = () => {
 
       <section className={styles.questionFormSection}>
         <h2>{t.askQuestion}</h2>
-        <form onSubmit={handleQuestionSubmit}>
-          <input
-            type="text"
-            value={newTitle}
-            onChange={(e) => setNewTitle(e.target.value)}
-            placeholder={t.enterTitle}
-            required
-          />
-          <textarea
-            value={newBody}
-            onChange={(e) => setNewBody(e.target.value)}
-            placeholder={t.enterBody}
-            required
-          />
-          <button type="submit">{t.submitQuestion}</button>
+        <form onSubmit={handleQuestionSubmit} className={styles.questionForm}>
+          <div className={styles.formGroup}>
+            <label htmlFor="title" className={styles.formLabel}>
+              {t.titleLabel}
+            </label>
+            <input
+              id="title"
+              type="text"
+              value={newTitle}
+              onChange={(e) => setNewTitle(e.target.value)}
+              placeholder={t.enterTitle}
+              required
+              className={styles.formInput}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="body" className={styles.formLabel}>
+              {t.bodyLabel}
+            </label>
+            <textarea
+              id="body"
+              value={newBody}
+              onChange={(e) => setNewBody(e.target.value)}
+              placeholder={t.enterBody}
+              required
+              className={styles.formTextarea}
+            />
+          </div>
+
+          <button type="submit" className={styles.submitButton}>
+            {t.submitQuestion}
+          </button>
         </form>
         {error && <p className={styles.errorMessage}>{error}</p>}
       </section>
@@ -246,7 +264,6 @@ const Blog = () => {
                         {post.comments.length >
                           (visibleComments[post.id] || 3) && (
                           <button
-                            className={styles.showMoreButton}
                             onClick={() => showMoreComments(post.id)}
                           >
                             Pokaż więcej

@@ -24,5 +24,10 @@
   "addComment": "Add a comment",
   "add": "Add",
   "comments": "Comments",
-  "noComments": "No comments yet. Be the first!"
+  "noComments": "No comments yet. Be the first!",
+  "enterTitle": "Enter title",
+  "titleLabel": "Title",
+  "enterBody": "Enter question body",
+  "bodyLabel": "Question body",
+  "errorMessage": "An error occurred. Please try again."
 }

@@ -24,5 +24,10 @@
   "addComment": "Dodaj komentarz",
   "add": "Dodaj",
   "comments": "Komentarze",
-  "noComments": "Brak komentarzy. Bądź pierwszy!"
+  "noComments": "Brak komentarzy. Bądź pierwszy!",
+  "enterTitle": "Wpisz tytuł",
+  "titleLabel": "Tytuł",
+  "enterBody": "Wpisz treść pytania",
+  "bodyLabel": "Treść pytania",
+  "errorMessage": "Wystąpił błąd. Spróbuj ponownie."
 }

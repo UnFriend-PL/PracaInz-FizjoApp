@@ -66,7 +66,7 @@ const Profile = () => {
       setLoading(true);
       const response = await apiService.post("/User/UpdateInfo", user, true);
       if (response.success) {
-        updateUser(response.data);
+        updateUser(await getUserInfo());
       } else {
         throw new Error(response.message || "Failed to update user info");
       }
@@ -139,11 +139,6 @@ const Profile = () => {
           responseType: "blob",
         }
       );
-
-      console.log("Blob:", blob);
-      console.log("Blob type:", blob.type);
-      console.log("Instance of Blob:", blob instanceof Blob);
-
       if (blob instanceof Blob && blob.size > 0) {
         const imageUrl = URL.createObjectURL(blob);
         setAvatarUrl(imageUrl);
@@ -244,10 +239,10 @@ const Profile = () => {
           {isEditing ? t.saveChanges : t.editAllFields}
         </button>
 
-        {Object.keys(user)
-          .filter((key) => key !== "Id" && key !== "avatarPath")
-          .map((key) => (
-            <div className={styles.field} key={key}>
+        {user && Object.keys(user)
+            .filter((key) => key !== "Id" && key !== "avatarPath")
+            .map((key) => (
+                <div className={styles.field} key={key}>
               <span className={styles.label}>
                 {t[key] || key.replace(/([A-Z])/g, " $1").trim()}:
               </span>
