@@ -18,6 +18,7 @@ public class StaffResponseDTO
     public int? YearsOfExperience { get; set; }
     public double? AveragePrice { get; set; }
     public int? NumberOfDoneAppointments { get; set; }
+    public string? Education { get; set; }
     public ICollection<PhysiotherapySpecialization>? Specializations { get; set; }
 
     public StaffResponseDTO() { }
@@ -32,6 +33,7 @@ public class StaffResponseDTO
         Description = staff.Description;
         Rating = 5; // TODO: Implement rating calculation from opinions
         YearsOfExperience = staff.Experience;
+        Education = staff.Education;
 
         if (staff.Appointments != null && staff.Appointments.Count > 0)
         {

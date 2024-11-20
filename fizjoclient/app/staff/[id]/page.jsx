@@ -41,9 +41,9 @@ export default function SpecialistProfile({ params }) {
             )}
             <h1>{specialist.name}</h1>
             <p className={styles.specialistInfo}>{specialist.specialization}</p>
-            <p className={styles.specialistInfo}>{specialist.description}</p>
+            <prev className={styles.specialistInfo}>{specialist.description}</prev>
             <p className={styles.specialistInfo}><strong>Wykształcenie:</strong> {specialist.education}</p>
-            <p className={styles.specialistInfo}><strong>Doświadczenie:</strong> {specialist.experience}</p>
+            <p className={styles.specialistInfo}><strong>Doświadczenie:</strong> {specialist.yearsOfExperience}</p>
 
             <div className={styles.reviewsSection}>
                 <h2>Opinie</h2>
