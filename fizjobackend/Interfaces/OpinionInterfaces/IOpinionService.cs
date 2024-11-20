@@ -1,8 +1,8 @@
-﻿using fizjobackend.Entities.OpinionEntities;
-using fizjobackend.Models.AccountDTOs;
-using fizjobackend.Models.OpinionDTOs;
+﻿using Fizjobackend.Entities.OpinionEntities;
+using Fizjobackend.Models.AccountDTOs;
+using Fizjobackend.Models.OpinionDTOs;
 
-namespace fizjobackend.Interfaces.OpinionInterfaces
+namespace Fizjobackend.Interfaces.OpinionInterfaces
 {
     public interface IOpinionService
     {

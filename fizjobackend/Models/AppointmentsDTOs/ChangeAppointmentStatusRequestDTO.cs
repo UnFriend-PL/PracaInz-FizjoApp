@@ -1,7 +1,7 @@
-﻿using fizjobackend.Enums.AppointmentEnums;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
+using Fizjobackend.Enums.AppointmentEnums;
 
-namespace fizjobackend.Models.AppointmentsDTOs
+namespace Fizjobackend.Models.AppointmentsDTOs
 {
     public class ChangeAppointmentStatusRequestDTO
     {

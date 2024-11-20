@@ -1,17 +1,15 @@
-﻿using fizjobackend.Entities.AppointmentEntities;
-using fizjobackend.Entities.BodyEntities;
-using fizjobackend.Entities.ConectorsEntities;
-using fizjobackend.Entities.OpinionEntities;
-using fizjobackend.Entities.PatientEntities;
-using fizjobackend.Entities.PhysiotherapistEntities;
-using fizjobackend.Entities.TreatmentsEntities;
-using fizjobackend.Entities.UserEntities;
-using fizjobackend.Seeders.BodySeeder;
+using Fizjobackend.Entities.AppointmentEntities;
+using Fizjobackend.Entities.BlogEntities;
+using Fizjobackend.Entities.BodyEntities;
+using Fizjobackend.Entities.OpinionEntities;
+using Fizjobackend.Entities.PatientEntities;
+using Fizjobackend.Entities.PhysiotherapistEntities;
+using Fizjobackend.Entities.TreatmentsEntities;
+using Fizjobackend.Entities.UserEntities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace fizjobackend.DbContexts
+namespace Fizjobackend.DbContexts
 {
     public class FizjoDbContext : DbContext
     {
@@ -45,11 +43,13 @@ namespace fizjobackend.DbContexts
             modelBuilder.Entity<Patient>().ToTable("Patients");
             modelBuilder.Entity<Physiotherapist>().ToTable("Physiotherapists");
 
+            BuildBlogEntities(modelBuilder);
             BuildTreatmentsEntities(modelBuilder);
             BuildPhysiotherapistSpecializationEntities(modelBuilder);
             BuildAppointmentEntities(modelBuilder);
             BuildBodyEntities(modelBuilder);
             BuildAppointmentBodyDetailsEntities(modelBuilder);
+            BuildOpinionsPatient(modelBuilder);
 
             static void BuildTreatmentsEntities(ModelBuilder modelBuilder)
             {
@@ -71,6 +71,44 @@ namespace fizjobackend.DbContexts
                     .HasForeignKey(t => t.OwnerId)
                     .OnDelete(DeleteBehavior.Restrict);
             }
+        }
+
+        private static void BuildBlogEntities(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Post>().ToTable("Posts", "Blog");
+            modelBuilder.Entity<Usability>().ToTable("Usability", "Blog");
+            modelBuilder.Entity<Comment>().ToTable("Comment", "Blog");
+            modelBuilder.Entity<Tag>().ToTable("Tag", "Blog");
+
+            modelBuilder.Entity<Post>()
+                .Property(p => p.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Comment>()
+                .Property(c => c.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Tag>()
+                .Property(t => t.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Usability>()
+                .Property(u => u.Id).ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Post>()
+                .HasMany(p => p.Tags)
+                .WithOne(t => t.Post)
+                .HasForeignKey(t => t.PostId)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Post>()
+                .HasMany(p => p.Comments)
+                .WithOne(c => c.Post)
+                .HasForeignKey(c=> c.PostId)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Comment>()
+                .HasOne(c => c.Post)
+                .WithMany(p => p.Comments)
+                .HasForeignKey(c=> c.PostId)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Post>()
+                .HasMany(p => p.Usabilities)
+                .WithOne(u => u.Post)
+                .HasForeignKey(u => u.PostId);
+            
         }
 
         private static void BuildBodyEntities(ModelBuilder modelBuilder)
@@ -113,10 +151,10 @@ namespace fizjobackend.DbContexts
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Appointment>()
-                .HasMany(e => e.AppointmentBodyDetails) 
+                .HasMany(e => e.AppointmentBodyDetails)
                 .WithOne(e => e.Appointment)
                 .HasForeignKey(e => e.AppointmentId)
-                .OnDelete(DeleteBehavior.Cascade); 
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
         private static void BuildAppointmentBodyDetailsEntities(ModelBuilder modelBuilder)
@@ -161,17 +199,16 @@ namespace fizjobackend.DbContexts
         private static void BuildOpinionsPatient(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Opinion>()
-                .HasOne(o => o.Patient)
-                .WithMany(p => p.Opinions)
-                .HasForeignKey(o => o.PatientId)
-                .OnDelete(DeleteBehavior.Restrict);
-
+                      .HasOne(o => o.Patient)
+                      .WithMany(p => p.Opinions)
+                      .HasForeignKey(o => o.PatientId)
+                      .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Opinion>()
                 .HasOne(o => o.Physiotherapist)
-                .WithMany(p => p.Opinions)
+                .WithMany(pt => pt.Opinions)
                 .HasForeignKey(o => o.PhysiotherapistId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
         public DbSet<User> Users { get; set; }
@@ -194,5 +231,11 @@ namespace fizjobackend.DbContexts
         // Treatment db entities
         public DbSet<Treatment> Treatments { get; set; }
 
+        // Blog
+
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<Usability> Usabilities { get; set; }
     }
 }

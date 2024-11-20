@@ -1,4 +1,4 @@
-﻿namespace fizjobackend.Models.BodyVisualizerDTOs
+﻿namespace Fizjobackend.Models.BodyVisualizerDTOs
 {
     public class BodyPartDetailsResponseDTO
     {

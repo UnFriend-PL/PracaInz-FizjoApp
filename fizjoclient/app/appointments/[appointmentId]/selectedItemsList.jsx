@@ -3,13 +3,16 @@ import styles from "./appointmentDetails.module.scss";
 import useSelectedItems from "../utils/useSelectedItems";
 import { AppointmentContext } from "./appointmentContext";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
+import pl from "./locales/pl.json";
+import en from "./locales/en.json";
 
+const locales = { en, pl };
 const SelectedItemsList = () => {
-  const { readOnly, t } = useContext(AppointmentContext);
+  const { readOnly } = useContext(AppointmentContext);
   const { language } = useContext(LanguageContext);
+  const t = locales[language];
 
   const { selectedItems, handleRemove } = useSelectedItems();
-
   return (
     <div className={styles.selectedItemsList}>
       <span className={styles.selectedItemsHeader}>{t.selectedItems}:</span>

@@ -1,4 +1,4 @@
-﻿namespace fizjobackend.Models.TreatmentsDTOs
+﻿namespace Fizjobackend.Models.TreatmentsDTOs
 {
     public class TreatmentRequestDTO
     {

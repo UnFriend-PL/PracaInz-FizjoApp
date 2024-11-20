@@ -32,5 +32,8 @@
   "invalidEmailError": "Niepoprawny Email",
   "invalidPhoneError": "Numer musi sie składać z 9 liczb",
   "invalidGenderError": "Wybierz jedną z trzech opcji",
-  "invalidAdressError": "Adres i kraj musi sie składać tylko z liter."
+  "invalidAdressError": "Adres i kraj musi sie składać tylko z liter.",
+  "replaceAvatar": "Zmień zdjęcie profilowe",
+  "uploadAvatar": "Wybierz zdjęcie",
+  "uploading": "Wysyłanie..."
 }

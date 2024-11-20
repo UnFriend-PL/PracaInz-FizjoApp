@@ -1,4 +1,4 @@
-﻿namespace fizjobackend.Models.OpinionDTOs
+﻿namespace Fizjobackend.Models.OpinionDTOs
 {
     public class UpdateOpinionRequestDTO
     {

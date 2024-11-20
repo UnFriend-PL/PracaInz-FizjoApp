@@ -33,5 +33,8 @@
   "invalidPhoneError": "Number must consist of 9 numbers",
   "invalidGenderError": "Choose one of three options",
   "invalidAdressError": "The adress and country must consist of the letters themselves",
-  "opinionsTitle": "Opinions"
+  "opinionsTitle": "Opinions",
+  "replaceAvatar": "Change profile picture",
+  "uploadAvatar": "Choose a picture",
+  "uploading": "Uploading..."
 }

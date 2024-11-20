@@ -1,20 +1,20 @@
-﻿using fizjobackend.DbContexts;
-using fizjobackend.Entities.PatientEntities;
-using fizjobackend.Entities.PhysiotherapistEntities;
-using fizjobackend.Entities.UserEntities;
-using fizjobackend.Helpers;
-using fizjobackend.Interfaces.DTOInterfaces.RegisterDTOInterfaces;
-using fizjobackend.Interfaces.DTOInterfaces.UserDTOInterfaces;
-using fizjobackend.Interfaces.HelpersInterfaces;
-using fizjobackend.Interfaces.UsersInterfaces;
-using fizjobackend.Models.AccountDTOs;
-using fizjobackend.Models.UserDTOs;
+﻿using Fizjobackend.DbContexts;
+using Fizjobackend.Entities.PatientEntities;
+using Fizjobackend.Entities.PhysiotherapistEntities;
+using Fizjobackend.Entities.UserEntities;
+using Fizjobackend.Helpers;
+using Fizjobackend.Interfaces.DTOInterfaces.RegisterDTOInterfaces;
+using Fizjobackend.Interfaces.DTOInterfaces.UserDTOInterfaces;
+using Fizjobackend.Interfaces.HelpersInterfaces;
+using Fizjobackend.Interfaces.UsersInterfaces;
+using Fizjobackend.Models.AccountDTOs;
+using Fizjobackend.Models.UserDTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Asn1.Ocsp;
 
-namespace fizjobackend.Services.UserServices
+namespace Fizjobackend.Services.UserServices
 {
     public class UserService : IUserService
     {

@@ -1,8 +1,8 @@
-﻿using fizjobackend.Entities.PatientEntities;
-using fizjobackend.Entities.PhysiotherapistEntities;
+﻿using Fizjobackend.Entities.PatientEntities;
+using Fizjobackend.Entities.PhysiotherapistEntities;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace fizjobackend.Models.OpinionDTOs
+namespace Fizjobackend.Models.OpinionDTOs
 {
     public class OpinionRequestDTOs
     {

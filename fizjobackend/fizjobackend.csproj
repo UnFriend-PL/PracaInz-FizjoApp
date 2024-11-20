@@ -42,7 +42,6 @@
   <ItemGroup>
     <Folder Include="DbContexts\" />
     <Folder Include="Enums\UserEnums\" />
-    <Folder Include="Interfaces\BodyVisualizerService\" />
     <Folder Include="Middleware\" />
     <Folder Include="Migrations\" />
   </ItemGroup>

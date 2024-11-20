@@ -27,6 +27,7 @@
   padding: 1.5rem;
   width: 100%;
   max-width: 100%;
+  position: relative;
 }
 
 .field {
@@ -75,6 +76,7 @@
   margin-top: 1rem;
   align-self: center;
 }
+
 .editButton svg {
   color: $text-white;
   font-weight: bold;
@@ -186,4 +188,49 @@
   font-size: 12px;
   margin-top: 4px; // Dystans nad błędem, aby wyglądał estetycznie
   align-self: start; // Wyrównanie komunikatu z początkiem pola
+}
+
+/* Avatar Styles */
+.avatarSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid $border-color;
+}
+
+.uploadSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.uploadLabel {
+  background-color: $button-bg;
+  color: $text-white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+}
+
+.uploadLabel:hover {
+  background-color: $button-bg-hover;
+}
+
+.uploadInput {
+  display: none;
+}
+
+.uploading {
+  color: $text-dark-green;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
 }

@@ -1,4 +1,4 @@
-﻿namespace fizjobackend.Enums.PhysiotherapistEnums
+﻿namespace Fizjobackend.Enums.PhysiotherapistEnums
 {
     public enum PhysiotherapySpecialization
     {

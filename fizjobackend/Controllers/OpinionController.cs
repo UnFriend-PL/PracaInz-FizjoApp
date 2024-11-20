@@ -1,14 +1,13 @@
-﻿using fizjobackend.Entities.OpinionEntities;
-using fizjobackend.Entities.UserEntities;
-using fizjobackend.Interfaces.OpinionInterfaces;
-using fizjobackend.Interfaces.UsersInterfaces;
-using fizjobackend.Models.AccountDTOs;
-using fizjobackend.Models.OpinionDTOs;
+﻿using Fizjobackend.Entities.OpinionEntities;
+using Fizjobackend.Entities.UserEntities;
+using Fizjobackend.Interfaces.OpinionInterfaces;
+using Fizjobackend.Models.AccountDTOs;
+using Fizjobackend.Models.OpinionDTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace fizjobackend.Controllers
+namespace Fizjobackend.Controllers
 {
     [ApiController]
     [Route("[controller]")]

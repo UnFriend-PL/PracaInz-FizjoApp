@@ -1,7 +1,7 @@
-﻿using fizjobackend.Entities.ConectorsEntities;
-using fizjobackend.Entities.TreatmentsEntities;
+﻿using Fizjobackend.Entities.ConectorsEntities;
+using Fizjobackend.Entities.TreatmentsEntities;
 
-namespace fizjobackend.Entities.AppointmentEntities
+namespace Fizjobackend.Entities.AppointmentEntities
 {
     public class AppointmentTreatments
     {

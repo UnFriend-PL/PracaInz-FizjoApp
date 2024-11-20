@@ -1,6 +1,6 @@
-﻿using fizjobackend.Models.UserDTOs;
+﻿using Fizjobackend.Models.UserDTOs;
 
-namespace fizjobackend.Models.OpinionDTOs
+namespace Fizjobackend.Models.OpinionDTOs
 {
     public class OpinionResponseDTOs
     {

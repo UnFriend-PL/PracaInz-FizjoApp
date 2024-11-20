@@ -1,6 +1,6 @@
-﻿using fizjobackend.Entities.OpinionEntities;
+﻿using Fizjobackend.Entities.OpinionEntities;
 
-namespace fizjobackend.Models.OpinionDTOs
+namespace Fizjobackend.Models.OpinionDTOs
 {
     public class ListOfOpinionResponseDTO
     {

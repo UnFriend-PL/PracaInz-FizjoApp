@@ -1,26 +1,16 @@
-﻿using fizjobackend.DbContexts;
-using fizjobackend.Entities.OpinionEntities;
-using fizjobackend.Entities.PatientEntities;
-using fizjobackend.Entities.PhysiotherapistEntities;
-using fizjobackend.Entities.UserEntities;
-using fizjobackend.Interfaces.AccountInterfaces;
-using fizjobackend.Interfaces.DTOInterfaces.UserDTOInterfaces;
-using fizjobackend.Interfaces.EmailInterface;
-using fizjobackend.Interfaces.HelpersInterfaces;
-using fizjobackend.Interfaces.OpinionInterfaces;
-using fizjobackend.Models.AccountDTOs;
-using fizjobackend.Models.AppointmentsDTOs;
-using fizjobackend.Models.OpinionDTOs;
-using fizjobackend.Models.UserDTOs;
-using fizjobackend.Services.AccountService;
-using fizjobackend.Services.AppointmentsService;
+﻿using Fizjobackend.Entities.OpinionEntities;
+using Fizjobackend.Interfaces.OpinionInterfaces;
+using Fizjobackend.Models.OpinionDTOs;
+using Fizjobackend.Models.UserDTOs;
+using Fizjobackend;
+using Fizjobackend.DbContexts;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Sprache;
 using System.Linq;
 
-namespace fizjobackend.Services.OpinionService
+namespace Fizjobackend.Services.OpinionService
 {
     public class OpinionService : IOpinionService
     {

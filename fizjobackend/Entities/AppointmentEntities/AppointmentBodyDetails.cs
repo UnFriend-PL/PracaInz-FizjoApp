@@ -1,6 +1,6 @@
-﻿using fizjobackend.Entities.BodyEntities;
+﻿using Fizjobackend.Entities.BodyEntities;
 
-namespace fizjobackend.Entities.AppointmentEntities
+namespace Fizjobackend.Entities.AppointmentEntities
 {
     public class AppointmentBodyDetails
     {

@@ -1,11 +1,10 @@
-﻿using fizjobackend.DbContexts;
-using fizjobackend.Interfaces.TreatmentsInterfaces;
-using fizjobackend.Models.BodyVisualizerDTOs;
-using fizjobackend.Models.TreatmentsDTOs;
+﻿using Fizjobackend.DbContexts;
+using Fizjobackend.Models.BodyVisualizerDTOs;
+using Fizjobackend.Models.TreatmentsDTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace fizjobackend.Services.Treatments
+namespace Fizjobackend.Services.Treatments
 {
     public class TreatmentsService : ITreatmentsService
     {

@@ -1,11 +1,11 @@
-﻿using fizjobackend.Interfaces.TreatmentsInterfaces;
-using fizjobackend.Models.TreatmentsDTOs;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Fizjobackend.Models.TreatmentsDTOs;
+using Fizjobackend.Services.Treatments;
 
-namespace fizjobackend.Controllers
+namespace Fizjobackend.Controllers
 {
     [Route("[controller]")]
     [ApiController]

@@ -1,12 +1,12 @@
-﻿using fizjobackend.Entities.AppointmentEntities;
-using fizjobackend.Entities.OpinionEntities;
-using fizjobackend.Entities.PatientEntities;
-using fizjobackend.Entities.PhysiotherapistEntities;
-using fizjobackend.Entities.UserEntities;
-using fizjobackend.Enums.AppointmentEnums;
+﻿using Fizjobackend.Entities.AppointmentEntities;
+using Fizjobackend.Entities.OpinionEntities;
+using Fizjobackend.Entities.PatientEntities;
+using Fizjobackend.Entities.PhysiotherapistEntities;
+using Fizjobackend.Entities.UserEntities;
+using Fizjobackend.Enums.AppointmentEnums;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace fizjobackend.Models.OpinionDTOs
+namespace Fizjobackend.Models.OpinionDTOs
 {
     public class OpinionListDTO
     {

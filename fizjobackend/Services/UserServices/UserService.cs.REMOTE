@@ -1,11 +1,11 @@
-﻿using fizjobackend.DbContexts;
-using fizjobackend.Entities.UserEntities;
-using fizjobackend.Interfaces.DTOInterfaces.UserDTOInterfaces;
-using fizjobackend.Interfaces.UsersInterfaces;
-using fizjobackend.Models.UserDTOs;
+﻿using Fizjobackend.DbContexts;
+using Fizjobackend.Entities.UserEntities;
+using Fizjobackend.Interfaces.DTOInterfaces.UserDTOInterfaces;
+using Fizjobackend.Interfaces.UsersInterfaces;
+using Fizjobackend.Models.UserDTOs;
 using Microsoft.EntityFrameworkCore;
 
-namespace fizjobackend.Services.UserServices
+namespace Fizjobackend.Services.UserServices
 {
     public class UserService : IUserService
     {

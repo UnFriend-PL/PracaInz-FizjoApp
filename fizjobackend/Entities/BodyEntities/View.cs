@@ -1,8 +1,8 @@
-﻿using fizjobackend.Entities.TreatmentsEntities;
+﻿using Fizjobackend.Entities.TreatmentsEntities;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace fizjobackend.Entities.BodyEntities
+namespace Fizjobackend.Entities.BodyEntities
 {
     public class View
     {

@@ -1,4 +1,4 @@
-﻿namespace fizjobackend.Enums.UserEnums
+﻿namespace Fizjobackend.Enums.UserEnums
 {
     public enum RegisterTypeOfGender
     {
