@@ -28,6 +28,17 @@ namespace Fizjobackend.Controllers
             return Ok(response);
         }
 
+        [HttpGet("/Post/Get/{postId}")]
+        public async Task<IActionResult> GetPost(Guid postId)
+        {
+            var response = await _blogService.GetPost(postId);
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+        
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("/Post/Create")]
         public async Task<IActionResult> CreatePost([FromBody] PostCreateRequestDTO post)
@@ -41,7 +52,7 @@ namespace Fizjobackend.Controllers
         }
         
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpPost("/Post/Comment/{postId}")]
+        [HttpPost("/Post/Comments/Add/{postId}")]
         public async Task<IActionResult> AddCommentWithRating(Guid postId, [FromBody] CommentCreateRequest comment)
         {
             var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));

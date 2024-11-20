@@ -1,17 +1,17 @@
 'use client';
 import React, {useState, useContext, useEffect} from 'react';
-import { useRouter } from 'next/navigation';
+import {useRouter} from 'next/navigation';
 import Image from 'next/image';
 import styles from './staff.module.scss';
-import { FaSearch } from 'react-icons/fa';
-import { LanguageContext } from "@/app/contexts/lang/langContext";
+import {FaSearch} from 'react-icons/fa';
+import {LanguageContext} from "@/app/contexts/lang/langContext";
 import pl from './locales/pl.json';
 import en from './locales/en.json';
 import apiService, {fetchAvatar} from "@/app/services/apiService/apiService";
 
-const locales = { en, pl };
+const locales = {en, pl};
 
-const Staff = () => {
+const Staff = ({recommendStaff = false}) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
     const [city, setCity] = useState('');
@@ -26,7 +26,7 @@ const Staff = () => {
     const router = useRouter();
     const [specialists, setSpecialists] = useState([]);
     const [avatars, setAvatars] = useState({});
-    const { language } = useContext(LanguageContext);
+    const {language} = useContext(LanguageContext);
     const t = locales[language];
 
     useEffect(() => {
@@ -83,15 +83,15 @@ const Staff = () => {
             const params = {
                 pageNumber,
                 pageSize,
-                ...(debouncedSearchTerm ? { searchTerm: debouncedSearchTerm } : {}),
-                ...(debouncedCity ? { city: debouncedCity } : {}),
-                ...(debouncedAveragePrice !== null ? { averagePrice: debouncedAveragePrice } : {})
+                ...(debouncedSearchTerm ? {searchTerm: debouncedSearchTerm} : {}),
+                ...(debouncedCity ? {city: debouncedCity} : {}),
+                ...(debouncedAveragePrice !== null ? {averagePrice: debouncedAveragePrice} : {})
             };
 
             const response = await apiService.get('/Staff/All', params, false);
             if (response.success) {
                 setSpecialists(response.data.staff);
-                setTotalPages( Math.ceil(response.data.totalCount / pageSize) );
+                setTotalPages(Math.ceil(response.data.totalCount / pageSize));
                 setTotalCount(response.data.totalCount);
                 setMaxPrice(Math.ceil(response.data.maxPrice));
                 await fetchAvatars(response.data.staff);
@@ -119,43 +119,45 @@ const Staff = () => {
 
     return (
         <div className={styles.specialistsContainer}>
-            <div className={styles.searchContainer}>
-                <div className={styles.searchInputContainer}>
-                    <FaSearch className={styles.searchIcon}/>
-                    <input
-                        type="text"
-                        placeholder={t.searchByTerm}
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className={styles.searchInput}
-                    />
+            {!recommendStaff && (
+                <div className={styles.searchContainer}>
+                    <div className={styles.searchInputContainer}>
+                        <FaSearch className={styles.searchIcon}/>
+                        <input
+                            type="text"
+                            placeholder={t.searchByTerm}
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className={styles.searchInput}
+                        />
+                    </div>
+                    <div className={styles.searchInputContainer}>
+                        <FaSearch className={styles.searchIcon}/>
+                        <input
+                            type="text"
+                            placeholder={t.searchByCity}
+                            value={city}
+                            onChange={(e) => setCity(e.target.value)}
+                            className={styles.searchInput}
+                        />
+                    </div>
+                    <div className={styles.sliderContainer}>
+                        <label>{t.averagePrice}: {averagePrice !== null ? averagePrice : t.any} pln</label>
+                        <input
+                            type="range"
+                            min={0}
+                            step={10}
+                            max={maxPrice}
+                            value={averagePrice !== null ? averagePrice : 0}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                setAveragePrice(value != 0 ? parseInt(value) : null);
+                            }}
+                            className={styles.slider}
+                        />
+                    </div>
                 </div>
-                <div className={styles.searchInputContainer}>
-                    <FaSearch className={styles.searchIcon}/>
-                    <input
-                        type="text"
-                        placeholder={t.searchByCity}
-                        value={city}
-                        onChange={(e) => setCity(e.target.value)}
-                        className={styles.searchInput}
-                    />
-                </div>
-                <div className={styles.sliderContainer}>
-                    <label>{t.averagePrice}: {averagePrice !== null ? averagePrice : t.any} pln</label>
-                    <input
-                        type="range"
-                        min={0}
-                        step={10}
-                        max={maxPrice}
-                        value={averagePrice !== null ? averagePrice : 0}
-                        onChange={(e) => {
-                            const value = e.target.value;
-                            setAveragePrice(value != 0 ? parseInt(value) : null);
-                        }}
-                        className={styles.slider}
-                    />
-                </div>
-            </div>
+            )}
             <div className={styles.specialistsList}>
                 {specialists.length > 0 ? (
                     specialists.map(specialist => (
@@ -186,27 +188,29 @@ const Staff = () => {
                     <p className={styles.noResults}>{t.noResults}</p>
                 )}
             </div>
-
-            <div className={styles.paginationContainer}>
-                <button
-                    onClick={handlePreviousPage}
-                    disabled={pageNumber === 1}
-                    className={styles.paginationButton}
-                >
-                    {t.previousPage}
-                </button>
-                <span className={styles.paginationInfo}>
+            {!recommendStaff && (
+                <div className={styles.paginationContainer}>
+                    <button
+                        onClick={handlePreviousPage}
+                        disabled={pageNumber === 1}
+                        className={styles.paginationButton}
+                    >
+                        {t.previousPage}
+                    </button>
+                    <span className={styles.paginationInfo}>
                     {t.page} {pageNumber} {t.of} {totalPages}
                 </span>
-                <button
-                    onClick={handleNextPage}
-                    disabled={pageNumber === totalPages}
-                    className={styles.paginationButton}
-                >
-                    {t.nextPage}
-                </button>
-            </div>
+                    <button
+                        onClick={handleNextPage}
+                        disabled={pageNumber === totalPages}
+                        className={styles.paginationButton}
+                    >
+                        {t.nextPage}
+                    </button>
+                </div>
+            )}
         </div>
+
     );
 
 };

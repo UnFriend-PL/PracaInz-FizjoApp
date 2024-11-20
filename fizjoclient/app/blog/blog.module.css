@@ -274,36 +274,40 @@
   font-size: 1.2rem;
   color: #333;
 }
+.commentsSection .commentsContainer {
+  max-height: 20rem;
+  overflow-y: auto;
+  padding-right: 0.1rem;
+}
+.commentsSection .commentsContainer :hover {
+  background-color: #e8e8e8;
+}
+.commentsSection .commentsContainer::-webkit-scrollbar {
+  width: 0.5rem;
+}
+.commentsSection .commentsContainer::-webkit-scrollbar-track {
+  background: transparent;
+}
+.commentsSection .commentsContainer::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+.commentsSection .commentsContainer::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
 .commentsSection .comment {
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.5rem;
+  padding: 0.2rem 0;
 }
 .commentsSection .comment strong {
   color: #2c2c2c;
 }
-.commentsSection .comment .starRating {
-  display: flex;
-  flex-direction: row;
-  gap: 0.3125rem;
-  margin-top: 0.3125rem;
-}
-.commentsSection .comment .starRating .star {
-  cursor: pointer;
-  color: #ccc;
-  transition: color 0.2s;
-}
-.commentsSection .comment .starRating .star:hover {
-  color: #ffc107;
-}
-.commentsSection .comment .starRating .starSelected {
-  cursor: pointer;
-  color: #ffc107;
-  transition: color 0.2s;
-}
-.commentsSection .comment .starRating .starSelected:hover {
-  color: #ffb300;
+.commentsSection .comment .commentDate {
+  font-size: 0.8rem;
+  color: #666;
 }
 .commentsSection .comment p {
-  margin: 0.3125rem 0 0 0.625rem;
+  margin: 0.2rem 0 0 0.625rem;
   color: #555;
 }
 .commentsSection textarea {
