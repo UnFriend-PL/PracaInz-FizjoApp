@@ -8,7 +8,7 @@
   "gender": "płeć",
   "country": "Kraj",
   "city": "Miasto",
-  "streetWithHouseNumber": "Ulica z nr domu",
+  "streetWithHouseNumber": "Adres",
   "postCode": "Kod pocztowy",
   "dateOfBirth": "Data urodzenia",
   "phoneNumber": "Numer telefonu",
@@ -35,5 +35,7 @@
   "invalidAdressError": "Adres i kraj musi sie składać tylko z liter.",
   "replaceAvatar": "Zmień zdjęcie profilowe",
   "uploadAvatar": "Wybierz zdjęcie",
-  "uploading": "Wysyłanie..."
+  "uploading": "Wysyłanie...",
+  "noAvatar": "Brak awatara",
+  "loadingAvatar": "Ładowanie awatara..."
 }
