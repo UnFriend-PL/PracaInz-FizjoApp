@@ -61,8 +61,6 @@ const BodyPartSelector = () => {
   const selectedSection = selectedItems.find(
     (item) => item.sectionName === sectionName
   );
-  console.log(selectedSection, "selectedSection");
-  console.log(selectedItems, "selectedItems");
 
   useEffect(() => {}, [selectedItems]);
 
@@ -149,9 +147,7 @@ const Navigation = ({
 }) => {
   useEffect(() => {
     if (currentIndex >= total) {
-      console.log(currentIndex);
       setCurrentIndex(total > 0 ? total - 1 : 0);
-      console.log(currentIndex);
     }
   }, [total, currentIndex]);
 

@@ -23,6 +23,8 @@ namespace Fizjobackend.Services.BodyVisualizerService
 
                 _logger.LogDebug("Attempting to find view with Gender: {Gender}, ViewPosition: {ViewPosition}", bodyRequest.Gender, bodyRequest.ViewPosition);
                 var view = await _context.Views
+                    .AsSplitQuery()
+                    .AsNoTracking()
                     .FirstOrDefaultAsync(v => v.Gender == bodyRequest.Gender && v.Name == bodyRequest.ViewPosition);
 
                 if (view == null)
@@ -35,6 +37,8 @@ namespace Fizjobackend.Services.BodyVisualizerService
 
                 _logger.LogDebug("View found with Id: {ViewId}. Attempting to find body section with BodySectionName: {BodySectionName}, ViewId: {ViewId}, ViewSide: {ViewSide}", bodyRequest.BodySectionName, view.Id, bodyRequest.ViewSide);
                 var bodySection = await _context.BodySections
+                    .AsSplitQuery()
+                    .AsNoTracking()
                     .FirstOrDefaultAsync(bs => bs.BodySectionName == bodyRequest.BodySectionName && bs.ViewId == view.Id && bs.BodySide == bodyRequest.ViewSide);
 
                 if (bodySection == null)
@@ -54,11 +58,15 @@ namespace Fizjobackend.Services.BodyVisualizerService
                 }
 
                 var muscles = await _context.Muscles
+                    .AsSplitQuery()
+                    .AsNoTracking()
                     .Where(m => m.BodySectionId == bodySection.Id)
                     .Select(m => new MuscleResponseDTO(m))
                     .ToListAsync();
 
                 var joints = await _context.Joints
+                    .AsSplitQuery()
+                    .AsNoTracking()
                     .Where(j => j.BodySectionId == bodySection.Id)
                     .Select(j => new JointResponseDTO(j))
                     .ToListAsync();

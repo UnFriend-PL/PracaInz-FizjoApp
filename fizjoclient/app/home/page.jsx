@@ -63,7 +63,7 @@ const Home = () => {
 
             {/* Sekcja wyszukiwarki specjalistów */}
             <section id="search-section" className={styles.searchSection}>
-                <Staff />
+                <Staff recommendStaff={true} />
             </section>
 
             {/* Sekcja Korzyści z Masażu */}

@@ -6,7 +6,7 @@ namespace Fizjobackend.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class EmailController : Controller
+    public class EmailController : ControllerBase
     {
 
         private readonly IEmailService _emailService;

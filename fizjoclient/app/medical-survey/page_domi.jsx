@@ -344,7 +344,6 @@ const MedicalSurvey = () => {
     const { name, value, type } = e.target;
     const trimmedValue =
       value.length > MAX_TEXT_LENGTH ? value.slice(0, MAX_TEXT_LENGTH) : value;
-    console.log(formData);
     if (type === "textarea") {
       setCharCounts((prevCounts) => ({
         ...prevCounts,
@@ -459,8 +458,6 @@ const MedicalSurvey = () => {
         const errorData = await response.json();
         throw new Error(errorData.message || "Wystąpił błąd");
       }
-
-      console.log("Sukces:", await response.json());
     } catch (error) {
       setError(error.message);
       setShowModal(true);

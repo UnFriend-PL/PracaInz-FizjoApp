@@ -4,16 +4,19 @@ using Fizjobackend.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace fizjobackend.Migrations
+namespace Fizjobackend.Migrations
 {
     [DbContext(typeof(FizjoDbContext))]
-    partial class FizjoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241117132055_SeedPhysiotherapySpecializations")]
+    partial class SeedPhysiotherapySpecializations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -132,9 +135,6 @@ namespace fizjobackend.Migrations
                     b.Property<string>("Author")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("AuthorId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Body")
                         .IsRequired()
@@ -334,41 +334,6 @@ namespace fizjobackend.Migrations
                     b.ToTable("Views");
                 });
 
-            modelBuilder.Entity("Fizjobackend.Entities.OpinionEntities.Opinion", b =>
-                {
-                    b.Property<Guid>("OpinionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NameAndFirstLetterOfTheLastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("PatientId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("PhysiotherapistId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UploadDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("OpinionId");
-
-                    b.HasIndex("PatientId");
-
-                    b.HasIndex("PhysiotherapistId");
-
-                    b.ToTable("Opinions");
-                });
-
             modelBuilder.Entity("Fizjobackend.Entities.PatientEntities.MedicalRaport", b =>
                 {
                     b.Property<Guid>("MedicalRaportId")
@@ -413,52 +378,52 @@ namespace fizjobackend.Migrations
                     b.HasData(
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("a1168abc-f5bd-4690-8e35-9fb22fb7e549"),
+                            PhysiotherapySpecializationId = new Guid("e1ac8c17-4bb8-4d30-b054-c3d76b76ef65"),
                             PhysiotherapySpecialization = "Orthopedic"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("bc5ddc67-6129-4365-8c78-ae030743cbff"),
+                            PhysiotherapySpecializationId = new Guid("daab6592-dacc-4f6f-9612-92c81b8845d6"),
                             PhysiotherapySpecialization = "Neurological"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("b30a7569-3a8a-4fb5-bf6c-2ecb1afd427d"),
+                            PhysiotherapySpecializationId = new Guid("7cafd9d7-2d5a-4fd4-9b50-600123d57c1b"),
                             PhysiotherapySpecialization = "Pediatric"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("416b253c-9dd3-4328-a17c-71844fcaad26"),
+                            PhysiotherapySpecializationId = new Guid("fe594244-6f26-4574-bd4e-e3f973ba006e"),
                             PhysiotherapySpecialization = "CardiovascularAndPulmonary"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("a37020d5-e0ba-4f06-93d1-55f577e77fbf"),
+                            PhysiotherapySpecializationId = new Guid("7946b21d-df79-4c59-9cde-e6999c51cf1a"),
                             PhysiotherapySpecialization = "Geriatric"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("922da888-f637-459d-a51d-98b4adbc8a68"),
+                            PhysiotherapySpecializationId = new Guid("60fdadb6-7a83-4251-9a38-2b235aef5b55"),
                             PhysiotherapySpecialization = "Sports"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("acce3959-684c-4e17-bbf7-a823d68db972"),
+                            PhysiotherapySpecializationId = new Guid("5be5992e-a0ea-4f47-9872-ef6532cd8023"),
                             PhysiotherapySpecialization = "Urogynecological"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("a5ec9c74-7f25-4dfd-b898-f7d54ce5591f"),
+                            PhysiotherapySpecializationId = new Guid("3f7365e9-8cb9-4873-a3b8-604abdf3a6aa"),
                             PhysiotherapySpecialization = "Oncological"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("c2f3a62d-05bc-41af-b245-cfbc0849f7a4"),
+                            PhysiotherapySpecializationId = new Guid("a40a56f5-5e68-4818-b152-ff4c399ea9dc"),
                             PhysiotherapySpecialization = "Dental"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("bedd6e07-2889-490b-b4e7-b882e627171d"),
+                            PhysiotherapySpecializationId = new Guid("c24970d1-7351-4473-acab-7c89c85c74fe"),
                             PhysiotherapySpecialization = "Occupational"
                         });
                 });
@@ -544,9 +509,7 @@ namespace fizjobackend.Migrations
 
                     b.Property<string>("AvatarPath")
                         .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue("default-avatar.png");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -822,17 +785,6 @@ namespace fizjobackend.Migrations
                 {
                     b.HasBaseType("Fizjobackend.Entities.UserEntities.User");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Education")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Experience")
-                        .HasColumnType("int");
-
                     b.Property<string>("LicenseNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -966,25 +918,6 @@ namespace fizjobackend.Migrations
                     b.Navigation("BodySection");
                 });
 
-            modelBuilder.Entity("Fizjobackend.Entities.OpinionEntities.Opinion", b =>
-                {
-                    b.HasOne("Fizjobackend.Entities.PatientEntities.Patient", "Patient")
-                        .WithMany("Opinions")
-                        .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Fizjobackend.Entities.PhysiotherapistEntities.Physiotherapist", "Physiotherapist")
-                        .WithMany("Opinions")
-                        .HasForeignKey("PhysiotherapistId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Patient");
-
-                    b.Navigation("Physiotherapist");
-                });
-
             modelBuilder.Entity("Fizjobackend.Entities.PatientEntities.MedicalRaport", b =>
                 {
                     b.HasOne("Fizjobackend.Entities.PatientEntities.Patient", null)
@@ -1098,15 +1031,11 @@ namespace fizjobackend.Migrations
                     b.Navigation("Appointments");
 
                     b.Navigation("MedicalRaports");
-
-                    b.Navigation("Opinions");
                 });
 
             modelBuilder.Entity("Fizjobackend.Entities.PhysiotherapistEntities.Physiotherapist", b =>
                 {
                     b.Navigation("Appointments");
-
-                    b.Navigation("Opinions");
 
                     b.Navigation("Treatments");
                 });

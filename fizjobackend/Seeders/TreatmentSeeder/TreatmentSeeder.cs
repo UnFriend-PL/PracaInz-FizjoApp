@@ -32,7 +32,6 @@ namespace Fizjobackend.Seeders.TreatmentSeeder
 
                 foreach (var treatmentData in seedData.Treatments)
                 {
-                    // Load muscles, joints, body sections, and views related to the treatment data
                     var muscles = await context.Muscles
                         .Where(m => treatmentData.Muscles.Contains(m.Name))
                         .ToListAsync();

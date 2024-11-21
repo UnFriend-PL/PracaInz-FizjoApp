@@ -190,6 +190,8 @@ namespace Fizjobackend.Services.AppointmentsService
                 await VerifyAppointmentStatusForSelectedUser(userId);
 
                 var appointmentsQuery = _context.Appointments
+                    .AsSplitQuery()
+                    .AsNoTracking()
                     .Where(a => (a.PatientId == userId || a.PhysiotherapistId == userId) && a.AppointmentStatus == appointmentsRequest.Status);
 
                 if (appointmentsRequest.Status == AppointmentStatus.Scheduled)
@@ -220,6 +222,8 @@ namespace Fizjobackend.Services.AppointmentsService
         {
             var totalAppointmentsCount = await appointmentsQuery.CountAsync();
             var appointments = await appointmentsQuery
+                .AsSplitQuery()
+                .AsNoTracking()
                 .OrderBy(a => a.AppointmentDate)
                 .Skip(page * 10)
                 .Take(10)
