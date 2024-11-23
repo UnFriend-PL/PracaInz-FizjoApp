@@ -22,10 +22,10 @@ namespace Fizjobackend.Controllers
 
         [HttpGet]
         [Authorize(AuthenticationSchemes = "Bearer")]
-        public async Task<IActionResult> GetTreatments()
+        public async Task<IActionResult> GetTreatments(TreatmentAutoCompleteRequestDTO request)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var response = await _treatmentsService.GetTreatments(Guid.Parse(userId));
+            var response = await _treatmentsService.GetTreatments(request);
             if (!response.Success)
             {
                 return BadRequest(response);

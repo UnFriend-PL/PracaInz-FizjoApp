@@ -19,18 +19,38 @@ namespace Fizjobackend.Services.Treatments
             _cache = cahe;
         }
 
-        public async Task<ServiceResponse<IEnumerable<TreatmentsAutoCompleteResponseDTO>>> GetTreatments(Guid userId)
+        public async Task<ServiceResponse<IEnumerable<TreatmentsAutoCompleteResponseDTO>>> GetTreatments(TreatmentAutoCompleteRequestDTO request)
         {
             ServiceResponse<IEnumerable<TreatmentsAutoCompleteResponseDTO>> response;
-
+            var searchWords = request.SearchTerm.ToLower().Split(' ');
+            var requestBodyPart = request.BodyPart.ToLower().Split("-");
             try
             {
-                var treatments = await _context.Treatments
+                var query = _context.Treatments
                     .AsSplitQuery()
                     .AsNoTracking()
-                    .AsQueryable()
-                    .ToListAsync();
-                var treatmentsDTO = treatments.Select(t => new TreatmentsAutoCompleteResponseDTO(t)).ToList();
+                    .AsQueryable();
+
+                if (requestBodyPart.Length > 1)
+                {
+                    query = query.Where(t => t.BodySide.ToLower() == requestBodyPart[0] && t.SectionName.ToLower() == requestBodyPart[1]);
+                }
+                if( searchWords.Length > 2)
+                {
+                    query = query.Where(t => t.ViewName.ToLower() == requestBodyPart[2]);
+                }
+                
+                if (searchWords.Length > 0)
+                {
+                    query = query.Where(t => searchWords.Any(sw => t.Name.ToLower().Contains(sw)) || searchWords.Any(sw => t.NamePL.ToLower().Contains(sw)));
+                }
+                if(request.OwnerId != null)
+                {
+                    query = query.Where(t => t.OwnerId == request.OwnerId);
+                }
+                
+                var treatmentsDTO = await query.Select(t => new TreatmentsAutoCompleteResponseDTO(t)).ToListAsync();
+                
                 response = new ServiceResponse<IEnumerable<TreatmentsAutoCompleteResponseDTO>>(" Treatments retrieved");
                 response.Data = treatmentsDTO;
                 response.Success = true;

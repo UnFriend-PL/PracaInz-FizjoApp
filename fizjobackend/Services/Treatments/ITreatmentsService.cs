@@ -4,7 +4,8 @@ namespace Fizjobackend.Services.Treatments
 {
     public interface ITreatmentsService
     {
-        Task<ServiceResponse<IEnumerable<TreatmentsAutoCompleteResponseDTO>>> GetTreatments(Guid userId);
+        Task<ServiceResponse<IEnumerable<TreatmentsAutoCompleteResponseDTO>>> GetTreatments(
+            TreatmentAutoCompleteRequestDTO request);
         Task<ServiceResponse<TreatmentResponseDTO>> GetTreatment(TreatmentRequestDTO treatmentRequest);
     }
 }

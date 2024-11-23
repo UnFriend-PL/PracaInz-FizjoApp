@@ -11,5 +11,5 @@
   "insurance": "Numer ubezpieczenia zdrowotnego",
   "search": "Szukaj",
   "patient": "Pacjent",
-  "searchPatient": "Wpisz imię pacjenta, email, telefon lub PESEL"
+  "searchPatient": "Wpisz email, telefon lub PESEL"
 }

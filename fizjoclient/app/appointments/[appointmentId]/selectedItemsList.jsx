@@ -13,6 +13,7 @@ const SelectedItemsList = () => {
   const t = locales[language];
 
   const { selectedItems, handleRemove } = useSelectedItems();
+  console.log(selectedItems)
   return (
     <div className={styles.selectedItemsList}>
       <span className={styles.selectedItemsHeader}>{t.selectedItems}:</span>

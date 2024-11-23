@@ -43,10 +43,10 @@ namespace Fizjobackend.Models.TreatmentsDTOs;
         Muscles = treatment.Muscles.Select(m => new MuscleResponseDTO(m)).Distinct();
         Joints = treatment.Joints.Select(j => new JointResponseDTO(j)).Distinct();
 
-        //SectionNamesPL = treatment.BodySections.Select(s => s.BodySectionNamePL);
-        //SectionNames = treatment.BodySections.Select(s => s.BodySectionName);
-        //BodySectionIds = treatment.BodySections.Select(b => b.Id);
-        //ViewIds = treatment.Views.Select(v => v.Id);
+        // SectionNamesPL = treatment.BodySections.Select(s => s.BodySectionNamePL);
+        // SectionNames = treatment.BodySections.Select(s => s.BodySectionName);
+        // BodySectionIds = treatment.BodySections.Select(b => b.Id);
+        // ViewIds = treatment.Views.Select(v => v.Id);
 
         //SectionNames = treatment.BodySections.Where(s => s.View.Gender == gender).Select(s => s.BodySectionName).Distinct();
         //SectionNamePL = treatment.BodySections.Select(s => s.BodySectionNamePL).Distinct();
