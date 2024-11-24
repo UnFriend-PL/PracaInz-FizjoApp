@@ -1,4 +1,5 @@
 ﻿using Fizjobackend.DbContexts;
+using Fizjobackend.Entities.TreatmentsEntities;
 using Fizjobackend.Models.TreatmentsDTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -18,96 +19,123 @@ namespace Fizjobackend.Services.Treatments
             _cache = cahe;
         }
 
-   public async Task<ServiceResponse<IEnumerable<TreatmentsAutoCompleteResponseDTO>>> GetTreatments(
-    TreatmentAutoCompleteRequestDTO request)
-{
-    ServiceResponse<IEnumerable<TreatmentsAutoCompleteResponseDTO>> response;
-    var searchWords = !string.IsNullOrWhiteSpace(request.SearchTerm)
-        ? request.SearchTerm.ToLower().Split(' ', StringSplitOptions.RemoveEmptyEntries)
-        : Array.Empty<string>();
+        public async Task<ServiceResponse<IEnumerable<TreatmentsAutoCompleteResponseDTO>>> GetTreatments(
+            TreatmentAutoCompleteRequestDTO request)
+        {
+            var response = new ServiceResponse<IEnumerable<TreatmentsAutoCompleteResponseDTO>>("Treatments retrieved");
 
-    var requestBodyParts = request.BodyParts?.Select(bp => bp.ToLower().Replace(" ", "-").Split('-')).ToList() ?? new List<string[]>();
-   
-    try
-    {
-        var query = _context.Treatments
-            .AsNoTracking()
-            .AsSplitQuery()
-            .AsQueryable()
-            .Where(t => t.Gender == request.Gender)
-            ;
-        
-        if (requestBodyParts.Count > 0)
+            try
+            {
+                var searchWords = GetSearchWords(request.SearchTerm);
+                var requestBodyParts = GetRequestBodyParts(request.BodyParts);
+
+                var query = _context.Treatments
+                    .AsNoTracking()
+                    .AsSplitQuery()
+                    .Where(t => t.Gender == request.Gender);
+
+                query = ApplyBodyPartsFilters(query, requestBodyParts);
+                query = ApplySearchWordsFilters(query, searchWords);
+
+                if (request.OwnerId != null)
+                {
+                    // query = query.Where(t => t.OwnerId == request.OwnerId || t.OwnerId == null);
+                }
+
+                var treatmentsDTO = await query
+                    .Distinct()
+                    .OrderBy(t => t.Name)
+                    .Skip((request.Page - 1) * request.Limit)
+                    .Take(request.Limit)
+                    .Select(t => new TreatmentsAutoCompleteResponseDTO(t))
+                    .ToListAsync();
+
+                response.Data = treatmentsDTO;
+                response.Success = true;
+                response.Message = "Treatments retrieved";
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = "An error occurred while retrieving treatments";
+                response.Errors = new[] { ex.Message };
+                _logger.LogError(ex, "An error occurred while retrieving treatments");
+            }
+
+            return response;
+        }
+
+        private string[] GetSearchWords(string searchTerm)
+        {
+            return string.IsNullOrWhiteSpace(searchTerm)
+                ? Array.Empty<string>()
+                : searchTerm.ToLower().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        private List<string[]> GetRequestBodyParts(IEnumerable<string> bodyParts)
+        {
+            return bodyParts == null
+                ? new List<string[]>()
+                : bodyParts
+                    .Select(bp => bp.ToLower().Replace(" ", "-").Split('-'))
+                    .ToList();
+        }
+
+        private IQueryable<Treatment> ApplyBodyPartsFilters(
+            IQueryable<Treatment> query, List<string[]> requestBodyParts)
         {
             foreach (var part in requestBodyParts)
             {
                 if (part.Length == 2)
                 {
+                    string bodySidePart = part[0];
+                    string sectionNamePart = part[1];
+
                     query = query.Where(t =>
-                        part.Any(bp => t.BodySide.ToLower().Contains(bp)) &&
-                        part.Any(bp => t.SectionName.ToLower().Contains(bp))
+                        t.BodySide.ToLower().Contains(bodySidePart) &&
+                        t.SectionName.ToLower().Contains(sectionNamePart)
                     );
                 }
-                else
+                else if (part.Length == 3)
                 {
+                    string bodySidePart = part[0];
+                    string sectionNamePart = part[1];
+                    string viewNamePart = part[2];
+
                     query = query.Where(t =>
-                        part.Any(bp => t.BodySide.ToLower().Contains(bp)) &&
-                        part.Any(bp => t.SectionName.ToLower().Contains(bp)) &&
-                        part.Any(bp => t.ViewName.ToLower().Contains(bp))
+                        t.BodySide.ToLower().Contains(bodySidePart) &&
+                        t.SectionName.ToLower().Contains(sectionNamePart) &&
+                        t.ViewName.ToLower().Contains(viewNamePart)
                     );
                 }
             }
+
+            return query;
         }
-        
-        if (searchWords.Length > 0)
+
+        private IQueryable<Treatment> ApplySearchWordsFilters(
+            IQueryable<Treatment> query, string[] searchWords)
         {
+            if (searchWords.Length == 0)
+                return query;
+
             query = query.Where(t =>
-                searchWords.Any(sw => 
-                    t.Name.ToLower().Contains(sw) || 
-                    t.NamePL.ToLower().Contains(sw) || 
-                    t.ViewName.ToLower().Contains(sw) || 
-                    t.ViewNamePL.ToLower().Contains(sw) || 
+                searchWords.Any(sw =>
+                    t.Name.ToLower().Contains(sw) ||
+                    t.NamePL.ToLower().Contains(sw) ||
+                    t.ViewName.ToLower().Contains(sw) ||
+                    t.ViewNamePL.ToLower().Contains(sw) ||
                     t.SectionName.ToLower().Contains(sw) ||
-                    t.BodySide.ToLower().Contains(sw) || 
-                    t.BodySidePL.ToLower().Contains(sw) || 
-                    t.DescriptionPL.ToLower().Contains(sw) ||
-                    t.Description.ToLower().Contains(sw)) // || 
-                );
+                    t.BodySide.ToLower().Contains(sw) ||
+                    t.BodySidePL.ToLower().Contains(sw) ||
+                    t.Description.ToLower().Contains(sw) ||
+                    t.DescriptionPL.ToLower().Contains(sw)
+                )
+            );
+
+            return query;
         }
 
-        if (request.OwnerId != null)
-        {
-            // query = query.Where(t => t.OwnerId == request.OwnerId || t.OwnerId == null);
-        }
-
-        var treatmentsDTO = await query
-            .Distinct()
-            .OrderBy(t => t.Name)
-            .Skip((request.Page - 1) * request.Limit)
-            .Take(request.Limit)
-            .Select(t => new TreatmentsAutoCompleteResponseDTO(t))
-            .ToListAsync();
-
-        response = new ServiceResponse<IEnumerable<TreatmentsAutoCompleteResponseDTO>>("Treatments retrieved")
-        {
-            Data = treatmentsDTO,
-            Success = true,
-            Message = "Treatments retrieved"
-        };
-    }
-    catch (Exception ex)
-    {
-        response = new ServiceResponse<IEnumerable<TreatmentsAutoCompleteResponseDTO>>(
-            "An error occurred while retrieving treatments")
-        {
-            Success = false,
-            Errors = new[] { ex.Message }
-        };
-        _logger.LogError(ex, "An error occurred while retrieving treatments");
-    }
-
-    return response;
-}
 
         public async Task<ServiceResponse<TreatmentResponseDTO>> GetTreatment(TreatmentRequestDTO treatmentRequest)
         {
