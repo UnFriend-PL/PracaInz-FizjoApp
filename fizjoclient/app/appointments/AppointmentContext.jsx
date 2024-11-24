@@ -8,10 +8,10 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
-import pl from "./locales/pl.json";
-import en from "./locales/en.json";
+import pl from "./[appointmentId]/locales/pl.json";
+import en from "./[appointmentId]/locales/en.json";
 import apiService from "@/app/services/apiService/apiService";
-import mapData from "../utils/mapData";
+import mapData from "./utils/mapData";
 const locales = { en, pl };
 
 export const AppointmentContext = createContext();
@@ -23,6 +23,7 @@ export const AppointmentProvider = ({ children }) => {
   const t = locales[language];
   const [selectedItems, setSelectedItems] = useState([]);
   const [appointment, setAppointment] = useState(null);
+  const [gender, setGender] = useState(null);
   const [selectedParts, setSelectedParts] = useState({
     front: [],
     back: [],
@@ -77,6 +78,7 @@ export const AppointmentProvider = ({ children }) => {
         true
       );
       setAppointment(response.data);
+      setGender(response.data.patient.gender);
       setReadOnly(
         response.data.appointmentStatusName !== "Scheduled" &&
           response.data.appointmentStatusName !== "Completed"
@@ -273,6 +275,7 @@ export const AppointmentProvider = ({ children }) => {
         handleBodyPartPress,
         selectedItems,
         setSelectedItems,
+        gender
       }}
     >
       {children}

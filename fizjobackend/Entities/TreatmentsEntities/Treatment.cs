@@ -24,8 +24,10 @@ namespace Fizjobackend.Entities.TreatmentsEntities
         public string ViewName { get; set; }
         public string? ViewNamePL { get; set; }
         public string? BodySide { get; set; }
+        public string? BodySidePL { get; set; }
         public string SectionName { get; set; }
         public string? SectionNamePL { get; set; }
+        public string Gender { get; set; }
         public int BodySectionId { get; set; }
 
         public virtual ICollection<Muscle> Muscles { get; set; } = new List<Muscle>();

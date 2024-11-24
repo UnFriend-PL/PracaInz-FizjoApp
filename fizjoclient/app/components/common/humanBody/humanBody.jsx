@@ -74,7 +74,7 @@ const Body = ({
     </SvgWrapper>
   );
 
-  if (gender === "female") {
+  if (gender.toLowerCase() === "female") {
     return renderBodySvg(side === "front" ? bodyFemaleFront : bodyFemaleBack);
   }
 

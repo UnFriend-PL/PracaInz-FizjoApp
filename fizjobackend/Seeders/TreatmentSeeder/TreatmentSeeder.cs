@@ -46,7 +46,6 @@ namespace Fizjobackend.Seeders.TreatmentSeeder
 
                     var views = await context.Views
                         .Where(v => v.BodySections.Any(bs => bodySections.Contains(bs)))
-                        .Distinct()
                         .ToListAsync();
 
                     foreach (var view in views)
@@ -67,6 +66,7 @@ namespace Fizjobackend.Seeders.TreatmentSeeder
                                 UpdateDate = DateTime.Parse(treatmentData.UpdateDate),
                                 IsDeleted = treatmentData.IsDeleted,
                                 BodySectionId = bodySection.Id,
+                                Gender = view.Gender,
                                 ViewId = view.Id,
                                 ViewName = view.Name,
                                 ViewNamePL = view.NamePL,

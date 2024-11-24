@@ -4,7 +4,7 @@ import HumanBody from "@/app/components/common/humanBody/humanBody";
 import styles from "./appointmentDetails.module.scss";
 import SwitchSelector from "react-switch-selector";
 import AppointmentDetails from "./appointmentDetails";
-import { AppointmentContext, AppointmentProvider } from "./appointmentContext";
+import { AppointmentContext, AppointmentProvider } from "../AppointmentContext";
 import { AuthContext } from "@/app/contexts/auth/authContext";
 import SelectedItemsList from "./selectedItemsList";
 import BodyPartSelector from "./bodyPartSelector";
@@ -16,6 +16,7 @@ const Appointments = () => {
     setViewPosition,
     viewPosition,
     appointment,
+    gender,
     selectedParts,
     handleBodyPartPress,
     readOnly,
@@ -40,7 +41,7 @@ const Appointments = () => {
           />
           <HumanBody
             side={viewPosition}
-            gender={appointment.patient.gender}
+            gender={gender}
             data={selectedParts[viewPosition]}
             scale={1.6}
             onBodyPartPress={handleBodyPartPress}

@@ -1,4 +1,7 @@
+import {useEffect} from "react";
+
 const mapData = (data, language) => {
+
   return data.map((section) => {
     const viewName =
       section.viewName ||

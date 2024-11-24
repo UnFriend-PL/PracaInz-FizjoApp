@@ -20,7 +20,7 @@ namespace Fizjobackend.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> GetTreatments(TreatmentAutoCompleteRequestDTO request)
         {

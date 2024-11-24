@@ -1,5 +1,4 @@
 ﻿using Fizjobackend.DbContexts;
-using Fizjobackend.Models.BodyVisualizerDTOs;
 using Fizjobackend.Models.TreatmentsDTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -19,53 +18,96 @@ namespace Fizjobackend.Services.Treatments
             _cache = cahe;
         }
 
-        public async Task<ServiceResponse<IEnumerable<TreatmentsAutoCompleteResponseDTO>>> GetTreatments(TreatmentAutoCompleteRequestDTO request)
+   public async Task<ServiceResponse<IEnumerable<TreatmentsAutoCompleteResponseDTO>>> GetTreatments(
+    TreatmentAutoCompleteRequestDTO request)
+{
+    ServiceResponse<IEnumerable<TreatmentsAutoCompleteResponseDTO>> response;
+    var searchWords = !string.IsNullOrWhiteSpace(request.SearchTerm)
+        ? request.SearchTerm.ToLower().Split(' ', StringSplitOptions.RemoveEmptyEntries)
+        : Array.Empty<string>();
+
+    var requestBodyParts = request.BodyParts?.Select(bp => bp.ToLower().Replace(" ", "-").Split('-')).ToList() ?? new List<string[]>();
+   
+    try
+    {
+        var query = _context.Treatments
+            .AsNoTracking()
+            .AsSplitQuery()
+            .AsQueryable()
+            .Where(t => t.Gender == request.Gender)
+            ;
+        
+        if (requestBodyParts.Count > 0)
         {
-            ServiceResponse<IEnumerable<TreatmentsAutoCompleteResponseDTO>> response;
-            var searchWords = request.SearchTerm.ToLower().Split(' ');
-            var requestBodyPart = request.BodyPart.ToLower().Split("-");
-            try
+            foreach (var part in requestBodyParts)
             {
-                var query = _context.Treatments
-                    .AsSplitQuery()
-                    .AsNoTracking()
-                    .AsQueryable();
-
-                if (requestBodyPart.Length > 1)
+                if (part.Length == 2)
                 {
-                    query = query.Where(t => t.BodySide.ToLower() == requestBodyPart[0] && t.SectionName.ToLower() == requestBodyPart[1]);
+                    query = query.Where(t =>
+                        part.Any(bp => t.BodySide.ToLower().Contains(bp)) &&
+                        part.Any(bp => t.SectionName.ToLower().Contains(bp))
+                    );
                 }
-                if( searchWords.Length > 2)
+                else
                 {
-                    query = query.Where(t => t.ViewName.ToLower() == requestBodyPart[2]);
+                    query = query.Where(t =>
+                        part.Any(bp => t.BodySide.ToLower().Contains(bp)) &&
+                        part.Any(bp => t.SectionName.ToLower().Contains(bp)) &&
+                        part.Any(bp => t.ViewName.ToLower().Contains(bp))
+                    );
                 }
-                
-                if (searchWords.Length > 0)
-                {
-                    query = query.Where(t => searchWords.Any(sw => t.Name.ToLower().Contains(sw)) || searchWords.Any(sw => t.NamePL.ToLower().Contains(sw)));
-                }
-                if(request.OwnerId != null)
-                {
-                    query = query.Where(t => t.OwnerId == request.OwnerId);
-                }
-                
-                var treatmentsDTO = await query.Select(t => new TreatmentsAutoCompleteResponseDTO(t)).ToListAsync();
-                
-                response = new ServiceResponse<IEnumerable<TreatmentsAutoCompleteResponseDTO>>(" Treatments retrieved");
-                response.Data = treatmentsDTO;
-                response.Success = true;
-                response.Message = "Treatments retrieved";
             }
-            catch (Exception ex)
-            {
-                response = new ServiceResponse<IEnumerable<TreatmentsAutoCompleteResponseDTO>>("An error occurred while retrieving treatments");
-                _logger.LogError(ex, "An error occurred while retrieving treatments");
-                response.Success = false;
-                response.Errors = new[] { ex.Message };
-            }
-
-            return response;
         }
+        
+        if (searchWords.Length > 0)
+        {
+            query = query.Where(t =>
+                searchWords.Any(sw => 
+                    t.Name.ToLower().Contains(sw) || 
+                    t.NamePL.ToLower().Contains(sw) || 
+                    t.ViewName.ToLower().Contains(sw) || 
+                    t.ViewNamePL.ToLower().Contains(sw) || 
+                    t.SectionName.ToLower().Contains(sw) ||
+                    t.BodySide.ToLower().Contains(sw) || 
+                    t.BodySidePL.ToLower().Contains(sw) || 
+                    t.DescriptionPL.ToLower().Contains(sw) ||
+                    t.Description.ToLower().Contains(sw)) // || 
+                );
+        }
+
+        if (request.OwnerId != null)
+        {
+            // query = query.Where(t => t.OwnerId == request.OwnerId || t.OwnerId == null);
+        }
+
+        var treatmentsDTO = await query
+            .Distinct()
+            .OrderBy(t => t.Name)
+            .Skip((request.Page - 1) * request.Limit)
+            .Take(request.Limit)
+            .Select(t => new TreatmentsAutoCompleteResponseDTO(t))
+            .ToListAsync();
+
+        response = new ServiceResponse<IEnumerable<TreatmentsAutoCompleteResponseDTO>>("Treatments retrieved")
+        {
+            Data = treatmentsDTO,
+            Success = true,
+            Message = "Treatments retrieved"
+        };
+    }
+    catch (Exception ex)
+    {
+        response = new ServiceResponse<IEnumerable<TreatmentsAutoCompleteResponseDTO>>(
+            "An error occurred while retrieving treatments")
+        {
+            Success = false,
+            Errors = new[] { ex.Message }
+        };
+        _logger.LogError(ex, "An error occurred while retrieving treatments");
+    }
+
+    return response;
+}
 
         public async Task<ServiceResponse<TreatmentResponseDTO>> GetTreatment(TreatmentRequestDTO treatmentRequest)
         {
@@ -86,6 +128,7 @@ namespace Fizjobackend.Services.Treatments
                     response = new ServiceResponse<TreatmentResponseDTO>("Treatment not found") { Success = false };
                     return response;
                 }
+
                 var treatmentDTO = new TreatmentResponseDTO(treatment, treatmentRequest.Gender);
                 response = new ServiceResponse<TreatmentResponseDTO>("Treatment retrieved");
                 response.Data = treatmentDTO;
@@ -102,6 +145,5 @@ namespace Fizjobackend.Services.Treatments
 
             return response;
         }
-
     }
 }
