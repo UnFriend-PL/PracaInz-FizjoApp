@@ -8,7 +8,7 @@ import { AppointmentContext, AppointmentProvider } from "../AppointmentContext";
 import { AuthContext } from "@/app/contexts/auth/authContext";
 import SelectedItemsList from "./selectedItemsList";
 import BodyPartSelector from "./bodyPartSelector";
-import TreatmentsAutoComplete from "@/app/components/treatments/treatments";
+import Treatments from "@/app/components/treatments/treatments";
 
 const Appointments = () => {
   const { isAuthenticated } = useContext(AuthContext);
@@ -29,7 +29,7 @@ const Appointments = () => {
       <AppointmentDetails />
       <div className={`${styles.container} ${styles.spaceAtBottom}`}>
         <div className={styles.treatmentsWrapper}>
-          <TreatmentsAutoComplete />
+          <Treatments />
         </div>
         <div className={styles.bodyContainer}>
           <SwitchSelector

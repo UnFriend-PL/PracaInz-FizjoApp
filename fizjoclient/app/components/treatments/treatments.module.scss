@@ -1,3 +1,5 @@
+@import "@/app/utils/globalColors.scss";
+
 .container {
   flex-basis: 100%;
   display: flex;
@@ -8,14 +10,97 @@
 
 .selectTreatments {
   flex-basis: 50%;
+  width: 60%;
 }
 
 .checkboxLabel {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 1rem;
 }
 
 .checkboxLabel input {
-  margin-right: 5px;
+  margin-right: 0.5rem;
+}
+
+.selectedTreatmentsContainer {
+  width: 80%;
+  margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.selectedTreatment {
+  position: relative;
+  background-color: #f0f0f0;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  flex-basis: 80%;
+
+  .hoverDetails {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    align-items: center;
+
+    .detailsElement {
+      flex-basis: 100%;
+      margin-bottom: 0.5rem;
+      border-bottom: 1px solid #6c757d;
+    }
+  }
+
+  &:hover .hoverDetails {
+    max-height: 10rem;
+    padding: 1rem;
+  }
+}
+
+.treatmentInfo {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.treatmentName {
+  font-weight: bold;
+}
+
+.treatmentDuration {
+  font-style: italic;
+  cursor: pointer;
+}
+
+.durationInput {
+  width: 5.2rem;
+  font-size: inherit;
+  padding: 0.2rem;
+}
+
+.hoverDetails {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  background-color: #e0e0e0;
+  border-top: 1px solid #ccc;
+}
+
+.deleteButton {
+  position: absolute;
+  top: 0rem;
+  right: 0rem;
+  background: $button-cancel-bg;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: none;
+  color: $text-white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }

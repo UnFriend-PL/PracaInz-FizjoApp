@@ -1,4 +1,5 @@
-﻿using Fizjobackend.DbContexts;
+﻿using System.Linq.Expressions;
+using Fizjobackend.DbContexts;
 using Fizjobackend.Entities.TreatmentsEntities;
 using Fizjobackend.Models.TreatmentsDTOs;
 using Microsoft.EntityFrameworkCore;
@@ -22,8 +23,19 @@ namespace Fizjobackend.Services.Treatments
         public async Task<ServiceResponse<IEnumerable<TreatmentsAutoCompleteResponseDTO>>> GetTreatments(
             TreatmentAutoCompleteRequestDTO request)
         {
-            var response = new ServiceResponse<IEnumerable<TreatmentsAutoCompleteResponseDTO>>("Treatments retrieved");
+            var cacheKey =
+                $"Treatments_{request.Gender}_{string.Join(",", request.BodyParts ?? new List<string>())}_{request.SearchTerm}_{request.Page}_{request.Limit}";
+            if (_cache.TryGetValue(cacheKey, out IEnumerable<TreatmentsAutoCompleteResponseDTO> cachedTreatments))
+            {
+                return new ServiceResponse<IEnumerable<TreatmentsAutoCompleteResponseDTO>>(
+                    "Treatments retrieved from cache")
+                {
+                    Data = cachedTreatments,
+                    Success = true
+                };
+            }
 
+            var response = new ServiceResponse<IEnumerable<TreatmentsAutoCompleteResponseDTO>>("Treatments retrieved");
             try
             {
                 var searchWords = GetSearchWords(request.SearchTerm);
@@ -50,9 +62,10 @@ namespace Fizjobackend.Services.Treatments
                     .Select(t => new TreatmentsAutoCompleteResponseDTO(t))
                     .ToListAsync();
 
+                _cache.Set(cacheKey, treatmentsDTO, TimeSpan.FromMinutes(5));
+
                 response.Data = treatmentsDTO;
                 response.Success = true;
-                response.Message = "Treatments retrieved";
             }
             catch (Exception ex)
             {
@@ -84,33 +97,73 @@ namespace Fizjobackend.Services.Treatments
         private IQueryable<Treatment> ApplyBodyPartsFilters(
             IQueryable<Treatment> query, List<string[]> requestBodyParts)
         {
+            if (requestBodyParts == null || !requestBodyParts.Any())
+                return query;
+
+            var parameter = Expression.Parameter(typeof(Treatment), "t");
+            var conditions = new List<Expression>();
+
             foreach (var part in requestBodyParts)
             {
+                Expression condition = null;
+
                 if (part.Length == 2)
                 {
-                    string bodySidePart = part[0];
-                    string sectionNamePart = part[1];
+                    string bodySidePart = part[0].ToLower();
+                    string sectionNamePart = part[1].ToLower();
 
-                    query = query.Where(t =>
-                        t.BodySide.ToLower().Contains(bodySidePart) &&
-                        t.SectionName.ToLower().Contains(sectionNamePart)
-                    );
+                    var bodySideCondition = Expression.Call(
+                        Expression.Call(
+                            Expression.Property(parameter, nameof(Treatment.BodySide)),
+                            nameof(string.ToLower), Type.EmptyTypes),
+                        nameof(string.Contains), null, Expression.Constant(bodySidePart));
+
+                    var sectionNameCondition = Expression.Call(
+                        Expression.Call(
+                            Expression.Property(parameter, nameof(Treatment.SectionName)),
+                            nameof(string.ToLower), Type.EmptyTypes),
+                        nameof(string.Contains), null, Expression.Constant(sectionNamePart));
+
+                    condition = Expression.AndAlso(bodySideCondition, sectionNameCondition);
                 }
                 else if (part.Length == 3)
                 {
-                    string bodySidePart = part[0];
-                    string sectionNamePart = part[1];
-                    string viewNamePart = part[2];
+                    string bodySidePart = part[0].ToLower();
+                    string sectionNamePart = part[1].ToLower();
+                    string viewNamePart = part[2].ToLower();
 
-                    query = query.Where(t =>
-                        t.BodySide.ToLower().Contains(bodySidePart) &&
-                        t.SectionName.ToLower().Contains(sectionNamePart) &&
-                        t.ViewName.ToLower().Contains(viewNamePart)
-                    );
+                    var bodySideCondition = Expression.Call(
+                        Expression.Call(
+                            Expression.Property(parameter, nameof(Treatment.BodySide)),
+                            nameof(string.ToLower), Type.EmptyTypes),
+                        nameof(string.Contains), null, Expression.Constant(bodySidePart));
+
+                    var sectionNameCondition = Expression.Call(
+                        Expression.Call(
+                            Expression.Property(parameter, nameof(Treatment.SectionName)),
+                            nameof(string.ToLower), Type.EmptyTypes),
+                        nameof(string.Contains), null, Expression.Constant(sectionNamePart));
+
+                    var viewNameCondition = Expression.Call(
+                        Expression.Call(
+                            Expression.Property(parameter, nameof(Treatment.ViewName)),
+                            nameof(string.ToLower), Type.EmptyTypes),
+                        nameof(string.Contains), null, Expression.Constant(viewNamePart));
+
+                    condition = Expression.AndAlso(
+                        Expression.AndAlso(bodySideCondition, sectionNameCondition),
+                        viewNameCondition);
+                }
+
+                if (condition != null)
+                {
+                    conditions.Add(condition);
                 }
             }
 
-            return query;
+            var finalCondition = conditions.Aggregate((current, next) => Expression.OrElse(current, next));
+            var lambda = Expression.Lambda<Func<Treatment, bool>>(finalCondition, parameter);
+            return query.Where(lambda);
         }
 
         private IQueryable<Treatment> ApplySearchWordsFilters(
@@ -139,6 +192,16 @@ namespace Fizjobackend.Services.Treatments
 
         public async Task<ServiceResponse<TreatmentResponseDTO>> GetTreatment(TreatmentRequestDTO treatmentRequest)
         {
+            var cacheKey = $"Treatment_{treatmentRequest.Id}";
+            if (_cache.TryGetValue(cacheKey, out TreatmentResponseDTO cachedTreatment))
+            {
+                return new ServiceResponse<TreatmentResponseDTO>("Treatment retrieved from cache")
+                {
+                    Data = cachedTreatment,
+                    Success = true
+                };
+            }
+
             ServiceResponse<TreatmentResponseDTO> response;
 
             try
@@ -146,11 +209,9 @@ namespace Fizjobackend.Services.Treatments
                 var treatment = await _context.Treatments
                     .AsSplitQuery()
                     .AsNoTracking()
-                    .Include(t => t.Muscles)
-                    .Include(t => t.Joints)
                     .Where(t => t.Id == treatmentRequest.Id)
-                    .AsQueryable()
                     .FirstOrDefaultAsync();
+
                 if (treatment == null)
                 {
                     response = new ServiceResponse<TreatmentResponseDTO>("Treatment not found") { Success = false };
@@ -158,10 +219,12 @@ namespace Fizjobackend.Services.Treatments
                 }
 
                 var treatmentDTO = new TreatmentResponseDTO(treatment, treatmentRequest.Gender);
+
+                _cache.Set(cacheKey, treatmentDTO, TimeSpan.FromMinutes(10));
+
                 response = new ServiceResponse<TreatmentResponseDTO>("Treatment retrieved");
                 response.Data = treatmentDTO;
                 response.Success = true;
-                response.Message = "Treatment retrieved";
             }
             catch (Exception ex)
             {

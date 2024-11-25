@@ -1,4 +1,5 @@
 {
   "treatmentSearch": "Wyszukaj i wybierz zabieg...",
-  "treatmentTypeToSearch": "Wpisz, aby wyszukać..."
+  "treatmentTypeToSearch": "Wpisz, aby wyszukać...",
+  "includeSelectedTreatmentsOnly" : "Uwzględnij tylko wybrane zabiegi"
 }
