@@ -19,19 +19,40 @@ import en from "./locales/en.json";
 
 const locales = {en, pl};
 
-const TreatmentItem = ({treatment, onEdit, onDelete, language}) => {
-    const [isEditing, setIsEditing] = useState(false);
-    const [newValue, setNewValue] = useState("");
+const TreatmentItem = ({ treatment, onEdit, onDelete, language }) => {
+    const [isEditingNotes, setIsEditingNotes] = useState(false);
+    const [newNotes, setNewNotes] = useState("");
+    const [isEditingDuration, setIsEditingDuration] = useState(false);
+    const [newDuration, setNewDuration] = useState(treatment.duration);
     const [showDetails, setShowDetails] = useState(false);
 
-    const handleEdit = () => {
-        setIsEditing(true);
-        setNewValue(treatment.notes || "");
+    const handleEditNotes = () => {
+        setIsEditingNotes(true);
+        setNewNotes(treatment.notes || "");
     };
 
-    const saveEdit = () => {
-        onEdit(treatment.id, newValue);
-        setIsEditing(false);
+    const saveEditNotes = () => {
+        onEdit(treatment.id, { notes: newNotes });
+        setIsEditingNotes(false);
+    };
+
+    const handleEditDuration = () => {
+        setIsEditingDuration(true);
+        setNewDuration(treatment.duration);
+    };
+
+    const saveEditDuration = () => {
+        onEdit(treatment.id, { duration: newDuration });
+        setIsEditingDuration(false);
+    };
+
+    const handleDurationKeyDown = (e) => {
+        if (e.key === "Enter") {
+            saveEditDuration();
+        } else if (e.key === "Escape") {
+            setIsEditingDuration(false);
+            setNewDuration(treatment.duration);
+        }
     };
 
     return (
@@ -40,7 +61,28 @@ const TreatmentItem = ({treatment, onEdit, onDelete, language}) => {
         <span className={styles.treatmentName}>
           {language === "en" ? treatment.name : treatment.namePL}
         </span>
-                <span className={styles.treatmentDuration}>{treatment.duration}</span>
+
+                {isEditingDuration ? (
+                    <input
+                        type="text"
+                        className={styles.durationInput}
+                        value={newDuration}
+                        onChange={(e) => setNewDuration(e.target.value)}
+                        onBlur={saveEditDuration}
+                        onKeyDown={handleDurationKeyDown}
+                        autoFocus
+                    />
+                ) : (
+                    <span
+                        className={styles.treatmentDuration}
+                        onDoubleClick={handleEditDuration}
+                        style={{ cursor: "pointer" }}
+                        title="Double-click to edit duration"
+                    >
+            {treatment.duration}
+          </span>
+                )}
+
                 <div className={styles.treatmentBodyDetails}>
           <span>
             {language === "en"
@@ -57,47 +99,44 @@ const TreatmentItem = ({treatment, onEdit, onDelete, language}) => {
                 {showDetails ? (
                     <CiCircleChevUp
                         className={styles.showMore}
-                        onClick={() => {
-                            setShowDetails((prev) => !prev);
-                        }}
+                        onClick={() => setShowDetails(false)}
                     />
                 ) : (
                     <CiCircleChevDown
                         className={styles.showMore}
-                        onClick={() => {
-                            setShowDetails((prev) => !prev);
-                        }}
+                        onClick={() => setShowDetails(true)}
                     />
                 )}
             </div>
             {showDetails && (
-                <>
-                    <div className={styles.treatmentDetails}>
-            <span className={styles.treatmentDetailsElement}>
-              {language == "en"
-                  ? treatment.description
-                  : treatment.descriptionPL}
+                <div className={styles.treatmentDetails}>
+          <span className={styles.treatmentDetailsElement}>
+            {language === "en"
+                ? treatment.description
+                : treatment.descriptionPL}
+          </span>
+
+                    {isEditingNotes ? (
+                        <textarea
+                            value={newNotes}
+                            onChange={(e) => setNewNotes(e.target.value)}
+                            onBlur={saveEditNotes}
+                            onKeyDown={(e) => e.key === "Enter" && saveEditNotes()}
+                            autoFocus
+                        />
+                    ) : (
+                        <span
+                            onDoubleClick={handleEditNotes}
+                            className={styles.treatmentDetailsElement}
+                            style={{ cursor: "pointer" }}
+                            title="Double-click to edit notes"
+                        >
+              {treatment.notes || "Add notes"}
             </span>
-                        {isEditing ? (
-                            <textarea
-                                value={newValue}
-                                onChange={(e) => setNewValue(e.target.value)}
-                                onBlur={saveEdit}
-                                onKeyDown={(e) => e.key === "Enter" && saveEdit()}
-                                autoFocus
-                            />
-                        ) : (
-                            <span
-                                onDoubleClick={handleEdit}
-                                className={styles.treatmentDetailsElement}
-                                style={{cursor: "pointer"}}
-                            >
-                {treatment.notes || "Add notes"}
-              </span>
-                        )}
-                        <button onClick={() => onDelete(treatment.id)}>Delete</button>
-                    </div>
-                </>
+                    )}
+
+                    <button onClick={() => onDelete(treatment.id)}>Delete</button>
+                </div>
             )}
         </div>
     );
@@ -145,8 +184,8 @@ const TreatmentsAutoComplete = () => {
             const treatments = await fetchTreatments(payload);
             const options = treatments.map((treatment) => ({
                 value: treatment.id,
-                label: language === "en" ? `${treatment.name} (${treatment.bodySectionName}, ${treatment.viewName}, ${treatment.bodySide})`
-                    : `${treatment.namePL} (${treatment.bodySectionNamePL}, ${treatment.viewNamePL}, ${treatment.bodySidePL})`
+                label: language === "en" ? `${treatment.name} (${treatment.bodySectionName}, ${treatment.viewName}, ${treatment.bodySide}) [${treatment.duration}]`
+                    : `${treatment.namePL} (${treatment.bodySectionNamePL}, ${treatment.viewNamePL}, ${treatment.bodySidePL}) [${treatment.duration}]`
                 ,
             }));
 
@@ -173,13 +212,14 @@ const TreatmentsAutoComplete = () => {
                     const uniqueTreatments = response.data.treatments.map((item) => ({
                         ...item.treatment,
                         notes: item.notes,
+                        duration: item.duration,
                     }));
                     setSelectedTreatments(uniqueTreatments);
                     setSelectedOptions(
                         uniqueTreatments.map((treatment) => ({
                             value: treatment.id,
-                            label: language === "en" ? `${treatment.name} (${treatment.bodySectionName}, ${treatment.viewName}, ${treatment.bodySide})`
-                                : `${treatment.namePL} (${treatment.bodySectionNamePL}, ${treatment.viewNamePL}, ${treatment.bodySidePL})`
+                            label: language === "en" ? `${treatment.name} (${treatment.bodySectionName}, ${treatment.viewName}, ${treatment.bodySide}) [${treatment.duration}]`
+                                : `${treatment.namePL} (${treatment.bodySectionNamePL}, ${treatment.viewNamePL}, ${treatment.bodySidePL}) [${treatment.duration}]`
                         }))
                     );
                 }
@@ -218,10 +258,10 @@ const TreatmentsAutoComplete = () => {
         }
     };
 
-    const updateTreatmentNotes = (id, notes) => {
+    const updateTreatment = (id, updatedFields) => {
         setSelectedTreatments((prev) =>
             prev.map((treatment) =>
-                treatment.id === id ? {...treatment, notes} : treatment
+                treatment.id === id ? { ...treatment, ...updatedFields } : treatment
             )
         );
     };
@@ -284,7 +324,7 @@ const TreatmentsAutoComplete = () => {
                     <TreatmentItem
                         key={treatment.id}
                         treatment={treatment}
-                        onEdit={updateTreatmentNotes}
+                        onEdit={updateTreatment}
                         onDelete={removeTreatment}
                         language={language}
                     />
