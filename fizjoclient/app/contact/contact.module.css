@@ -1,0 +1,79 @@
+.contactPageContainer {
+  font-family: "Inter", sans-serif;
+  color: #2c2c2c;
+  padding: 20px;
+  line-height: 1.6;
+}
+.contactPageContainer h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.contactPageContainer .aboutSection, .contactPageContainer .specialistsSection, .contactPageContainer .contactInfoSection, .contactPageContainer .contactFormSection, .contactPageContainer .faqSection {
+  margin: 40px 0;
+  padding: 20px;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+}
+.contactPageContainer .aboutSection h2, .contactPageContainer .specialistsSection h2, .contactPageContainer .contactInfoSection h2, .contactPageContainer .contactFormSection h2, .contactPageContainer .faqSection h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.contactPageContainer .specialistsList {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.contactPageContainer .specialistsList .specialist {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 250px;
+}
+.contactPageContainer .specialistsList .specialist img {
+  width: 100%;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+.contactPageContainer form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.contactPageContainer form input, .contactPageContainer form textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+.contactPageContainer form input:focus, .contactPageContainer form textarea:focus {
+  outline: none;
+  border-color: #333;
+}
+.contactPageContainer form .ctaButton {
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.contactPageContainer form .ctaButton:hover {
+  background-color: #555;
+}
+.contactPageContainer .faqSection ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+.contactPageContainer .faqSection ul li {
+  font-size: 1rem;
+  margin: 10px 0;
+  color: #333;
+}
+
+/*# sourceMappingURL=contact.module.css.map */

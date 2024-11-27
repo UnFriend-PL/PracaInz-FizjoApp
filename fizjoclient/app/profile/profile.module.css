@@ -1,0 +1,146 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #fffefd;
+  min-width: 30%;
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #197b5c;
+}
+
+.loading {
+  font-size: 1.5rem;
+  color: #197b5c;
+}
+
+.profileCard {
+  background: #fffefd;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+}
+
+.field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #197b5c;
+}
+
+.label {
+  font-weight: bold;
+  color: #197b5c;
+  text-transform: capitalize;
+}
+
+.value {
+  color: #000;
+  cursor: pointer;
+}
+
+.editIcon {
+  margin-right: 8px;
+  color: #197b5c;
+}
+
+.editableInput {
+  border: 1px solid #197b5c;
+  padding: 0.3rem;
+  border-radius: 4px;
+  width: 60%;
+}
+
+.editButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  background-color: #0aca81;
+  padding: 0.6rem 0.6rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.editButton svg {
+  color: #fffefd;
+  font-weight: bold;
+  padding: 0;
+  margin: 0;
+}
+
+.editButton:hover {
+  background-color: #008042;
+}
+
+.saveButton {
+  background-color: #0aca81;
+  color: #fffefd;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  margin-top: 1rem;
+  align-self: center;
+}
+
+.saveButton:hover {
+  background-color: #008042;
+}
+
+/* Avatar Styles */
+.avatarSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #197b5c;
+}
+
+.uploadSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.uploadLabel {
+  background-color: #0aca81;
+  color: #fffefd;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+}
+
+.uploadLabel:hover {
+  background-color: #008042;
+}
+
+.uploadInput {
+  display: none;
+}
+
+.uploading {
+  color: #197b5c;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+/*# sourceMappingURL=profile.module.css.map */

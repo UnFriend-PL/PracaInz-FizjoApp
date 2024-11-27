@@ -88,7 +88,6 @@ export const AppointmentProvider = ({ children }) => {
     }
   };
 
-  // Fetch saved muscles and joints
   const fetchSavedMusclesAndJoints = useCallback(async () => {
     try {
       const response = await apiService.post(

@@ -116,7 +116,6 @@ namespace Fizjobackend.Controllers
         [HttpPost("/Appointments/{appointmentId}/LoadSelectedBodyDetails")]
         public async Task<IActionResult> LoadSelectedBodyDetails(Guid appointmentId)
         {
-            // Should we add an user access check here?
             var response = await _appointmentsService.LoadAppointmentBodyDetails(appointmentId);
             if (!response.Success)
             {

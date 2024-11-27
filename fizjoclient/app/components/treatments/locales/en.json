@@ -1,5 +1,6 @@
 {
   "treatmentSearch": "Search and select a treatment...",
   "treatmentTypeToSearch": "Type to search...",
-    "includeSelectedTreatmentsOnly" : "Include selected treatments only"
+  "includeSelectedTreatmentsOnly": "Include selected treatments only",
+  "save": "Save"
 }

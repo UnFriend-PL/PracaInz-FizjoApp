@@ -27,7 +27,7 @@ namespace Fizjobackend.Models.TreatmentsDTOs;
     public string bodySectionName { get; set; }
     public string bodySectionNamePL { get; set; }
 
-    public TreatmentResponseDTO(Treatment treatment, string gender)
+    public TreatmentResponseDTO(Treatment treatment)
     {
         Id = treatment.Id;
         OwnerId = treatment.OwnerId;

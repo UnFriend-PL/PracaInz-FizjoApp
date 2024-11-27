@@ -1,5 +1,6 @@
 {
   "treatmentSearch": "Wyszukaj i wybierz zabieg...",
   "treatmentTypeToSearch": "Wpisz, aby wyszukać...",
-  "includeSelectedTreatmentsOnly" : "Uwzględnij tylko wybrane zabiegi"
+  "includeSelectedTreatmentsOnly" : "Uwzględnij tylko wybrane zabiegi",
+  "save": "Zapisz"
 }

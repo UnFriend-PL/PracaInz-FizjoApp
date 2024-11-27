@@ -1,0 +1,1 @@
+{"version":3,"sourceRoot":"","sources":["Modal.module.scss","../utils/globalColors.scss"],"names":[],"mappings":"AAEA;EACI;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;;AAGF;EACE,kBCTW;EDUX;EACA;EACA;EACA;EACA;EACA;;;AAGF;EACE;EACA;EACA;EACA,YCLe;EDMf;EACA;EACA,OCjBS;EDkBT;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE,kBCdmB;;;ADkBvB;EACE,OC/Bc","file":"Modal.module.css"}

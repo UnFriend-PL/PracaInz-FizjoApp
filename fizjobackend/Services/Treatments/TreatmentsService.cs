@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Fizjobackend.DbContexts;
+using Fizjobackend.Entities.AppointmentEntities;
 using Fizjobackend.Entities.TreatmentsEntities;
 using Fizjobackend.Models.TreatmentsDTOs;
 using Microsoft.EntityFrameworkCore;
@@ -218,7 +219,7 @@ namespace Fizjobackend.Services.Treatments
                     return response;
                 }
 
-                var treatmentDTO = new TreatmentResponseDTO(treatment, treatmentRequest.Gender);
+                var treatmentDTO = new TreatmentResponseDTO(treatment);
 
                 _cache.Set(cacheKey, treatmentDTO, TimeSpan.FromMinutes(10));
 
@@ -232,6 +233,142 @@ namespace Fizjobackend.Services.Treatments
                 _logger.LogError(ex, "An error occurred while retrieving treatment");
                 response.Success = false;
                 response.Errors = new[] { ex.Message };
+            }
+
+            return response;
+        }
+
+        public async Task<ServiceResponse<bool>> SaveAppointmentTreatments(
+            AppointmentSaveTreatmentsRequestDTO request)
+        {
+            _logger.LogInformation("Saving appointment treatments for: {AppointmentId}", request.AppointmentId);
+            var response = new ServiceResponse<bool>("Appointment treatments saved");
+
+            try
+            {
+                // Rozpoczęcie transakcji, aby zapewnić spójność danych
+                using var transaction = await _context.Database.BeginTransactionAsync();
+
+                // Pobranie bieżących zabiegów przypisanych do wizyty
+                var currentAppointmentTreatments = await _context.AppointmentTreatmens
+                    .Where(at => at.AppointmentId == request.AppointmentId)
+                    .ToListAsync();
+
+                // Utworzenie listy TreatmentIds z żądania
+                var requestedTreatmentIds = request.Treatments.Select(t => t.TreatmentId).ToList();
+
+                // Znalezienie zabiegów do usunięcia (obecnych w bazie, ale nie w żądaniu)
+                var treatmentsToRemove = currentAppointmentTreatments
+                    .Where(at => !requestedTreatmentIds.Contains(at.TreatmentId))
+                    .ToList();
+
+                if (treatmentsToRemove.Any())
+                {
+                    _context.AppointmentTreatmens.RemoveRange(treatmentsToRemove);
+                    _logger.LogInformation("Usunięto {Count} zabiegów dla AppointmentId: {AppointmentId}",
+                        treatmentsToRemove.Count, request.AppointmentId);
+                }
+
+                // Iteracja przez zabiegi w żądaniu
+                foreach (var treatmentDto in request.Treatments)
+                {
+                    // Sprawdzenie, czy zabieg już istnieje w bieżących zabiegach
+                    var existingTreatment = currentAppointmentTreatments
+                        .FirstOrDefault(at => at.TreatmentId == treatmentDto.TreatmentId);
+
+                    if (existingTreatment != null)
+                    {
+                        // Aktualizacja istniejącego zabiegu
+                        existingTreatment.Duration = treatmentDto.Duration;
+                        existingTreatment.Notes = treatmentDto.Notes;
+                        existingTreatment.UpdateDate = treatmentDto.UpdateDate;
+
+                        _context.AppointmentTreatmens.Update(existingTreatment);
+                        _logger.LogInformation(
+                            "Zaktualizowano zabieg ID: {TreatmentId} dla AppointmentId: {AppointmentId}",
+                            treatmentDto.TreatmentId, request.AppointmentId);
+                    }
+                    else
+                    {
+                        // Dodanie nowego zabiegu
+                        var newAppointmentTreatment = new AppointmentTreatments
+                        {
+                            AppointmentId = request.AppointmentId,
+                            TreatmentId = treatmentDto.TreatmentId,
+                            Duration = treatmentDto.Duration,
+                            Notes = treatmentDto.Notes,
+                            UpdateDate = treatmentDto.UpdateDate
+                        };
+
+                        await _context.AppointmentTreatmens.AddAsync(newAppointmentTreatment);
+                        _logger.LogInformation(
+                            "Dodano nowy zabieg ID: {TreatmentId} dla AppointmentId: {AppointmentId}",
+                            treatmentDto.TreatmentId, request.AppointmentId);
+                    }
+                }
+
+                // Zapisanie zmian w bazie danych
+                await _context.SaveChangesAsync();
+
+                // Zatwierdzenie transakcji
+                await transaction.CommitAsync();
+
+                _logger.LogInformation("Appointment treatments saved successfully for: {AppointmentId}",
+                    request.AppointmentId);
+                response.Data = true;
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError(ex,
+                    "An error occurred while saving appointment treatments for AppointmentId: {AppointmentId}",
+                    request.AppointmentId);
+                response.Success = false;
+                response.Message = "An error occurred while saving appointment treatments.";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,
+                    "An unexpected error occurred while saving appointment treatments for AppointmentId: {AppointmentId}",
+                    request.AppointmentId);
+                response.Success = false;
+                response.Message = "An unexpected error occurred.";
+            }
+
+            return response;
+        }
+
+        public async Task<ServiceResponse<AppointmentTreatmentsResponseDTO>> GetAppointmentTreatments(
+            Guid appointmentId)
+        {
+            var response = new ServiceResponse<AppointmentTreatmentsResponseDTO>("Appointment treatments retrieved");
+            try
+            {
+                var appointmentTreatments = await _context.AppointmentTreatmens
+                    .Where(at => at.AppointmentId == appointmentId)
+                    .Include(at => at.Treatment)
+                    .AsSplitQuery()
+                    .AsNoTracking()
+                    .ToListAsync();
+
+                if (appointmentTreatments == null)
+                {
+                    response.Success = false;
+                    response.Message = "Appointment treatments not found";
+                    return response;
+                }
+
+                var tratmentsDto = new AppointmentTreatmentsResponseDTO()
+                {
+                    Treatments = appointmentTreatments.Select(at => new AppointmentTreatmentResponseDTO(at)).ToList()
+                };
+                response.Data = tratmentsDto;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = "An error occurred while retrieving appointment treatments";
+                response.Errors = new[] { ex.Message };
+                _logger.LogError(ex, "An error occurred while retrieving appointment treatments");
             }
 
             return response;

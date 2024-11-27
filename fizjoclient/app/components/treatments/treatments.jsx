@@ -1,227 +1,299 @@
-import React, { useContext, useState, useCallback, useEffect } from "react";
+import React, {
+    useContext,
+    useState,
+    useCallback,
+    useEffect,
+} from "react";
+import {AsyncPaginate} from "react-select-async-paginate";
 import styles from "./treatments.module.scss";
 import apiService from "@/app/services/apiService/apiService";
-import { LanguageContext } from "@/app/contexts/lang/langContext";
-import { UserContext } from "@/app/contexts/user/userContext";
-import { AsyncPaginate } from "react-select-async-paginate";
+import {LanguageContext} from "@/app/contexts/lang/langContext";
+import {UserContext} from "@/app/contexts/user/userContext";
+import {AppointmentContext} from "@/app/appointments/AppointmentContext";
+import useSelectedItems from "@/app/appointments/utils/useSelectedItems";
+import {CiCircleChevUp} from "react-icons/ci";
+import {CiCircleChevDown} from "react-icons/ci";
+
 import pl from "./locales/pl.json";
 import en from "./locales/en.json";
-import useSelectedItems from "@/app/appointments/utils/useSelectedItems";
-import { AppointmentContext } from "@/app/appointments/AppointmentContext";
 
-const locales = { en, pl };
+const locales = {en, pl};
 
-const TreatmentsAutoComplete = () => {
-    const [selectedOptions, setSelectedOptions] = useState([]);
-    const [includeSelectedBodyParts, setIncludeSelectedBodyParts] = useState(true);
-    const [refreshKey, setRefreshKey] = useState(0);
-    const { language } = useContext(LanguageContext);
-    const { user } = useContext(UserContext);
-    const t = locales[language];
-    const { selectedItems } = useSelectedItems();
-    const { gender } = useContext(AppointmentContext);
-    const [selectedTreatments, setSelectedTreatments] = useState([]);
+const TreatmentItem = ({treatment, onEdit, onDelete, language}) => {
+    const [isEditing, setIsEditing] = useState(false);
+    const [newValue, setNewValue] = useState("");
+    const [showDetails, setShowDetails] = useState(false);
 
-    // Nowe stany dla edycji czasu trwania
-    const [editingTreatmentId, setEditingTreatmentId] = useState(null);
-    const [newDuration, setNewDuration] = useState("");
-
-    const prepareRequestPayload = (inputValue, page, bodyParts, userId, gender) => ({
-        ownerId: userId || "",
-        searchTerm: inputValue,
-        limit: 50,
-        page,
-        bodyParts,
-        gender,
-    });
-
-    const mapTreatmentsToOptions = (treatments, language) =>
-        treatments.map((treatment) => ({
-            value: treatment.id,
-            label:
-                language === "en"
-                    ? `${treatment.name} (${treatment.bodySectionName}, ${treatment.viewName})`
-                    : `${treatment.namePL} (${treatment.bodySectionNamePL}, ${treatment.viewNamePL})`,
-        }));
-
-    const fetchTreatments = async (payload) => {
-        try {
-            const response = await apiService.post(`/Treatments`, payload, true);
-            return response.success ? response.data : [];
-        } catch (error) {
-            console.error(error);
-            return [];
-        }
+    const handleEdit = () => {
+        setIsEditing(true);
+        setNewValue(treatment.notes || "");
     };
 
-    const loadOptions = useCallback(
-        async (inputValue, prevOptions, { page }) => {
-            const bodyParts = includeSelectedBodyParts
+    const saveEdit = () => {
+        onEdit(treatment.id, newValue);
+        setIsEditing(false);
+    };
+
+    return (
+        <div className={styles.treatmentItem} key={treatment.id}>
+            <div className={styles.treatmentHeader}>
+        <span className={styles.treatmentName}>
+          {language === "en" ? treatment.name : treatment.namePL}
+        </span>
+                <span className={styles.treatmentDuration}>{treatment.duration}</span>
+                <div className={styles.treatmentBodyDetails}>
+          <span>
+            {language === "en"
+                ? treatment.bodySectionName
+                : treatment.bodySectionNamePL}
+          </span>
+                    <span>
+            {language === "en" ? treatment.viewName : treatment.viewNamePL}
+          </span>
+                    <span>
+            {language === "en" ? treatment.bodySide : treatment.bodySidePL}
+          </span>
+                </div>
+                {showDetails ? (
+                    <CiCircleChevUp
+                        className={styles.showMore}
+                        onClick={() => {
+                            setShowDetails((prev) => !prev);
+                        }}
+                    />
+                ) : (
+                    <CiCircleChevDown
+                        className={styles.showMore}
+                        onClick={() => {
+                            setShowDetails((prev) => !prev);
+                        }}
+                    />
+                )}
+            </div>
+            {showDetails && (
+                <>
+                    <div className={styles.treatmentDetails}>
+            <span className={styles.treatmentDetailsElement}>
+              {language == "en"
+                  ? treatment.description
+                  : treatment.descriptionPL}
+            </span>
+                        {isEditing ? (
+                            <textarea
+                                value={newValue}
+                                onChange={(e) => setNewValue(e.target.value)}
+                                onBlur={saveEdit}
+                                onKeyDown={(e) => e.key === "Enter" && saveEdit()}
+                                autoFocus
+                            />
+                        ) : (
+                            <span
+                                onDoubleClick={handleEdit}
+                                className={styles.treatmentDetailsElement}
+                                style={{cursor: "pointer"}}
+                            >
+                {treatment.notes || "Add notes"}
+              </span>
+                        )}
+                        <button onClick={() => onDelete(treatment.id)}>Delete</button>
+                    </div>
+                </>
+            )}
+        </div>
+    );
+};
+
+const TreatmentsAutoComplete = () => {
+    const [selectedTreatments, setSelectedTreatments] = useState([]);
+    const [selectedOptions, setSelectedOptions] = useState([]);
+    const [includeSelectedBodyParts, setIncludeSelectedBodyParts] =
+        useState(true);
+    const {language} = useContext(LanguageContext);
+    const {user} = useContext(UserContext);
+    const {gender, appointmentId} = useContext(AppointmentContext);
+    const {selectedItems} = useSelectedItems();
+    const t = locales[language];
+
+    const fetchTreatments = useCallback(async (payload) => {
+        try {
+            const response = await apiService.post("/Treatments", payload, true);
+            return response.success ? response.data : [];
+        } catch (error) {
+            console.error("Failed to fetch treatments:", error);
+            return [];
+        }
+    }, []);
+
+    const preparePayload = useCallback(
+        (inputValue, page) => ({
+            ownerId: user?.id || "",
+            searchTerm: inputValue,
+            limit: 50,
+            page,
+            bodyParts: includeSelectedBodyParts
                 ? selectedItems.map((item) => item.sectionName)
-                : [];
+                : [],
+            gender,
+        }),
+        [user?.id, includeSelectedBodyParts, selectedItems, gender]
+    );
 
-            const payload = prepareRequestPayload(inputValue, page, bodyParts, user?.id, gender);
 
+    const loadOptions = useCallback(
+        async (inputValue, _, {page}) => {
+            const payload = preparePayload(inputValue, page);
             const treatments = await fetchTreatments(payload);
-            const options = mapTreatmentsToOptions(treatments, language);
-
-            const hasMore = treatments.length === 50;
+            const options = treatments.map((treatment) => ({
+                value: treatment.id,
+                label: language === "en" ? `${treatment.name} (${treatment.bodySectionName}, ${treatment.viewName}, ${treatment.bodySide})`
+                    : `${treatment.namePL} (${treatment.bodySectionNamePL}, ${treatment.viewNamePL}, ${treatment.bodySidePL})`
+                ,
+            }));
 
             return {
                 options,
-                hasMore,
-                additional: {
-                    page: page + 1,
-                },
+                hasMore: treatments.length === 50,
+                additional: {page: page + 1},
             };
         },
-        [user?.id, includeSelectedBodyParts, selectedItems, language, gender]
+        [fetchTreatments, preparePayload, language]
     );
 
-    const handleTreatmentSelectChange = (options) => {
+    useEffect(() => {
+        if (!appointmentId) return;
+
+        const fetchSavedTreatments = async () => {
+            try {
+                const response = await apiService.get(
+                    `/Treatments/${appointmentId}`,
+                    {},
+                    true
+                );
+                if (response.success) {
+                    const uniqueTreatments = response.data.treatments.map((item) => ({
+                        ...item.treatment,
+                        notes: item.notes,
+                    }));
+                    setSelectedTreatments(uniqueTreatments);
+                    setSelectedOptions(
+                        uniqueTreatments.map((treatment) => ({
+                            value: treatment.id,
+                            label: language === "en" ? `${treatment.name} (${treatment.bodySectionName}, ${treatment.viewName}, ${treatment.bodySide})`
+                                : `${treatment.namePL} (${treatment.bodySectionNamePL}, ${treatment.viewNamePL}, ${treatment.bodySidePL})`
+                        }))
+                    );
+                }
+            } catch (error) {
+                console.error("Failed to fetch saved treatments:", error);
+            }
+        };
+
+        fetchSavedTreatments();
+    }, [appointmentId, language]);
+
+    const handleSelectionChange = (options) => {
+        setSelectedOptions(options || []);
         if (options && options.length > selectedOptions.length) {
             const newOption = options[options.length - 1];
             fetchTreatmentDetail(newOption.value);
         }
-        setSelectedOptions(options || []);
     };
 
     const fetchTreatmentDetail = async (id) => {
         try {
             const response = await apiService.post(
-                `/Treatments/Treatment`,
-                {
-                    id: id,
-                    gender: gender,
-                },
+                "/Treatments/Treatment",
+                {id, gender},
                 true
             );
             if (response.success) {
-                setSelectedTreatments((prev) => [...prev, response.data]);
+                setSelectedTreatments((prev) =>
+                    prev.some((treatment) => treatment.id === id)
+                        ? prev
+                        : [...prev, {...response.data, notes: ""}]
+                );
             }
         } catch (error) {
-            console.error(error);
-            return null;
+            console.error("Failed to fetch treatment details:", error);
         }
     };
 
-    const handleCheckboxChange = (event) => {
-        setIncludeSelectedBodyParts(event.target.checked);
-        setSelectedOptions([]);
-        setRefreshKey((prevKey) => prevKey + 1);
-    };
-
-    const handleDurationChange = (treatmentId) => {
-        // Aktualizuj czas trwania w stanie selectedTreatments
-        setSelectedTreatments((prevTreatments) =>
-            prevTreatments.map((treatment) =>
-                treatment.id === treatmentId ? { ...treatment, duration: newDuration } : treatment
+    const updateTreatmentNotes = (id, notes) => {
+        setSelectedTreatments((prev) =>
+            prev.map((treatment) =>
+                treatment.id === id ? {...treatment, notes} : treatment
             )
         );
-        // Resetuj stan edycji
-        setEditingTreatmentId(null);
-        setNewDuration("");
     };
 
-    useEffect(() => {
-        setRefreshKey((prevKey) => prevKey + 1);
-    }, [language]);
+    const removeTreatment = (id) => {
+        setSelectedTreatments((prev) =>
+            prev.filter((treatment) => treatment.id !== id)
+        );
+        setSelectedOptions((prev) => prev.filter((option) => option.value !== id));
+    };
 
-    useEffect(() => {
-        setSelectedOptions([]);
-    }, [refreshKey]);
+    const saveTreatments = async () => {
+        const payload = {
+            appointmentId,
+            treatments: selectedTreatments.map((treatment) => ({
+                treatmentId: treatment.id,
+                duration: treatment.duration,
+                notes: treatment.notes,
+                updateDate: new Date().toISOString(),
+            })),
+        };
+
+        try {
+            await apiService.post("/Treatments/Save", payload, true);
+        } catch (error) {
+            console.error("Failed to save treatments:", error);
+        }
+    };
+
+    const handleChangeIncludeSelectedBodyParts = () => {
+        setIncludeSelectedBodyParts((prev) => !prev)
+        fetchTreatments()
+    }
 
     return (
         <div className={styles.container}>
-            <label className={styles.checkboxLabel}>
+            <label>
                 <input
                     type="checkbox"
                     checked={includeSelectedBodyParts}
-                    onChange={handleCheckboxChange}
+                    onChange={handleChangeIncludeSelectedBodyParts}
                 />
                 {t.includeSelectedTreatmentsOnly}
             </label>
+
             <AsyncPaginate
-                className={styles.selectTreatments}
-                cacheOptions
+                key={language}
                 loadOptions={loadOptions}
                 value={selectedOptions}
-                onChange={handleTreatmentSelectChange}
-                placeholder={t.treatmentSearch}
-                noOptionsMessage={() => t.treatmentTypeToSearch}
-                isClearable
+                onChange={handleSelectionChange}
                 isMulti
-                additional={{
-                    page: 1,
-                }}
+                placeholder={t.treatmentSearch}
                 debounceTimeout={500}
-                key={refreshKey}
+                additional={{page: 1}}
+                className={styles.treatmentSelect}
             />
-            <div className={styles.selectedTreatmentsContainer}>
+
+            <div className={styles.treatmentList}>
                 {selectedTreatments.map((treatment) => (
-                    <div key={treatment.id} className={styles.selectedTreatment}>
-                        <div className={styles.treatmentInfo}>
-              <span className={styles.treatmentName}>
-                {language === "en" ? treatment.name : treatment.namePL}
-              </span>
-                            {editingTreatmentId === treatment.id ? (
-                                <input
-                                    type="text"
-                                    className={styles.durationInput}
-                                    value={newDuration}
-                                    onChange={(e) => setNewDuration(e.target.value)}
-                                    onBlur={() => handleDurationChange(treatment.id)}
-                                    onKeyDown={(e) => {
-                                        if (e.key === "Enter") {
-                                            handleDurationChange(treatment.id);
-                                        }
-                                    }}
-                                    autoFocus
-                                />
-                            ) : (
-                                <span
-                                    className={styles.treatmentDuration}
-                                    onDoubleClick={() => {
-                                        setEditingTreatmentId(treatment.id);
-                                        setNewDuration(treatment.duration);
-                                    }}
-                                >
-                  {treatment.duration}
-                </span>
-                            )}
-                        </div>
-                        <div className={styles.hoverDetails}>
-              <span className={styles.detailsElement}>
-                {language === "en"
-                    ? treatment.bodySectionName
-                    : treatment.bodySectionNamePL}
-                  &nbsp;
-                  {treatment.bodySide &&
-                      (language === "en" ? treatment.bodySide : treatment.bodySidePL)}
-                  &nbsp;
-                  {treatment.viewName &&
-                      (language === "en" ? treatment.viewName : treatment.viewNamePL)}
-              </span>
-                            <span className={styles.detailsElement}>
-                {language === "en" ? treatment.description : treatment.descriptionPL}
-              </span>
-                        </div>
-                        <button
-                            className={styles.deleteButton}
-                            onClick={() => {
-                                setSelectedTreatments((prev) =>
-                                    prev.filter((item) => item.id !== treatment.id)
-                                );
-                                setSelectedOptions((prev) =>
-                                    prev.filter((option) => option.value !== treatment.id)
-                                );
-                            }}
-                        >
-                            &times;
-                        </button>
-                    </div>
+                    <TreatmentItem
+                        key={treatment.id}
+                        treatment={treatment}
+                        onEdit={updateTreatmentNotes}
+                        onDelete={removeTreatment}
+                        language={language}
+                    />
                 ))}
             </div>
+
+            <button className={styles.treatmentSave} onClick={saveTreatments}>
+                {t.save}
+            </button>
         </div>
     );
 };
