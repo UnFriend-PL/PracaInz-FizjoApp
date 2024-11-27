@@ -19,99 +19,38 @@ import { AppointmentContext } from "../AppointmentContext";
 const locales = { en, pl };
 
 const AppointmentDetails = () => {
-  const { language } = useContext(LanguageContext);
-  const t = locales[language];
-
-  // Access context
   const {
     appointment,
-    appointmentId,
     fetchAppointmentDetails,
     readOnly,
-    t: contextT,
+    isPatientModalOpen,
+    setPatientModalOpen,
+    isPhysioModalOpen,
+    setPhysioModalOpen,
+    isSaving,
+    selectedNewStatus,
+    setSelectedNewStatus,
+    appointmentsDetailsFormData,
+    setAppointmentsDetailsFormData,
+    selectedNewHour,
+    setSelectedNewHour,
+    isAppointmentStatusEditing,
+    setIsAppointmentStatusEditing,
+    handleInputChange,
+    handleStatusChange,
+    handleFormSubmit,
+    handleStatusEdit,
+      language,
   } = useContext(AppointmentContext);
 
-  // Component-specific state
-  const [isPatientModalOpen, setPatientModalOpen] = useState(false);
-  const [isPhysioModalOpen, setPhysioModalOpen] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [selectedNewStatus, setSelectedNewStatus] = useState(
-    appointment.appointmentStatus
-  );
-  const [formData, setFormData] = useState({
-    appointmentDescription: appointment.appointmentDescription || "",
-    notes: appointment.notes || "",
-    diagnosis: appointment.diagnosis || "",
-    isPaid: appointment.isPaid || false,
-    appointmentDate: new Date(appointment.appointmentDate),
-    status: appointment.appointmentStatus,
-  });
-
-  const [selectedNewHour, setSelectedNewHour] = useState(
-    `${format(new Date(appointment.appointmentDate), "HH:mm")}`
-  );
-  const [isAppointmentStatusEditing, setIsAppointmentStatusEditing] =
-    useState(false);
+  const t = locales[language];
 
   if (!appointment) {
     return <div>{t.loading}</div>;
   }
 
   const { appointmentStatusName, patient, physiotherapist, appointmentDate } =
-    appointment;
-
-  // Handle input changes
-  const handleInputChange = (e, date) => {
-    if (date) {
-      const [hour, minute] = selectedNewHour.split(":").map(Number);
-      const newAppointmentDate = new Date(date);
-      newAppointmentDate.setHours(hour);
-      newAppointmentDate.setMinutes(minute);
-      setFormData({
-        ...formData,
-        appointmentDate: newAppointmentDate,
-      });
-    } else {
-      const { name, value, type, checked } = e.target;
-      setFormData({
-        ...formData,
-        [name]: type === "checkbox" ? checked : value,
-      });
-    }
-  };
-
-  // Handle status change
-  const handleStatusChange = (newStatus) => {
-    setSelectedNewStatus(newStatus);
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      status: newStatus,
-    }));
-  };
-
-  // Handle form submit
-  const handleFormSubmit = async () => {
-    try {
-      setIsSaving(true);
-      const response = await apiService.put(
-        `/Appointments/${appointmentId}/Edit`,
-        formData,
-        true
-      );
-      if (response.success) {
-        await fetchAppointmentDetails();
-        setIsSaving(false);
-      }
-    } catch (error) {
-      setIsSaving(false);
-      console.error("Failed to save appointment details:", error);
-    }
-  };
-
-  // Handle status edit
-  const handleStatusEdit = () => {
-    setIsAppointmentStatusEditing((prev) => !prev);
-  };
+      appointment;
 
   return (
     <div className={styles.appointmentCard}>
@@ -191,7 +130,7 @@ const AppointmentDetails = () => {
           <DetailField
             label={t.diagnosis}
             name="diagnosis"
-            value={formData.diagnosis}
+            value={appointmentsDetailsFormData.diagnosis}
             onChange={handleInputChange}
             type="textarea"
             t={t}
@@ -199,7 +138,7 @@ const AppointmentDetails = () => {
           <DetailField
             label={t.notes}
             name="notes"
-            value={formData.notes}
+            value={appointmentsDetailsFormData.notes}
             onChange={handleInputChange}
             type="textarea"
             t={t}
@@ -209,7 +148,7 @@ const AppointmentDetails = () => {
           <DetailField
             label={t.description}
             name="appointmentDescription"
-            value={formData.appointmentDescription}
+            value={appointmentsDetailsFormData.appointmentDescription}
             onChange={handleInputChange}
             type="textarea"
             t={t}
@@ -217,7 +156,7 @@ const AppointmentDetails = () => {
           <DetailField
             label={t.paid}
             name="isPaid"
-            value={formData.isPaid}
+            value={appointmentsDetailsFormData.isPaid}
             onChange={handleInputChange}
             type="checkbox"
             t={t}

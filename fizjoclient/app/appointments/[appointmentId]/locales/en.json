@@ -30,5 +30,6 @@
   "selectedItems": "Selected",
   "front": "Front",
   "back": "Back",
-  "selectNewStatus": "Select new status and/or date"
+  "selectNewStatus": "Select new status and/or date",
+  "saveAll": "Save all"
 }

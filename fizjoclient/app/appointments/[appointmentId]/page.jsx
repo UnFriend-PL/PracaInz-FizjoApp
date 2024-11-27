@@ -9,6 +9,11 @@ import { AuthContext } from "@/app/contexts/auth/authContext";
 import SelectedItemsList from "./selectedItemsList";
 import BodyPartSelector from "./bodyPartSelector";
 import Treatments from "@/app/components/treatments/treatments";
+import pl from "./locales/pl.json";
+import en from "./locales/en.json";
+
+const locales = { en, pl };
+
 
 const Appointments = () => {
   const { isAuthenticated } = useContext(AuthContext);
@@ -20,12 +25,18 @@ const Appointments = () => {
     selectedParts,
     handleBodyPartPress,
     readOnly,
+      language,
+      saveAll,
   } = useContext(AppointmentContext);
-
+    const t = locales[language];
   if (!isAuthenticated || !appointment) return null;
 
   return (
     <div className={styles.container}>
+      <div className={styles.buttonSaveAll}>
+        <button className={styles.buttonSaveAll}>{t.saveAll}</button>
+      </div>
+
       <AppointmentDetails />
       <div className={`${styles.container} ${styles.spaceAtBottom}`}>
         <div className={styles.treatmentsWrapper}>
