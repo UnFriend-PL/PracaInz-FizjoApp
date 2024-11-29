@@ -5,7 +5,7 @@
   "notAuthenticated": "Nie jesteś zalogowany",
   "firstName": "Imię",
   "lastName": "Nazwisko",
-  "gender": "płeć",
+  "gender": "Płeć",
   "country": "Kraj",
   "city": "Miasto",
   "streetWithHouseNumber": "Adres",
@@ -37,5 +37,9 @@
   "uploadAvatar": "Wybierz zdjęcie",
   "uploading": "Wysyłanie...",
   "noAvatar": "Brak awatara",
-  "loadingAvatar": "Ładowanie awatara..."
+  "loadingAvatar": "Ładowanie awatara...",
+  "education": "Wykształcenie",
+  "description": "Opis",
+  "yearsOfExperience": "Lata doświadczenia",
+  "adress": "Adres"
 }

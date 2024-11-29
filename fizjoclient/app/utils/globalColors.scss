@@ -7,10 +7,12 @@ $bg-light-green: #47ffa6;
 $bg-white: #fffefd;
 $bg-container: #fffefd;
 $bg-section: #f9f9f9;
+$bg-label: #fff;
 
 // backgrounds hover
 $bg-hover-light-green: #e0fff0;
 $bg-hover-dark-green: #197b5c;
+$bg-hover-light-blue: #eef6ff;
 
 // text
 $text-white: #fffefd;
@@ -34,14 +36,25 @@ $button-edit-bg-hover: #b1871b;
 
 // labels
 $label-color: #197b5c;
-
+$label-color-grey: #333;
+$label-color-box: #000000;
+//labels
+$label-hover-upload: #007bff;
+$label-select-box: rgba(0, 123, 255, 0.5);
 //inputs
 $input-border: #197b5c;
 $input-color: #000000;
+$input-upload-avatar: #f9f9f9;
 
 // borders
 $border-color: #197b5c;
 $border-edit-color: #daa520;
+$border-upload-avatar: #ccc;
+$border-color-black: #000000;
+$border-title: #ddd;
+// borders hover
+$border-upload-avatar-hover: #007bff;
+$border-label-hover: #ccc;
 
 // Body parts
 $hight-light-color: #ffc23f;
@@ -68,3 +81,17 @@ $cell-hover-background: #495057;
 
 //star
 $star-color: #ffbc00;
+
+//---------------------------------------------------
+// modal, profile
+$text-color: #000000;
+$primary-color: #0056b3;
+$secondary-color: #007bff;
+$background-light: #f9f9f9;
+$background-medium: #eef6ff;
+$background-dark: #ffffff;
+$border-color: #ddd;
+$shadow-color: rgba(0, 0, 0, 0.1);
+$hover-color: #003f7d;
+$active-color: #002d5c;
+$highlight-color: #004d00;

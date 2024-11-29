@@ -36,5 +36,9 @@
   "opinionsTitle": "Opinions",
   "replaceAvatar": "Change profile picture",
   "uploadAvatar": "Choose a picture",
-  "uploading": "Uploading..."
+  "uploading": "Uploading...",
+  "education": "Education",
+  "description": "Description",
+  "yearsOfExperience": "Years Of Experience",
+  "adress": "Adress"
 }
