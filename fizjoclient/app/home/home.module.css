@@ -106,13 +106,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  hyphens: auto;
 }
 .benefitsSection .benefitsList .benefit h3 {
   font-size: 1.5rem;
   font-weight: 400;
   margin-bottom: 10px;
   color: #333;
+  line-height: 1;
 }
 .benefitsSection .benefitsList .benefit p {
   font-size: 1rem;

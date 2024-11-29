@@ -1,9 +1,9 @@
-import React, { useContext, useState, useCallback, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import Select from "react-select";
 import styles from "./appointmentDetails.module.scss";
 import pl from "./locales/pl.json";
 import en from "./locales/en.json";
-import { AppointmentContext } from "../AppointmentContext";
+import { AppointmentContext } from "../appointmentContext";
 import mapData from "../utils/mapData";
 import useSelectedItems from "../utils/useSelectedItems";
 const locales = { en, pl };
@@ -12,8 +12,6 @@ const BodyPartSelector = () => {
   const {
     currentIndex,
     setCurrentIndex,
-    isSaving,
-    saveBodyDetails,
     handleNavigation,
     musclesAndJoints,
     selectedItems,
@@ -94,13 +92,6 @@ const BodyPartSelector = () => {
           />
         </div>
       </div>
-      <button
-        onClick={saveBodyDetails}
-        disabled={isSaving}
-        className={styles.saveButton}
-      >
-        {isSaving ? t.savingBodyDetails : t.saveBodyDetails}
-      </button>
     </>
   );
 };

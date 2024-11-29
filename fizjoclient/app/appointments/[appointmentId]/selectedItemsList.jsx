@@ -1,18 +1,15 @@
-import React, {useContext, useEffect} from "react";
+import React, {useContext} from "react";
 import styles from "./appointmentDetails.module.scss";
 import useSelectedItems from "../utils/useSelectedItems";
-import { AppointmentContext } from "../AppointmentContext";
-import { LanguageContext } from "@/app/contexts/lang/langContext";
+import { AppointmentContext } from "../appointmentContext";
 import pl from "./locales/pl.json";
 import en from "./locales/en.json";
 
 const locales = { en, pl };
 const SelectedItemsList = () => {
-  const { readOnly } = useContext(AppointmentContext);
-  const { language } = useContext(LanguageContext);
+  const { readOnly, language } = useContext(AppointmentContext);
   const t = locales[language];
   const { selectedItems, handleRemove } = useSelectedItems();
-  console.log(selectedItems)
 
 
   return (

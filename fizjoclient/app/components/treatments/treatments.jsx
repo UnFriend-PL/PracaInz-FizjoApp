@@ -1,16 +1,10 @@
 import React, {
     useContext,
     useState,
-    useCallback,
-    useEffect,
 } from "react";
 import {AsyncPaginate} from "react-select-async-paginate";
 import styles from "./treatments.module.scss";
-import apiService from "@/app/services/apiService/apiService";
-import {LanguageContext} from "@/app/contexts/lang/langContext";
-import {UserContext} from "@/app/contexts/user/userContext";
-import {AppointmentContext} from "@/app/appointments/AppointmentContext";
-import useSelectedItems from "@/app/appointments/utils/useSelectedItems";
+import {AppointmentContext} from "@/app/appointments/appointmentContext";
 import {CiCircleChevUp} from "react-icons/ci";
 import {CiCircleChevDown} from "react-icons/ci";
 
@@ -134,7 +128,6 @@ const TreatmentItem = ({treatment, onEdit, onDelete, language}) => {
               {treatment.notes || "Add notes"}
             </span>
                     )}
-
                     <button onClick={() => onDelete(treatment.id)}>Delete</button>
                 </div>
             )}
@@ -151,12 +144,10 @@ const TreatmentsAutoComplete = () => {
         handleSelectionChange,
         updateTreatment,
         removeTreatment,
-        saveTreatments,
         includeSelectedBodyParts,
         handleChangeIncludeSelectedBodyParts,
     } = useContext(AppointmentContext);
     const t = locales[language];
-
 
     return (
         <div className={styles.container}>
@@ -195,10 +186,6 @@ const TreatmentsAutoComplete = () => {
                     <div>No treatments available.</div>
                 )}
             </div>
-
-            <button className={styles.treatmentSave} onClick={saveTreatments}>
-                {t.save}
-            </button>
         </div>
     );
 };

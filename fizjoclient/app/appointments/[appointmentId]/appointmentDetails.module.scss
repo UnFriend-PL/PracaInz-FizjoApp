@@ -246,7 +246,6 @@
   align-items: center;
   flex-basis: content;
   font-size: 0.9em;
-  background-color: $tag-bg;
   color: $text-white;
   border-radius: 5px 0 0 5px;
   margin: 0.2em;
@@ -254,7 +253,7 @@
 .selectedItemLabel {
   padding: 0.5em;
   border-radius: 0 5px 5px 0;
-  background-color: $tag-bg;
+  background-color: #39c6ab;
   color: #fff;
 }
 .selectedItem .checkbox {
@@ -350,4 +349,15 @@
   flex-wrap: wrap;
   justify-content: space-around;
   padding: 0 0 1rem;
+}
+
+.buttonSaveAll{
+  position: fixed;
+  background-color: $button-submit-bg;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  color: $text-white;
+  padding: 0.45rem;
+  border-radius: 15px;
+  z-index: 99;
 }

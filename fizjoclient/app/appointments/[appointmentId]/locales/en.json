@@ -31,5 +31,6 @@
   "front": "Front",
   "back": "Back",
   "selectNewStatus": "Select new status and/or date",
-  "saveAll": "Save all"
+  "saveAll": "Save all",
+  "saving" : "Saving..."
 }

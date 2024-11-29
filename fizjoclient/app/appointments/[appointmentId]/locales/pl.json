@@ -31,5 +31,6 @@
   "front": "Przód",
   "back": "Tył",
   "selectNewStatus": "Wybierz nowy status i/lub date",
-  "saveAll": "Zapisz wszystko"
+  "saveAll": "Zapisz wszystko",
+  "saving" : "Zapisywanie..."
 }
