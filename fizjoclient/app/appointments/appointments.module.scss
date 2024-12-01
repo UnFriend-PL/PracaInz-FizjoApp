@@ -5,7 +5,7 @@
   align-items: stretch;
   align-content: stretch;
   flex-wrap: wrap;
-  background-color: $bg-container;
+  background-color: $off-white;
   min-width: 70%;
   max-width: 80%;
 }
@@ -16,7 +16,7 @@
   flex-basis: 80%;
   justify-content: space-between;
   .date {
-    color: $text-black;
+    color:$black;
     flex-basis: 100%;
     font-weight: 800;
     font-size: 1.2rem;
@@ -25,15 +25,17 @@
   }
   .appointmentCard {
     &:hover {
-      background-color: $bg-hover-light-green;
+      background-color: $blue-highlight;
       cursor: pointer;
+      color: $white;
+
     }
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     align-content: center;
-    background: $bg-container;
+    background: $off-white;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 1.5rem;
@@ -41,7 +43,7 @@
     max-width: 100%;
     margin-bottom: 1rem;
     .time {
-      color: $text-black;
+      color:$black;
       font-weight: 800;
       font-size: 1.2em;
       margin-bottom: 0.3em;
@@ -60,12 +62,11 @@
         border-bottom: 1px solid $border-color;
         .label {
           font-weight: bold;
-          color: $label-color;
-          text-decoration: cap;
+          color: $grey;
           text-transform: capitalize;
         }
         .value {
-          color: $text-black;
+          color:$black;
         }
       }
     }
@@ -78,7 +79,7 @@
   justify-content: space-between;
   align-items: center;
   align-content: center;
-  background-color: $bg-section;
+  background-color: $off-white;
   padding: 1rem;
   flex-basis: 100%;
 }

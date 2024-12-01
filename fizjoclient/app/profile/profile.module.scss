@@ -1,3 +1,4 @@
+@import "@/app/utils/globalColors.scss";
 @import "../utils/globalColors.scss";
 
 .container {
@@ -5,23 +6,23 @@
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  background-color: $bg-container;
+  background-color: $off-white;
   min-width: 30%;
 }
 
 .title {
   font-size: 2rem;
   margin-bottom: 20px;
-  color: $text-dark-green;
+  color: $dark-green;
 }
 
 .loading {
   font-size: 1.5rem;
-  color: $text-dark-green;
+  color: $dark-green;
 }
 
 .profileCard {
-  background: $bg-container;
+  background: $off-white;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 1.5rem;
@@ -40,18 +41,18 @@
 
 .label {
   font-weight: bold;
-  color: $label-color;
+  color: $grey;
   text-transform: capitalize;
 }
 
 .value {
-  color: $text-black;
+  color:$black;
   cursor: pointer;
 }
 
 .editIcon {
   margin-right: 8px;
-  color: $text-dark-green;
+  color: $dark-green;
 }
 
 .editableInput {
@@ -66,7 +67,7 @@
   align-items: center;
   justify-content: center;
   align-content: center;
-  background-color: $button-bg;
+  background-color: $green;
   padding: 0.6rem 0.6rem;
   border-radius: 4px;
   border: none;
@@ -75,19 +76,19 @@
 }
 
 .editButton svg {
-  color: $text-white;
+  color: $white;
   font-weight: bold;
   padding: 0;
   margin: 0;
 }
 
 .editButton:hover {
-  background-color: $button-bg-hover;
+  background-color: $green-highlight;
 }
 
 .saveButton {
-  background-color: $button-bg;
-  color: $text-white;
+  background-color: $green;
+  color: $white;
   padding: 0.5rem 1rem;
   border-radius: 4px;
   border: none;
@@ -97,7 +98,7 @@
 }
 
 .saveButton:hover {
-  background-color: $button-bg-hover;
+  background-color: $green-highlight;
 }
 
 /* Avatar Styles */
@@ -123,8 +124,8 @@
 }
 
 .uploadLabel {
-  background-color: $button-bg;
-  color: $text-white;
+  background-color: $green;
+  color: $white;
   padding: 0.5rem 1rem;
   border-radius: 4px;
   cursor: pointer;
@@ -132,7 +133,7 @@
 }
 
 .uploadLabel:hover {
-  background-color: $button-bg-hover;
+  background-color: $green-highlight;
 }
 
 .uploadInput {
@@ -140,7 +141,7 @@
 }
 
 .uploading {
-  color: $text-dark-green;
+  color: $dark-green;
   font-size: 0.9rem;
   margin-top: 0.5rem;
 }

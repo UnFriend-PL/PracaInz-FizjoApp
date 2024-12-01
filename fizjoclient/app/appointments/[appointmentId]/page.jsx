@@ -41,14 +41,17 @@ const Appointments = () => {
                     <Treatments/>
                 </div>
                 <div className={styles.bodyContainer}>
-                    <SwitchSelector
-                        onChange={setViewPosition}
-                        options={[
-                            {label: "Front", value: "front"},
-                            {label: "Back", value: "back"},
-                        ]}
-                    />
+                    <div className={styles.switchSelector}>
+                        <SwitchSelector
+                            onChange={setViewPosition}
+                            options={[
+                                {label: "Front", value: "front", optionClassName: styles.switchLabel},
+                                {label: "Back", value: "back", optionClassName: styles.switchLabel},
+                            ]}
+                        />
+                    </div>
                     <HumanBody
+                        className={styles.humanBody}
                         side={viewPosition}
                         gender={gender}
                         data={selectedParts[viewPosition]}

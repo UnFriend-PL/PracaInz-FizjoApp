@@ -16,8 +16,8 @@
   transition: background-color 0.2s, border-color 0.2s;
 
   &:hover {
-    background-color: #f9f9f9;
-    border-color: #ccc;
+    background-color: $off-white;
+    border-color: $dark-green;
     cursor: text;
   }
 

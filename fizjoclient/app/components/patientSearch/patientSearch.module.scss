@@ -1,6 +1,6 @@
 @import "@/app/utils/globalColors.scss";
 .searchLabel {
-  color: $label-color;
+  color: $grey;
   font-weight: bold;
   text-transform: capitalize;
   font-size: 1.2rem;
@@ -13,7 +13,7 @@
   flex-wrap: wrap;
 
   .showDetails {
-    color: $text-dark-green;
+    color: $dark-green;
     cursor: pointer;
     flex-basis: 100%;
     font-size: 0.9rem;
@@ -24,7 +24,7 @@
 }
 
 .deletePatient {
-  color: $text-error;
+  color:$error;
   cursor: pointer;
 }
 
@@ -44,8 +44,8 @@
   }
 
   .searchButton {
-    background-color: $button-submit-bg;
-    color: $text-white;
+    background-color: $blue;
+    color: $white;
     padding: 0.5rem;
     font-weight: 800;
     border-radius: 5px;

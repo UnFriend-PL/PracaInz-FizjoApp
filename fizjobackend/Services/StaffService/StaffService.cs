@@ -28,7 +28,7 @@ public class StaffService : IStaffService
         {
             var query = _dbContext.Physiotherapists
                 .Include(p => p.PhysiotherapySpecializations)
-                .Include(p => p.Appointments.Where(a => a.IsPaid && a.Price > 0))
+                .Include(p => p.Appointments.Where(a => a.Price > 0))
                 .AsSplitQuery()
                 .AsNoTracking();
 

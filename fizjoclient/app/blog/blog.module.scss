@@ -1,8 +1,9 @@
+@import "@/app/utils/globalColors.scss";
 @import "../utils/globalColors.scss";
 
 .blogContainer {
   font-family: "Inter", sans-serif;
-  color: #2c2c2c;
+  color: $grey;
   line-height: 1.6;
   padding: 0.4rem;
   max-width: 50rem;
@@ -16,13 +17,13 @@
   h1 {
     font-size: 2rem;
     margin-bottom: 0.2rem;
-    color: #333;
+    color: $dark-green;
   }
 
   p {
     margin: 0.1rem 0;
     font-size: 1rem;
-    color: #666;
+    color: $black;
   }
 }
 
@@ -34,7 +35,7 @@
   h2 {
     font-size: 1.75rem;
     font-weight: 500;
-    color: #2c2c2c;
+    color: $grey;
     margin-bottom: 1.5rem;
   }
 
@@ -46,7 +47,7 @@
   }
 
   .stepCard {
-    background-color: #f9f9f9;
+    background-color: $off-white;
     padding: 1rem;
     border-radius: 0.5rem;
     box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.05);
@@ -60,19 +61,19 @@
     .stepIcon {
       margin-bottom: 0.4rem;
       font-size: 2.5rem;
-      color: #a8d5ba;
+      color: $dark-green;
     }
 
     h3 {
       font-size: 1.5rem;
       font-weight: 400;
       margin-bottom: 0.3rem;
-      color: #333;
+      color: $dark-green;
     }
 
     p {
       font-size: 1rem;
-      color: #666;
+      color: $black;
       margin-top: 0.1rem;
     }
   }
@@ -81,15 +82,16 @@
 .questionFormSection {
   text-align: center;
   padding: 1rem;
-  background-color: #fff;
+  background-color: $off-white;
   border-radius: 0.5rem;
   box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
 
   h2 {
     margin-bottom: 1rem;
-    color: #333;
+    color: $dark-green;
     font-size: 1.5rem;
+    font-weight: bold;
   }
 
   .questionForm {
@@ -109,7 +111,7 @@
   .formLabel {
     margin-bottom: 0.1rem;
     font-weight: 600;
-    color: #555;
+    color: $dark-green;
     font-size: 1rem;
   }
 
@@ -117,13 +119,13 @@
   .formTextarea {
     width: 100%;
     padding: 0.5rem 0.75rem;
-    border: 1px solid #ccc;
+    border: 1px solid $dark-green;
     border-radius: 0.25rem;
     font-size: 1rem;
     transition: border-color 0.2s;
 
     &:focus {
-      border-color: #007bff;
+      border-color: $dark-green;
       outline: none;
     }
   }
@@ -135,7 +137,7 @@
 
   .submitButton {
     padding: 0.75rem 0.5rem;
-    background-color: #28a745;
+    background-color: $green;
     border: none;
     color: white;
     font-size: 1rem;
@@ -144,16 +146,16 @@
     transition: background-color 0.3s ease;
 
     &:hover {
-      background-color: #218838;
+      background-color: $green-highlight;
     }
 
     &:active {
-      background-color: #1e7e34;
+      background-color: $dark-green;
     }
   }
 
   .errorMessage {
-    color: #dc3545;
+    color: $dark-green;
     font-weight: 500;
     margin-top: 0.4rem;
     text-align: center;
@@ -172,23 +174,23 @@
   .questionItem {
     margin-bottom: 0.9375rem;
     padding: 0.9375rem;
-    background-color: #f9f9f9;
+    background-color: $off-white;
     border-radius: 0.5rem;
     box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
 
     h4 {
-      border-bottom: 1px solid #a3a3a3;
+      border-bottom: 1px solid $dark-green;
     }
 
     .questionText {
       font-weight: bold;
       font-size: 1.1rem;
-      color: #333;
+      color: $black;
     }
 
     .questionDate {
       font-size: 0.8rem;
-      color: #666;
+      color: $dark-green;
     }
 
     .starRating {
@@ -199,35 +201,35 @@
 
       .star {
         cursor: pointer;
-        color: #ccc;
+        color: $grey;
         transition: color 0.2s;
 
         &:hover {
-          color: #ffc107;
+          color: $yellow;
         }
       }
 
       .starSelected {
         cursor: pointer;
-        color: #ffc107;
+        color: $yellow;
         transition: color 0.2s;
 
         &:hover {
-          color: #ffb300;
+          color: $dark-green;
         }
       }
     }
 
     .questionUsername {
       font-size: 0.9rem;
-      color: #666;
+      color: $dark-green;
       margin-top: 0.3125rem;
     }
 
     .questionBody {
       margin-top: 0.625rem;
       font-size: 1rem;
-      color: #2c2c2c;
+      color: $grey;
     }
 
     img {
@@ -246,7 +248,7 @@
 
     button {
       padding: 0.5rem 1rem;
-      background-color: #333;
+      background-color: $dark-green;
       border: none;
       color: white;
       font-size: 1rem;
@@ -255,24 +257,24 @@
       transition: background-color 0.3s ease;
 
       &:disabled {
-        background-color: #ccc;
+        background-color: $dark-green;
         cursor: not-allowed;
       }
 
       &:hover:not(:disabled) {
-        background-color: #555;
+        background-color: $dark-green;
       }
     }
 
     span {
       font-size: 1rem;
-      color: #333;
+      color: $dark-green;
     }
   }
 }
 
 .errorMessage {
-  color: #ff0000;
+  color: $dark-green;
   font-weight: bold;
   margin-top: 1.25rem;
   text-align: center;
@@ -286,21 +288,21 @@
 
   .star {
     cursor: pointer;
-    color: #ccc;
+    color: $dark-green;
     transition: color 0.2s;
 
     &:hover {
-      color: #ffc107;
+      color: $dark-green;
     }
   }
 
   .starSelected {
     cursor: pointer;
-    color: #ffc107;
+    color: $dark-green;
     transition: color 0.2s;
 
     &:hover {
-      color: #ffb300;
+      color: $dark-green;
     }
   }
 }
@@ -308,23 +310,19 @@
 .commentsSection {
   margin-top: 0.9375rem;
   padding: 0.625rem;
-  background-color: #f1f1f1;
+  background-color: $off-white;
   border-radius: 0.3125rem;
 
   h4 {
     margin-bottom: 0.625rem;
     font-size: 1.2rem;
-    color: #333;
+    color: $dark-green;
   }
 
   .commentsContainer {
     max-height: 20rem;
     overflow-y: auto;
     padding-right: 0.1rem;
-
-    :hover {
-      background-color: #e8e8e8;
-    }
 
     &::-webkit-scrollbar {
       width: 0.5rem;
@@ -349,17 +347,17 @@
     padding: 0.2rem 0;
 
     strong {
-      color: #2c2c2c;
+      color: $grey;
     }
 
     .commentDate {
       font-size: 0.8rem;
-      color: #666;
+      color: $dark-green;
     }
 
     p {
       margin: 0.2rem 0 0 0.625rem;
-      color: #555;
+      color: $dark-green;
     }
   }
 
@@ -368,7 +366,7 @@
     height: 3.75rem;
     margin-top: 0.625rem;
     padding: 0.5rem;
-    border: 1px solid #ccc;
+    border: 1px solid $dark-green;
     border-radius: 0.25rem;
     resize: vertical;
   }
@@ -376,7 +374,7 @@
   .addCommentButton {
     margin-top: 0.3125rem;
     padding: 0.5rem 0.75rem;
-    background-color: #a8d5ba;
+    background-color: $dark-green;
     border: none;
     color: white;
     border-radius: 0.25rem;
@@ -387,14 +385,14 @@
     transition: background-color 0.3s ease;
 
     &:hover {
-      background-color: #76bfa7;
+      background-color: $dark-green;
     }
   }
 
   button {
     margin-top: 0.3125rem;
     padding: 0.5rem 0.75rem;
-    background-color: #a8d5ba;
+    background-color: $dark-green;
     border: none;
     color: white;
     border-radius: 0.25rem;
@@ -405,7 +403,7 @@
     transition: background-color 0.3s ease;
 
     &:hover {
-      background-color: #76bfa7;
+      background-color: $dark-green;
     }
   }
 }

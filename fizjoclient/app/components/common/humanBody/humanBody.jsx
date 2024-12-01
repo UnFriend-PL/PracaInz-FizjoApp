@@ -21,7 +21,7 @@ const SvgWrapper = ({ side, scale, gender, children }) => {
 };
 
 const Body = ({
-  colors = ["#197b5c", "#74b9ff"],
+  colors = ["#6CCB81", "#606B66"],
   data = [],
   scale = 1,
   side = "front",
