@@ -18,6 +18,8 @@ namespace Fizjobackend.Entities.PhysiotherapistEntities
         [InverseProperty("Physiotherapist")]
         public ICollection<Appointment> Appointments { get; set; } = [];
         public virtual ICollection<Treatment> Treatments { get; set; } = new List<Treatment>();
+        [InverseProperty("Physiotherapist")]
+        public ICollection<WorkingHours> WorkingHours { get; set; } = new List<WorkingHours>();
 
         public Physiotherapist() { }
 

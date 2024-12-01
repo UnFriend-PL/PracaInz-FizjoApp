@@ -60,6 +60,15 @@ namespace Fizjobackend.DbContexts
                 .HasForeignKey(at => at.AppointmentId)
                 .OnDelete(DeleteBehavior.Cascade);
             
+            modelBuilder.Entity<WorkingHours>()
+                .Property(w => w.Id)
+                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<WorkingHours>()
+                .HasOne(w => w.Physiotherapist)
+                .WithMany(p => p.WorkingHours)
+                .HasForeignKey(w => w.PhysiotherapistId)
+                .OnDelete(DeleteBehavior.Cascade);
+            
             BuildBlogEntities(modelBuilder);
             BuildTreatmentsEntities(modelBuilder);
             BuildPhysiotherapistSpecializationEntities(modelBuilder);
@@ -228,6 +237,7 @@ namespace Fizjobackend.DbContexts
         public DbSet<Physiotherapist> Physiotherapists { get; set; }
         public DbSet<PhysiotherapySpecializationEntity> PhysiotherapySpecializationEntities { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<WorkingHours> WorkingHours { get; set; }
 
         // Body parts db entities
         public DbSet<View> Views { get; set; }

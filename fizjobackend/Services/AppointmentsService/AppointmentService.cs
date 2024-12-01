@@ -457,5 +457,31 @@ namespace Fizjobackend.Services.AppointmentsService
                 return new ServiceResponse<List<LoadAppointmentBodyDetailsResponseDTO>>($"Error during loading body part details.");
             }
         }
+        
+        public async Task<List<TimeSpan>> GetAvailableSlots(WorkingHoursRequestDTO request)
+        {
+            var workingHours = await _context.WorkingHours
+                .FirstOrDefaultAsync(w => w.PhysiotherapistId == request.PhysiotherapistId && w.DayOfWeek == request.Date.DayOfWeek);
+
+            if (workingHours == null)
+                return new List<TimeSpan>();
+
+            var appointments = await _context.Appointments
+                .Where(a => a.PhysiotherapistId == request.PhysiotherapistId && a.AppointmentDate.Date == request.Date.Date)
+                .ToListAsync();
+
+            var busySlots = appointments
+                .Select(a => a.AppointmentDate.TimeOfDay)
+                .ToHashSet();
+
+            var availableSlots = new List<TimeSpan>();
+            for (var time = workingHours.StartHour; time < workingHours.EndHour; time = time.Add(TimeSpan.FromHours(1)))
+            {
+                if (!busySlots.Contains(time))
+                    availableSlots.Add(time);
+            }
+
+            return availableSlots;
+        }
     }
 }
