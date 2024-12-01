@@ -76,7 +76,6 @@ export const AppointmentProvider = ({ children }) => {
         {},
         true
       );
-      console.log("Fetched Appointment Details:", response.data);
       setAppointment(response.data);
       setReadOnly(
         response.data.appointmentStatusName !== "Scheduled" &&
@@ -242,7 +241,6 @@ export const AppointmentProvider = ({ children }) => {
 
       try {
         const bodyPartData = await fetchBodyPartDetails(bodyPart);
-        console.log(bodyPartData, "Body Part Data");
         updateMusclesAndJoints(bodyPartData);
       } catch (error) {
         console.error("Failed to fetch muscles and joints details:", error);

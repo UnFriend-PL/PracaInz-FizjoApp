@@ -1,7 +1,7 @@
-﻿using fizjobackend.Entities.TreatmentsEntities;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using Fizjobackend.Entities.TreatmentsEntities;
 
-namespace fizjobackend.Entities.BodyEntities
+namespace Fizjobackend.Entities.BodyEntities
 {
     public class Muscle
     {

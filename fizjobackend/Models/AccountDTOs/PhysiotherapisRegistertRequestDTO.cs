@@ -1,6 +1,4 @@
-﻿using fizjobackend.Interfaces.DTOInterfaces.RegisterDTOInterfaces;
-
-namespace fizjobackend.Models.AccountDTOs
+﻿namespace Fizjobackend.Models.AccountDTOs
 {
     public class PhysiotherapisRegistertRequestDTO : IUserRegisterDTO
     {

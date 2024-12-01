@@ -1,4 +1,4 @@
-﻿namespace fizjobackend
+﻿namespace Fizjobackend
 {
     public class ServiceResponse<T>
     {

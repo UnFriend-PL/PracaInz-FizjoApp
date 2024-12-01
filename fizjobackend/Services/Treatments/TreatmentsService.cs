@@ -1,11 +1,10 @@
-﻿using fizjobackend.DbContexts;
-using fizjobackend.Interfaces.TreatmentsInterfaces;
-using fizjobackend.Models.BodyVisualizerDTOs;
-using fizjobackend.Models.TreatmentsDTOs;
+﻿using Fizjobackend.DbContexts;
+using Fizjobackend.Models.BodyVisualizerDTOs;
+using Fizjobackend.Models.TreatmentsDTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace fizjobackend.Services.Treatments
+namespace Fizjobackend.Services.Treatments
 {
     public class TreatmentsService : ITreatmentsService
     {
@@ -27,6 +26,7 @@ namespace fizjobackend.Services.Treatments
             try
             {
                 var treatments = await _context.Treatments
+                    .AsSplitQuery()
                     .AsNoTracking()
                     .AsQueryable()
                     .ToListAsync();
@@ -54,6 +54,8 @@ namespace fizjobackend.Services.Treatments
             try
             {
                 var treatment = await _context.Treatments
+                    .AsSplitQuery()
+                    .AsNoTracking()
                     .Include(t => t.Muscles)
                     .Include(t => t.Joints)
                     .Where(t => t.Id == treatmentRequest.Id)

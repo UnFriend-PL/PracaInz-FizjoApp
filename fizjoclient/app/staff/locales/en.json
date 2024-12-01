@@ -8,6 +8,11 @@
       "masażysta": "Masseur",
       "miasto": "City",
       "specjalizacja": "Specialization"
-    }
+    },
+  "previousPage": "Previous page",
+  "nextPage": "Next page",
+  "page": "Page",
+  "of": "of",
+    "averagePrice": "Maximum average price"
   }
   

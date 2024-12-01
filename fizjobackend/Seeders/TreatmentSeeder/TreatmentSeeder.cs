@@ -1,11 +1,11 @@
-﻿using fizjobackend.DbContexts;
-using fizjobackend.Entities.BodyEntities;
-using fizjobackend.Entities.TreatmentsEntities;
+﻿using Fizjobackend.Entities.BodyEntities;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
+using Fizjobackend.DbContexts;
+using Fizjobackend.Entities.TreatmentsEntities;
 
-namespace fizjobackend.Seeders.TreatmentSeeder
+namespace Fizjobackend.Seeders.TreatmentSeeder
 {
     public static class TreatmentSeeder
     {
@@ -32,7 +32,6 @@ namespace fizjobackend.Seeders.TreatmentSeeder
 
                 foreach (var treatmentData in seedData.Treatments)
                 {
-                    // Load muscles, joints, body sections, and views related to the treatment data
                     var muscles = await context.Muscles
                         .Where(m => treatmentData.Muscles.Contains(m.Name))
                         .ToListAsync();

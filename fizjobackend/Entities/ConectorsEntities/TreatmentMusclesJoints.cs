@@ -1,7 +1,7 @@
-﻿using fizjobackend.Entities.BodyEntities;
-using fizjobackend.Entities.TreatmentsEntities;
+﻿using Fizjobackend.Entities.BodyEntities;
+using Fizjobackend.Entities.TreatmentsEntities;
 
-namespace fizjobackend.Entities.ConectorsEntities
+namespace Fizjobackend.Entities.ConectorsEntities
 {
     public class TreatmentMusclesJoints
     {

@@ -1,6 +1,6 @@
-﻿using fizjobackend.Entities.PhysiotherapistEntities;
+﻿using Fizjobackend.Entities.PhysiotherapistEntities;
 
-namespace fizjobackend.Models.AppointmentsDTOs
+namespace Fizjobackend.Models.AppointmentsDTOs
 {
     public class PhysiotherapistAppointmentResponseDTO
     {

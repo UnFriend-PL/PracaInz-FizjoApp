@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace fizjobackend.Entities.UserEntities
+namespace Fizjobackend.Entities.UserEntities
 {
     public abstract class User : IdentityUser<Guid>
     {

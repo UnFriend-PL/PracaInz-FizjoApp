@@ -1,4 +1,4 @@
-﻿namespace fizjobackend.Models.UserDTOs
+﻿namespace Fizjobackend.Models.UserDTOs
 {
     public class SearchPatientRequestDTO
     {

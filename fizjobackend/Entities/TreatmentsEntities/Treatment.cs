@@ -1,9 +1,9 @@
-﻿using fizjobackend.Entities.AppointmentEntities;
-using fizjobackend.Entities.BodyEntities;
-using fizjobackend.Entities.PhysiotherapistEntities;
+﻿using Fizjobackend.Entities.AppointmentEntities;
 using System.ComponentModel.DataAnnotations;
+using Fizjobackend.Entities.BodyEntities;
+using Fizjobackend.Entities.PhysiotherapistEntities;
 
-namespace fizjobackend.Entities.TreatmentsEntities
+namespace Fizjobackend.Entities.TreatmentsEntities
 {
     public class Treatment
     {

@@ -1,4 +1,4 @@
-﻿namespace fizjobackend.Enums.AppointmentEnums
+﻿namespace Fizjobackend.Enums.AppointmentEnums
 {
     public enum AppointmentStatus
     {

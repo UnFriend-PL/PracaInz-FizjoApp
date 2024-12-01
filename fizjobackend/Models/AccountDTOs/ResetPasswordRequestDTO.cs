@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace fizjobackend.Models.AccountDTOs
+namespace Fizjobackend.Models.AccountDTOs
 {
     public class ResetPasswordRequestDTO
     {

@@ -1,6 +1,6 @@
-﻿using fizjobackend.Entities.PatientEntities;
+﻿using Fizjobackend.Entities.PatientEntities;
 
-namespace fizjobackend.Models.AppointmentsDTOs
+namespace Fizjobackend.Models.AppointmentsDTOs
 {
     public class PatientAppointmentDetailResponseDTO
     {
