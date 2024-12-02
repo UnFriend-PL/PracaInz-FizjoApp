@@ -1,3 +1,4 @@
+@import "@/app/utils/globalColors.scss";
 @import "../utils/globalColors.scss";
 
 .form {
@@ -7,7 +8,7 @@
     max-width: 800px;
     margin: 0 auto;
     padding: 2rem;
-    background-color: $bg-page;
+    background-color:$off-white;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -15,7 +16,7 @@
 .heading {
     margin-bottom: 1.5rem;
     font-size: 1.5rem;
-    color: $text-black;
+    color:$black;
     text-align: center;
 }
 
@@ -27,7 +28,7 @@
 }
 
 .success {
-    color: $text-black;
+    color:$black;
     margin-bottom: 1rem;
     font-size: 1rem;
     text-align: center;
@@ -41,7 +42,7 @@
     display: block;
     margin-bottom: 0.5rem;
     font-weight: bold;
-    color: $text-black;
+    color:$black;
     transition: color 0.3s ease;
 }
 
@@ -77,13 +78,13 @@
     top: 0;
     width: 25px;
     height: 25px;
-    background-color: #fff;
-    border: 2px solid #000;
+    background-color: $dark-green;
+    border: 2px solid $dark-green;
     border-radius: 4px;
 }
 
 .booleanInput input[type="radio"]:checked+span::before {
-    background-color: #00A86B;
+    background-color: $dark-green;
 }
 
 .booleanInput input[type="radio"]:checked+span::after {
@@ -109,11 +110,11 @@
 .textarea {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid $input-border;
+    border: 1px solid $border-color;
     border-radius: 4px;
     font-size: 1rem;
-    color: $text-black;
-    background-color: $bg-page;
+    color:$black;
+    background-color:$off-white;
     box-sizing: border-box;
     resize: none;
     overflow: hidden;
@@ -127,7 +128,7 @@
 
 .charCount {
     font-size: 0.875rem;
-    color: $text-black;
+    color:$black;
     margin-top: 0.5rem;
 }
 
@@ -135,9 +136,9 @@
 .agreements {
     margin-top: 20px;
     padding: 15px;
-    border: 1px solid #ddd;
+    border: 1px solid $off-white;
     border-radius: 8px;
-    background-color: #fafafa;
+    background-color: $dark-green;
 }
 
 .agreementsHeading {
@@ -169,15 +170,15 @@
 .submitButton {
     margin-top: 20px;
     padding: 12px 24px;
-    background-color: #007bff;
-    color: #fff;
+    background-color: $dark-green;
+    color: $dark-green;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     font-size: 1rem;
 
     &:hover {
-        background-color: #0056b3;
+        background-color: $dark-green;
     }
 }
 
@@ -192,7 +193,7 @@
 
 .textareaError {
     border: 1px solid red; // Zmieniony kolor obramowania
-    background-color: #fdd; // Zmieniony kolor tła
+    background-color: $dark-green; // Zmieniony kolor tła
   }
 
   .hidden {

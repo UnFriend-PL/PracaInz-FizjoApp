@@ -1,79 +1,30 @@
-@import "../utils/globalColors.scss";
+@import "@/app/utils/globalColors.scss";
 
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 2rem;
-  background-color: $background-light;
+  background-color: $white;
   min-width: 70%;
-  box-shadow: 0 0.4rem 0.8rem $shadow-color;
+  box-shadow: 0 0.4rem 0.8rem $off-white;
 }
 
 .title {
   font-size: 2rem;
-  margin-bottom: 2rem;
-  color: $highlight-color;
-}
-
-.dropdownContainer {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdownIcon {
-  cursor: pointer;
-  font-size: 1.5rem;
-  color: $text-color;
-  transition: transform 0.3s ease, color 0.3s ease;
-}
-
-.dropdownIcon:hover {
-  color: $secondary-color;
-  transform: rotate(180deg);
-}
-
-.dropdownMenu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: $background-dark;
-  border: 0.1rem solid $border-color;
-  border-radius: 0.4rem;
-  box-shadow: 0 0.4rem 0.6rem $shadow-color;
-  width: 12.5;
-  max-width: 12.5rem;
-  z-index: 1000;
-}
-
-.dropdownMenu > div {
-  padding: 1rem 1.5rem;
-  font-size: 0.9rem;
-  color: $text-color;
-  cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-.dropdownMenu > div:hover {
-  background-color: $background-medium;
-  color: $secondary-color;
+  margin-bottom: 20px;
+  color: $dark-green;
 }
 
 .loading {
   font-size: 1.5rem;
-  color: $highlight-color;
+  color: $dark-green;
 }
 
-.profileHeader {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 75rem;
-  margin: 0 auto;
+.profileCard {
+  background: $off-white;
   padding: 1.5rem;
-  box-shadow: 0 0.4rem 0.8rem $shadow-color;
-  background-color: $background-medium;
+  box-shadow: 0 0.4rem 0.8rem $off-white;
   border-radius: 0.6rem;
   gap: 2rem;
   flex-wrap: wrap;
@@ -93,7 +44,7 @@
   max-width: 7rem;
   aspect-ratio: 1;
   border-radius: 50%;
-  border: 0.2rem solid $secondary-color;
+  border: 0.2rem solid $blue;
 }
 
 .profileInfo {
@@ -108,33 +59,18 @@
   align-items: center;
   font-size: 1rem;
   font-weight: bold;
-  color: $primary-color;
+  color: $dark-green;
+  text-transform: capitalize;
 }
 
-.profileDescription {
-  padding: 1rem;
-  border: 0.1rem solid lighten($primary-color, 20%);
-  border-radius: 0.6rem;
-  background-color: $background-medium;
-  font-size: 0.9rem;
-  color: darken($text-color, 20%);
-  line-height: 1.4;
+.value {
+  color: $black;
+  cursor: pointer;
 }
 
-.profileBody {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
-  width: 100%;
-  max-width: 75rem;
-  margin: 1rem auto;
-  padding: 2rem;
-  background-color: $background-dark;
-  border-radius: 0.6rem;
-  box-shadow: 0 0.4rem 0.8rem $shadow-color;
-  gap: 2rem;
-  flex-wrap: wrap;
+.editIcon {
+  margin-right: 8px;
+  color: $dark-green;
 }
 
 .profileColumn {
@@ -143,7 +79,7 @@
 }
 
 .profileColumnRight {
-  border-left: 0.2rem solid $primary-color;
+  border-left: 0.2rem solid $white;
   padding-left: 1rem;
 }
 
@@ -154,53 +90,42 @@
 }
 
 .fieldItem {
-  padding: 0.75rem;
-  border: 0.1rem solid $border-color;
-  border-radius: 0.8rem;
-  background-color: $background-light;
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  background-color: $blue;
+  color: white;
+  padding: 0.6rem 0.6rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 1rem;
 }
 
-.fieldLabel {
-  font-size: 0.9rem;
+.editButton svg {
+  color: $white;
   font-weight: bold;
-  color: $primary-color;
+  color: $blue;
 }
 
-.fieldValue {
-  padding-left: 0.5rem;
-  font-size: 0.9rem;
-  color: $text-color;
+.editButton:hover {
+  background-color: $blue-highlight;
 }
 
-.addressBox {
-  border: 0.2rem solid lighten($border-color, 10%);
-  padding: 1rem;
-  border-radius: 1rem;
-  background-color: $background-light;
-}
-
-.actionButton {
-  padding: 0.5rem 1.5rem;
-  font-size: 1rem;
-  font-weight: bold;
-  color: $background-dark;
-  background-color: $primary-color;
+.saveButton {
+  background-color: $blue;
+  color: $white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
   border: none;
   border-radius: 0.6rem;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
 }
 
-.actionButton:hover {
-  background-color: $hover-color;
-  transform: scale(1.05);
-}
-
-.actionButton:active {
-  background-color: $active-color;
+.saveButton:hover {
+  background-color: $blue-highlight;
 }
 
 .buttonWrapper {
@@ -210,23 +135,39 @@
   margin-top: 1.5rem;
 }
 
-@media (max-width: 768px) {
-  .profileHeader {
-    flex-direction: column;
-    align-items: center;
-    padding: 1rem;
-  }
+.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid $border-color;
+}
 
-  .profileBody {
-    flex-direction: column;
-    padding: 1.5rem;
-  }
+.uploadSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  .fieldGroup {
-    grid-template-columns: 1fr;
-  }
+.uploadLabel {
+  background-color: $blue;
+  color: $white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+}
 
-  .buttonWrapper {
-    justify-content: center;
-  }
+.uploadLabel:hover {
+  background-color: $blue-highlight;
+}
+
+.uploadInput {
+  display: none;
+}
+
+.uploading {
+  color: $dark-green;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
 }

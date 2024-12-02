@@ -1,3 +1,4 @@
+@import "@/app/utils/globalColors.scss";
 @import "../utils/globalColors.scss";
 
 .specialistsContainer {
@@ -23,7 +24,7 @@
 .searchInput {
     width: 100%;
     padding: 0.625rem 2.5rem 0.625rem 0.9375rem;
-    border: 1px solid #ddd;
+    border: 1px solid $off-white;
     border-radius: 0.5rem;
     font-size: 1rem;
     transition: box-shadow 0.3s ease;
@@ -39,7 +40,7 @@
     right: 0.9375rem;
     top: 50%;
     transform: translateY(-50%);
-    color: #999;
+    color: $dark-green;
 }
 
 .specialistsList {
@@ -49,7 +50,7 @@
 }
 
 .specialistCard {
-    background: #f9f9f9;
+    background: $off-white;
     padding: 0.9375rem;
     border-radius: 0.625rem;
     box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
@@ -70,7 +71,7 @@
 .placeholderImage {
     width: 6.25rem;
     height: 6.25rem;
-    background-color: #ddd;
+    background-color: $off-white;
     border-radius: 50%;
     margin-bottom: 0.625rem;
 }
@@ -79,23 +80,24 @@
     font-size: 1.125rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
+    color: $dark-green;
 }
 
 .specialistInfo {
     font-size: 0.875rem;
-    color: #666;
+    color: $blue;
 }
 
 .specialistCity {
     font-size: 0.875rem;
-    color: #333;
+    color: $dark-green;
     font-weight: 600;
 }
 
 .noResults {
     text-align: center;
     font-size: 1.125rem;
-    color: #999;
+    color: $dark-green;
 }
 
 .paginationContainer {
@@ -106,7 +108,7 @@
 }
 
 .paginationButton {
-    color: #fff;
+    color: $white;
     border: none;
     padding: 0.625rem 1.25rem;
     margin: 0 0.625rem;
@@ -116,7 +118,7 @@
 }
 
 .paginationButton:disabled {
-    background-color: #ccc;
+    background-color: $dark-green;
     cursor: not-allowed;
 }
 

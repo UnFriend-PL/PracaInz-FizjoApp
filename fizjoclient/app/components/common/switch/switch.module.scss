@@ -1,3 +1,4 @@
+@import "@/app/utils/globalColors.scss";
 .switchContainer {
   display: inline-block;
   position: relative;
@@ -16,7 +17,7 @@
   cursor: pointer;
   width: 3rem; /* Responsive width */
   height: 1.5rem; /* Responsive height */
-  background: #bebebe;
+  background: $blue;
   border-radius: 50px; /* Adjusted for round corners */
   position: relative;
   transition: background-color 0.2s;
@@ -35,12 +36,12 @@
   height: 1.2rem; /* Responsive size */
   border-radius: 50%;
   transition: 0.2s;
-  background: #040404;
+  background: $blue;
   box-shadow: 0 0 0.125rem 0 rgba(10, 10, 10, 0.29); /* Adjusted shadow */
 }
 
 .switchCheckbox:checked + .switchLabel {
-  background: #4cd137;
+  background: $dark-green;
 }
 
 .switchCheckbox:checked + .switchLabel .switchButton {

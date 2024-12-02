@@ -2,7 +2,7 @@
 
 .detailsGroup {
   flex-basis: 45%;
-  background-color: $bg-section;
+  background-color: $off-white;
   padding: 1em;
   margin: 4em 0 1em 0;
   position: relative;
@@ -25,15 +25,15 @@
 
   .detailGroupButton {
     align-self: flex-start;
-    background-color: $button-bg;
-    color: $text-white;
+    background-color: $green;
+    color: $white;
     border: none;
     padding: 0.3em 0.6em;
     border-radius: 4px;
     cursor: pointer;
-
+    transition-duration: 1s;
     &:hover {
-      background-color: $button-bg-hover;
+      background-color: $green-highlight;
     }
   }
 }

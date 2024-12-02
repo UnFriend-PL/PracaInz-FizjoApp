@@ -1,3 +1,4 @@
+@import "@/app/utils/globalColors.scss";
 @import "../utils/globalColors.scss";
 
 .modalBackdrop {
@@ -14,7 +15,7 @@
   }
   
   .modalContent {
-    background-color: $bg-container; 
+    background-color: $off-white;
     padding: 20px;
     border-radius: 8px;
     width: 90%;
@@ -27,10 +28,10 @@
     position: absolute;
     top: 10px;
     right: 10px;
-    background: $button-cancel-bg;
+    background: $red;
     border: none;
     border-radius: 50%;
-    color: $text-white;
+    color: $white;
     font-size: 16px;
     width: 30px;
     height: 30px;
@@ -41,12 +42,12 @@
     transition: background-color 0.3s ease;
   
     &:hover {
-      background-color: $button-cancel-bg-hover;
+      background-color: $red;
     }
   }
   
   .modalText {
-    color: $text-dark-green;
+    color: $dark-green;
   }
 
 

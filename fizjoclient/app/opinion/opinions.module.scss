@@ -5,31 +5,31 @@
   margin: 0 auto; /* Wyśrodkowanie kontenera */
   padding: 20px;
   font-family: Arial, sans-serif;
-  background-color: $bg-container;
+  background-color: $white;
 }
 
 .heading {
   text-align: center;
   margin-bottom: 20px;
-  color: $text-black;
+  color: $black;
 }
 
 .opinionCard {
   position: relative;
-  background-color: $bg-white;
+  background-color: $white;
   border: 1px solid $border-color;
   border-radius: 10px;
   padding: 20px;
   margin-bottom: 15px;
-  box-shadow: 0px 4px 8px $box-shadow-color;
+  box-shadow: 0px 4px 8px $off-white;
 }
 .opinionCardEdit {
-  background-color: $bg-white;
-  border: 1px solid $border-edit-color;
+  background-color: $white;
+  border: 1px solid $border-color;
   border-radius: 10px;
   padding: 20px;
   margin-bottom: 15px;
-  box-shadow: 0px 4px 8px $box-shadow-color;
+  box-shadow: 0px 4px 8px $off-white;
 }
 
 .opinionAuthor,
@@ -37,7 +37,7 @@
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
-  color: $text-black;
+  color: $black;
 }
 .opinionDate {
   position: absolute;
@@ -56,7 +56,7 @@
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
-  color: $text-black;
+  color: $black;
 }
 .opinionComment {
   font-style: italic;
@@ -88,7 +88,7 @@
 .editButton {
   display: flex;
   align-items: center;
-  background-color: $button-edit-bg;
+  background-color: $blue;
   color: white;
   padding: 7px;
   border: none;
@@ -99,7 +99,7 @@
 .saveButton {
   display: flex;
   align-items: center;
-  background-color: $button-submit-bg;
+  background-color: $green;
   color: white;
   padding: 7px;
   border: none;
@@ -110,7 +110,7 @@
 .cancelButton {
   display: flex;
   align-items: center;
-  background-color: $button-cancel-bg-hover;
+  background-color: $red;
   color: white;
   padding: 7px;
   border: none;
@@ -128,13 +128,13 @@
 }
 
 .editButton:hover {
-  background-color: darken($button-edit-bg-hover, 10%);
+  background-color: darken($blue, 10%);
 }
 .saveButton:hover {
-  background-color: darken($button-submit-bg-hover, 10%);
+  background-color: darken($green, 10%);
 }
 .cancelButton:hover {
-  background-color: darken($button-cancel-bg-hover, 10%);
+  background-color: darken($red, 10%);
 }
 
 .editIcon,
@@ -169,12 +169,12 @@
 }
 .star {
   display: block;
-  color: $star-color;
+  color: $yellow;
   margin-right: 2px;
 }
 
 .stars {
   display: block;
-  color: $star-color;
+  color: $yellow;
   display: inline-flex;
 }

@@ -13,7 +13,7 @@
 }
 
 .modalContent {
-  background: $bg-page;
+  background:$off-white;
   padding: 2rem;
   border-radius: 8px;
   min-width: 45%;
@@ -45,8 +45,8 @@
   background: none;
   border: none;
   font-size: 1.5rem;
-  background-color: $button-cancel-bg;
-  color: $text-white;
+  background-color: $red;
+  color: $white;
   padding: 0.5rem;
   height: 2rem;
   width: 2rem;
@@ -62,7 +62,7 @@
 .modalNavigation {
   flex-basis: 100%;
   .header {
-    color: $text-dark-green;
+    color: $dark-green;
     font-size: 1.5rem;
     font-weight: bold;
     border-bottom: 1px solid black;

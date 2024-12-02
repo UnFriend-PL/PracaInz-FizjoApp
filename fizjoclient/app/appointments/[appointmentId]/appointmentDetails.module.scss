@@ -9,27 +9,38 @@
   flex-wrap: wrap;
   flex-basis: 100%;
 }
+
 .spaceAtBottom {
   padding-bottom: 15em;
 }
+
 .bodyContainer {
   display: flex;
   flex-direction: row;
   flex-basis: 45%;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-around;
+
 }
+
+.switchSelector {
+  margin-bottom: 4rem;
+  display: flex;
+  flex-basis: 100%;
+}
+
 .treatmentsWrapper {
   flex-basis: 80%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  background-color: $bg-section;
+  background-color: $off-white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 1rem;
   margin: 1rem;
 }
+
 .sectionWrapper {
   flex-basis: 45%;
   align-self: stretch;
@@ -37,10 +48,11 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: flex-start;
-  background-color: $bg-section;
+  background-color: $off-white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 1em;
+
   .navigation {
     display: flex;
     flex-basis: 50%;
@@ -50,8 +62,9 @@
   }
 
   .navigation button {
-    background-color: $button-bg;
-    color: $text-white;
+    transition-duration: 1s;
+    background-color: $blue;
+    color: $white;
     border: none;
     padding: 0.3em 0.6em;
     border-radius: 4px;
@@ -59,8 +72,9 @@
   }
 
   .navigation button:hover {
-    background-color: $button-bg-hover;
+    background-color: $blue-highlight;
   }
+
   .bodyPartContainer {
     flex-basis: 100%;
     display: flex;
@@ -69,6 +83,7 @@
     align-items: center;
     align-content: center;
   }
+
   .bodyPart {
     flex-basis: 100%;
   }
@@ -78,15 +93,16 @@
     font-size: 1.2em;
     text-transform: capitalize;
     font-weight: bold;
-    color: $text-dark-green;
+    color: $dark-green;
   }
 
   .bodyPartSubHeader {
-    color: $text-black;
+    color: $black;
     font-size: 1em;
     font-weight: bold;
   }
 }
+
 .appointmentCard {
   display: flex;
   flex-basis: 80%;
@@ -106,18 +122,21 @@
     align-content: stretch;
     justify-content: space-between;
   }
+
   .appointmentDate {
     top: -1.2em;
     font-size: 1em;
     font-weight: 800;
     cursor: pointer;
   }
+
   .detailsGroup {
     flex-basis: 45%;
-    background-color: $bg-section;
+    background-color: $off-white;
     padding: 1em;
     margin: 4em 0 1em 0;
     position: relative;
+
     .detailGroupName {
       position: absolute;
       top: -2em;
@@ -125,23 +144,31 @@
       font-size: 1.3em;
       font-weight: 800;
     }
+
     .detailGroupButton:hover {
-      color: $text-dark-green;
+      color: $dark-green;
     }
   }
 }
+
 .header {
   display: flex;
   flex-basis: 100%;
   justify-content: space-between;
   font-weight: bold;
   font-size: 1.5em;
+
   .status {
-    background-color: $bg-dark-green;
-    color: $text-white;
+    transition-duration: 1s;
+    background-color: $dark-green;
+    color: $white;
     padding: 0.5em;
     border-radius: 5px;
     cursor: pointer;
+
+    &:hover {
+      background-color: $green;
+    }
   }
 }
 
@@ -193,8 +220,9 @@
   margin-top: 15px;
   font-size: 16px;
   font-weight: semi-bold;
-  color: #555;
+  color: $dark-green;
 }
+
 .selectedItemsList {
   display: flex;
   flex-wrap: wrap;
@@ -204,23 +232,26 @@
   align-self: stretch;
   flex-basis: 100%;
 }
+
 .selectedItemsHeader {
   font-size: 1.2em;
   font-weight: bold;
-  color: $text-dark-green;
+  color: $dark-green;
   text-transform: capitalize;
   align-self: stretch;
   flex-basis: 100%;
 }
+
 .selectedSectionHeader {
   font-size: 1.1em;
   font-weight: bold;
-  color: $text-black;
+  color: $black;
   text-transform: capitalize;
   position: absolute;
   top: -1.3em;
   left: 0.1em;
 }
+
 .selectedSection {
   display: flex;
   flex-wrap: wrap;
@@ -229,10 +260,11 @@
   align-content: center;
   flex-basis: 100%;
   margin: 1.5em 0 0.5em 0;
-  background-color: $bg-page;
+  background-color: $off-white;
   padding: 0.2em;
   position: relative;
 }
+
 .selectedItems {
   display: flex;
   flex-wrap: wrap;
@@ -246,23 +278,24 @@
   align-items: center;
   flex-basis: content;
   font-size: 0.9em;
-  background-color: $tag-bg;
-  color: $text-white;
+  color: $white;
   border-radius: 5px 0 0 5px;
   margin: 0.2em;
 }
+
 .selectedItemLabel {
   padding: 0.5em;
   border-radius: 0 5px 5px 0;
-  background-color: $tag-bg;
-  color: #fff;
+  background-color: $green;
+  color: $white;
 }
+
 .selectedItem .checkbox {
   margin-right: 10px;
 }
 
 .removeButton {
-  background-color: $button-cancel-bg;
+  background-color: $selected;
   color: white;
   border: none;
   padding: 0.3em 0.6em;
@@ -273,7 +306,7 @@
 }
 
 .removeButton:hover {
-  background-color: $button-cancel-bg-hover;
+  background-color: $red;
 }
 
 .editableDetails {
@@ -285,7 +318,7 @@
 
 .detailsGroup {
   flex-basis: 45%;
-  background-color: $bg-section;
+  background-color: $off-white;
   padding: 1em;
   margin: 1em 0;
   position: relative;
@@ -321,8 +354,8 @@
 }
 
 .saveButton {
-  background-color: $button-bg;
-  color: $text-white;
+  background-color: $blue;
+  color: $white;
   border: none;
   padding: 0.5em 1em;
   border-radius: 4px;
@@ -333,7 +366,7 @@
 }
 
 .saveButton:hover {
-  background-color: $button-bg-hover;
+  background-color: $green-highlight;
 }
 
 .statusChangeContainer {
@@ -345,9 +378,27 @@
   justify-content: space-around;
   flex-wrap: wrap;
 }
+
 .statusButtons {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
   padding: 0 0 1rem;
+}
+
+.buttonSaveAll {
+  position: fixed;
+  background-color: $green;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  color: $white;
+  padding: 0.45rem;
+  border-radius: 15px;
+  z-index: 99;
+  transition-duration: 1s;
+
+  &:hover {
+    background-color: $green-highlight;
+
+  }
 }

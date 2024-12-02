@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace fizjobackend.Migrations
 {
     /// <inheritdoc />
-    public partial class initialCreate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -108,7 +110,7 @@ namespace fizjobackend.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AvatarPath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AvatarPath = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValue: "default-avatar.png"),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -192,6 +194,7 @@ namespace fizjobackend.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Body = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Author = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PostId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
@@ -275,7 +278,10 @@ namespace fizjobackend.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LicenseNumber = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    LicenseNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Experience = table.Column<int>(type: "int", nullable: false),
+                    Education = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -441,8 +447,10 @@ namespace fizjobackend.Migrations
                     ViewName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ViewNamePL = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BodySide = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BodySidePL = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SectionName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SectionNamePL = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BodySectionId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -454,6 +462,27 @@ namespace fizjobackend.Migrations
                         principalTable: "Physiotherapists",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WorkingHours",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PhysiotherapistId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DayOfWeek = table.Column<int>(type: "int", nullable: false),
+                    StartHour = table.Column<TimeSpan>(type: "time", nullable: false),
+                    EndHour = table.Column<TimeSpan>(type: "time", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WorkingHours", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WorkingHours_Physiotherapists_PhysiotherapistId",
+                        column: x => x.PhysiotherapistId,
+                        principalTable: "Physiotherapists",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -496,6 +525,34 @@ namespace fizjobackend.Migrations
                         principalTable: "BodySections",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppointmentTreatmens",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AppointmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TreatmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Duration = table.Column<TimeSpan>(type: "time", nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppointmentTreatmens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppointmentTreatmens_Appointments_AppointmentId",
+                        column: x => x.AppointmentId,
+                        principalTable: "Appointments",
+                        principalColumn: "AppointmentId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AppointmentTreatmens_Treatments_TreatmentId",
+                        column: x => x.TreatmentId,
+                        principalTable: "Treatments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -593,6 +650,23 @@ namespace fizjobackend.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "PhysiotherapySpecializationEntities",
+                columns: new[] { "PhysiotherapySpecializationId", "PhysiotherapySpecialization" },
+                values: new object[,]
+                {
+                    { new Guid("45036705-f0f0-4033-a586-8bcd023e2cf3"), "Geriatric" },
+                    { new Guid("54bb8af7-8be3-4a15-9b6d-8b656578c5ff"), "Pediatric" },
+                    { new Guid("6cae212c-b536-49c4-885b-f8d5b029c013"), "Urogynecological" },
+                    { new Guid("80d63571-bd14-4c99-a301-3b47dcd136c4"), "Orthopedic" },
+                    { new Guid("a9b58805-ee4c-4e1f-a889-202d71b23241"), "Sports" },
+                    { new Guid("c19adc7e-66b9-4c82-ab28-b2fd13ccb1a8"), "CardiovascularAndPulmonary" },
+                    { new Guid("e9e19bf0-bb82-4fd6-95e6-7e36939a6051"), "Neurological" },
+                    { new Guid("ec3537e1-2417-485b-b621-c19d55e67a76"), "Dental" },
+                    { new Guid("f1c3d2db-18e5-49f0-b222-a216e4ed8ce3"), "Oncological" },
+                    { new Guid("fa171112-07dd-4ab6-ad81-131535d05f23"), "Occupational" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AppointmentBodyDetails_AppointmentId",
                 table: "AppointmentBodyDetails",
@@ -627,6 +701,16 @@ namespace fizjobackend.Migrations
                 name: "IX_Appointments_PhysiotherapistId",
                 table: "Appointments",
                 column: "PhysiotherapistId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppointmentTreatmens_AppointmentId",
+                table: "AppointmentTreatmens",
+                column: "AppointmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppointmentTreatmens_TreatmentId",
+                table: "AppointmentTreatmens",
+                column: "TreatmentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BodySections_ViewId",
@@ -695,6 +779,11 @@ namespace fizjobackend.Migrations
                 schema: "Blog",
                 table: "Usability",
                 column: "PostId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkingHours_PhysiotherapistId",
+                table: "WorkingHours",
+                column: "PhysiotherapistId");
         }
 
         /// <inheritdoc />
@@ -702,6 +791,9 @@ namespace fizjobackend.Migrations
         {
             migrationBuilder.DropTable(
                 name: "AppointmentBodyDetails");
+
+            migrationBuilder.DropTable(
+                name: "AppointmentTreatmens");
 
             migrationBuilder.DropTable(
                 name: "Comment",
@@ -747,6 +839,9 @@ namespace fizjobackend.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserTokens");
+
+            migrationBuilder.DropTable(
+                name: "WorkingHours");
 
             migrationBuilder.DropTable(
                 name: "Appointments");

@@ -1,26 +1,25 @@
-import React, { useContext, useState, useCallback, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import Select from "react-select";
 import styles from "./appointmentDetails.module.scss";
-import { LanguageContext } from "@/app/contexts/lang/langContext";
 import pl from "./locales/pl.json";
 import en from "./locales/en.json";
-import { AppointmentContext } from "./appointmentContext";
+import { AppointmentContext } from "../appointmentContext";
 import mapData from "../utils/mapData";
 import useSelectedItems from "../utils/useSelectedItems";
-import createBodyDetails from "../utils/createBodyDetails";
-import apiService from "@/app/services/apiService/apiService";
-
 const locales = { en, pl };
 
 const BodyPartSelector = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  const { language } = useContext(LanguageContext);
+  const {
+    currentIndex,
+    setCurrentIndex,
+    handleNavigation,
+    musclesAndJoints,
+    selectedItems,
+    language,
+  } = useContext(AppointmentContext);
+  const { handleChange } = useSelectedItems();
   const t = locales[language];
-  const [isSaving, setIsSaving] = useState(false);
-  const { musclesAndJoints, appointmentId } = useContext(AppointmentContext);
-  const { selectedItems, handleChange } = useSelectedItems();
-  const mappedData = mapData(musclesAndJoints);
+  const mappedData = mapData(musclesAndJoints, language);
   const {
     sectionName = "",
     sectionNamePL = "",
@@ -28,41 +27,9 @@ const BodyPartSelector = () => {
     joints = [],
   } = mappedData[currentIndex] || {};
 
-  const handleSave = async () => {
-    setIsSaving(true);
-    const bodyDetailsPayload = createBodyDetails(selectedItems);
-    try {
-      const response = await apiService.post(
-        `/appointments/${appointmentId}/SaveBodyDetails`,
-        bodyDetailsPayload,
-        true
-      );
-      if (!response.success) throw new Error("Network response was not ok");
-    } catch (error) {
-      console.error("Save failed:", error);
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
-  const handleNavigation = useCallback(
-    (direction) => {
-      if (mappedData.length === 0) return;
-
-      setCurrentIndex((prevIndex) => {
-        return direction === "prev"
-          ? (prevIndex - 1 + mappedData.length) % mappedData.length
-          : (prevIndex + 1) % mappedData.length;
-      });
-    },
-    [mappedData.length]
-  );
-
   const selectedSection = selectedItems.find(
     (item) => item.sectionName === sectionName
   );
-
-  useEffect(() => {}, [selectedItems]);
 
   return (
     <>
@@ -125,19 +92,11 @@ const BodyPartSelector = () => {
           />
         </div>
       </div>
-      <button
-        onClick={handleSave}
-        disabled={isSaving}
-        className={styles.saveButton}
-      >
-        {isSaving ? t.savingBodyDetails : t.saveBodyDetails}
-      </button>
     </>
   );
 };
 
 export default BodyPartSelector;
-
 const Navigation = ({
   setCurrentIndex,
   currentIndex,

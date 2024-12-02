@@ -8,20 +8,23 @@
 .statusButton {
   padding: 0.5rem 1rem;
   border-radius: 20px;
-  border: 2px solid $text-dark-green;
-  background-color: $text-white;
-  color: $text-dark-green;
+  border: 2px solid $blue;
+  background-color: $white;
+  color: $dark-green;
   font-size: 0.8rem;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
 
   &:hover {
-    background-color: $bg-light-green;
+    background-color: $blue-highlight;
+    border: 2px solid rgba(0, 0, 0, 0.0);
+    color: $white;
+    transition-duration: 1s;
   }
 }
 
 .selected {
-  background-color: $text-dark-green;
-  color: $text-white;
-  border-color: $text-dark-green;
+  background-color: $blue;
+  color: $white;
+  border-color: $blue;
 }

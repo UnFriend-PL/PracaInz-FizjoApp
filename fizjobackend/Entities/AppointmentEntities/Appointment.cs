@@ -28,6 +28,7 @@ namespace Fizjobackend.Entities.AppointmentEntities
         public int? PainLevelAfter { get; set; }
         public string InitialCondition { get; set; } = string.Empty;
         public ICollection<AppointmentBodyDetails> AppointmentBodyDetails { get; set; }
+        public ICollection<AppointmentTreatments> AppointmentTreatments { get; set; }
         public Appointment() { }
 
         public Appointment(CreateAppointmentRequestDTO appointment)

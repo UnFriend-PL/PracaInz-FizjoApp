@@ -12,9 +12,9 @@ public class TreatmentsAutoCompleteResponseDTO
     public string ViewName { get; set; }
     public string ViewNamePL { get; set; }
     public string BodySide { get; set; }
+    public string BodySidePL { get; set; }
     public string bodySectionName { get; set; }
     public string bodySectionNamePL { get; set; }
-
     public TreatmentsAutoCompleteResponseDTO(Treatment treatment)
     {
         Id = treatment.Id;
@@ -24,6 +24,7 @@ public class TreatmentsAutoCompleteResponseDTO
         Duration = treatment.Duration;
         ViewName = treatment.ViewName;
         BodySide = treatment.BodySide;
+        BodySidePL = treatment.BodySidePL;
         ViewNamePL = treatment.ViewNamePL;
         bodySectionName = treatment.SectionName;
         bodySectionNamePL = treatment.SectionNamePL;

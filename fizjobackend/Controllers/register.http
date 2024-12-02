@@ -34,8 +34,8 @@ Content-Type: application/json
   "postCode": "00-001",
   "pesel": "90111212393",
   "dateOfBirth": "1990-11-12T00:00:00Z",
-  "email": "tadest@gmail.com",
+  "email": "szymonecki1233@gmail.com",
   "password": "Kolo1212#",
   "confirmPassword": "Kolo1212#",
-  "phoneNumber": "123416789"
+  "phoneNumber": "123411789"
 }

@@ -19,14 +19,15 @@ namespace Fizjobackend.Models.TreatmentsDTOs;
     public DateTime CreateDate { get; set; }
     public DateTime? UpdateDate { get; set; }
     public bool IsDeleted { get; set; }
-    public IEnumerable<string> SectionNames { get; set;}
-    public IEnumerable<string> SectionNamesPL { get; set;}
-    public IEnumerable<int> BodySectionIds { get; set;}
-    public IEnumerable<int> ViewIds { get; set;}
-    public IEnumerable<MuscleResponseDTO> Muscles { get; set; }
-    public IEnumerable<JointResponseDTO> Joints { get; set; }
+    
+    public string ViewName { get; set; }
+    public string ViewNamePL { get; set; }
+    public string BodySide { get; set; }
+    public string BodySidePL { get; set; }
+    public string bodySectionName { get; set; }
+    public string bodySectionNamePL { get; set; }
 
-    public TreatmentResponseDTO(Treatment treatment, string gender)
+    public TreatmentResponseDTO(Treatment treatment)
     {
         Id = treatment.Id;
         OwnerId = treatment.OwnerId;
@@ -40,18 +41,12 @@ namespace Fizjobackend.Models.TreatmentsDTOs;
         CreateDate = treatment.CreateDate;
         UpdateDate = treatment.UpdateDate;
         IsDeleted = treatment.IsDeleted;
-        Muscles = treatment.Muscles.Select(m => new MuscleResponseDTO(m)).Distinct();
-        Joints = treatment.Joints.Select(j => new JointResponseDTO(j)).Distinct();
-
-        //SectionNamesPL = treatment.BodySections.Select(s => s.BodySectionNamePL);
-        //SectionNames = treatment.BodySections.Select(s => s.BodySectionName);
-        //BodySectionIds = treatment.BodySections.Select(b => b.Id);
-        //ViewIds = treatment.Views.Select(v => v.Id);
-
-        //SectionNames = treatment.BodySections.Where(s => s.View.Gender == gender).Select(s => s.BodySectionName).Distinct();
-        //SectionNamePL = treatment.BodySections.Select(s => s.BodySectionNamePL).Distinct();
-        //BodySectionIds = treatment.BodySections.Select(s => s.Id).Distinct();
-        //ViewIds = treatment.BodySections.Select(s => s.ViewId).Distinct();
+        ViewName = treatment.ViewName;
+        ViewNamePL = treatment.ViewNamePL;
+        BodySide = treatment.BodySide;
+        BodySidePL = treatment.BodySidePL;
+        bodySectionName = treatment.SectionName;
+        bodySectionNamePL = treatment.SectionNamePL;
     }
 
     public TreatmentResponseDTO()

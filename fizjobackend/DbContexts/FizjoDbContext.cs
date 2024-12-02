@@ -47,6 +47,29 @@ namespace Fizjobackend.DbContexts
             modelBuilder.Entity<Patient>().ToTable("Patients");
             modelBuilder.Entity<Physiotherapist>().ToTable("Physiotherapists");
 
+            modelBuilder.Entity<AppointmentTreatments>()
+                .HasKey(at => at.Id);
+            modelBuilder.Entity<AppointmentTreatments>()
+                .HasOne(at => at.Treatment)
+                .WithMany(t => t.AppointmentTreatments)
+                .HasForeignKey(at => at.TreatmentId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<AppointmentTreatments>()
+                .HasOne(at => at.Appointment)
+                .WithMany(a => a.AppointmentTreatments)
+                .HasForeignKey(at => at.AppointmentId)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            modelBuilder.Entity<WorkingHours>()
+                .Property(w => w.Id)
+                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<WorkingHours>()
+                .HasOne(w => w.Physiotherapist)
+                .WithMany(p => p.WorkingHours)
+                .HasForeignKey(w => w.PhysiotherapistId)
+                .OnDelete(DeleteBehavior.Cascade);
+            
             BuildBlogEntities(modelBuilder);
             BuildTreatmentsEntities(modelBuilder);
             BuildPhysiotherapistSpecializationEntities(modelBuilder);
@@ -230,6 +253,7 @@ namespace Fizjobackend.DbContexts
         public DbSet<Physiotherapist> Physiotherapists { get; set; }
         public DbSet<PhysiotherapySpecializationEntity> PhysiotherapySpecializationEntities { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<WorkingHours> WorkingHours { get; set; }
         public DbSet<Opinion> Opinions { get; set; }
 
 
@@ -244,6 +268,7 @@ namespace Fizjobackend.DbContexts
 
         // Treatment db entities
         public DbSet<Treatment> Treatments { get; set; }
+        public DbSet<AppointmentTreatments> AppointmentTreatmens { get; set; }
 
         // Blog
 
