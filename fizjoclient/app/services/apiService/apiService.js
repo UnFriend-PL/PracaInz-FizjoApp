@@ -125,12 +125,12 @@ export default apiService;
 export const fetchAvatar = async (avatarPath) => {
   try {
     const blob = await apiService.get(
-        `/User/Avatar/Get/${avatarPath}`,
-        null,
-        true,
-        {
-          responseType: "blob",
-        }
+      `/User/Avatar/Get/${avatarPath}`,
+      null,
+      true,
+      {
+        responseType: "blob",
+      }
     );
     if (blob instanceof Blob && blob.size > 0) {
       const imageUrl = URL.createObjectURL(blob);
@@ -142,4 +142,4 @@ export const fetchAvatar = async (avatarPath) => {
     console.error("Error fetching avatar:", error);
     return null;
   }
-}
+};

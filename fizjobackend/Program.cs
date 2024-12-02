@@ -20,6 +20,8 @@ using Fizjobackend.Services.EmailService;
 using Fizjobackend.Services.StaffService;
 using Fizjobackend.Services.Treatments;
 using Fizjobackend.Services.UserServices;
+using Fizjobackend.Interfaces.OpinionInterfaces;
+using Fizjobackend.Services.OpinionService;
 
 namespace Fizjobackend
 {
@@ -82,6 +84,7 @@ namespace Fizjobackend
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IJwtGenerator, JwtGenerator>();
             builder.Services.AddScoped<IEmailService, EmailService>();
+            builder.Services.AddScoped<IOpinionService, OpinionService>();
             builder.Services.AddScoped<IStaffService, StaffService>();
             builder.Services.AddScoped<IAppointmentsService, AppointmentService>();
             builder.Services.AddScoped<IBodyVisualizerService, BodyVisualizerService>();

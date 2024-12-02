@@ -1,0 +1,190 @@
+@charset "UTF-8";
+.container {
+  max-width: 800px;
+  margin: 0 auto; /* Wyśrodkowanie kontenera */
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #101010;
+}
+
+.opinionCard {
+  position: relative;
+  background-color: #ffffff;
+  border: 1px solid #ced4da;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0px 4px 8px #f8f9fa;
+}
+
+.opinionCardEdit {
+  background-color: #ffffff;
+  border: 1px solid #ced4da;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0px 4px 8px #f8f9fa;
+}
+
+.opinionAuthor,
+.opinionRating {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #101010;
+}
+
+.opinionDate {
+  position: absolute;
+  top: 8px; /* Adjust as necessary for spacing */
+  right: 8px; /* Adjust as necessary for spacing */
+  font-size: 0.9em; /* Optional: make the font size slightly smaller */
+  color: #888; /* Optional: a lighter color for subtlety */
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end; /* Aligns buttons to the right */
+  margin-top: 10px; /* Adds spacing above buttons */
+  gap: 10px;
+}
+
+.opinionAbout {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #101010;
+}
+
+.opinionComment {
+  font-style: italic;
+  color: #667799;
+}
+
+.commentInput {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.filled {
+  color: gold;
+}
+
+.empty {
+  color: #ddd;
+}
+
+.editButtons {
+  display: flex;
+  gap: 10px;
+}
+
+.editButton {
+  display: flex;
+  align-items: center;
+  background-color: #5E9FEB;
+  color: white;
+  padding: 7px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.saveButton {
+  display: flex;
+  align-items: center;
+  background-color: #6CCB81;
+  color: white;
+  padding: 7px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cancelButton {
+  display: flex;
+  align-items: center;
+  background-color: #dc3545;
+  color: white;
+  padding: 7px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.saveButton {
+  background-color: #28a745;
+}
+
+.cancelButton {
+  background-color: #dc3545;
+}
+
+.editButton:hover {
+  background-color: #3184e5;
+}
+
+.saveButton:hover {
+  background-color: #46be61;
+}
+
+.cancelButton:hover {
+  background-color: #bd2130;
+}
+
+.editIcon,
+.saveIcon,
+.cancelIcon {
+  margin-right: 5px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.paginationButton {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.paginationButton:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  margin: 0 15px;
+}
+
+.star {
+  display: block;
+  color: #e1b325;
+  margin-right: 2px;
+}
+
+.stars {
+  display: block;
+  color: #e1b325;
+  display: inline-flex;
+}
+
+/*# sourceMappingURL=opinions.module.css.map */

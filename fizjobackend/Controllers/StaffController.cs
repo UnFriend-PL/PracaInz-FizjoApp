@@ -1,6 +1,10 @@
+using fizjobackend.Models.StaffDTOs;
+using Fizjobackend.Models.UserDTOs;
 using Fizjobackend.Services.StaffService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Fizjobackend.Controllers;
 
@@ -36,6 +40,20 @@ public class StaffController : ControllerBase
     public async Task<IActionResult> GetStaffById(Guid id)
     {
         var response = await _staffService.GetStaffById(id);
+        if (!response.Success)
+        {
+            return BadRequest(response);
+        }
+        return Ok(response);
+    }
+
+    [Authorize(AuthenticationSchemes = "Bearer")]
+    [HttpPost("/Staff/Update")]
+    public async Task<IActionResult> UpdateStaff([FromBody] UpdateStaffInfoRequestDTO updateStaffInfoRequest)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var userRoles = User.FindAll(ClaimTypes.Role).Select(c => c.Value);
+        var response = await _staffService.UpdateStaff(Guid.Parse(userId), updateStaffInfoRequest, userRoles);
         if (!response.Success)
         {
             return BadRequest(response);

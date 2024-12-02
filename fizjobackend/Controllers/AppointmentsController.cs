@@ -124,5 +124,19 @@ namespace Fizjobackend.Controllers
             }
             return Ok(response);
         }
+        
+        [HttpPost("/Appointments/AvailableSlots")]
+        public async Task<IActionResult> GetAvailableSlots([FromBody] WorkingHoursRequestDTO request)
+        {
+            var response = await _appointmentsService.GetAvailableSlots(request);
+            if (!response.Success)
+            {
+                _logger.LogWarning("Failed to get available slots: {Message}", response.Message);
+                
+                return BadRequest(response);
+            }
+            
+            return Ok(response);
+        }
     }
 }

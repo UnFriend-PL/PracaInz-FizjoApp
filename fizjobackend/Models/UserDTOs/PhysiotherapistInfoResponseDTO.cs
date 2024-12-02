@@ -37,6 +37,7 @@ namespace Fizjobackend.Models.UserDTOs
             PhoneNumber = physiotherapist.PhoneNumber;
             LicenseNumber = physiotherapist.LicenseNumber;
             AvatarPath = physiotherapist.AvatarPath;
+
         }
     }
 }

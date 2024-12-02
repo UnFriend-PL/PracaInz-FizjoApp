@@ -1,4 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using Fizjobackend.Entities.AppointmentEntities;
+using Fizjobackend.Entities.TreatmentsEntities;
+using Fizjobackend.Entities.OpinionEntities;
+using Fizjobackend.Entities.UserEntities;
+using Fizjobackend.Models.AccountDTOs;
+using System.ComponentModel.DataAnnotations.Schema;
 using Fizjobackend.Entities.AppointmentEntities;
 using Fizjobackend.Entities.TreatmentsEntities;
 using Fizjobackend.Entities.UserEntities;
@@ -20,7 +25,7 @@ namespace Fizjobackend.Entities.PhysiotherapistEntities
         public virtual ICollection<Treatment> Treatments { get; set; } = new List<Treatment>();
         [InverseProperty("Physiotherapist")]
         public ICollection<WorkingHours> WorkingHours { get; set; } = new List<WorkingHours>();
-
+        public ICollection<Opinion> Opinions { get; set; } = [];
         public Physiotherapist() { }
 
         public Physiotherapist(PhysiotherapisRegistertRequestDTO physiotherapist)

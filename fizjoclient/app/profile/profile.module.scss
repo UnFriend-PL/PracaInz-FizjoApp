@@ -1,13 +1,13 @@
 @import "@/app/utils/globalColors.scss";
-@import "../utils/globalColors.scss";
 
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
-  background-color: $off-white;
-  min-width: 30%;
+  padding: 2rem;
+  background-color: $white;
+  min-width: 70%;
+  box-shadow: 0 0.4rem 0.8rem $off-white;
 }
 
 .title {
@@ -23,30 +23,48 @@
 
 .profileCard {
   background: $off-white;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 1.5rem;
-  width: 100%;
-  max-width: 100%;
-  position: relative;
+  box-shadow: 0 0.4rem 0.8rem $off-white;
+  border-radius: 0.6rem;
+  gap: 2rem;
+  flex-wrap: wrap;
 }
 
-.field {
+.avatarWrapper {
+  flex: 0 0 15%;
+  max-width: 12.5rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding: 0.8rem 0;
-  border-bottom: 1px solid $border-color;
 }
 
-.label {
+.avatarImage {
+  width: 100%;
+  height: auto;
+  max-width: 7rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 0.2rem solid $blue;
+}
+
+.profileInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.profileField {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
   font-weight: bold;
-  color: $grey;
+  color: $dark-green;
   text-transform: capitalize;
 }
 
 .value {
-  color:$black;
+  color: $black;
   cursor: pointer;
 }
 
@@ -55,19 +73,29 @@
   color: $dark-green;
 }
 
-.editableInput {
-  border: 1px solid $border-color;
-  padding: 0.3rem;
-  border-radius: 4px;
-  width: 60%;
+.profileColumn {
+  flex: 1;
+  min-width: 18.75rem;
 }
 
-.editButton {
+.profileColumnRight {
+  border-left: 0.2rem solid $white;
+  padding-left: 1rem;
+}
+
+.fieldGroup {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12.5rem, 1fr)); // 200px w rem
+  gap: 1.5rem;
+}
+
+.fieldItem {
   display: flex;
   align-items: center;
   justify-content: center;
   align-content: center;
-  background-color: $green;
+  background-color: $blue;
+  color: white;
   padding: 0.6rem 0.6rem;
   border-radius: 4px;
   border: none;
@@ -78,35 +106,33 @@
 .editButton svg {
   color: $white;
   font-weight: bold;
-  padding: 0;
-  margin: 0;
+  color: $blue;
 }
 
 .editButton:hover {
-  background-color: $green-highlight;
+  background-color: $blue-highlight;
 }
 
 .saveButton {
-  background-color: $green;
+  background-color: $blue;
   color: $white;
   padding: 0.5rem 1rem;
   border-radius: 4px;
   border: none;
+  border-radius: 0.6rem;
   cursor: pointer;
-  margin-top: 1rem;
-  align-self: center;
+  transition: all 0.3s ease-in-out;
 }
 
 .saveButton:hover {
-  background-color: $green-highlight;
+  background-color: $blue-highlight;
 }
 
-/* Avatar Styles */
-.avatarSection {
+.buttonWrapper {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 1rem;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
 }
 
 .avatar {
@@ -124,7 +150,7 @@
 }
 
 .uploadLabel {
-  background-color: $green;
+  background-color: $blue;
   color: $white;
   padding: 0.5rem 1rem;
   border-radius: 4px;
@@ -133,7 +159,7 @@
 }
 
 .uploadLabel:hover {
-  background-color: $green-highlight;
+  background-color: $blue-highlight;
 }
 
 .uploadInput {

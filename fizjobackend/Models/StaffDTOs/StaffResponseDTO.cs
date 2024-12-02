@@ -14,7 +14,7 @@ public class StaffResponseDTO
     public string? PhoneNumber { get; set; }
     public string? AvatarPath { get; set; }
     public string? Description { get; set; }
-    public int? Rating { get; set; }
+    public double? Rating { get; set; }
     public int? YearsOfExperience { get; set; }
     public double? AveragePrice { get; set; }
     public int? NumberOfDoneAppointments { get; set; }

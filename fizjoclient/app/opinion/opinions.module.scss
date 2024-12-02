@@ -1,0 +1,180 @@
+@import "../utils/globalColors.scss";
+
+.container {
+  max-width: 800px;
+  margin: 0 auto; /* Wyśrodkowanie kontenera */
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: $white;
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 20px;
+  color: $black;
+}
+
+.opinionCard {
+  position: relative;
+  background-color: $white;
+  border: 1px solid $border-color;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0px 4px 8px $off-white;
+}
+.opinionCardEdit {
+  background-color: $white;
+  border: 1px solid $border-color;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0px 4px 8px $off-white;
+}
+
+.opinionAuthor,
+.opinionRating {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: $black;
+}
+.opinionDate {
+  position: absolute;
+  top: 8px; /* Adjust as necessary for spacing */
+  right: 8px; /* Adjust as necessary for spacing */
+  font-size: 0.9em; /* Optional: make the font size slightly smaller */
+  color: #888; /* Optional: a lighter color for subtlety */
+}
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end; /* Aligns buttons to the right */
+  margin-top: 10px; /* Adds spacing above buttons */
+  gap: 10px;
+}
+.opinionAbout {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: $black;
+}
+.opinionComment {
+  font-style: italic;
+  color: #667799;
+  //$text-muted;
+}
+
+.commentInput {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid $border-color;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.filled {
+  color: gold;
+}
+
+.empty {
+  color: #ddd;
+}
+
+.editButtons {
+  display: flex;
+  gap: 10px;
+}
+
+.editButton {
+  display: flex;
+  align-items: center;
+  background-color: $blue;
+  color: white;
+  padding: 7px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.saveButton {
+  display: flex;
+  align-items: center;
+  background-color: $green;
+  color: white;
+  padding: 7px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.cancelButton {
+  display: flex;
+  align-items: center;
+  background-color: $red;
+  color: white;
+  padding: 7px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.saveButton {
+  background-color: #28a745;
+}
+
+.cancelButton {
+  background-color: #dc3545;
+}
+
+.editButton:hover {
+  background-color: darken($blue, 10%);
+}
+.saveButton:hover {
+  background-color: darken($green, 10%);
+}
+.cancelButton:hover {
+  background-color: darken($red, 10%);
+}
+
+.editIcon,
+.saveIcon,
+.cancelIcon {
+  margin-right: 5px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.paginationButton {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.paginationButton:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  margin: 0 15px;
+}
+.star {
+  display: block;
+  color: $yellow;
+  margin-right: 2px;
+}
+
+.stars {
+  display: block;
+  color: $yellow;
+  display: inline-flex;
+}

@@ -1,6 +1,7 @@
-﻿using Fizjobackend.Entities.AppointmentEntities;
+using Fizjobackend.Entities.AppointmentEntities;
 using Fizjobackend.Entities.BlogEntities;
 using Fizjobackend.Entities.BodyEntities;
+using Fizjobackend.Entities.OpinionEntities;
 using Fizjobackend.Entities.PatientEntities;
 using Fizjobackend.Entities.PhysiotherapistEntities;
 using Fizjobackend.Entities.TreatmentsEntities;
@@ -75,6 +76,7 @@ namespace Fizjobackend.DbContexts
             BuildAppointmentEntities(modelBuilder);
             BuildBodyEntities(modelBuilder);
             BuildAppointmentBodyDetailsEntities(modelBuilder);
+            BuildOpinionsPatient(modelBuilder);
 
             static void BuildTreatmentsEntities(ModelBuilder modelBuilder)
             {
@@ -231,6 +233,20 @@ namespace Fizjobackend.DbContexts
                     })
             );
         }
+        private static void BuildOpinionsPatient(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Opinion>()
+                      .HasOne(o => o.Patient)
+                      .WithMany(p => p.Opinions)
+                      .HasForeignKey(o => o.PatientId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Opinion>()
+                .HasOne(o => o.Physiotherapist)
+                .WithMany(pt => pt.Opinions)
+                .HasForeignKey(o => o.PhysiotherapistId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Patient> Patients { get; set; }
@@ -238,6 +254,8 @@ namespace Fizjobackend.DbContexts
         public DbSet<PhysiotherapySpecializationEntity> PhysiotherapySpecializationEntities { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<WorkingHours> WorkingHours { get; set; }
+        public DbSet<Opinion> Opinions { get; set; }
+
 
         // Body parts db entities
         public DbSet<View> Views { get; set; }

@@ -1,4 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using Fizjobackend.Entities.AppointmentEntities;
+using Fizjobackend.Entities.OpinionEntities;
+using Fizjobackend.Entities.UserEntities;
+using Fizjobackend.Models.AccountDTOs;
+using System.ComponentModel.DataAnnotations.Schema;
 using Fizjobackend.Entities.AppointmentEntities;
 using Fizjobackend.Entities.UserEntities;
 using Fizjobackend.Models.AccountDTOs;
@@ -14,7 +18,7 @@ namespace Fizjobackend.Entities.PatientEntities
 
         [InverseProperty("Patient")]
         public ICollection<Appointment> Appointments { get; set; } = [];
-
+        public ICollection<Opinion>Opinions { get; set; } = [];
         public Patient() { }
         public Patient(PatientRegisterRequestDTO patient)
         {

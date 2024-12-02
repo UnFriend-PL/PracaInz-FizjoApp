@@ -8,6 +8,7 @@ using Fizjobackend.Enums.AppointmentEnums;
 using Fizjobackend.Models.AppointmentsDTOs;
 using Fizjobackend.Models.BodyVisualizerDTOs;
 using Fizjobackend.Services.BodyVisualizerService;
+using Org.BouncyCastle.Asn1.X509;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Fizjobackend.Services.AppointmentsService
@@ -254,7 +255,7 @@ namespace Fizjobackend.Services.AppointmentsService
         {
             var pastScheduledAppointments = await _context.Appointments
                 .Where(a => a.AppointmentStatus == AppointmentStatus.Scheduled
-                            && a.AppointmentDate < DateTime.Now
+                            //&& a.AppointmentDate < DateTime.Now
                             && (a.PatientId == userId || a.PhysiotherapistId == userId))
                 .ToListAsync();
 
@@ -458,14 +459,16 @@ namespace Fizjobackend.Services.AppointmentsService
             }
         }
         
-        public async Task<List<TimeSpan>> GetAvailableSlots(WorkingHoursRequestDTO request)
+        public async Task<ServiceResponse<List<TimeSpan>>> GetAvailableSlots(WorkingHoursRequestDTO request)
         {
+            ServiceResponse<List<TimeSpan>> response = new ServiceResponse<List<TimeSpan>>("Available slots fetched");
             var workingHours = await _context.WorkingHours
                 .FirstOrDefaultAsync(w => w.PhysiotherapistId == request.PhysiotherapistId && w.DayOfWeek == request.Date.DayOfWeek);
 
-            if (workingHours == null)
-                return new List<TimeSpan>();
-
+            if (workingHours == null){
+                response.Data = new List<TimeSpan>();
+                return response;
+            }
             var appointments = await _context.Appointments
                 .Where(a => a.PhysiotherapistId == request.PhysiotherapistId && a.AppointmentDate.Date == request.Date.Date)
                 .ToListAsync();
@@ -480,8 +483,9 @@ namespace Fizjobackend.Services.AppointmentsService
                 if (!busySlots.Contains(time))
                     availableSlots.Add(time);
             }
-
-            return availableSlots;
+            response.Data = availableSlots;
+            
+            return response;
         }
     }
 }

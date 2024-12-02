@@ -13,5 +13,6 @@ namespace Fizjobackend.Services.AppointmentsService
         Task<ServiceResponse<bool>> EditAppointment(Guid appointmentId, Guid physiotherapistId, EditAppointmentRequestDTO bodyDetailsToSave);
         Task<ServiceResponse<bool>> ChangeAppointmentStatus(Guid appointmentId, Guid physiotherapistId, ChangeAppointmentStatusRequestDTO status);
         Task<ServiceResponse<List<LoadAppointmentBodyDetailsResponseDTO>>> LoadAppointmentBodyDetails(Guid appointmentId);
+        Task<ServiceResponse<List<TimeSpan>>> GetAvailableSlots(WorkingHoursRequestDTO request);
     }
 }
