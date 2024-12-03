@@ -290,23 +290,19 @@ const Profile = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <h1 className={styles.title}>{t.profile}</h1>
-        <div className={styles.dropdownContainer}>
-          <FaCaretDown
-            className={styles.dropdownIcon}
-            onClick={toggleDropdown}
-          />
-          {showDropdown && (
-            <div className={styles.dropdownMenu}>
-              <div onClick={() => handleMenuClick("appointments")}>
-                {t.appointments}
-              </div>
-              <div onClick={() => showDetails()}>{t.opinions}</div>
+      <h1 className={styles.title}>{t.profile}</h1>
+      <div className={styles.dropdownContainer}>
+        <FaCaretDown className={styles.dropdownIcon} onClick={toggleDropdown} />
+        {showDropdown && (
+          <div className={styles.dropdownMenu}>
+            <div onClick={() => handleMenuClick("appointments")}>
+              {t.appointments}
             </div>
-          )}
-        </div>
+            <div onClick={() => showDetails()}>{t.opinions}</div>
+          </div>
+        )}
       </div>
+
       <div className={styles.profileContainer}>
         <div className={styles.profileHeader}>
           <div className={styles.avatarWrapper}>
@@ -335,12 +331,6 @@ const Profile = () => {
           {role === "Physiotherapist" && (
             <>
               <div className={styles.profileInfo}>
-                <div className={styles.profileDescription}>
-                  <span className={styles.fieldLabel}>{t.description}:</span>
-                  <span className={styles.fieldValue}>
-                    {staffData.description || t.notAvailable}
-                  </span>
-                </div>
                 <div className={styles.profileField}>
                   <span className={styles.fieldLabel}>{t.education}</span>
                   <span className={styles.fieldValue}>
@@ -355,21 +345,88 @@ const Profile = () => {
                     {staffData.yearsOfExperience || t.notAvailable}
                   </span>
                 </div>
+                <div className={styles.profileDescription}>
+                  <div className={styles.profileDescriptionTitle}>
+                    <span className={styles.fieldLabel}>{t.description}:</span>
+                  </div>
+                  <div className={styles.profileDescriptionValue}>
+                    <span className={styles.fieldValue}>
+                      {staffData.description || t.notAvailable}
+                    </span>
+                  </div>
+                </div>
               </div>
             </>
           )}
         </div>
-        <div className={styles.profileBody}>
-          <div className={styles.profileColumn}>
-            {[
-              "firstName",
-              "lastName",
-              "gender",
-              "pesel",
-              "dateOfBirth",
-              "phoneNumber",
-              "email",
-            ].map((key) => {
+
+        <div className={styles.profileColumnPersonInfomration}>
+          <div className={styles.profilPersonInfomrationTitle}>
+            {t.personInformation}
+          </div>
+          {[
+            "firstName",
+            "lastName",
+            "gender",
+            "pesel",
+            "dateOfBirth",
+            "phoneNumber",
+            "email",
+          ].map((key) => {
+            if (!user[key]) return null;
+            return (
+              <div className={styles.fieldItem} key={key}>
+                <div className={styles.field}>
+                  <span className={styles.fieldLabel}>
+                    {t[key] || key.replace(/([A-Z])/g, " $1").trim()}:
+                  </span>
+                  {editableFields[key] ? (
+                    key === "dateOfBirth" ? (
+                      <input
+                        type="date"
+                        value={
+                          editedUser[key] ? editedUser[key].slice(0, 10) : ""
+                        }
+                        onChange={(e) => handleInputChange(key, e.target.value)}
+                        className={styles.editableInput}
+                      />
+                    ) : key === "gender" ? (
+                      <select
+                        value={editedUser[key]}
+                        onChange={(e) => handleInputChange(key, e.target.value)}
+                        className={styles.editableInput}
+                      >
+                        <option value="male">{t.male}</option>
+                        <option value="female">{t.female}</option>
+                        <option value="other">{t.other}</option>
+                      </select>
+                    ) : (
+                      <input
+                        type="text"
+                        value={editedUser[key]}
+                        onChange={(e) => handleInputChange(key, e.target.value)}
+                        className={styles.editableInput}
+                      />
+                    )
+                  ) : (
+                    <span
+                      className={`${styles.fieldValue} ${styles.nonEditable}`}
+                    >
+                      {key === "dateOfBirth"
+                        ? formatDateToReadable(user[key])
+                        : user[key]}
+                    </span>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className={styles.profileColumnAddress}>
+          <div className={styles.addressTitle}>{t.adress}</div>
+          {["country", "city", "streetWithHouseNumber", "postCode"].map(
+            (key) => {
               if (!user[key]) return null;
               return (
                 <div className={styles.fieldItem} key={key}>
@@ -378,105 +435,40 @@ const Profile = () => {
                       {t[key] || key.replace(/([A-Z])/g, " $1").trim()}:
                     </span>
                     {editableFields[key] ? (
-                      key === "dateOfBirth" ? (
-                        <input
-                          type="date"
-                          value={
-                            editedUser[key] ? editedUser[key].slice(0, 10) : ""
-                          }
-                          onChange={(e) =>
-                            handleInputChange(key, e.target.value)
-                          }
-                          className={styles.editableInput}
-                        />
-                      ) : key === "gender" ? (
-                        <select
-                          value={editedUser[key]}
-                          onChange={(e) =>
-                            handleInputChange(key, e.target.value)
-                          }
-                          className={styles.editableInput}
-                        >
-                          <option value="male">{t.male}</option>
-                          <option value="female">{t.female}</option>
-                          <option value="other">{t.other}</option>
-                        </select>
-                      ) : (
-                        <input
-                          type="text"
-                          value={editedUser[key]}
-                          onChange={(e) =>
-                            handleInputChange(key, e.target.value)
-                          }
-                          className={styles.editableInput}
-                        />
-                      )
+                      <input
+                        type="text"
+                        value={editedUser[key]}
+                        onChange={(e) => handleInputChange(key, e.target.value)}
+                        className={styles.editableInput}
+                      />
                     ) : (
                       <span
                         className={`${styles.fieldValue} ${styles.nonEditable}`}
                       >
-                        {key === "dateOfBirth"
-                          ? formatDateToReadable(user[key])
-                          : user[key]}
+                        {user[key]}
                       </span>
                     )}
                   </div>
                 </div>
               );
-            })}
-          </div>
-
-          <div
-            className={`${styles.profileColumn} ${styles.profileColumnRight}`}
-          >
-            <div className={styles.addressTitle}>{t.adress}</div>
-            {["country", "city", "streetWithHouseNumber", "postCode"].map(
-              (key) => {
-                if (!user[key]) return null;
-                return (
-                  <div className={styles.fieldItem} key={key}>
-                    <div className={styles.field}>
-                      <span className={styles.fieldLabel}>
-                        {t[key] || key.replace(/([A-Z])/g, " $1").trim()}:
-                      </span>
-                      {editableFields[key] ? (
-                        <input
-                          type="text"
-                          value={editedUser[key]}
-                          onChange={(e) =>
-                            handleInputChange(key, e.target.value)
-                          }
-                          className={styles.editableInput}
-                        />
-                      ) : (
-                        <span
-                          className={`${styles.fieldValue} ${styles.nonEditable}`}
-                        >
-                          {user[key]}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                );
-              }
-            )}
-          </div>
+            }
+          )}
         </div>
-        <div className="button-wrapper">
-          <button className={styles.actionButton} onClick={handleOpenModal}>
-            {t.editButton}
-          </button>
-        </div>
-        <Modal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          staffData={staffData}
-          userData={user}
-          onSave={handleSave}
-          role={role}
-          title="Edit Profile"
-        ></Modal>
       </div>
+      <div className={styles.buttonWrapper}>
+        <button className={styles.actionButton} onClick={handleOpenModal}>
+          {t.editButton}
+        </button>
+      </div>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        staffData={staffData}
+        userData={user}
+        onSave={handleSave}
+        role={role}
+        title="Edit Profile"
+      ></Modal>
     </div>
   );
 };

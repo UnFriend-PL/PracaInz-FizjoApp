@@ -41,5 +41,6 @@
   "education": "Wykształcenie",
   "description": "Opis",
   "yearsOfExperience": "Lata doświadczenia",
-  "adress": "Adres"
+  "adress": "Adres",
+  "personInformation": "Dane osobowe"
 }

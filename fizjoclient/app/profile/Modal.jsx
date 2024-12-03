@@ -329,7 +329,7 @@ const ProfileModal = ({
           </div>
           {role === "Physiotherapist" && (
             <div className={styles.sectionStaffDown}>
-              <h3 className={styles.titleStaffSection}>Staff Data</h3>
+              <h3 className={styles.titleSection}>Staff Data</h3>
 
               <label className={styles.label}>
                 {t.education} {": "}

@@ -40,5 +40,6 @@
   "education": "Education",
   "description": "Description",
   "yearsOfExperience": "Years Of Experience",
-  "adress": "Adress"
+  "adress": "Adress",
+  "personInformation": "Person Information"
 }
