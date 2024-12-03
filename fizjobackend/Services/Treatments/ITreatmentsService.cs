@@ -1,4 +1,5 @@
-﻿using Fizjobackend.Models.TreatmentsDTOs;
+﻿using Fizjobackend.Models.AppointmentsDTOs;
+using Fizjobackend.Models.TreatmentsDTOs;
 
 namespace Fizjobackend.Services.Treatments
 {

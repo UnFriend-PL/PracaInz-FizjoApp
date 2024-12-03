@@ -12,6 +12,7 @@ import { LanguageContext } from "@/app/contexts/lang/langContext";
 import pl from "./locales/pl.json";
 import en from "./locales/en.json";
 import PatientSearch from "../components/patientSearch/patientSearch";
+import {AuthContext} from "@/app/contexts/auth/authContext";
 
 const locales = { en, pl };
 
@@ -32,6 +33,7 @@ const AppointmentScheduler = () => {
   const router = useRouter();
 
   const validateAndSubmit = async () => {
+
     if (!selectedPatient || !selectedHour || !price) {
       setError("All fields are required.");
       return;

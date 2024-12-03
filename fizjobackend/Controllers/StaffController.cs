@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Fizjobackend.Models.AppointmentsDTOs;
 
 namespace Fizjobackend.Controllers;
 
@@ -58,6 +59,31 @@ public class StaffController : ControllerBase
         {
             return BadRequest(response);
         }
+        return Ok(response);
+    }
+    
+    [HttpPost("/Staff/AvailableSlots")]
+    public async Task<IActionResult> GetAvailableSlots([FromBody] WorkingHoursRequestDTO request)
+    {
+        var response = await _staffService.GetAvailableSlots(request);
+        if (!response.Success)
+        {
+            return BadRequest(response);
+        }
+            
+        return Ok(response);
+    }
+    
+    
+    [HttpPost("/Staff/SaveWorkingHours")]
+    public async Task<IActionResult> AddWorkingHours([FromBody] SaveWorkingHoursRequestDTO request)
+    {
+        var response = await _staffService.SaveStaffWorkingHours(request);
+        if (!response.Success)
+        {
+            return BadRequest(response);
+        }
+            
         return Ok(response);
     }
 }

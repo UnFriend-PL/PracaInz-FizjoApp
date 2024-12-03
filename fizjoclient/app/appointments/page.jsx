@@ -25,11 +25,22 @@ const Appointments = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [selectedDate, setSelectedDate] = useState("");
   const t = locales[language];
+  // const { isauthenticated } = useContext(AuthContext);
+
+
+  // useEffect(() => {
+  //   if (!isauthenticated) {
+  //     router.push("/auth");
+  //   }
+  // }, []);
 
   const handleDateChange = (event) => {
     setSelectedDate(event.target.value);
   };
   const [selectedPatient, setSelectedPatient] = useState(null);
+
+
+
 
   const getAppointments = async (status = 0) => {
     try {
