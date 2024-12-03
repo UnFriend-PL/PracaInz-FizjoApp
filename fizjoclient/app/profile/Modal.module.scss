@@ -43,7 +43,7 @@
   display: none;
 }
 .uploadLabel {
-  background-color: $blue;
+  background-color: $grey-highlight;
   color: $white;
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;
@@ -52,24 +52,25 @@
 }
 
 .uploadLabel:hover {
-  background-color: $blue-highlight;
+  background-color: $grey-highlight;
 }
 .sectionUploadAvatar {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  background-color: $blue;
+  background-color: $off-white;
   padding: 1.25rem;
   border: 0.125rem dashed $border-color;
   border-radius: 0.5rem;
   text-align: center;
   transition: all 0.3s ease;
+  margin-bottom: 1rem;
 }
 
 .sectionUploadAvatar:hover {
   border-color: $border-color;
-  background-color: $blue-highlight;
+  background-color: $azure;
 }
 
 .uploadLabel {
@@ -81,7 +82,7 @@
 }
 
 .uploadLabel:hover {
-  color: $blue-highlight;
+  color: $grey;
 }
 
 .uploadInput {
@@ -138,8 +139,11 @@
   font-size: 1rem;
   border: 1px solid $border-color;
   border-radius: 0.25rem;
-  background-color: $blue;
+  background-color: $white;
   box-shadow: inset 0 1px 2px $off-white;
+}
+.label input:hover {
+  background-color: $azure;
 }
 
 .label input:focus,
@@ -160,7 +164,7 @@
   border-radius: 0.5rem;
   padding: 1.25rem;
   margin-top: 1.25rem;
-  box-shadow: 0rem 0.25rem 0.5rem $black
+  box-shadow: 0rem 0.25rem 0.5rem $black;
 }
 
 .titleStaffSection {
@@ -186,7 +190,7 @@
   font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 0.25rem;
-  background-color: $blue;
+  background-color: $grey-highlight;
   box-shadow: inset 0 1px 2px $black;
 }
 
@@ -204,12 +208,6 @@
   border-color: $blue-highlight;
   outline: none;
   box-shadow: 0 0 4px $off-white;
-}
-
-.error {
-  color: $white;
-  font-size: 0.875rem;
-  margin-top: 0.25rem;
 }
 
 .buttonContainer {

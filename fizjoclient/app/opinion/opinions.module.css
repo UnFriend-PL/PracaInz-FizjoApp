@@ -91,7 +91,7 @@
 .editButton {
   display: flex;
   align-items: center;
-  background-color: #5E9FEB;
+  background-color: #5e9feb;
   color: white;
   padding: 7px;
   border: none;
@@ -103,7 +103,7 @@
 .saveButton {
   display: flex;
   align-items: center;
-  background-color: #6CCB81;
+  background-color: #6ccb81;
   color: white;
   padding: 7px;
   border: none;
