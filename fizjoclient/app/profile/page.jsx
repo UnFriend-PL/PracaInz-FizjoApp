@@ -96,7 +96,6 @@ const Profile = () => {
     try {
       let userUpdateResponse, staffUpdateResponse, avatarUploadResponse;
 
-      // Aktualizacja danych użytkownika
       if (updatedUser && updatedUser !== user) {
         try {
           userUpdateResponse = await apiService.post(
@@ -113,7 +112,6 @@ const Profile = () => {
         }
       }
 
-      // Aktualizacja danych pracownika (jeśli rola to 'Physiotherapist')
       if (
         role === "Physiotherapist" &&
         updatedStaffData &&
@@ -134,7 +132,6 @@ const Profile = () => {
         }
       }
 
-      // Przesyłanie nowego awatara
       if (tempAvatarFile) {
         const formData = new FormData();
         formData.append("file", tempAvatarFile);
@@ -159,7 +156,6 @@ const Profile = () => {
         }
       }
 
-      // Aktualizacja stanu po udanych operacjach
       if (userUpdateResponse?.success) {
         updateUser(updatedUser);
         await getUserInfo();
@@ -268,6 +264,7 @@ const Profile = () => {
     if (staffId) {
       fetchStaffInfo(staffId);
     }
+    console.log(staffData);
   }, [staffId]);
 
   if (!isAuthenticated) {
@@ -337,6 +334,7 @@ const Profile = () => {
                     {staffData.education || t.notAvailable}
                   </span>
                 </div>
+
                 <div className={styles.profileField}>
                   <span className={styles.fieldLabel}>
                     {t.yearsOfExperience}:
@@ -345,16 +343,20 @@ const Profile = () => {
                     {staffData.yearsOfExperience || t.notAvailable}
                   </span>
                 </div>
-                <div className={styles.profileDescription}>
-                  <div className={styles.profileDescriptionTitle}>
-                    <span className={styles.fieldLabel}>{t.description}:</span>
+                {staffData.description && (
+                  <div className={styles.profileDescription}>
+                    <div className={styles.profileDescriptionTitle}>
+                      <span className={styles.fieldLabel}>
+                        {t.description}:
+                      </span>
+                    </div>
+                    <div className={styles.profileDescriptionValue}>
+                      <span className={styles.fieldValue}>
+                        {staffData.description}
+                      </span>
+                    </div>
                   </div>
-                  <div className={styles.profileDescriptionValue}>
-                    <span className={styles.fieldValue}>
-                      {staffData.description || t.notAvailable}
-                    </span>
-                  </div>
-                </div>
+                )}
               </div>
             </>
           )}

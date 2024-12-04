@@ -41,5 +41,6 @@
   "description": "Description",
   "yearsOfExperience": "Years Of Experience",
   "adress": "Adress",
-  "personInformation": "Person Information"
+  "personInformation": "Person Information",
+  "notAvailable": "None"
 }
