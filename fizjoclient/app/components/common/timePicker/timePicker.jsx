@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import Select from "react-select";
+import React, { useEffect, useState } from "react";
+import CreatableSelect from "react-select/creatable";
 import styles from "./timePicker.module.scss";
 
 const TimePicker = ({
@@ -12,8 +12,8 @@ const TimePicker = ({
                         onTimeChange,
                     }) => {
     const [time, setTime] = useState(initialTime);
-    const [isValid, setIsValid] = useState(true);
-    const [availableToSelectTimes, setAvailableToSelectTimes] = useState(availableTimes);
+    const [isCustomTime, setIsCustomTime] = useState(false);
+    const [availableToSelectTimes, setAvailableToSelectTimes] = useState([]);
 
     const formatTime = (hours, minutes) => {
         return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
@@ -23,30 +23,28 @@ const TimePicker = ({
     };
 
     function GetTimeSteps() {
-        const times = [];
-        if (availableTimes.length > 0) {
-            availableTimes.forEach(time => {
+        // Jeśli przekazano gotową listę dostępnych czasów
+        if (availableTimes && availableTimes.length > 0) {
+            return availableTimes.map((time) => {
                 const date = new Date(time);
                 const hours = String(date.getHours()).padStart(2, "0");
                 const minutes = String(date.getMinutes()).padStart(2, "0");
-                times.push({ value: `${hours}:${minutes}`, label: `${hours}:${minutes}` });
+                return { value: `${hours}:${minutes}`, label: `${hours}:${minutes}` };
             });
-            return times;
         }
 
+        // Jeśli dostępne czasy generujemy na podstawie minTime, maxTime i step
+        const times = [];
         const [minHours, minMinutes] = minTime.split(":").map(Number);
         const [maxHours, maxMinutes] = maxTime.split(":").map(Number);
 
         for (let h = minHours; h <= maxHours; h++) {
             for (let m = 0; m < 60; m += step) {
-                const currentTime = formatTime(h, m);
-                if (
-                    (h === minHours && m < minMinutes) ||
-                    (h === maxHours && m > maxMinutes)
-                ) {
+                if ((h === minHours && m < minMinutes) || (h === maxHours && m > maxMinutes)) {
                     continue;
                 }
-                times.push({value: currentTime, label: currentTime});
+                const currentTime = formatTime(h, m);
+                times.push({ value: currentTime, label: currentTime });
             }
         }
         return times;
@@ -55,39 +53,39 @@ const TimePicker = ({
     useEffect(() => {
         const times = GetTimeSteps();
         setAvailableToSelectTimes(times);
-    }, [step, minTime, maxTime]);
+    }, [step, minTime, maxTime, availableTimes]);
 
-
-
-    const handleTimeChange = (selectedOption) => {
-        setTime(selectedOption.value);
+    const handleTimeChange = (newValue) => {
+        if (!newValue) return; // zabezpieczenie przed null/undefined
+        setTime(newValue.value);
+        setIsCustomTime(!availableToSelectTimes.find((option) => option.value === newValue.value));
         if (onTimeChange) {
-            onTimeChange(selectedOption.value);
-        }
-    };
-
-    const handleManualTimeInput = (event) => {
-        const inputValue = event.target.value;
-        const regex = /^([01]\d|2[0-3]):([0-5]\d)$/;
-        setTime(inputValue);
-        if (regex.test(inputValue)) {
-            setIsValid(true);
-            if (onTimeChange) {
-                onTimeChange(inputValue);
-            }
-        } else {
-            setIsValid(false);
+            onTimeChange(newValue.value);
         }
     };
 
     return (
-        <Select
-            value={availableToSelectTimes.find((option) => option.value === time)}
-            onChange={handleTimeChange}
-            options={availableToSelectTimes}
-            isDisabled={disabled}
-            className={styles.selectField}
-        />
+        <div className={styles.wrapper}>
+            <CreatableSelect
+                value={
+                    availableToSelectTimes.find((option) => option.value === time) || {
+                        value: time,
+                        label: time,
+                    }
+                }
+                onChange={handleTimeChange}
+                options={availableToSelectTimes}
+                isDisabled={disabled}
+                className={styles.selectField}
+                noOptionsMessage={() => ":("}
+                formatCreateLabel={(inputValue) => `> "${inputValue}"`}
+            />
+            {isCustomTime && (
+                <div className={styles.warningMessage}>
+                    Uwaga: Wybrany czas nie pochodzi z dostępnych opcji i może nakładać się z innymi wizytami.
+                </div>
+            )}
+        </div>
     );
 };
 
