@@ -42,5 +42,12 @@
   "description": "Opis",
   "yearsOfExperience": "Lata doświadczenia",
   "adress": "Adres",
-  "personInformation": "Dane osobowe"
+  "personInformation": "Dane osobowe",
+  "sunday": "Niedziela",
+  "monday": "Poniedziałek",
+  "tuesday": "Wtorek",
+  "wednesday": "Środa",
+  "thursday": "Czwartek",
+  "friday": "Piątek",
+  "saturday": "Sobota"
 }

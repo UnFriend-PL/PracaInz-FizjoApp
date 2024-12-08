@@ -1,8 +1,8 @@
+namespace Fizjobackend.Entities.PhysiotherapistEntities;
 
-namespace Fizjobackend.Models.AppointmentsDTOs;
-
-public class SaveWorkingHoursRequestDTO
+public class WorkingHoursResponseDto
 {
+    public Guid Id { get; set; }
     public Guid PhysiotherapistId { get; set; }
     public DayOfWeek DayOfWeek { get; set; }
     public TimeSpan StartHour { get; set; }

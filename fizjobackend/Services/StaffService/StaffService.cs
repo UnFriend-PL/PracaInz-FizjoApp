@@ -219,13 +219,41 @@ public class StaffService : IStaffService
         return response;
     }
 
+    public async Task<ServiceResponse<List<WorkingHoursResponseDto>>> GetStaffWorkingHours(Guid physiotherapistId)
+    {
+        var response = new ServiceResponse<List<WorkingHoursResponseDto>>("Working hours fetched");
+        try
+        {
+            var workingHours = await _dbContext.WorkingHours.Where(wh => wh.PhysiotherapistId == physiotherapistId)
+                .Select(whd => new WorkingHoursResponseDto()
+                {
+                    DayOfWeek = whd.DayOfWeek,
+                    StartHour = whd.StartHour,
+                    EndHour = whd.EndHour
+                })
+                .ToListAsync();
+            
+            response.Data = workingHours;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"");
+        }
+
+        return response;
+    }
+    
     public async Task<ServiceResponse<bool>> SaveStaffWorkingHours(SaveWorkingHoursRequestDTO request)
     {
         var response = new ServiceResponse<bool>("Working hours saved successfully");
         try
         {
+            var dayOfWeek = Enum.Parse<DayOfWeek>(request.DayOfWeek);
+            var startHour = TimeSpan.Parse(request.StartHour);
+            var endHour = TimeSpan.Parse(request.EndHour);
+            
             var exisitingDay = await _dbContext.WorkingHours
-                .Where(w => w.PhysiotherapistId == request.PhysiotherapistId && w.DayOfWeek == request.DayOfWeek)
+                .Where(w => w.PhysiotherapistId == request.PhysiotherapistId && w.DayOfWeek == dayOfWeek)
                 .FirstOrDefaultAsync();
 
             if (exisitingDay == null)
@@ -233,16 +261,16 @@ public class StaffService : IStaffService
                 var workingHours = new WorkingHours
                 {
                     PhysiotherapistId = request.PhysiotherapistId,
-                    DayOfWeek = request.DayOfWeek,
-                    StartHour = request.StartHour,
-                    EndHour = request.EndHour
+                    DayOfWeek = dayOfWeek,
+                    StartHour = startHour,
+                    EndHour = endHour
                 };
                 _dbContext.WorkingHours.Add(workingHours);
             }
             else
             {
-                exisitingDay.StartHour = request.StartHour;
-                exisitingDay.EndHour = request.EndHour;
+                exisitingDay.StartHour = startHour;
+                exisitingDay.EndHour = endHour;
             }
 
             await _dbContext.SaveChangesAsync();

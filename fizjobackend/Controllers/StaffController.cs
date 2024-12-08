@@ -63,9 +63,9 @@ public class StaffController : ControllerBase
     }
     
     [HttpPost("/Staff/AvailableSlots")]
-    public async Task<IActionResult> GetAvailableSlots([FromBody] WorkingHoursRequestDTO request)
+    public async Task<IActionResult> GetAvailableSlots([FromBody] WorkingHoursRequestDTO workingHours)
     {
-        var response = await _staffService.GetAvailableSlots(request);
+        var response = await _staffService.GetAvailableSlots(workingHours);
         if (!response.Success)
         {
             return BadRequest(response);
@@ -74,11 +74,23 @@ public class StaffController : ControllerBase
         return Ok(response);
     }
     
-    
+    [Authorize(AuthenticationSchemes = "Bearer")]
     [HttpPost("/Staff/SaveWorkingHours")]
-    public async Task<IActionResult> AddWorkingHours([FromBody] SaveWorkingHoursRequestDTO request)
+    public async Task<IActionResult> AddWorkingHours([FromBody] SaveWorkingHoursRequestDTO workingHours)
     {
-        var response = await _staffService.SaveStaffWorkingHours(request);
+        var response = await _staffService.SaveStaffWorkingHours(workingHours);
+        if (!response.Success)
+        {
+            return BadRequest(response);
+        }
+            
+        return Ok(response);
+    }
+    
+    [HttpGet("/Staff/WorkingHours/{physiotherapistId}")]
+    public async Task<IActionResult> GetWorkingHours(Guid physiotherapistId)
+    {
+        var response = await _staffService.GetStaffWorkingHours(physiotherapistId);
         if (!response.Success)
         {
             return BadRequest(response);

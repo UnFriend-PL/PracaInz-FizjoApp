@@ -1,3 +1,4 @@
+using Fizjobackend.Entities.PhysiotherapistEntities;
 using Fizjobackend.Models.AppointmentsDTOs;
 using fizjobackend.Models.StaffDTOs;
 using Fizjobackend.Models.StaffDTOs;
@@ -11,4 +12,5 @@ public interface IStaffService
     Task<ServiceResponse<UpdateStaffInfoResponseDTO>> UpdateStaff(Guid guid, UpdateStaffInfoRequestDTO updateUserInfoRequest, IEnumerable<string> userRoles);
     Task<ServiceResponse<List<TimeSpan>>> GetAvailableSlots(WorkingHoursRequestDTO request);
     Task<ServiceResponse<bool>> SaveStaffWorkingHours(SaveWorkingHoursRequestDTO request);
+    Task<ServiceResponse<List<WorkingHoursResponseDto>>> GetStaffWorkingHours(Guid physiotherapistId);
 }

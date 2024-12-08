@@ -41,5 +41,12 @@
   "description": "Description",
   "yearsOfExperience": "Years Of Experience",
   "adress": "Adress",
-  "personInformation": "Person Information"
+  "personInformation": "Person Information",
+  "sunday": "Sunday",
+  "monday": "Monday",
+  "tuesday": "Tuesday",
+  "wednesday": "Wednesday",
+  "thursday": "Thursday",
+  "friday": "Friday",
+  "saturday": "Saturday"
 }
