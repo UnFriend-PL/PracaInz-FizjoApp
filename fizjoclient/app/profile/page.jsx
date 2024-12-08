@@ -100,74 +100,70 @@ const Profile = () => {
         try {
             let userUpdateResponse, staffUpdateResponse, avatarUploadResponse;
 
-            // Aktualizacja danych użytkownika
-            if (updatedUser && updatedUser !== user) {
-                try {
-                    userUpdateResponse = await apiService.post(
-                        "/User/UpdateInfo",
-                        updatedUser,
-                        true
-                    );
-                } catch (error) {
-                    console.error(
-                        "Error updating user info:",
-                        error.response?.data || error.message
-                    );
-                    throw new Error("Failed to update user information");
-                }
-            }
+      if (updatedUser && updatedUser !== user) {
+        try {
+          userUpdateResponse = await apiService.post(
+            "/User/UpdateInfo",
+            updatedUser,
+            true
+          );
+        } catch (error) {
+          console.error(
+            "Error updating user info:",
+            error.response?.data || error.message
+          );
+          throw new Error("Failed to update user information");
+        }
+      }
 
-            // Aktualizacja danych pracownika (jeśli rola to 'Physiotherapist')
-            if (
-                role === "Physiotherapist" &&
-                updatedStaffData &&
-                updatedStaffData !== staffData
-            ) {
-                try {
-                    staffUpdateResponse = await apiService.post(
-                        "/Staff/Update",
-                        updatedStaffData,
-                        true
-                    );
-                } catch (error) {
-                    console.error(
-                        "Error updating staff data:",
-                        error.response?.data || error.message
-                    );
-                    throw new Error("Failed to update staff data");
-                }
-            }
+      if (
+        role === "Physiotherapist" &&
+        updatedStaffData &&
+        updatedStaffData !== staffData
+      ) {
+        try {
+          staffUpdateResponse = await apiService.post(
+            "/Staff/Update",
+            updatedStaffData,
+            true
+          );
+        } catch (error) {
+          console.error(
+            "Error updating staff data:",
+            error.response?.data || error.message
+          );
+          throw new Error("Failed to update staff data");
+        }
+      }
 
-            // Przesyłanie nowego awatara
-            if (tempAvatarFile) {
-                const formData = new FormData();
-                formData.append("file", tempAvatarFile);
-                setUploading(true);
-                try {
-                    avatarUploadResponse = await apiService.post(
-                        "/User/Avatar/Upload",
-                        formData,
-                        true,
-                        {
-                            headers: {"Content-Type": "multipart/form-data"},
-                        }
-                    );
-                } catch (error) {
-                    console.error(
-                        "Error uploading avatar:",
-                        error.response?.data || error.message
-                    );
-                    throw new Error("Failed to upload avatar");
-                } finally {
-                    setUploading(false);
-                }
+      if (tempAvatarFile) {
+        const formData = new FormData();
+        formData.append("file", tempAvatarFile);
+        setUploading(true);
+        try {
+          avatarUploadResponse = await apiService.post(
+            "/User/Avatar/Upload",
+            formData,
+            true,
+            {
+              headers: { "Content-Type": "multipart/form-data" },
             }
+          );
+        } catch (error) {
+          console.error(
+            "Error uploading avatar:",
+            error.response?.data || error.message
+          );
+          throw new Error("Failed to upload avatar");
+        } finally {
+          setUploading(false);
+        }
+      }
 
-            // Aktualizacja stanu po udanych operacjach
-            if (userUpdateResponse?.success) {
-                updateUser(updatedUser);
-                await getUserInfo();
-            }
+      if (userUpdateResponse?.success) {
+        updateUser(updatedUser);
+        await getUserInfo();
+      }
 
             if (role === "Physiotherapist" && staffUpdateResponse?.success) {
                 fetchStaffInfo(staffId);
@@ -288,7 +284,8 @@ const Profile = () => {
             fetchStaffInfo(staffId);
             getWorkingHours(staffId);
         }
-    }, [staffId]);
+      console.log(staffData);
+  }, [staffId]);
 
     if (!isAuthenticated) {
         return (
@@ -357,7 +354,8 @@ const Profile = () => {
                     {staffData.education || t.notAvailable}
                   </span>
                                 </div>
-                                <div className={styles.profileField}>
+                
+                <div className={styles.profileField}>
                   <span className={styles.fieldLabel}>
                     {t.yearsOfExperience}:
                   </span>
@@ -365,16 +363,20 @@ const Profile = () => {
                     {staffData.yearsOfExperience || t.notAvailable}
                   </span>
                                 </div>
-                                <div className={styles.profileDescription}>
-                                    <div className={styles.profileDescriptionTitle}>
-                                        <span className={styles.fieldLabel}>{t.description}:</span>
-                                    </div>
-                                    <div className={styles.profileDescriptionValue}>
-                    <span className={styles.fieldValue}>
-                      {staffData.description || t.notAvailable}
-                    </span>
-                                    </div>
-                                </div>
+                {staffData.description && (
+                                  <div className={styles.profileDescription}>
+                                      <div className={styles.profileDescriptionTitle}>
+                                          <span className={styles.fieldLabel}>
+                        {t.description}:
+                      </span>
+                                      </div>
+                                      <div className={styles.profileDescriptionValue}>
+                      <span className={styles.fieldValue}>
+                        {staffData.description}
+                      </span>
+                                      </div>
+                                  </div>
+                )}
                             </div>
                         </>
                     )}
