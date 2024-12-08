@@ -1,13 +1,16 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, {useState, useRef, useEffect, useContext} from "react";
 import styles from "./detailField.module.scss";
+import {AuthContext} from "@/app/contexts/auth/authContext";
 
 const DetailField = ({ label, name, value, onChange, type, t, readOnly }) => {
   const [isEditing, setIsEditing] = useState(false);
   const textareaRef = useRef(null);
-
+  const {role} = useContext(AuthContext);
   const handleDoubleClick = () => {
     if (!readOnly) {
-      setIsEditing(true);
+      {role === "Physiotherapist" && (
+      setIsEditing(true)
+        )}
     }
   };
 

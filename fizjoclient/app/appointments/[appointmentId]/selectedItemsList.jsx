@@ -4,13 +4,14 @@ import useSelectedItems from "../utils/useSelectedItems";
 import { AppointmentContext } from "../appointmentContext";
 import pl from "./locales/pl.json";
 import en from "./locales/en.json";
+import {AuthContext} from "@/app/contexts/auth/authContext";
 
 const locales = { en, pl };
 const SelectedItemsList = () => {
   const { readOnly, language } = useContext(AppointmentContext);
   const t = locales[language];
   const { selectedItems, handleRemove } = useSelectedItems();
-
+  const { role } = useContext(AuthContext);
 
   return (
     <div className={styles.selectedItemsList}>
@@ -31,7 +32,7 @@ const SelectedItemsList = () => {
                 <div className={styles.selectedItemLabel}>
                   {item?.label || "Unknown"}
                 </div>
-                {!readOnly && item && (
+                {!readOnly && role === "Physiotherapist" && item && (
                   <button
                     onClick={() =>
                       handleRemove(

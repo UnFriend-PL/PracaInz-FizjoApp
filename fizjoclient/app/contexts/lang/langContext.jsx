@@ -14,8 +14,8 @@ export const LanguageProvider = ({ children }) => {
     }
   }, []);
 
-  const changeLanguage = (lng) => {
-    i18n.changeLanguage(lng);
+  const changeLanguage = async (lng) => {
+    await i18n.changeLanguage(lng);
     setLanguage(lng);
     localStorage.setItem("lang", lng);
   };

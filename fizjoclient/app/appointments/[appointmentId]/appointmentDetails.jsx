@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, {useContext, useState} from "react";
 import styles from "./appointmentDetails.module.scss";
 import Modal from "@/app/components/common/modal/modal";
 import { format } from "date-fns";
@@ -13,6 +13,7 @@ import Calendar from "@/app/components/common/calendar/calendar";
 import TimePicker from "@/app/components/common/timePicker/timePicker";
 import AppointmentStatusButtons from "@/app/components/common/appointmentStatusButtons/appointmentStatusButtons";
 import {AppointmentContext} from "@/app/appointments/appointmentContext";
+import {AuthContext} from "@/app/contexts/auth/authContext";
 
 const locales = { en, pl };
 
@@ -33,8 +34,9 @@ const AppointmentDetails = () => {
         handleStatusChange,
         handleStatusEdit,
         language,
+        availableTimes
     } = useContext(AppointmentContext);
-
+    const { role } = useContext(AuthContext);
     const t = locales[language] || locales.en;
 
     if (!appointment) {
@@ -51,7 +53,8 @@ const AppointmentDetails = () => {
                 })}
             </span>
             <div className={styles.header}>
-                <span className={styles.status} onClick={handleStatusEdit}>
+                <span className={styles.status} onClick={role === "Physiotherapist" ? handleStatusEdit : undefined}
+                >
                     {t.appointment}: {appointmentStatusName}
                 </span>
                 {isAppointmentStatusEditing && (
@@ -68,10 +71,9 @@ const AppointmentDetails = () => {
                                     onStatusChange={handleStatusChange}
                                 />
                             </div>
-                            <TimePicker
-                                initialTime={selectedNewHour}
-                                onTimeChange={setSelectedNewHour}
-                            />
+
+                            <TimePicker key={availableTimes} availableTimes={availableTimes} onTimeChange={setSelectedNewHour}></TimePicker>
+
                             <Calendar
                                 onDateSelect={(date) => {
                                     handleInputChange(null, date);
@@ -116,8 +118,10 @@ const AppointmentDetails = () => {
                     value={physiotherapist.licenseNumber}
                 />
             </Modal>
+
             <div className={styles.editableDetails}>
-                <div className={styles.detailsGroup}>
+                {role === "Physiotherapist" && (
+                    <div className={styles.detailsGroup}>
                     <DetailField
                         label={t.diagnosis}
                         name="diagnosis"
@@ -135,6 +139,7 @@ const AppointmentDetails = () => {
                         t={t}
                     />
                 </div>
+                )}
                 <div className={styles.detailsGroup}>
                     <DetailField
                         label={t.description}

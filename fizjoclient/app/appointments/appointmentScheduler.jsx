@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import apiService from "@/app/services/apiService/apiService";
 import {useRouter} from "next/navigation";
 import {format} from "date-fns";
@@ -12,10 +12,11 @@ import pl from "./locales/pl.json";
 import en from "./locales/en.json";
 import PatientSearch from "../components/patientSearch/patientSearch";
 import {UserContext} from "@/app/contexts/user/userContext";
+import {AuthContext} from "@/app/contexts/auth/authContext";
 
 const locales = {en, pl};
 
-const AppointmentScheduler = () => {
+const AppointmentScheduler = ({physiotherapistId = null, averagePrice = null}) => {
     const {language} = useContext(LanguageContext);
     const t = locales[language];
     const [openSchedulerModal, setOpenSchedulerModal] = useState(false);
@@ -32,6 +33,7 @@ const AppointmentScheduler = () => {
     const router = useRouter();
     const [availableTimes, setAvailableTimes] = useState([]);
     const {user} = useContext(UserContext);
+    const {role} = useContext(AuthContext);
     const handCalendarDateChange = (date) => {
         setSelectedDate(date);
         try {
@@ -39,7 +41,7 @@ const AppointmentScheduler = () => {
 
             const payload = {
                 date: formattedDate,
-                physiotherapistId: user.id
+                physiotherapistId: role === "Patient" ? physiotherapistId : user.id
             };
             apiService.post(`/Staff/AvailableSlots`, payload, true).then((response) => {
                 if (response.success) {
@@ -53,6 +55,13 @@ const AppointmentScheduler = () => {
         }
 
     }
+
+    useEffect(() => {
+        if (role === "Patient") {
+            setSelectedPatient({id: user.id});
+            setPrice(averagePrice);
+        }
+    }, []);
 
     const validateAndSubmit = async () => {
 
@@ -70,6 +79,7 @@ const AppointmentScheduler = () => {
         const payload = {
             patientId: selectedPatient.id,
             appointmentDate: appointmentDate,
+            physiotherapistId: role === "Patient" ? physiotherapistId : user.id,
             appointmentDescription,
             notes,
             diagnosis,
@@ -110,8 +120,10 @@ const AppointmentScheduler = () => {
             >
                 {error && <div className={styles.errorMessage}>{error}</div>}
                 <div className={styles.searchPanel}>
-                    <PatientSearch onPatientSelect={setSelectedPatient} t={t}/>
-                    {selectedPatient && (
+                    {role === "Physiotherapist" && (
+                        <PatientSearch onPatientSelect={setSelectedPatient} t={t}/>
+                    )}
+                    {selectedPatient && role === "Physiotherapist" && (
                         <>
                             <div className={styles.searchField}>
                                 <div className={styles.searchLabel}>{t.price}:</div>
@@ -179,7 +191,8 @@ const AppointmentScheduler = () => {
                     <div className={styles.searchField}>
                         <div className={styles.searchLabel}>{t.selectAppointmentHour}:</div>
                         <div className={styles.searchValue}>
-                            <TimePicker key={availableTimes} availableTimes={availableTimes} onTimeChange={setSelectedHour}></TimePicker>
+                            <TimePicker key={availableTimes} availableTimes={availableTimes}
+                                        onTimeChange={setSelectedHour}></TimePicker>
                         </div>
                     </div>
                     <div className={styles.searchField}>
