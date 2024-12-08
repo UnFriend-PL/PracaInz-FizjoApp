@@ -255,7 +255,7 @@ namespace Fizjobackend.Services.AppointmentsService
         {
             var pastScheduledAppointments = await _context.Appointments
                 .Where(a => a.AppointmentStatus == AppointmentStatus.Scheduled
-                            //&& a.AppointmentDate < DateTime.Now
+                            && a.AppointmentDate < DateTime.Now
                             && (a.PatientId == userId || a.PhysiotherapistId == userId))
                 .ToListAsync();
 

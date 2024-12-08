@@ -10,7 +10,7 @@ public interface IStaffService
     Task<ServiceResponse<StaffWrapperResponseDTO>> GetAllStaff(string? searchTerm, double? averagePrice, string? city, int pageNumber, int pageSize);
     Task<ServiceResponse<StaffResponseDTO>> GetStaffById(Guid id);
     Task<ServiceResponse<UpdateStaffInfoResponseDTO>> UpdateStaff(Guid guid, UpdateStaffInfoRequestDTO updateUserInfoRequest, IEnumerable<string> userRoles);
-    Task<ServiceResponse<List<TimeSpan>>> GetAvailableSlots(WorkingHoursRequestDTO request);
+    Task<ServiceResponse<List<DateTimeOffset>>> GetAvailableSlots(WorkingHoursRequestDTO request);
     Task<ServiceResponse<bool>> SaveStaffWorkingHours(SaveWorkingHoursRequestDTO request);
     Task<ServiceResponse<List<WorkingHoursResponseDto>>> GetStaffWorkingHours(Guid physiotherapistId);
 }

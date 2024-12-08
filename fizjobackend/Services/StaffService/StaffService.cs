@@ -186,38 +186,67 @@ public class StaffService : IStaffService
         return response;
     }
 
-    public async Task<ServiceResponse<List<TimeSpan>>> GetAvailableSlots(WorkingHoursRequestDTO request)
+    public async Task<ServiceResponse<List<DateTimeOffset>>> GetAvailableSlots(WorkingHoursRequestDTO request)
+{
+    var response = new ServiceResponse<List<DateTimeOffset>>("Available slots fetched");
+    var workingHours = await _dbContext.WorkingHours
+        .FirstOrDefaultAsync(w =>
+            w.PhysiotherapistId == request.PhysiotherapistId && w.DayOfWeek == request.Date.DayOfWeek);
+
+    if (workingHours == null)
     {
-        ServiceResponse<List<TimeSpan>> response = new ServiceResponse<List<TimeSpan>>("Available slots fetched");
-        var workingHours = await _dbContext.WorkingHours
-            .FirstOrDefaultAsync(w =>
-                w.PhysiotherapistId == request.PhysiotherapistId && w.DayOfWeek == request.Date.DayOfWeek);
-
-        if (workingHours == null)
-        {
-            response.Data = new List<TimeSpan>();
-            return response;
-        }
-
-        var appointments = await _dbContext.Appointments
-            .Where(a => a.PhysiotherapistId == request.PhysiotherapistId && a.AppointmentDate.Date == request.Date.Date)
-            .ToListAsync();
-
-        var busySlots = appointments
-            .Select(a => a.AppointmentDate.TimeOfDay)
-            .ToHashSet();
-
-        var availableSlots = new List<TimeSpan>();
-        for (var time = workingHours.StartHour; time < workingHours.EndHour; time = time.Add(TimeSpan.FromHours(1)))
-        {
-            if (!busySlots.Contains(time))
-                availableSlots.Add(time);
-        }
-
-        response.Data = availableSlots;
-
+        response.Data = new List<DateTimeOffset>();
         return response;
     }
+
+    var date = new DateTimeOffset(request.Date.Date);
+    
+    var workingStart = date + workingHours.StartHour;
+    var workingEnd = date + workingHours.EndHour; 
+
+    var appointments = await _dbContext.Appointments
+        .Where(a => a.PhysiotherapistId == request.PhysiotherapistId
+                    && a.AppointmentDate.Date == request.Date.Date)
+        .ToListAsync();
+
+    var slotDuration = TimeSpan.FromMinutes(15);
+
+    var initialBusySlots = appointments.Select(a =>
+    {
+        var appointmentUtc = DateTime.SpecifyKind(a.AppointmentDate, DateTimeKind.Utc);
+        var appointmentOffset = new DateTimeOffset(appointmentUtc);
+
+        var hour = appointmentOffset.Hour;
+        var minute = (appointmentOffset.Minute / 15) * 15;
+        var rounded = new DateTimeOffset(appointmentOffset.Date)
+            .AddHours(hour)
+            .AddMinutes(minute);
+
+        return rounded;
+    }).ToList();
+
+    var busySlots = new HashSet<DateTimeOffset>();
+    foreach (var startSlot in initialBusySlots)
+    {
+        busySlots.Add(startSlot);
+        busySlots.Add(startSlot.Add(slotDuration));
+        busySlots.Add(startSlot.Add(slotDuration * 2));
+        busySlots.Add(startSlot.Add(slotDuration * 3));
+    }
+
+    var availableSlots = new List<DateTimeOffset>();
+
+    for (var time = workingStart; time < workingEnd; time = time.Add(slotDuration))
+    {
+        if (!busySlots.Contains(time))
+        {
+            availableSlots.Add(time);
+        }
+    }
+
+    response.Data = availableSlots;
+    return response;
+}
 
     public async Task<ServiceResponse<List<WorkingHoursResponseDto>>> GetStaffWorkingHours(Guid physiotherapistId)
     {
@@ -232,7 +261,7 @@ public class StaffService : IStaffService
                     EndHour = whd.EndHour
                 })
                 .ToListAsync();
-            
+
             response.Data = workingHours;
         }
         catch (Exception ex)
@@ -242,7 +271,7 @@ public class StaffService : IStaffService
 
         return response;
     }
-    
+
     public async Task<ServiceResponse<bool>> SaveStaffWorkingHours(SaveWorkingHoursRequestDTO request)
     {
         var response = new ServiceResponse<bool>("Working hours saved successfully");
@@ -251,7 +280,7 @@ public class StaffService : IStaffService
             var dayOfWeek = Enum.Parse<DayOfWeek>(request.DayOfWeek);
             var startHour = TimeSpan.Parse(request.StartHour);
             var endHour = TimeSpan.Parse(request.EndHour);
-            
+
             var exisitingDay = await _dbContext.WorkingHours
                 .Where(w => w.PhysiotherapistId == request.PhysiotherapistId && w.DayOfWeek == dayOfWeek)
                 .FirstOrDefaultAsync();

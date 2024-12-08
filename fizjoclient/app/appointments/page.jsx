@@ -25,14 +25,7 @@ const Appointments = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [selectedDate, setSelectedDate] = useState("");
   const t = locales[language];
-  // const { isauthenticated } = useContext(AuthContext);
 
-
-  // useEffect(() => {
-  //   if (!isauthenticated) {
-  //     router.push("/auth");
-  //   }
-  // }, []);
 
   const handleDateChange = (event) => {
     setSelectedDate(event.target.value);
@@ -134,7 +127,7 @@ const Appointments = () => {
                 onClick={showDetails(appointment)}
               >
                 <span>
-                  {format(new Date(appointment.appointmentDate), "HH:mm", {
+                  {format(new Date(appointment.appointmentDate).toISOString(), "HH:mm", {
                     locale: language === "pl" ? plDate : undefined,
                   })}
                 </span>
