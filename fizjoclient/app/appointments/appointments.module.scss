@@ -8,6 +8,9 @@
   background-color: $off-white;
   min-width: 70%;
   max-width: 80%;
+  @media (max-width: 768px) {
+      margin-top: 3rem;
+  }
 }
 
 .dateGroup {

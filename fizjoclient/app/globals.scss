@@ -10,6 +10,10 @@ body {
   overflow-x: hidden;
 }
 
+html{
+  max-width: 100vw;
+}
+
 .page {
   display: flex;
   flex-direction: column;
@@ -19,6 +23,7 @@ body {
   align-content: center;
   padding-top: 10%;
   min-height: 100vh;
+  max-width: 100vw;
   background-color:$off-white;
   color: $black;
 }
