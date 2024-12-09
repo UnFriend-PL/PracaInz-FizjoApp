@@ -39,6 +39,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 1rem;
   margin: 1rem;
+  max-width: 100vw;
 }
 
 .sectionWrapper {
@@ -113,7 +114,18 @@
   justify-content: space-between;
   align-items: center;
   align-content: center;
+  @media (max-width: 768px) {
+    flex-basis: 100%;
+    margin-top: 2rem;
+  }
 
+  .time {
+    color: $black;
+    font-weight: 800;
+    font-size: 1.2em;
+    margin-bottom: 0.3em;
+
+  }
   .details {
     flex-basis: 100%;
     display: flex;
@@ -401,4 +413,162 @@
     background-color: $green-highlight;
 
   }
+}
+
+.addOpinionForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+
+  .firstNameAndLastNamePhysio {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333333;
+    text-align: center;
+  }
+
+  .rating {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+
+    span {
+      font-size: 1rem;
+      font-weight: bold;
+      color: #555555;
+    }
+  }
+  .stars {
+    display: flex;
+    gap: 0.5rem;
+
+    span {
+      font-size: 1.5rem;
+      color: #f4b400; // złoty kolor gwiazdek
+      cursor: pointer;
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: scale(1.2);
+      }
+
+      &.filledStar {
+        color: #f4b400; // Kolor dla wypełnionych gwiazdek
+      }
+
+      &.emptyStar {
+        color: #cccccc; // Kolor dla pustych gwiazdek
+      }
+    }
+  }
+  .commentInput {
+    width: 100%;
+    min-height: 100px;
+    font-size: 1rem;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    padding: 0.5rem;
+    resize: vertical;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+  }
+
+  .buttonContainer {
+    display: flex;
+    justify-content: space-between;
+
+    .saveOpinionButton,
+    .cancelOpinionButton {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &.saveOpinionButton {
+        background-color: #28a745;
+        color: #ffffff;
+
+        &:hover {
+          background-color: #218838;
+        }
+
+        &:active {
+          background-color: #1e7e34;
+        }
+      }
+
+      &.cancelOpinionButton {
+        background-color: #dc3545;
+        color: #ffffff;
+
+        &:hover {
+          background-color: #c82333;
+        }
+
+        &:active {
+          background-color: #bd2130;
+        }
+      }
+    }
+    .deleteButton {
+      background-color: $red; /* Czerwony kolor tła */
+      color: $white; /* Kolor tekstu - biały */
+      border: none;
+      padding: 0.5em 1em;
+      font-size: 1.2em;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s ease; /* Animacja przejść */
+
+      position: absolute;
+      top: 0;
+      right: 0;
+
+      &:hover {
+        background-color: $dark-red;
+        transform: scale(1.05); /* Lekka animacja powiększenia */
+      }
+
+      &:focus {
+        outline: none; /* Usunięcie obramowania na focus */
+      }
+    }
+  }
+}
+.stars {
+  display: flex;
+  gap: 0.5rem;
+
+  span {
+    font-size: 1.5rem;
+    color: #f4b400; // złoty kolor gwiazdek
+    cursor: pointer;
+    transition: transform 0.2s ease;
+
+    &.filledStar {
+      color: #f4b400; // Kolor dla wypełnionych gwiazdek
+    }
+
+    &.emptyStar {
+      color: #cccccc; // Kolor dla pustych gwiazdek
+    }
+  }
+}
+.comment {
+  font-style: italic;
+  color: #667799;
 }

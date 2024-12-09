@@ -41,5 +41,14 @@
   "education": "Wykształcenie",
   "description": "Opis",
   "yearsOfExperience": "Lata doświadczenia",
-  "adress": "Adres"
+  "adress": "Adres",
+  "personInformation": "Dane osobowe",
+  "notAvailable": "Brak",
+  "sunday": "Niedziela",
+  "monday": "Poniedziałek",
+  "tuesday": "Wtorek",
+  "wednesday": "Środa",
+  "thursday": "Czwartek",
+  "friday": "Piątek",
+  "saturday": "Sobota"
 }

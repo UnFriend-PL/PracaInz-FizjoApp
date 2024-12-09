@@ -13,7 +13,7 @@
 }
 
 .modalContent {
-  background:$off-white;
+  background: $off-white;
   padding: 2rem;
   border-radius: 8px;
   min-width: 45%;
@@ -21,28 +21,36 @@
   max-height: 80%;
   scrollbar-width: thin;
   overflow-y: scroll;
+  overflow-x: hidden;
   position: relative;
-  display: flex;
   flex-wrap: wrap;
 }
 
 .large {
   max-width: 80%;
   min-width: 80%;
+  @media (max-width: 768px) {
+    max-width: 100%;
+  }
 }
 .medium {
   max-width: 60%;
   min-width: 60%;
+  @media (max-width: 768px) {
+    max-width: 100%;
+  }
 }
 .small {
   max-width: 45%;
   min-width: 45%;
+  @media (max-width: 768px) {
+    max-width: 100%;
+  }
 }
 .closeButton {
   position: absolute;
   top: 0;
   right: 0;
-  background: none;
   border: none;
   font-size: 1.5rem;
   background-color: $red;

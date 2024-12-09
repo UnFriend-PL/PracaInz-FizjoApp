@@ -40,5 +40,14 @@
   "education": "Education",
   "description": "Description",
   "yearsOfExperience": "Years Of Experience",
-  "adress": "Adress"
+  "adress": "Adress",
+  "personInformation": "Person Information",
+  "notAvailable": "None",
+  "sunday": "Sunday",
+  "monday": "Monday",
+  "tuesday": "Tuesday",
+  "wednesday": "Wednesday",
+  "thursday": "Thursday",
+  "friday": "Friday",
+  "saturday": "Saturday"
 }

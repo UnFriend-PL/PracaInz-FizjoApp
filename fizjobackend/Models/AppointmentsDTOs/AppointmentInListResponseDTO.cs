@@ -31,7 +31,7 @@ namespace Fizjobackend.Models.AppointmentsDTOs
             PhysiotherapistId = appointment.PhysiotherapistId;
             PhysiotherapistFirstName = physiotherapist.FirstName;
             PhysiotherapistLastName = physiotherapist.LastName;
-            AppointmentDate = appointment.AppointmentDate;
+            AppointmentDate = DateTime.SpecifyKind(appointment.AppointmentDate, DateTimeKind.Utc);
             MovedFromDate = appointment.MovedFromDate;
             IsPaid = appointment.IsPaid;
             Price = appointment.Price;

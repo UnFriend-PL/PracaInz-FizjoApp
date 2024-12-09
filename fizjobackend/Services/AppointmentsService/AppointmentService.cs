@@ -255,7 +255,7 @@ namespace Fizjobackend.Services.AppointmentsService
         {
             var pastScheduledAppointments = await _context.Appointments
                 .Where(a => a.AppointmentStatus == AppointmentStatus.Scheduled
-                            //&& a.AppointmentDate < DateTime.Now
+                            && a.AppointmentDate < DateTime.Now
                             && (a.PatientId == userId || a.PhysiotherapistId == userId))
                 .ToListAsync();
 
@@ -459,33 +459,5 @@ namespace Fizjobackend.Services.AppointmentsService
             }
         }
         
-        public async Task<ServiceResponse<List<TimeSpan>>> GetAvailableSlots(WorkingHoursRequestDTO request)
-        {
-            ServiceResponse<List<TimeSpan>> response = new ServiceResponse<List<TimeSpan>>("Available slots fetched");
-            var workingHours = await _context.WorkingHours
-                .FirstOrDefaultAsync(w => w.PhysiotherapistId == request.PhysiotherapistId && w.DayOfWeek == request.Date.DayOfWeek);
-
-            if (workingHours == null){
-                response.Data = new List<TimeSpan>();
-                return response;
-            }
-            var appointments = await _context.Appointments
-                .Where(a => a.PhysiotherapistId == request.PhysiotherapistId && a.AppointmentDate.Date == request.Date.Date)
-                .ToListAsync();
-
-            var busySlots = appointments
-                .Select(a => a.AppointmentDate.TimeOfDay)
-                .ToHashSet();
-
-            var availableSlots = new List<TimeSpan>();
-            for (var time = workingHours.StartHour; time < workingHours.EndHour; time = time.Add(TimeSpan.FromHours(1)))
-            {
-                if (!busySlots.Contains(time))
-                    availableSlots.Add(time);
-            }
-            response.Data = availableSlots;
-            
-            return response;
-        }
     }
 }

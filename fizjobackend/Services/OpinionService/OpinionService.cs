@@ -1,5 +1,4 @@
 ﻿using Fizjobackend.Entities.OpinionEntities;
-using Fizjobackend.Interfaces.OpinionInterfaces;
 using Fizjobackend.Models.OpinionDTOs;
 using Fizjobackend.Models.UserDTOs;
 using Fizjobackend;
@@ -9,6 +8,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Sprache;
 using System.Linq;
+using fizjobackend.Services.OpinionService;
+using fizjobackend.Models.OpinionDTOs;
 
 namespace Fizjobackend.Services.OpinionService
 {
@@ -253,6 +254,69 @@ namespace Fizjobackend.Services.OpinionService
                 }).ToList();
                 opinionResponse.Page = page;
                 opinionResponse.TotalPage = (int)Math.Ceiling((double)opinionsCount / pageSize); response.Data = opinionResponse;
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"An error occurred: {ex.Message}";
+            }
+
+            return response;
+        }
+
+        public async Task<ServiceResponse<OpinionExistsResposneDTO>> DoesOpinionExist(string userId, string physiotherapistId)
+        {
+            var response = new ServiceResponse<OpinionExistsResposneDTO>("");
+
+            try
+            {
+                if (!Guid.TryParse(userId, out Guid patientGuidId))
+                {
+                    response.Success = false;
+                    response.Message = "Invalid patient GUID";
+                    return response;
+                }
+
+                if (!Guid.TryParse(physiotherapistId, out Guid physiotherapistGuidId))
+                {
+                    response.Success = false;
+                    response.Message = "Invalid physiotherapist GUID";
+                    return response;
+                }
+                List<Opinion> opinions;
+
+                opinions = await _context.Opinions
+                    .Where(o => o.PatientId == patientGuidId)
+                    .ToListAsync();
+
+                var opinionForPhysiotherapist = opinions
+                    .FirstOrDefault(o => o.PhysiotherapistId == physiotherapistGuidId);
+
+
+                if (opinionForPhysiotherapist != null)
+                {
+                    response.Data = new OpinionExistsResposneDTO
+                    {
+                        PhysiotherapistId = opinionForPhysiotherapist.PhysiotherapistId,
+                        PatientId = opinionForPhysiotherapist.PatientId,
+                        OpinionId = opinionForPhysiotherapist.OpinionId,
+                        Exists = true,
+                        Rating=opinionForPhysiotherapist.Rating,
+                        Comment=opinionForPhysiotherapist.Comment
+                    };
+                }
+                else
+                {
+                    response.Data = new OpinionExistsResposneDTO
+                    {
+                        PhysiotherapistId = physiotherapistGuidId,
+                        PatientId = patientGuidId,
+                        OpinionId = Guid.Empty,
+                        Exists = false
+                    };
+                }
+
                 response.Success = true;
             }
             catch (Exception ex)

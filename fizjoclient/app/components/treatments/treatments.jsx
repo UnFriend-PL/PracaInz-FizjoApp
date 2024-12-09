@@ -1,31 +1,29 @@
-import React, {
-    useContext,
-    useState,
-} from "react";
+import React, {useContext, useState,} from "react";
 import {AsyncPaginate} from "react-select-async-paginate";
 import styles from "./treatments.module.scss";
 import {AppointmentContext} from "@/app/appointments/appointmentContext";
-import {CiCircleChevUp} from "react-icons/ci";
-import {CiCircleChevDown} from "react-icons/ci";
+import {CiCircleChevDown, CiCircleChevUp} from "react-icons/ci";
 
 import pl from "./locales/pl.json";
 import en from "./locales/en.json";
+import {AuthContext} from "@/app/contexts/auth/authContext";
 
 const locales = {en, pl};
 
-const TreatmentItem = ({treatment, onEdit, onDelete, language}) => {
+const TreatmentItem = ({treatment, onEdit, onDelete, language, role}) => {
     const [isEditingNotes, setIsEditingNotes] = useState(false);
     const [newNotes, setNewNotes] = useState("");
     const [isEditingDuration, setIsEditingDuration] = useState(false);
     const [newDuration, setNewDuration] = useState(treatment.duration);
     const [showDetails, setShowDetails] = useState(false);
-
     const handleEditNotes = () => {
+        if (role === "patient") return;
         setIsEditingNotes(true);
         setNewNotes(treatment.notes || "");
     };
 
     const saveEditNotes = () => {
+        if (role === "patient") return;
         onEdit(treatment.id, {notes: newNotes});
         setIsEditingNotes(false);
     };
@@ -105,7 +103,7 @@ const TreatmentItem = ({treatment, onEdit, onDelete, language}) => {
             {showDetails && (
                 <div className={styles.treatmentDetails}>
           <span className={styles.treatmentDetailsElement}>
-            {language === "en"
+            {language == "en"
                 ? treatment.description
                 : treatment.descriptionPL}
           </span>
@@ -120,15 +118,17 @@ const TreatmentItem = ({treatment, onEdit, onDelete, language}) => {
                         />
                     ) : (
                         <span
-                            onDoubleClick={handleEditNotes}
+                            onDoubleClick={role === "Physiotherapist" ? handleEditNotes : undefined}
                             className={styles.treatmentDetailsElement}
                             style={{cursor: "pointer"}}
                             title="Double-click to edit notes"
                         >
-              {treatment.notes || "Add notes"}
+              {treatment.notes || "No notes..."}
             </span>
                     )}
-                    <button onClick={() => onDelete(treatment.id)}>Delete</button>
+                    {role === "Physiotherapist" && (
+                        <button onClick={() => onDelete(treatment.id)}>Delete</button>
+                    )}
                 </div>
             )}
         </div>
@@ -147,31 +147,35 @@ const TreatmentsAutoComplete = () => {
         includeSelectedBodyParts,
         handleChangeIncludeSelectedBodyParts,
     } = useContext(AppointmentContext);
+    const {role} = useContext(AuthContext);
     const t = locales[language];
 
     return (
         <div className={styles.container}>
-            <label>
-                <input
-                    type="checkbox"
-                    checked={includeSelectedBodyParts}
-                    onChange={handleChangeIncludeSelectedBodyParts}
-                />
-                {t.includeSelectedTreatmentsOnly}
-            </label>
+            {role === "Physiotherapist" && (
+                <>
+                    <label>
+                        <input
+                            type="checkbox"
+                            checked={includeSelectedBodyParts}
+                            onChange={handleChangeIncludeSelectedBodyParts}
+                        />
+                        {t.includeSelectedTreatmentsOnly}
+                    </label>
 
-            <AsyncPaginate
-                key={language}
-                loadOptions={loadOptions}
-                value={selectedOptions}
-                onChange={handleSelectionChange}
-                isMulti
-                placeholder={t.treatmentSearch}
-                debounceTimeout={500}
-                additional={{page: 1}}
-                className={styles.treatmentSelect}
-            />
-
+                    <AsyncPaginate
+                        key={language}
+                        loadOptions={loadOptions}
+                        value={selectedOptions}
+                        onChange={handleSelectionChange}
+                        isMulti
+                        placeholder={t.treatmentSearch}
+                        debounceTimeout={500}
+                        additional={{page: 1}}
+                        className={styles.treatmentSelect}
+                    />
+                </>
+            )}
             <div className={styles.treatmentList}>
                 {selectedTreatments && selectedTreatments.length > 0 ? (
                     selectedTreatments.map((treatment) => (
@@ -180,6 +184,8 @@ const TreatmentsAutoComplete = () => {
                             treatment={treatment}
                             onEdit={updateTreatment}
                             onDelete={removeTreatment}
+                            language={language}
+                            role={role}
                         />
                     ))
                 ) : (

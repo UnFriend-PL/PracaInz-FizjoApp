@@ -20,8 +20,8 @@ using Fizjobackend.Services.EmailService;
 using Fizjobackend.Services.StaffService;
 using Fizjobackend.Services.Treatments;
 using Fizjobackend.Services.UserServices;
-using Fizjobackend.Interfaces.OpinionInterfaces;
 using Fizjobackend.Services.OpinionService;
+using fizjobackend.Services.OpinionService;
 
 namespace Fizjobackend
 {

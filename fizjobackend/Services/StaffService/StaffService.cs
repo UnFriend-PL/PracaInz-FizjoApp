@@ -3,6 +3,7 @@ using fizjobackend.Models.StaffDTOs;
 using Fizjobackend.DbContexts;
 using Fizjobackend.Entities.OpinionEntities;
 using Fizjobackend.Entities.PhysiotherapistEntities;
+using Fizjobackend.Models.AppointmentsDTOs;
 using Fizjobackend.Models.OpinionDTOs;
 using Fizjobackend.Models.StaffDTOs;
 using Microsoft.EntityFrameworkCore;
@@ -48,6 +49,7 @@ public class StaffService : IStaffService
                     p.City.ToLower().Contains(lowerSearchTerm)
                 );
             }
+
             if (!string.IsNullOrEmpty(city))
             {
                 string lowerCity = city.ToLower();
@@ -59,7 +61,7 @@ public class StaffService : IStaffService
             var staff = await query
                 .Select(s => new StaffResponseDTO(s))
                 .ToListAsync();
-            
+
             var staffList = staff
                 .Where(s => averagePrice == null || s.AveragePrice < averagePrice)
                 .OrderBy(s => s.Rating)
@@ -68,9 +70,10 @@ public class StaffService : IStaffService
                 .Take(pageSize)
                 .ToList();
             double? maxAveragePrice = staff.Max(s => s.AveragePrice);
-            
-            var pagedResponse = new StaffWrapperResponseDTO(staffList, pageNumber, pageSize, totalCount, maxAveragePrice);
-            
+
+            var pagedResponse =
+                new StaffWrapperResponseDTO(staffList, pageNumber, pageSize, totalCount, maxAveragePrice);
+
             response.Data = pagedResponse;
         }
         catch (Exception ex)
@@ -82,7 +85,7 @@ public class StaffService : IStaffService
 
         return response;
     }
-    
+
     public async Task<ServiceResponse<StaffResponseDTO>> GetStaffById(Guid id)
     {
         var response = new ServiceResponse<StaffResponseDTO>("Staff fetched");
@@ -112,6 +115,7 @@ public class StaffService : IStaffService
             response.Message = ex.Message;
             _logger.LogError(ex.Message);
         }
+
         return response;
     }
 
@@ -182,41 +186,133 @@ public class StaffService : IStaffService
         return response;
     }
 
-    //private async Task<ServiceResponse<double>> CalculateAverageRating(Guid physiotherapistId)
-    //{
-    //    try
-    //    {
-    //        var opinions = await _dbContext.Opinions
-    //            .Where(o => o.PhysiotherapistId == physiotherapistId)
-    //            .ToListAsync();
+    public async Task<ServiceResponse<List<DateTimeOffset>>> GetAvailableSlots(WorkingHoursRequestDTO request)
+{
+    var response = new ServiceResponse<List<DateTimeOffset>>("Available slots fetched");
+    var workingHours = await _dbContext.WorkingHours
+        .FirstOrDefaultAsync(w =>
+            w.PhysiotherapistId == request.PhysiotherapistId && w.DayOfWeek == request.Date.DayOfWeek);
 
-    //        if (!opinions.Any())
-    //        {
-    //            return new ServiceResponse<double>("No opinions found for the specified physiotherapist.")
-    //            {
-    //                Success = false
-    //            };
-    //        }
+    if (workingHours == null)
+    {
+        response.Data = new List<DateTimeOffset>();
+        return response;
+    }
 
-    //        double totalRating = opinions.Sum(o => o.Rating);
-    //        double averageRating = Math.Floor(totalRating / opinions.Count);
-    //        averageRating = Math.Round(averageRating * 2) / 2;
+    var date = new DateTimeOffset(request.Date.Date);
+    
+    var workingStart = date + workingHours.StartHour;
+    var workingEnd = date + workingHours.EndHour; 
 
+    var appointments = await _dbContext.Appointments
+        .Where(a => a.PhysiotherapistId == request.PhysiotherapistId
+                    && a.AppointmentDate.Date == request.Date.Date)
+        .ToListAsync();
 
-    //        return new ServiceResponse<double>("Average rating calculated successfully.")
-    //        {
-    //            Success = true,
-    //            Data = averageRating
-    //        };
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        return new ServiceResponse<double>($"An error occurred: {ex.Message}")
-    //        {
-    //            Success = false
-    //        };
-    //    }
-    //}
+    var slotDuration = TimeSpan.FromMinutes(15);
+
+    var initialBusySlots = appointments.Select(a =>
+    {
+        var appointmentUtc = DateTime.SpecifyKind(a.AppointmentDate, DateTimeKind.Utc);
+        var appointmentOffset = new DateTimeOffset(appointmentUtc);
+
+        var hour = appointmentOffset.Hour;
+        var minute = (appointmentOffset.Minute / 15) * 15;
+        var rounded = new DateTimeOffset(appointmentOffset.Date)
+            .AddHours(hour)
+            .AddMinutes(minute);
+
+        return rounded;
+    }).ToList();
+
+    var busySlots = new HashSet<DateTimeOffset>();
+    foreach (var startSlot in initialBusySlots)
+    {
+        busySlots.Add(startSlot);
+        busySlots.Add(startSlot.Add(slotDuration));
+        busySlots.Add(startSlot.Add(slotDuration * 2));
+        busySlots.Add(startSlot.Add(slotDuration * 3));
+    }
+
+    var availableSlots = new List<DateTimeOffset>();
+
+    for (var time = workingStart; time < workingEnd; time = time.Add(slotDuration))
+    {
+        if (!busySlots.Contains(time))
+        {
+            availableSlots.Add(time);
+        }
+    }
+
+    response.Data = availableSlots;
+    return response;
+}
+
+    public async Task<ServiceResponse<List<WorkingHoursResponseDto>>> GetStaffWorkingHours(Guid physiotherapistId)
+    {
+        var response = new ServiceResponse<List<WorkingHoursResponseDto>>("Working hours fetched");
+        try
+        {
+            var workingHours = await _dbContext.WorkingHours.Where(wh => wh.PhysiotherapistId == physiotherapistId)
+                .Select(whd => new WorkingHoursResponseDto()
+                {
+                    DayOfWeek = whd.DayOfWeek,
+                    StartHour = whd.StartHour,
+                    EndHour = whd.EndHour
+                })
+                .ToListAsync();
+
+            response.Data = workingHours;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"");
+        }
+
+        return response;
+    }
+
+    public async Task<ServiceResponse<bool>> SaveStaffWorkingHours(SaveWorkingHoursRequestDTO request)
+    {
+        var response = new ServiceResponse<bool>("Working hours saved successfully");
+        try
+        {
+            var dayOfWeek = Enum.Parse<DayOfWeek>(request.DayOfWeek);
+            var startHour = TimeSpan.Parse(request.StartHour);
+            var endHour = TimeSpan.Parse(request.EndHour);
+
+            var exisitingDay = await _dbContext.WorkingHours
+                .Where(w => w.PhysiotherapistId == request.PhysiotherapistId && w.DayOfWeek == dayOfWeek)
+                .FirstOrDefaultAsync();
+
+            if (exisitingDay == null)
+            {
+                var workingHours = new WorkingHours
+                {
+                    PhysiotherapistId = request.PhysiotherapistId,
+                    DayOfWeek = dayOfWeek,
+                    StartHour = startHour,
+                    EndHour = endHour
+                };
+                _dbContext.WorkingHours.Add(workingHours);
+            }
+            else
+            {
+                exisitingDay.StartHour = startHour;
+                exisitingDay.EndHour = endHour;
+            }
+
+            await _dbContext.SaveChangesAsync();
+            return response;
+        }
+        catch (Exception ex)
+        {
+            response.Success = false;
+            response.Message = ex.Message;
+            _logger.LogError(ex.Message);
+            return response;
+        }
+    }
 
     private string GetBaseRoleFromUserRoles(IEnumerable<string> userRoles)
     {

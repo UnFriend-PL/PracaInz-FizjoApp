@@ -49,10 +49,31 @@
 }
 
 .buttonContainer {
-  display: flex;
-  justify-content: flex-end; /* Aligns buttons to the right */
-  margin-top: 10px; /* Adds spacing above buttons */
-  gap: 10px;
+  display: flex; /* Flexbox dla przycisków */
+  gap: 10px; /* Odstęp między przyciskami */
+  justify-content: flex-end; /* Ustawienie przycisków po prawej stronie */
+  align-items: center; /* Wyrównanie przycisków w pionie do środka */
+}
+
+.buttonContainer button {
+  display: inline-flex; /* Flexbox dla przycisków */
+  align-items: center;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Styl na hover przycisków */
+.buttonContainer button:hover {
+  transform: scale(1.05); /* Powiększenie przycisku przy najechaniu */
+}
+
+/* Usunięcie obramowania po kliknięciu */
+.buttonContainer button:focus {
+  outline: none; /* Usunięcie obramowania po kliknięciu */
 }
 
 .opinionAbout {
@@ -85,25 +106,81 @@
 
 .editButtons {
   display: flex;
-  gap: 10px;
+  gap: 15px; /* Zwiększono przestrzeń między przyciskami */
+  align-items: center; /* Wyrównanie przycisków w poziomie */
+  justify-content: flex-start; /* Przyciski ustawione od lewej strony */
 }
 
 .editButton {
   display: flex;
   align-items: center;
-  background-color: #5E9FEB;
-  color: white;
-  padding: 7px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  background-color: #5e9feb; /* Kolor tła, jeśli $blue jest zdefiniowane w Twoich zmiennych SCSS */
+  color: white; /* Kolor tekstu */
+  padding: 0.5em 1em; /* Wewnętrzne marginesy, aby przycisk był odpowiedniej wielkości */
+  margin-right: 1rem;
+  border: none; /* Usunięcie obramowania */
+  border-radius: 5px; /* Zaokrąglenie rogów */
+  cursor: pointer; /* Kursor wskazujący, że jest to element interaktywny */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Płynna zmiana koloru tła i efekt powiększenia */
+  /* Dostosowanie dla małych ekranów */
+}
+@media (max-width: 768px) {
+  .editButton {
+    padding: 6px 10px; /* Mniejsze marginesy na mniejszych ekranach */
+  }
+}
+.editButton:hover {
+  background-color: #3184e5; /* Zmiana koloru tła przy hover (ciemniejszy odcień $blue) */
+  transform: scale(1.05); /* Delikatne powiększenie przy najechaniu */
+}
+.editButton:focus {
+  outline: none; /* Usunięcie obramowania po kliknięciu */
+}
+.editButton .editIcon {
+  font-size: 1.2rem; /* Rozmiar ikony */
+  margin-right: 5px; /* Odstęp między ikoną a tekstem */
+}
+
+.deleteButton {
+  background-color: #d9534f; /* Czerwony kolor tła, dla przycisku usuwania */
+  color: white; /* Biały kolor tekstu */
+  border: none; /* Bez obramowania */
+  padding: 0.5em 1em; /* Wewnętrzne marginesy, aby przycisk był odpowiedniej wielkości */
+  font-size: 1rem; /* Rozmiar czcionki */
+  font-weight: bold; /* Pogrubiony tekst */
+  border-radius: 5px; /* Zaokrąglone rogi przycisku */
+  cursor: pointer; /* Zmieniamy kursor na "rękę" przy najechaniu */
+  transition: background-color 0.3s, transform 0.2s ease; /* Animacja dla zmiany tła i skalowania */
+  display: flex;
+  align-items: center; /* Wyrównanie ikonki i tekstu w pionie */
+  justify-content: center; /* Wyśrodkowanie elementów w poziomie */
+  /* Mały odstęp między ikoną i tekstem */
+  gap: 0.5rem;
+  /* Responsywność: Dostosowanie dla małych ekranów */
+}
+.deleteButton:hover {
+  background-color: #c9302c; /* Zmiana koloru na ciemniejszy czerwony podczas hover */
+  transform: scale(1.05); /* Lekka animacja powiększenia przy najechaniu */
+}
+.deleteButton:focus {
+  outline: none; /* Usunięcie obramowania po kliknięciu */
+}
+@media (max-width: 768px) {
+  .deleteButton {
+    font-size: 0.9rem; /* Mniejszy rozmiar czcionki na małych ekranach */
+    padding: 0.4em 0.8em; /* Mniejsze marginesy na małych ekranach */
+  }
+}
+
+.deleteIcon {
+  font-size: 1.2rem; /* Ustawiamy rozmiar ikony */
+  color: white; /* Biała ikona */
 }
 
 .saveButton {
   display: flex;
   align-items: center;
-  background-color: #6CCB81;
+  background-color: #6ccb81;
   color: white;
   padding: 7px;
   border: none;

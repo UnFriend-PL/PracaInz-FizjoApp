@@ -1,4 +1,5 @@
 @import "@/app/utils/globalColors.scss";
+
 .container {
   display: flex;
   justify-content: center;
@@ -8,6 +9,11 @@
   background-color: $off-white;
   min-width: 70%;
   max-width: 80%;
+
+  @media (max-width: 768px) {
+    margin-top: 3rem;
+    max-width: 100%;
+  }
 }
 
 .dateGroup {
@@ -15,21 +21,23 @@
   flex-wrap: wrap;
   flex-basis: 80%;
   justify-content: space-between;
+
   .date {
-    color:$black;
+    color: $black;
     flex-basis: 100%;
     font-weight: 800;
     font-size: 1.2rem;
     margin-bottom: 0.3rem;
     border-bottom: 3px solid $border-color;
   }
+
   .appointmentCard {
     &:hover {
       background-color: $blue-highlight;
       cursor: pointer;
       color: $white;
-
     }
+
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -42,12 +50,18 @@
     flex-basis: 45%;
     max-width: 100%;
     margin-bottom: 1rem;
+
+    @media (max-width: 768px) {
+      flex-basis: 100%;
+    }
+
     .time {
-      color:$black;
+      color: $black;
       font-weight: 800;
       font-size: 1.2em;
       margin-bottom: 0.3em;
     }
+
     .details {
       display: flex;
       flex-wrap: wrap;
@@ -55,23 +69,27 @@
       align-items: center;
       align-content: center;
       flex-basis: 100%;
+
       .field {
         display: flex;
         justify-content: space-between;
         padding: 0.8rem 0;
         border-bottom: 1px solid $border-color;
+
         .label {
           font-weight: bold;
           color: $grey;
           text-transform: capitalize;
         }
+
         .value {
-          color:$black;
+          color: $black;
         }
       }
     }
   }
 }
+
 .appointmentsNav {
   display: flex;
   flex-direction: row;
@@ -82,18 +100,74 @@
   background-color: $off-white;
   padding: 1rem;
   flex-basis: 100%;
+  overflow: hidden;
+
+  @media (max-width: 768px) {
+    justify-content: center;
+    padding: 0;
+  }
 }
+
 .searchPanel {
   flex-basis: 100%;
   display: flex;
   flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    justify-content: flex-start;
+  }
+
 }
+
 .searchPanelSection {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   align-content: center;
-  flex-basis: fit-content;
-  padding: 2rem 2rem 0 0;
+  flex-basis: 100%;
+  width: 100%;
+
+  .element{
+    flex-basis: 30%;
+    justify-content: flex-start;
+    @media (max-width: 768px) {
+      flex-basis: 100%;
+      justify-content: space-between;
+    }
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0.3rem;
+    align-items: center;
+    input[type="date"] {
+      width: 100%;
+      padding: 0.5rem 1rem;
+      border: 1px solid $border-color;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    .patientSearch, .appointmentScheduler {
+      width: 100%;
+
+      input, button {
+        width: 100%;
+        padding: 0.5rem 1rem;
+        border: 1px solid $border-color;
+        border-radius: 5px;
+        font-size: 1rem;
+      }
+
+      button {
+        background-color: $blue;
+        color: $white;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: darken($blue, 10%);
+        }
+      }
+    }
+  }
 }

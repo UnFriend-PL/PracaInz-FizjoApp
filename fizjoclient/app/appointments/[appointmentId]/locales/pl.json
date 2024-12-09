@@ -32,5 +32,8 @@
   "back": "Tył",
   "selectNewStatus": "Wybierz nowy status i/lub date",
   "saveAll": "Zapisz wszystko",
-  "saving" : "Zapisywanie..."
+  "saving": "Zapisywanie...",
+  "addOpinion": "Daj opinie",
+  "viewOpinion": "Twoja opinia",
+  "yourOpinion": "Twoja opinia"
 }

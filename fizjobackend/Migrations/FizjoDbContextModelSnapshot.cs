@@ -444,52 +444,52 @@ namespace fizjobackend.Migrations
                     b.HasData(
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("80d63571-bd14-4c99-a301-3b47dcd136c4"),
+                            PhysiotherapySpecializationId = new Guid("6be4ebde-f6fe-4239-a55c-88906b311dc4"),
                             PhysiotherapySpecialization = "Orthopedic"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("e9e19bf0-bb82-4fd6-95e6-7e36939a6051"),
+                            PhysiotherapySpecializationId = new Guid("343af049-1b68-47bf-8cec-ac89f20a8b06"),
                             PhysiotherapySpecialization = "Neurological"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("54bb8af7-8be3-4a15-9b6d-8b656578c5ff"),
+                            PhysiotherapySpecializationId = new Guid("03e45b5a-2c80-4187-b672-0f1aec15e5f4"),
                             PhysiotherapySpecialization = "Pediatric"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("c19adc7e-66b9-4c82-ab28-b2fd13ccb1a8"),
+                            PhysiotherapySpecializationId = new Guid("ef2f6545-1a5f-4831-b896-4f7a1e191892"),
                             PhysiotherapySpecialization = "CardiovascularAndPulmonary"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("45036705-f0f0-4033-a586-8bcd023e2cf3"),
+                            PhysiotherapySpecializationId = new Guid("8e1618c9-df9d-4f33-b293-10622c87c0d1"),
                             PhysiotherapySpecialization = "Geriatric"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("a9b58805-ee4c-4e1f-a889-202d71b23241"),
+                            PhysiotherapySpecializationId = new Guid("da89c3c6-029a-4b1f-9b0d-fad4f94f1d92"),
                             PhysiotherapySpecialization = "Sports"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("6cae212c-b536-49c4-885b-f8d5b029c013"),
+                            PhysiotherapySpecializationId = new Guid("86da9521-68ca-402f-8592-0e5e80b14dc1"),
                             PhysiotherapySpecialization = "Urogynecological"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("f1c3d2db-18e5-49f0-b222-a216e4ed8ce3"),
+                            PhysiotherapySpecializationId = new Guid("516aa73d-49cf-434e-a8a9-9b30e3f1a9f6"),
                             PhysiotherapySpecialization = "Oncological"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("ec3537e1-2417-485b-b621-c19d55e67a76"),
+                            PhysiotherapySpecializationId = new Guid("a627ab87-9fa7-4e6e-a94f-2a5f0b60fccf"),
                             PhysiotherapySpecialization = "Dental"
                         },
                         new
                         {
-                            PhysiotherapySpecializationId = new Guid("fa171112-07dd-4ab6-ad81-131535d05f23"),
+                            PhysiotherapySpecializationId = new Guid("896a2465-9f63-4be4-af39-00377d9e5b2d"),
                             PhysiotherapySpecialization = "Occupational"
                         });
                 });
