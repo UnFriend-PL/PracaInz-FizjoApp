@@ -131,21 +131,29 @@ const Appointments = () => {
             <div className={styles.container}>
                 <div className={styles.appointmentsNav}>
                     <AppointmentStatusButtons getAppointments={getAppointments}/>
-                    {role == "Physiotherapist" && <AppointmentScheduler/>}
                     <div className={styles.searchPanel}>
                         <div className={styles.searchPanelSection}>
-                            <input type="date" value={selectedDate} onChange={handleDateChange}/>
-                        </div>
-                        {role == "Physiotherapist" && (
-                            <div className={styles.searchPanelSection}>
-                                <PatientSearch
-                                    onPatientSelect={setSelectedPatient}
-                                    buttonText={t.select}
-                                    displayLabel={false}
-                                />
-
+                            <div className={styles.element}>
+                                <input type="date" value={selectedDate} onChange={handleDateChange}/>
                             </div>
-                        )}
+                            {role == "Physiotherapist" && (
+                                <>
+                                    <div className={styles.element}>
+                                        <PatientSearch
+                                            onPatientSelect={setSelectedPatient}
+                                            buttonText={t.select}
+                                            displayLabel={false}
+                                        />
+                                    </div>
+                                    <div className={styles.element}>
+
+                                        <AppointmentScheduler className={styles.element}/>
+                                    </div>
+                                </>
+                            )}
+
+                        </div>
+
                     </div>
                 </div>
             </div>
