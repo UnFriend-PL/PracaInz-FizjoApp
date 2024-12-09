@@ -20,7 +20,6 @@
   flex-basis: 45%;
   flex-wrap: wrap;
   justify-content: space-around;
-
 }
 
 .switchSelector {
@@ -157,21 +156,39 @@
   justify-content: space-between;
   font-weight: bold;
   font-size: 1.5em;
+}
+.status {
+  transition-duration: 1s;
+  background-color: $dark-green;
+  color: $white;
+  padding: 0.5em;
+  border-radius: 5px;
+  cursor: pointer;
 
-  .status {
-    transition-duration: 1s;
-    background-color: $dark-green;
-    color: $white;
-    padding: 0.5em;
-    border-radius: 5px;
-    cursor: pointer;
-
-    &:hover {
-      background-color: $green;
-    }
+  &:hover {
+    background-color: $green;
   }
 }
+.button {
+  background-color: $dark-green; /* Zgodne z stylem status */
+  color: $white;
+  border: none;
+  padding: 0.5em 1em;
+  font-size: 1.2em;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s ease; /* Animacja przejść */
 
+  &:hover {
+    background-color: $green; /* Zmiana koloru na hover */
+    transform: scale(1.05); /* Lekka animacja powiększenia */
+  }
+
+  &:focus {
+    outline: none; /* Usunięcie obramowania na focus */
+  }
+}
 .detailGroup {
   display: flex;
   flex-wrap: wrap;
@@ -330,11 +347,11 @@
     margin-bottom: 0.5em;
   }
 
-  .textarea {
+  .commentInput {
     width: 100%;
     min-height: 80px;
     padding: 0.5em;
-    border: 1px solid $border-color;
+    border: 1px solid $green;
     border-radius: 4px;
     resize: vertical;
   }
@@ -386,19 +403,206 @@
   padding: 0 0 1rem;
 }
 
-.buttonSaveAll {
-  position: fixed;
-  background-color: $green;
-  bottom: 0.5rem;
-  right: 0.5rem;
-  color: $white;
-  padding: 0.45rem;
-  border-radius: 15px;
-  z-index: 99;
-  transition-duration: 1s;
+.addOpinionForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
 
-  &:hover {
-    background-color: $green-highlight;
+  .firstNameAndLastNamePhysio {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333333;
+    text-align: center;
+  }
 
+  .rating {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+
+    span {
+      font-size: 1rem;
+      font-weight: bold;
+      color: #555555;
+    }
+
+    .stars {
+      display: flex;
+      gap: 0.5rem;
+
+      span {
+        font-size: 1.5rem;
+        color: #f4b400; // złoty kolor gwiazdek
+        cursor: pointer;
+        transition: transform 0.2s ease;
+
+        &:hover {
+          transform: scale(1.2);
+        }
+
+        &.filledStar {
+          color: #f4b400; // Kolor dla wypełnionych gwiazdek
+        }
+
+        &.emptyStar {
+          color: #cccccc; // Kolor dla pustych gwiazdek
+        }
+      }
+    }
+  }
+  .stars {
+    display: flex;
+    gap: 0.5rem;
+
+    span {
+      font-size: 1.5rem;
+      color: #f4b400; // złoty kolor gwiazdek
+      cursor: pointer;
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: scale(1.2);
+      }
+
+      &.filledStar {
+        color: #f4b400; // Kolor dla wypełnionych gwiazdek
+      }
+
+      &.emptyStar {
+        color: #cccccc; // Kolor dla pustych gwiazdek
+      }
+    }
+  }
+  .commentInput {
+    width: 100%;
+    min-height: 100px;
+    font-size: 1rem;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    padding: 0.5rem;
+    resize: vertical;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+  }
+
+  .buttonContainer {
+    display: flex;
+    justify-content: space-between;
+
+    .saveOpinionButton,
+    .cancelOpinionButton {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &.saveOpinionButton {
+        background-color: #28a745;
+        color: #ffffff;
+
+        &:hover {
+          background-color: #218838;
+        }
+
+        &:active {
+          background-color: #1e7e34;
+        }
+      }
+
+      &.cancelOpinionButton {
+        background-color: #dc3545;
+        color: #ffffff;
+
+        &:hover {
+          background-color: #c82333;
+        }
+
+        &:active {
+          background-color: #bd2130;
+        }
+      }
+    }
+    .deleteButton {
+      background-color: $red; /* Czerwony kolor tła */
+      color: $white; /* Kolor tekstu - biały */
+      border: none;
+      padding: 0.5em 1em;
+      font-size: 1.2em;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s ease; /* Animacja przejść */
+
+      position: absolute;
+      top: 0;
+      right: 0;
+
+      &:hover {
+        background-color: $dark-red;
+        transform: scale(1.05); /* Lekka animacja powiększenia */
+      }
+
+      &:focus {
+        outline: none; /* Usunięcie obramowania na focus */
+      }
+    }
   }
 }
+.stars {
+  display: flex;
+  gap: 0.5rem;
+
+  span {
+    font-size: 1.5rem;
+    color: #f4b400; // złoty kolor gwiazdek
+    cursor: pointer;
+    transition: transform 0.2s ease;
+
+    &.filledStar {
+      color: #f4b400; // Kolor dla wypełnionych gwiazdek
+    }
+
+    &.emptyStar {
+      color: #cccccc; // Kolor dla pustych gwiazdek
+    }
+  }
+}
+.comment {
+  font-style: italic;
+  color: #667799;
+  //$text-muted;
+}
+
+.commentInput {
+  margin-top: 0.5rem;
+  width: 100%;
+  height: 8rem;
+  padding: 10px;
+  border: 1px solid $border-color;
+  border-radius: 5px;
+  font-size: 14px;
+}
+// .star {
+//   display: block;
+//   color: $yellow;
+//   margin-right: 2px;
+// }
+
+// .stars {
+//   display: block;
+//   color: $yellow;
+//   display: inline-flex;
+// }
