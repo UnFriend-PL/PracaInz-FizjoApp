@@ -1,35 +1,35 @@
-@import "../utils/globalColors.scss";
-
+@charset "UTF-8";
 .container {
   max-width: 800px;
   margin: 0 auto; /* Wyśrodkowanie kontenera */
   padding: 20px;
   font-family: Arial, sans-serif;
-  background-color: $white;
+  background-color: #ffffff;
 }
 
 .heading {
   text-align: center;
   margin-bottom: 20px;
-  color: $black;
+  color: #101010;
 }
 
 .opinionCard {
   position: relative;
-  background-color: $white;
-  border: 1px solid $border-color;
+  background-color: #ffffff;
+  border: 1px solid #ced4da;
   border-radius: 10px;
   padding: 20px;
   margin-bottom: 15px;
-  box-shadow: 0px 4px 8px $off-white;
+  box-shadow: 0px 4px 8px #f8f9fa;
 }
+
 .opinionCardEdit {
-  background-color: $white;
-  border: 1px solid $border-color;
+  background-color: #ffffff;
+  border: 1px solid #ced4da;
   border-radius: 10px;
   padding: 20px;
   margin-bottom: 15px;
-  box-shadow: 0px 4px 8px $off-white;
+  box-shadow: 0px 4px 8px #f8f9fa;
 }
 
 .opinionAuthor,
@@ -37,8 +37,9 @@
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
-  color: $black;
+  color: #101010;
 }
+
 .opinionDate {
   position: absolute;
   top: 8px; /* Adjust as necessary for spacing */
@@ -46,6 +47,7 @@
   font-size: 0.9em; /* Optional: make the font size slightly smaller */
   color: #888; /* Optional: a lighter color for subtlety */
 }
+
 .buttonContainer {
   display: flex; /* Flexbox dla przycisków */
   gap: 10px; /* Odstęp między przyciskami */
@@ -78,8 +80,9 @@
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
-  color: $black;
+  color: #101010;
 }
+
 .opinionComment {
   font-style: italic;
   color: #667799;
@@ -88,7 +91,7 @@
 .commentInput {
   width: 100%;
   padding: 10px;
-  border: 1px solid $border-color;
+  border: 1px solid #ced4da;
   border-radius: 5px;
   font-size: 14px;
 }
@@ -111,7 +114,7 @@
 .editButton {
   display: flex;
   align-items: center;
-  background-color: $blue; /* Kolor tła, jeśli $blue jest zdefiniowane w Twoich zmiennych SCSS */
+  background-color: #5e9feb; /* Kolor tła, jeśli $blue jest zdefiniowane w Twoich zmiennych SCSS */
   color: white; /* Kolor tekstu */
   padding: 0.5em 1em; /* Wewnętrzne marginesy, aby przycisk był odpowiedniej wielkości */
   margin-right: 1rem;
@@ -119,29 +122,25 @@
   border-radius: 5px; /* Zaokrąglenie rogów */
   cursor: pointer; /* Kursor wskazujący, że jest to element interaktywny */
   transition: background-color 0.3s ease, transform 0.2s ease; /* Płynna zmiana koloru tła i efekt powiększenia */
-
   /* Dostosowanie dla małych ekranów */
-  @media (max-width: 768px) {
+}
+@media (max-width: 768px) {
+  .editButton {
     padding: 6px 10px; /* Mniejsze marginesy na mniejszych ekranach */
   }
-
-  &:hover {
-    background-color: darken(
-      $blue,
-      10%
-    ); /* Zmiana koloru tła przy hover (ciemniejszy odcień $blue) */
-    transform: scale(1.05); /* Delikatne powiększenie przy najechaniu */
-  }
-
-  &:focus {
-    outline: none; /* Usunięcie obramowania po kliknięciu */
-  }
-
-  .editIcon {
-    font-size: 1.2rem; /* Rozmiar ikony */
-    margin-right: 5px; /* Odstęp między ikoną a tekstem */
-  }
 }
+.editButton:hover {
+  background-color: #3184e5; /* Zmiana koloru tła przy hover (ciemniejszy odcień $blue) */
+  transform: scale(1.05); /* Delikatne powiększenie przy najechaniu */
+}
+.editButton:focus {
+  outline: none; /* Usunięcie obramowania po kliknięciu */
+}
+.editButton .editIcon {
+  font-size: 1.2rem; /* Rozmiar ikony */
+  margin-right: 5px; /* Odstęp między ikoną a tekstem */
+}
+
 .deleteButton {
   background-color: #d9534f; /* Czerwony kolor tła, dla przycisku usuwania */
   color: white; /* Biały kolor tekstu */
@@ -155,21 +154,19 @@
   display: flex;
   align-items: center; /* Wyrównanie ikonki i tekstu w pionie */
   justify-content: center; /* Wyśrodkowanie elementów w poziomie */
-
   /* Mały odstęp między ikoną i tekstem */
   gap: 0.5rem;
-
-  &:hover {
-    background-color: #c9302c; /* Zmiana koloru na ciemniejszy czerwony podczas hover */
-    transform: scale(1.05); /* Lekka animacja powiększenia przy najechaniu */
-  }
-
-  &:focus {
-    outline: none; /* Usunięcie obramowania po kliknięciu */
-  }
-
   /* Responsywność: Dostosowanie dla małych ekranów */
-  @media (max-width: 768px) {
+}
+.deleteButton:hover {
+  background-color: #c9302c; /* Zmiana koloru na ciemniejszy czerwony podczas hover */
+  transform: scale(1.05); /* Lekka animacja powiększenia przy najechaniu */
+}
+.deleteButton:focus {
+  outline: none; /* Usunięcie obramowania po kliknięciu */
+}
+@media (max-width: 768px) {
+  .deleteButton {
     font-size: 0.9rem; /* Mniejszy rozmiar czcionki na małych ekranach */
     padding: 0.4em 0.8em; /* Mniejsze marginesy na małych ekranach */
   }
@@ -183,7 +180,7 @@
 .saveButton {
   display: flex;
   align-items: center;
-  background-color: $green;
+  background-color: #6ccb81;
   color: white;
   padding: 7px;
   border: none;
@@ -191,10 +188,11 @@
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
+
 .cancelButton {
   display: flex;
   align-items: center;
-  background-color: $red;
+  background-color: #dc3545;
   color: white;
   padding: 7px;
   border: none;
@@ -212,13 +210,15 @@
 }
 
 .editButton:hover {
-  background-color: darken($blue, 10%);
+  background-color: #3184e5;
 }
+
 .saveButton:hover {
-  background-color: darken($green, 10%);
+  background-color: #46be61;
 }
+
 .cancelButton:hover {
-  background-color: darken($red, 10%);
+  background-color: #bd2130;
 }
 
 .editIcon,
@@ -251,14 +251,17 @@
 .pageInfo {
   margin: 0 15px;
 }
+
 .star {
   display: block;
-  color: $yellow;
+  color: #e1b325;
   margin-right: 2px;
 }
 
 .stars {
   display: block;
-  color: $yellow;
+  color: #e1b325;
   display: inline-flex;
 }
+
+/*# sourceMappingURL=opinions.module.css.map */

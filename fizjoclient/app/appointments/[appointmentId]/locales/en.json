@@ -32,5 +32,8 @@
   "back": "Back",
   "selectNewStatus": "Select new status and/or date",
   "saveAll": "Save all",
-  "saving" : "Saving..."
+  "saving": "Saving...",
+  "addOpinion": "Add Opinion",
+  "viewOpinion": "Your opinion",
+  "yourOpinion": "Your opinion"
 }

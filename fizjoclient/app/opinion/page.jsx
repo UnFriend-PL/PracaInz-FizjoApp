@@ -118,7 +118,29 @@ const Opinions = () => {
       console.error("Błąd podczas aktualizacji opinii:", error);
     }
   };
+  const handleDeleteOpinion = (opinionId) => {
+    onDelete(opinionId); // Wywołanie funkcji usuwania
 
+    // Aktualizacja lokalnego stanu po usunięciu opinii
+    setOpinions((prevOpinions) =>
+      prevOpinions.filter((opinion) => opinion.opinionId !== opinionId)
+    );
+  };
+
+  const onDelete = async (opinionId) => {
+    try {
+      const endpoint = `/Opinion/${opinionId}`;
+      const response = await apiService.delete(endpoint, null, true);
+
+      if (response.success) {
+        console.log("Opinia została pomyślnie usunięta");
+      } else {
+        console.error("Wystąpił błąd podczas usuwania opinii");
+      }
+    } catch (error) {
+      console.error("Błąd połączenia:", error);
+    }
+  };
   const cancelEdit = () => {
     setEditingOpinion(null);
   };
@@ -207,13 +229,22 @@ const Opinions = () => {
                       </button>
                     </>
                   ) : (
-                    <button
-                      onClick={() => handleEditOpinion(opinion)}
-                      className={styles.editButton}
-                    >
-                      <FaRegEdit className={styles.editIcon} />
-                      {t.edit}
-                    </button>
+                    <div className={styles.ButtonContainer}>
+                      <button
+                        onClick={() => handleEditOpinion(opinion)}
+                        className={styles.editButton}
+                      >
+                        <FaRegEdit className={styles.editIcon} />
+                        {t.edit}
+                      </button>
+                      <button
+                        onClick={() => handleDeleteOpinion(opinion.opinionId)} // Funkcja usuwania
+                        className={styles.deleteButton}
+                      >
+                        <FaRegTrashAlt className={styles.deleteIcon} />
+                        {t.delete}
+                      </button>
+                    </div>
                   )}
                 </div>
               )}

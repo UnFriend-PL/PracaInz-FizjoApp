@@ -13,7 +13,7 @@
 }
 
 .modalContent {
-  background:$off-white;
+  background: $off-white;
   padding: 2rem;
   border-radius: 8px;
   min-width: 45%;
@@ -23,7 +23,6 @@
   overflow-y: scroll;
   overflow-x: hidden;
   position: relative;
-  display: flex;
   flex-wrap: wrap;
 }
 
