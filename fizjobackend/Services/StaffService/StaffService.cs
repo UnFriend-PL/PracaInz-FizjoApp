@@ -277,33 +277,58 @@ public class StaffService : IStaffService
         var response = new ServiceResponse<bool>("Working hours saved successfully");
         try
         {
+            // Parsowanie danych wejœciowych
             var dayOfWeek = Enum.Parse<DayOfWeek>(request.DayOfWeek);
             var startHour = TimeSpan.Parse(request.StartHour);
             var endHour = TimeSpan.Parse(request.EndHour);
 
-            var exisitingDay = await _dbContext.WorkingHours
-                .Where(w => w.PhysiotherapistId == request.PhysiotherapistId && w.DayOfWeek == dayOfWeek)
-                .FirstOrDefaultAsync();
-
-            if (exisitingDay == null)
+            if (startHour == TimeSpan.Zero && endHour == TimeSpan.Zero)
             {
-                var workingHours = new WorkingHours
+                // Usuwanie godzin pracy, jeœli startHour i endHour to "00:00"
+                var existingDay = await _dbContext.WorkingHours
+                    .Where(w => w.PhysiotherapistId == request.PhysiotherapistId && w.DayOfWeek == dayOfWeek)
+                    .FirstOrDefaultAsync();
+
+                if (existingDay != null)
                 {
-                    PhysiotherapistId = request.PhysiotherapistId,
-                    DayOfWeek = dayOfWeek,
-                    StartHour = startHour,
-                    EndHour = endHour
-                };
-                _dbContext.WorkingHours.Add(workingHours);
+                    _dbContext.WorkingHours.Remove(existingDay);
+                    await _dbContext.SaveChangesAsync();
+                    return response;
+                }
+                else
+                {
+                    response.Success = false;
+                    response.Message = "No existing working hours found to delete.";
+                    return response;
+                }
             }
             else
             {
-                exisitingDay.StartHour = startHour;
-                exisitingDay.EndHour = endHour;
-            }
+                // Zapisanie lub aktualizacja godzin pracy
+                var existingDay = await _dbContext.WorkingHours
+                    .Where(w => w.PhysiotherapistId == request.PhysiotherapistId && w.DayOfWeek == dayOfWeek)
+                    .FirstOrDefaultAsync();
 
-            await _dbContext.SaveChangesAsync();
-            return response;
+                if (existingDay == null)
+                {
+                    var workingHours = new WorkingHours
+                    {
+                        PhysiotherapistId = request.PhysiotherapistId,
+                        DayOfWeek = dayOfWeek,
+                        StartHour = startHour,
+                        EndHour = endHour
+                    };
+                    _dbContext.WorkingHours.Add(workingHours);
+                }
+                else
+                {
+                    existingDay.StartHour = startHour;
+                    existingDay.EndHour = endHour;
+                }
+
+                await _dbContext.SaveChangesAsync();
+                return response;
+            }
         }
         catch (Exception ex)
         {
