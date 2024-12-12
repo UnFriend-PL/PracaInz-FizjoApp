@@ -1,37 +1,15 @@
 {
     "contactTitle": "Contact",
-    "specialistsTitle": "Our Specialists",
+    "aboutTitle": "About Us",
+    "aboutDescription": "We are a team of specialists ready to help you.",
+    "contactInfoTitle": "Contact Information",
     "contactFormTitle": "Contact Form",
     "namePlaceholder": "Your Name",
     "emailPlaceholder": "Your Email",
-    "phonePlaceholder": "Your Phone Number",
     "messagePlaceholder": "Your Message",
     "sendButton": "Send",
-    "contactInfoTitle": "Contact Information",
-    "locationTitle": "Our Location",
-    "locationDescription": "Enter a city to view the map.",
-    "cityPlaceholder": "Enter a city",
-    "hoursTitle": "Working Hours",
-    "days": {
-        "monday": "Monday",
-        "tuesday": "Tuesday",
-        "wednesday": "Wednesday",
-        "thursday": "Thursday",
-        "friday": "Friday",
-        "saturday": "Saturday",
-        "sunday": "Sunday"
-    },
-    "hours": {
-        "open": "09:00 - 18:00",
-        "closed": "Closed"
-    },
-    "paymentInfoTitle": "PAYMENT DETAILS",
-    "nip": "NIP: 123-456-78-90",
-    "companyName": "Company Name: Przykładowa Firma Sp. z o.o.",
-    "address": "Address:  Przykładowa 1, 00-000 Miasto",
-    "accountNumber": "Account Number: 00 1234 5678 9012 3456 7890 0000",
-    "paymentMethods": "*Payment by card/BLIK available",
     "faqTitle": "Frequently Asked Questions",
-    "faq1": "How can I schedule an appointment?",
-    "faq2": "Do you offer discounts for new customers?"
+    "faq1": "What is manual therapy?",
+    "faq2": "What are the benefits of massage?",
+    "blogLink": "More questions on the blog"
 }

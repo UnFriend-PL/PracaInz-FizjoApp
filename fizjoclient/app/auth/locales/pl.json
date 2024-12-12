@@ -26,5 +26,6 @@
   "confirmPassword": "Potwierdź hasło",
   "phoneNumber": "Numer telefonu",
   "prev": "Poprzedni",
-  "next": "Następny"
+  "next": "Następny",
+  "registrationSuccessMessage": "Rejestracja zakończona sukcesem! Przekierowuję na stronę główną..."
 }

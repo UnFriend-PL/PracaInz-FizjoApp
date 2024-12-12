@@ -31,7 +31,7 @@ const Blog = () => {
 
   const fetchPosts = async (page = 1) => {
     try {
-      const data = await apiService.get("/Post/All", { page: page - 1 }, false);
+      const data = await apiService.get("/Post/All", { page: page }, false);
       if (data.success) {
         setPosts(data.data.posts);
         setTotalPages(data.data.totalPages);
@@ -45,6 +45,7 @@ const Blog = () => {
   };
 
   useEffect(() => {
+    //console.log("1" + isAuthenticated);
     fetchPosts(currentPage);
   }, [currentPage]);
 
@@ -192,43 +193,45 @@ const Blog = () => {
         </section>
 
         <section className={styles.questionFormSection}>
-          <h2>{t.askQuestion}</h2>
-          <form onSubmit={handleQuestionSubmit} className={styles.questionForm}>
-            <div className={styles.formGroup}>
-              <label htmlFor="title" className={styles.formLabel}>
-                {t.titleLabel}
-              </label>
-              <input
-                  id="title"
-                  type="text"
-                  value={newTitle}
-                  onChange={(e) => setNewTitle(e.target.value)}
-                  placeholder={t.enterTitle}
-                  required
-                  className={styles.formInput}
-              />
-            </div>
+        <h2>{t.askQuestion}</h2>
+        <form onSubmit={handleQuestionSubmit} className={styles.questionForm}>
+          <div className={styles.formGroup}>
+            <label htmlFor="title" className={styles.formLabel}>
+              {t.titleLabel}
+            </label>
+            <input
+                id="title"
+                type="text"
+                value={newTitle}
+                onChange={(e) => setNewTitle(e.target.value)}
+                placeholder={t.enterTitle}
+                required
+                className={styles.formInput}
+            />
+          </div>
 
-            <div className={styles.formGroup}>
-              <label htmlFor="body" className={styles.formLabel}>
-                {t.bodyLabel}
-              </label>
-              <textarea
-                  id="body"
-                  value={newBody}
-                  onChange={(e) => setNewBody(e.target.value)}
-                  placeholder={t.enterBody}
-                  required
-                  className={styles.formTextarea}
-              />
-            </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="body" className={styles.formLabel}>
+              {t.bodyLabel}
+            </label>
+            <textarea
+                id="body"
+                value={newBody}
+                onChange={(e) => setNewBody(e.target.value)}
+                placeholder={t.enterBody}
+                required
+                className={styles.formTextarea}
+            />
+          </div>
 
-            <button type="submit" className={styles.submitButton}>
-              {t.submitQuestion}
-            </button>
-          </form>
-          {error && <p className={styles.errorMessage}>{error}</p>}
-        </section>
+          <button type="submit" className={styles.submitButton}>
+            {t.submitQuestion}
+          </button>
+        </form>
+        {error && <p className={styles.errorMessage}>{error}</p>}
+      </section>
+
+
 
         <section className={styles.questionsList}>
           <h3>{t.recentQuestions}</h3>

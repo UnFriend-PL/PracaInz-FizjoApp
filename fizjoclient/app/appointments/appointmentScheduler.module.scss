@@ -45,7 +45,7 @@
     }
 
     .deletePatient {
-      color:$error;
+      color: $error;
       cursor: pointer;
     }
     .searchField {
@@ -86,3 +86,104 @@
     }
   }
 }
+
+/* Responsywność */
+@media (max-width: 1024px) {
+  .appointmentSchedulerButton {
+    font-size: 2rem;
+    padding: 0.5rem;
+  }
+
+  .searchPanel {
+    flex-direction: column;
+
+    .searchLabel {
+      font-size: 1rem;
+    }
+
+    .searchField {
+      flex-direction: column;
+      align-items: stretch;
+
+      .searchInput {
+        flex-basis: 100%;
+        margin-bottom: 0.5rem;
+      }
+
+      .searchButton {
+        flex-basis: 100%;
+      }
+    }
+
+    .submitButton {
+      padding: 0.5rem 1rem;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .appointmentSchedulerButton {
+    font-size: 1.8rem;
+    padding: 0.4rem;
+  }
+
+  .searchPanel {
+    padding-top: 1rem;
+
+    .searchLabel {
+      font-size: 0.9rem;
+    }
+
+    .searchField {
+      .searchInput {
+        padding: 0.4rem;
+        font-size: 0.9rem;
+      }
+
+      .searchButton {
+        font-size: 0.9rem;
+        padding: 0.4rem;
+      }
+    }
+
+    .submitButton {
+      font-size: 0.9rem;
+      padding: 0.4rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .appointmentSchedulerButton {
+    font-size: 1.5rem;
+    padding: 0.3rem;
+  }
+
+  .searchPanel {
+    .searchLabel {
+      font-size: 0.8rem;
+    }
+
+    .searchValue .showDetails {
+      font-size: 0.8rem;
+    }
+
+    .searchField {
+      .searchInput {
+        padding: 0.3rem;
+        font-size: 0.8rem;
+      }
+
+      .searchButton {
+        font-size: 0.8rem;
+        padding: 0.3rem;
+      }
+    }
+
+    .submitButton {
+      font-size: 0.8rem;
+      padding: 0.3rem;
+    }
+  }
+}
+

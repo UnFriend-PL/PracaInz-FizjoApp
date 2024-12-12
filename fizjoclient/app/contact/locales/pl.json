@@ -1,37 +1,15 @@
 {
     "contactTitle": "Kontakt",
-    "specialistsTitle": "Nasi Specjaliści",
+    "aboutTitle": "O Nas",
+    "aboutDescription": "Jesteśmy zespołem specjalistów gotowych Ci pomóc.",
+    "contactInfoTitle": "Dane Kontaktowe",
     "contactFormTitle": "Formularz Kontaktowy",
     "namePlaceholder": "Twoje imię",
     "emailPlaceholder": "Twój e-mail",
-    "phonePlaceholder": "Twój numer telefonu",
     "messagePlaceholder": "Twoja wiadomość",
     "sendButton": "Wyślij",
-    "contactInfoTitle": "Dane Kontaktowe",
-    "locationTitle": "Nasza Lokalizacja",
-    "locationDescription": "Wpisz miejscowość, aby zobaczyć mapę.",
-    "cityPlaceholder": "Wprowadź miejscowość",
-    "hoursTitle": "Godziny Pracy",
-    "days": {
-        "monday": "Poniedziałek",
-        "tuesday": "Wtorek",
-        "wednesday": "Środa",
-        "thursday": "Czwartek",
-        "friday": "Piątek",
-        "saturday": "Sobota",
-        "sunday": "Niedziela"
-    },
-    "hours": {
-        "open": "09:00 - 18:00",
-        "closed": "Nieczynne"
-    },
-    "paymentInfoTitle": "DANE DO PRZELEWU",
-    "nip": "NIP: 123-456-78-90",
-    "companyName": "Nazwa Firmy: Przykładowa Firma Sp. z o.o.",
-    "address": "ul. Przykładowa 1, 00-000 Miasto",
-    "accountNumber": "nr konta: 00 1234 5678 9012 3456 7890 0000",
-    "paymentMethods": "*Możliwość płatności kartą/BLIK",
     "faqTitle": "Najczęściej Zadawane Pytania",
-    "faq1": "Jak mogę umówić się na wizytę?",
-    "faq2": "Czy oferujecie zniżki dla nowych klientów?"
+    "faq1": "Co to jest terapia manualna?",
+    "faq2": "Jakie są korzyści z masażu?",
+    "blogLink": "Więcej pytań na blogu"
 }

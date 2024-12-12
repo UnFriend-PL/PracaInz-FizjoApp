@@ -41,5 +41,10 @@
   "education": "Wykształcenie",
   "description": "Opis",
   "yearsOfExperience": "Lata doświadczenia",
-  "adress": "Adres"
+  "adress": "Adres",
+  "registrationSuccessMessage": "Rejestracja zakończona sukcesem! Przekierowuję na stronę główną..."
+  
+  
+  
+  
 }

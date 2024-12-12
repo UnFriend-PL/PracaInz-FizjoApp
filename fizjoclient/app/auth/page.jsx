@@ -1,5 +1,6 @@
 "use client";
 import { useState, useContext } from "react";
+import { useRouter } from "next/navigation"; // Import useRouter
 import styles from "./auth.module.scss";
 import LoginForm from "./LoginForm";
 import RegistrationForm from "./SignUp";
@@ -12,6 +13,7 @@ import en from "./locales/en.json";
 const locales = { en, pl };
 
 const AuthPage = () => {
+  const router = useRouter(); // Initialize router
   const { login } = useContext(AuthContext);
   const { language } = useContext(LanguageContext);
   const t = locales[language];
@@ -77,6 +79,7 @@ const AuthPage = () => {
 
       if (response.success) {
         login(response.data);
+        router.push("/home"); 
       } else {
         const errorData = response;
         setError(errorData.message || "An error occurred");

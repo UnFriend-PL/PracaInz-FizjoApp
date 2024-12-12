@@ -17,10 +17,9 @@
     text-align: center;
     background-size: cover;
     background-position: center;
-    background-attachment: fixed; 
+    background-attachment: fixed;
     background-repeat: no-repeat;
-    animation: backgroundChange 15s infinite alternate; 
-
+    animation: backgroundChange 15s infinite alternate;
 
     &::before {
         content: '';
@@ -35,7 +34,7 @@
 
     .heroContent {
         position: relative;
-        z-index: 2; 
+        z-index: 2;
         max-width: 800px;
         color: $white;
 
@@ -68,9 +67,40 @@
             }
         }
     }
+
+    // Media queries for smaller screens
+    @media (max-width: 768px) {
+        .heroContent {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            p {
+                font-size: 1.2rem;
+            }
+
+            .ctaButton {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+    }
+
+    @media (max-width: 480px) {
+        height: 80vh;
+        .heroContent {
+            h1 {
+                font-size: 2rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+        }
+    }
 }
 
-// Keyframes do zmiany tła co kilka sekund
+// Keyframes for background change
 @keyframes backgroundChange {
     0% {
         background-image: url('/images/tlo1.jpg');
@@ -81,15 +111,9 @@
     100% {
         background-image: url('/images/tlo3.jpg');
     }
-    50% {
-        background-image: url('/images/tlo4.jpg');
-    }
-    100% {
-        background-image: url('/images/tlo5.jpg');
-    }
 }
 
-/* Sekcja Korzyści z Masażu */
+/* Benefits Section */
 .benefitsSection {
     padding: 60px 20px;
     background-color: $white;
@@ -122,6 +146,7 @@
             flex-direction: column;
             align-items: center;
             hyphens: auto;
+
             h3 {
                 font-size: 1.5rem;
                 font-weight: 400;
@@ -138,14 +163,51 @@
 
             .benefitIcon {
                 margin-bottom: 15px;
-                font-size: 2.5rem; 
+                font-size: 2.5rem;
                 color: $green;
+            }
+        }
+    }
+
+    // Responsive styles for benefits
+    @media (max-width: 768px) {
+        .benefitsList {
+            gap: 20px;
+        }
+
+        .benefit {
+            max-width: 200px;
+
+            h3 {
+                font-size: 1.2rem;
+            }
+
+            p {
+                font-size: 0.9rem;
+            }
+        }
+    }
+
+    @media (max-width: 480px) {
+        h2 {
+            font-size: 1.5rem;
+        }
+
+        .benefit {
+            max-width: 180px;
+
+            h3 {
+                font-size: 1rem;
+            }
+
+            p {
+                font-size: 0.8rem;
             }
         }
     }
 }
 
-/* CTA Section - wyświetlana tylko, jeśli użytkownik nie jest zalogowany */
+/* CTA Section */
 .ctaSection {
     padding: 60px 20px;
     background-color: $dark-green;
@@ -169,12 +231,34 @@
         transition: background-color 0.3s ease;
 
         &:hover {
-            background-color: $dark-green;
+            background-color: lighten($dark-green, 10%);
+        }
+    }
+
+    @media (max-width: 768px) {
+        h2 {
+            font-size: 1.5rem;
+        }
+
+        .ctaButtonLarge {
+            font-size: 1rem;
+            padding: 10px 20px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        h2 {
+            font-size: 1.2rem;
+        }
+
+        .ctaButtonLarge {
+            font-size: 0.9rem;
+            padding: 8px 16px;
         }
     }
 }
 
-/* Stylizacja dla animacji korzyści */
+/* Animation for benefits visibility */
 .benefit {
     opacity: 0;
     transform: translateY(50px);
@@ -185,6 +269,7 @@
     opacity: 1;
     transform: translateY(0);
 }
+
 
 
 

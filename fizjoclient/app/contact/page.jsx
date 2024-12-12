@@ -22,14 +22,6 @@ const Contact = () => {
                 <p>{t.aboutDescription}</p>
             </section>
 
-            {/* Informacje o Specjalistach */}
-            <section className={styles.specialistsSection}>
-                <h2>{t.specialistsTitle}</h2>
-                <div className={styles.specialistsList}>
-                    <Staff />
-                </div>
-            </section>
-
             {/* Informacje Kontaktowe */}
             <section className={styles.contactInfoSection}>
                 <h2>{t.contactInfoTitle}</h2>
@@ -50,13 +42,17 @@ const Contact = () => {
 
             {/* FAQ */}
             <section className={styles.faqSection}>
-                <h2>{t.faqTitle}</h2>
-                <ul>
-                    <li>{t.faq1}</li>
-                    <li>{t.faq2}</li>
-                    {/* Dodaj więcej pytań i odpowiedzi według potrzeb */}
-                </ul>
-            </section>
+            <h2>{t.faqTitle}</h2>
+<ul>
+    <li>{t.faq1}</li>
+    <li>{t.faq2}</li>
+</ul>
+<a href="/blog?category=faq" className={styles.ctaButton}>
+    {t.blogLink}
+</a>
+
+</section>
+
         </div>
     );
 };

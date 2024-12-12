@@ -9,6 +9,15 @@
   min-width: 30%;
   max-width: 50%;
   background-color: $off-white;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+    max-width: 90%;
+  }
+
+  @media (max-width: 480px) {
+    max-width: 100%;
+  }
 }
 
 .formContainer {
@@ -18,35 +27,76 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 100%;
+
+  @media (max-width: 480px) {
+    padding: 1rem;
+    border-radius: 6px;
+  }
 }
 
 .form {
   display: flex;
   flex-direction: column;
+  max-width: 100%;
+  min-width: 100%;
+  margin: 0 auto;
+
+  @media (max-width: 480px) {
+    padding: 0 1rem;
+  }
+}
+
+.heading {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: $black;
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.8rem;
+  }
 }
 
 .label {
-  margin-bottom: 0.5rem;
-  color: $grey;
+  margin-bottom: 0.3rem;
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+  }
 }
 
 .input {
-  padding: 0.75rem;
+  margin-bottom: 1rem;
+  padding: 0.8rem;
   border: 1px solid $border-color;
   border-radius: 4px;
-  margin-bottom: 1rem;
-  background-color: $off-white;
-  color: $border-color;
+
+  @media (max-width: 480px) {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
 }
 
-.option {
-  color: $border-color;
+.buttonContainer {
+  display: flex;
+  justify-content: space-between;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: 10px;
+  }
 }
 
+.button,
 .submitButton {
+  padding: 10px 20px;
   background-color: $green;
-  color: $dark-green;
-  padding: 0.75rem;
+  color: $white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -54,6 +104,19 @@
 
   &:hover {
     background-color: $green-highlight;
+  }
+
+  @media (max-width: 480px) {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+}
+
+.submitButton {
+  background-color: $dark-green;
+
+  &:hover {
+    background-color: lighten($dark-green, 10%);
   }
 }
 
@@ -70,71 +133,28 @@
   &:hover {
     background-color: $dark-green;
   }
+
+  @media (max-width: 480px) {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
 }
 
 .registrationFields {
   display: flex;
   flex-direction: column;
-}
 
-.form {
-  display: flex;
-  flex-direction: column;
-  max-width: 100%;
-  min-width: 100%;
-  margin: 0 auto;
-}
-
-.heading {
-  text-align: center;
-  font-size: 2.5rem;
-  margin-bottom: 1.5rem;
-  color:$black;
-}
-
-.label {
-  margin-bottom: 0.3rem;
-}
-
-.input {
-  margin-bottom: 1rem;
-  padding: 0.8rem;
-  border: 1px solid $border-color;
-  border-radius: 4px;
-}
-
-.buttonContainer {
-  display: flex;
-  justify-content: space-between;
-}
-
-.button {
-  padding: 10px 20px;
-  background-color: $green;
-  color: $white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.button:hover {
-  background-color: $green-highlight;
-}
-
-.submitButton {
-  padding: 10px 20px;
-  background-color: $dark-green;
-  color: $white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.submitButton:hover {
-  background-color: $dark-green;
+  @media (max-width: 480px) {
+    gap: 10px;
+  }
 }
 
 .error {
   color: red;
   margin-bottom: 15px;
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+  }
 }
+

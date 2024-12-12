@@ -1,4 +1,5 @@
 @import "@/app/utils/globalColors.scss";
+
 .container {
   display: flex;
   justify-content: center;
@@ -8,6 +9,12 @@
   background-color: $off-white;
   min-width: 70%;
   max-width: 80%;
+
+  @media (max-width: 768px) {
+    min-width: 90%;
+    max-width: 100%;
+    padding: 1rem;
+  }
 }
 
 .dateGroup {
@@ -15,21 +22,22 @@
   flex-wrap: wrap;
   flex-basis: 80%;
   justify-content: space-between;
+
+  @media (max-width: 768px) {
+    flex-basis: 100%;
+    margin-bottom: 1rem;
+  }
+
   .date {
-    color:$black;
+    color: $black;
     flex-basis: 100%;
     font-weight: 800;
     font-size: 1.2rem;
     margin-bottom: 0.3rem;
     border-bottom: 3px solid $border-color;
   }
-  .appointmentCard {
-    &:hover {
-      background-color: $blue-highlight;
-      cursor: pointer;
-      color: $white;
 
-    }
+  .appointmentCard {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -42,12 +50,29 @@
     flex-basis: 45%;
     max-width: 100%;
     margin-bottom: 1rem;
+
+    &:hover {
+      background-color: $blue-highlight;
+      cursor: pointer;
+      color: $white;
+    }
+
+    @media (max-width: 768px) {
+      flex-basis: 100%;
+      padding: 1rem;
+    }
+
     .time {
-      color:$black;
+      color: $black;
       font-weight: 800;
       font-size: 1.2em;
       margin-bottom: 0.3em;
+
+      @media (max-width: 768px) {
+        font-size: 1rem;
+      }
     }
+
     .details {
       display: flex;
       flex-wrap: wrap;
@@ -55,23 +80,36 @@
       align-items: center;
       align-content: center;
       flex-basis: 100%;
+
       .field {
         display: flex;
         justify-content: space-between;
         padding: 0.8rem 0;
         border-bottom: 1px solid $border-color;
+
+        @media (max-width: 768px) {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
         .label {
           font-weight: bold;
           color: $grey;
           text-transform: capitalize;
+
+          @media (max-width: 768px) {
+            margin-bottom: 0.3rem;
+          }
         }
+
         .value {
-          color:$black;
+          color: $black;
         }
       }
     }
   }
 }
+
 .appointmentsNav {
   display: flex;
   flex-direction: row;
@@ -82,12 +120,23 @@
   background-color: $off-white;
   padding: 1rem;
   flex-basis: 100%;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
+
 .searchPanel {
   flex-basis: 100%;
   display: flex;
   flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 }
+
 .searchPanelSection {
   display: flex;
   flex-wrap: wrap;
@@ -96,4 +145,9 @@
   align-content: center;
   flex-basis: fit-content;
   padding: 2rem 2rem 0 0;
+
+  @media (max-width: 768px) {
+    padding: 1rem 0;
+    flex-basis: 100%;
+  }
 }
