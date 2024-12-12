@@ -98,9 +98,6 @@ const Profile = () => {
   };
 
   const handleSave = async (updatedUser, updatedStaffData, tempAvatarFile) => {
-    console.log("#######################");
-    console.log("Temporary Avatar File:", tempAvatarFile);
-
     try {
       let userUpdateResponse,
         staffUpdateResponse,
@@ -114,7 +111,6 @@ const Profile = () => {
             updatedUser,
             true
           );
-          console.log("User update response:", updatedUser);
         } catch (error) {
           console.error(
             "Error updating user info:",
@@ -122,7 +118,6 @@ const Profile = () => {
           );
           throw new Error("Failed to update user information");
         }
-        console.log("Updated User:", updatedUser);
       }
       if (role === "Physiotherapist" && updatedStaffData) {
         try {
@@ -131,7 +126,6 @@ const Profile = () => {
             updatedStaffData,
             true
           );
-          console.log("Staff update response:", staffUpdateResponse);
         } catch (error) {
           console.error(
             "Error updating staff data:",
@@ -139,17 +133,15 @@ const Profile = () => {
           );
           throw new Error("Failed to update staff data");
         }
-        console.log("Updated Staff Data:", updatedStaffData);
       }
       if (tempAvatarFile) {
-        console.log();
         const formData = new FormData();
         formData.append("file", tempAvatarFile);
         setUploading(true);
         try {
           avatarUploadResponse = await apiService.post(
             "/User/Avatar/Upload",
-              formData,
+            formData,
             true,
             {
               headers: { "Content-Type": "multipart/form-data" },
@@ -165,81 +157,25 @@ const Profile = () => {
           setUploading(false);
         }
       }
-      // if (removeWorkingHours && removeWorkingHours.length > 0) {
-      //   try {
-      //     const promises = workingHours.map((wh) => {
-      //       const workingHours = {
-      //         PhysiotherapistId: user.id,
-      //         DayOfWeek: wh.dayOfWeek.toString(),
-      //         StartHour: wh.startHour,
-      //         EndHour: wh.endHour,
-      //       };
-      //       return apiService.post(
-      //         "/Staff/SaveWorkingHours",
-      //         workingHours,
-      //         true
-      //       );
-      //     });
-      //     const responses = await Promise.all(promises);
-      //     responses.forEach((response, index) => {
-      //       if (!response.success) {
-      //         console.error(
-      //           "Error saving working hours for:",
-      //           tempWorkingHours[index],
-      //           response.message
-      //         );
-      //       }
-      //     });
-      //     alert("Working hours saved successfully!");
-      //   } catch (error) {
-      //     console.error("Error saving working hours:", error.message || error);
-      //     alert("Failed to save working hours.");
-      //   }
-      // }
-      // // Handle working hours update
-      // if (updateWorkingHours && updateWorkingHours.length > 0) {
-      //   try {
-      //     const promises = workingHours.map((wh) => {
-      //       const workingHours = {
-      //         PhysiotherapistId: user.id,
-      //         DayOfWeek: wh.dayOfWeek.toString(),
-      //         StartHour: wh.startHour,
-      //         EndHour: wh.endHour,
-      //       };
-      //       return apiService.post(
-      //         "/Staff/SaveWorkingHours",
-      //         workingHours,
-      //         true
-      //       );
-      //     });
-      //     const responses = await Promise.all(promises);
-      //     responses.forEach((response, index) => {
-      //       if (!response.success) {
-      //         console.error(
-      //           "Error saving working hours for:",
-      //           tempWorkingHours[index],
-      //           response.message
-      //         );
-      //       }
-      //     });
-      //     alert("Working hours saved successfully!");
-      //   } catch (error) {
-      //     console.error("Error saving working hours:", error.message || error);
-      //     alert("Failed to save working hours.");
-      //   }
-      // }
+      setUploading(true);
 
       if (userUpdateResponse?.success) {
-        await getUserInfo(); // Odśwież dane użytkownika
+        updateUser(updatedUser);
+        await getUserInfo();
       }
       if (role === "Physiotherapist" && staffUpdateResponse?.success) {
-        await fetchStaffInfo(staffId); // Odśwież dane personelu
+        await fetchStaffInfo(staffId);
       }
-      if (tempWorkingHours && workingHours.length > 0) {
-        await getWorkingHours(); // Odśwież godziny pracy
+      if (role === "Physiotherapist") {
+        await getWorkingHours(staffId);
       }
-
-      setIsModalOpen(false); // Zamknij modal po zapisaniu
+      if (avatarUploadResponse?.success) {
+        const newAvatarPath = avatarUploadResponse.data;
+        updateUser({ ...updatedUser, avatarPath: newAvatarPath });
+        await fetchProfilePicture(newAvatarPath);
+      }
+      setLoading(false);
+      setIsModalOpen(false);
     } catch (error) {
       console.error("Error saving changes:", error.message || error);
       alert(`Failed to save changes: ${error.message}`);
@@ -313,7 +249,6 @@ const Profile = () => {
         enableEditAllFields();
         break;
       case "appointments":
-        console.log("Navigate to Appointments");
         break;
       case "opinion":
         break;
@@ -323,29 +258,23 @@ const Profile = () => {
     setShowDropdown(false);
   };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getUserInfo();
-        if (data) {
-          updateUser(data);
-          fetchStaffInfo(data.id);
-          if (data.avatarPath) {
-            fetchProfilePicture(data.avatarPath);
+    if (isAuthenticated) {
+      const fetchData = async () => {
+        try {
+          const data = await getUserInfo();
+          if (data) {
+            updateUser(data);
+            setStaffId(data.id);
+            if (data.avatarPath) {
+              fetchProfilePicture(data.avatarPath);
+            }
           }
+        } catch (error) {
+          console.error("Error fetching user info:", error);
         }
-      } catch (error) {
-        console.error("Error fetching user info:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    if (isAuthenticated) fetchData();
-
-    return () => {
-      if (avatarUrl) {
-        URL.revokeObjectURL(avatarUrl);
-      }
-    };
+      };
+      fetchData();
+    }
   }, [isAuthenticated]);
 
   useEffect(() => {
@@ -353,7 +282,6 @@ const Profile = () => {
       fetchStaffInfo(staffId);
       getWorkingHours(staffId);
     }
-    console.log(staffData);
   }, [staffId]);
 
   if (!isAuthenticated) {
@@ -552,9 +480,9 @@ const Profile = () => {
               <div className={styles.workingHoursTitle}>{t.workingHours}</div>
               {workingHours.length > 0 ? (
                 workingHours
-                  .sort((a, b) => a.dayOfWeek - b.dayOfWeek) // Sortowanie wg dayOfWeek
+                  .sort((a, b) => a.dayOfWeek - b.dayOfWeek)
                   .map((hour) => (
-                    <div className={styles.fieldItem} key={hour.id}>
+                    <div className={styles.fieldItem} key={hour.dayOfWeek}>
                       <div className={styles.field}>
                         <span className={styles.fieldLabel}>
                           {t[`day${hour.dayOfWeek}`]}:
