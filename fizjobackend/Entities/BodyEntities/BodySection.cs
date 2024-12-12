@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Fizjobackend.Entities.TreatmentsEntities;
+using System.ComponentModel.DataAnnotations;
 
-namespace fizjobackend.Entities.BodyEntities
+namespace Fizjobackend.Entities.BodyEntities
 {
     public class BodySection
     {

@@ -1,12 +1,11 @@
-﻿using fizjobackend.Entities.UserEntities;
-using fizjobackend.Interfaces.AccountInterfaces;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Fizjobackend.Entities.UserEntities;
 
-namespace fizjobackend.Services.AccountService
+namespace Fizjobackend.Services.AccountService
 {
     internal class JwtGenerator : IJwtGenerator
     {

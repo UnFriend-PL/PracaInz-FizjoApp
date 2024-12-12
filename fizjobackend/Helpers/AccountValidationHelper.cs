@@ -1,9 +1,8 @@
-﻿using fizjobackend.Entities.UserEntities;
-using fizjobackend.Enums.UserEnums;
-using fizjobackend.Interfaces.HelpersInterfaces;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
+using Fizjobackend.Entities.UserEntities;
+using Fizjobackend.Enums.UserEnums;
 
-namespace fizjobackend.Helpers
+namespace Fizjobackend.Helpers
 {
     internal class AccountValidationHelper : IAccountValidationHelper
     {

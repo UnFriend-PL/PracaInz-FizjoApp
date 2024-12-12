@@ -1,9 +1,11 @@
 {
   "home": "Strona główna",
   "appointments": "Wizyty",
+  "staff": "Personel",
+  "blog": "Blog",
   "contact": "Kontakt",
   "profile": "Profil",
   "signIn": "Zaloguj się",
   "logOut": "Wyloguj się",
-  "logo": "Logo"
+  "logo": "Fizjo-Hub"
 }

@@ -1,76 +1,271 @@
 "use client";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styles from "./profile.module.scss";
-import apiService from "../services/apiService/apiService";
+import apiService, { fetchAvatar } from "../services/apiService/apiService";
+import { useRouter } from "next/navigation";
 import { AuthContext } from "../contexts/auth/authContext";
 import { UserContext } from "../contexts/user/userContext";
 import { LanguageContext } from "../contexts/lang/langContext";
-import { FaRegEdit } from "react-icons/fa";
+import { FaCaretDown } from "react-icons/fa";
 import pl from "./locales/pl.json";
 import en from "./locales/en.json";
+import Image from "next/image";
+import Modal from "./Modal";
 
 const locales = { en, pl };
 
 const Profile = () => {
-  const [loading, setLoading] = useState(true);
+  const router = useRouter();
   const { isAuthenticated } = useContext(AuthContext);
   const { user, updateUser } = useContext(UserContext);
   const { language } = useContext(LanguageContext);
   const t = locales[language];
-  const [isEditing, setIsEditing] = useState(false);
+
+  const [loading, setLoading] = useState(true);
   const [editableFields, setEditableFields] = useState({});
-  const [isDirty, setIsDirty] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
+  const [editedUser, setEditedUser] = useState(user);
+  const [uploading, setUploading] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState(null);
+  const [avatarLoading, setAvatarLoading] = useState(false);
+  const [workingHours, setWorkingHours] = useState([]);
+  const [tempWorkingHours, setTempWorkingHours] = useState(workingHours || []);
 
-  const handleEditToggle = (key) => {
-    setEditableFields((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
-  };
+  const [staffData, setStaffData] = useState({
+    education: "",
+    description: "",
+    yearsOfExperience: "",
+  });
+  const { role } = useContext(AuthContext);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleInputChange = (key, value) => {
-    updateUser((prevUser) => ({
-      ...prevUser,
-      [key]: value,
-    }));
-    setIsDirty(true);
-  };
-
-  const enableEditAllFields = () => {
-    setIsEditing(!isEditing);
-    if (!isEditing) {
-      const newEditableFields = Object.keys(user).reduce((acc, key) => {
-        acc[key] = true;
-        return acc;
-      }, {});
-      setEditableFields(newEditableFields);
-    } else {
-      setEditableFields({});
-      setIsDirty(false);
-    }
-  };
-
-  const saveChanges = async () => {
-    setIsEditing(false);
-    setEditableFields({});
-    setIsDirty(false);
+  const [staffId, setStaffId] = useState(null);
+  const handleOpenModal = async () => {
     try {
-      console.log(user);
-      const response = await apiService.post("/User/UpdateInfo", user, true);
-      if (response.success) {
-        return response.data;
-      } else {
-        throw new Error(response.data);
+      const data = await getUserInfo();
+      if (data) {
+        updateUser(data);
+        setEditedUser(data);
+        fetchStaffInfo(data.id);
       }
     } catch (error) {
-      console.error("Error fetching user info:", error);
-    } finally {
-      setLoading(false);
+      console.error("Error fetching user data:", error);
+    }
+    setIsModalOpen(true);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getUserInfo();
+        if (data) {
+          updateUser(data);
+          setStaffId(data.id);
+          if (data.avatarPath) {
+            await fetchProfilePicture(data.avatarPath);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (isAuthenticated) fetchData();
+  }, [isAuthenticated]);
+
+  const fetchProfilePicture = async (avatarPath) => {
+    setAvatarLoading(true);
+    if (avatarPath) {
+      try {
+        const url = await fetchAvatar(avatarPath);
+        setAvatarUrl(url);
+      } catch (error) {
+        console.error("Error loading avatar:", error);
+        setAvatarUrl(null);
+      } finally {
+        setAvatarLoading(false);
+      }
+    } else {
+      setAvatarUrl(null);
+      setAvatarLoading(false);
+    }
+  };
+  const formatDateToReadable = (dateString) => {
+    const options = { year: "numeric", month: "numeric", day: "numeric" };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  const handleSave = async (updatedUser, updatedStaffData, tempAvatarFile) => {
+    console.log("#######################");
+    console.log("Temporary Avatar File:", tempAvatarFile);
+
+    try {
+      let userUpdateResponse,
+        staffUpdateResponse,
+        avatarUploadResponse,
+        updateWorkingHours;
+
+      if (updatedUser) {
+        try {
+          userUpdateResponse = await apiService.post(
+            "/User/UpdateInfo",
+            updatedUser,
+            true
+          );
+          console.log("User update response:", updatedUser);
+        } catch (error) {
+          console.error(
+            "Error updating user info:",
+            error.response?.data || error.message
+          );
+          throw new Error("Failed to update user information");
+        }
+        console.log("Updated User:", updatedUser);
+      }
+      if (role === "Physiotherapist" && updatedStaffData) {
+        try {
+          staffUpdateResponse = await apiService.post(
+            "/Staff/Update",
+            updatedStaffData,
+            true
+          );
+          console.log("Staff update response:", staffUpdateResponse);
+        } catch (error) {
+          console.error(
+            "Error updating staff data:",
+            error.response?.data || error.message
+          );
+          throw new Error("Failed to update staff data");
+        }
+        console.log("Updated Staff Data:", updatedStaffData);
+      }
+      if (tempAvatarFile) {
+        console.log();
+        const formData = new FormData();
+        formData.append("file", tempAvatarFile);
+        setUploading(true);
+        try {
+          avatarUploadResponse = await apiService.post(
+            "/User/Avatar/Upload",
+            tempAvatarFile,
+            true,
+            {
+              headers: { "Content-Type": "multipart/form-data" },
+            }
+          );
+        } catch (error) {
+          console.error(
+            "Error uploading avatar:",
+            error.response?.data || error.message
+          );
+          throw new Error("Failed to upload avatar");
+        } finally {
+          setUploading(false);
+        }
+      }
+      // if (removeWorkingHours && removeWorkingHours.length > 0) {
+      //   try {
+      //     const promises = workingHours.map((wh) => {
+      //       const workingHours = {
+      //         PhysiotherapistId: user.id,
+      //         DayOfWeek: wh.dayOfWeek.toString(),
+      //         StartHour: wh.startHour,
+      //         EndHour: wh.endHour,
+      //       };
+      //       return apiService.post(
+      //         "/Staff/SaveWorkingHours",
+      //         workingHours,
+      //         true
+      //       );
+      //     });
+      //     const responses = await Promise.all(promises);
+      //     responses.forEach((response, index) => {
+      //       if (!response.success) {
+      //         console.error(
+      //           "Error saving working hours for:",
+      //           tempWorkingHours[index],
+      //           response.message
+      //         );
+      //       }
+      //     });
+      //     alert("Working hours saved successfully!");
+      //   } catch (error) {
+      //     console.error("Error saving working hours:", error.message || error);
+      //     alert("Failed to save working hours.");
+      //   }
+      // }
+      // // Handle working hours update
+      // if (updateWorkingHours && updateWorkingHours.length > 0) {
+      //   try {
+      //     const promises = workingHours.map((wh) => {
+      //       const workingHours = {
+      //         PhysiotherapistId: user.id,
+      //         DayOfWeek: wh.dayOfWeek.toString(),
+      //         StartHour: wh.startHour,
+      //         EndHour: wh.endHour,
+      //       };
+      //       return apiService.post(
+      //         "/Staff/SaveWorkingHours",
+      //         workingHours,
+      //         true
+      //       );
+      //     });
+      //     const responses = await Promise.all(promises);
+      //     responses.forEach((response, index) => {
+      //       if (!response.success) {
+      //         console.error(
+      //           "Error saving working hours for:",
+      //           tempWorkingHours[index],
+      //           response.message
+      //         );
+      //       }
+      //     });
+      //     alert("Working hours saved successfully!");
+      //   } catch (error) {
+      //     console.error("Error saving working hours:", error.message || error);
+      //     alert("Failed to save working hours.");
+      //   }
+      // }
+
+      if (userUpdateResponse?.success) {
+        await getUserInfo(); // Odśwież dane użytkownika
+      }
+      if (role === "Physiotherapist" && staffUpdateResponse?.success) {
+        await fetchStaffInfo(staffId); // Odśwież dane personelu
+      }
+      if (tempWorkingHours && workingHours.length > 0) {
+        await getWorkingHours(); // Odśwież godziny pracy
+      }
+
+      setIsModalOpen(false); // Zamknij modal po zapisaniu
+    } catch (error) {
+      console.error("Error saving changes:", error.message || error);
+      alert(`Failed to save changes: ${error.message}`);
     }
   };
 
-  const getUserInfo = async (e) => {
-    e.preventDefault();
+  const showDetails = () => {
+    router.push("/opinion");
+  };
+
+  const fetchStaffInfo = async (staffId) => {
+    try {
+      if (role === "Physiotherapist") {
+        const response = await apiService.get(`/Staff/${staffId}`);
+        if (response.success) {
+          const { education, description, yearsOfExperience } = response.data;
+          setStaffData({ education, description, yearsOfExperience });
+        } else {
+          console.error("Failed to fetch staff data:", response.message);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching staff info:", error);
+    }
+  };
+  const getUserInfo = async () => {
     try {
       const response = await apiService.get("/User/GetInfo", null, true);
       if (response.success) {
@@ -86,17 +281,80 @@ const Profile = () => {
     }
   };
 
+  const getWorkingHours = async () => {
+    try {
+      const response = await apiService.get(`/Staff/WorkingHours/${staffId}`);
+      if (response.success) {
+        setWorkingHours(response.data);
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (error) {
+      console.error("Error fetching staff info:", error);
+      return [];
+    }
+  };
+  const formatTime = (timeString) => {
+    const [hours, minutes] = timeString.split(":");
+    return `${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}`;
+  };
+  useEffect(() => {
+    if (isAuthenticated) {
+      getUserInfo();
+    }
+  }, [isAuthenticated]);
+
+  const toggleDropdown = () => {
+    setShowDropdown((prev) => !prev);
+  };
+  const handleMenuClick = (option) => {
+    switch (option) {
+      case "edit":
+        enableEditAllFields();
+        break;
+      case "appointments":
+        console.log("Navigate to Appointments");
+        break;
+      case "opinion":
+        break;
+      default:
+        break;
+    }
+    setShowDropdown(false);
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getUserInfo({ preventDefault: () => {} });
-        updateUser(data);
+        const data = await getUserInfo();
+        if (data) {
+          updateUser(data);
+          fetchStaffInfo(data.id);
+          if (data.avatarPath) {
+            fetchProfilePicture(data.avatarPath);
+          }
+        }
       } catch (error) {
         console.error("Error fetching user info:", error);
+      } finally {
+        setLoading(false);
       }
     };
     if (isAuthenticated) fetchData();
+
+    return () => {
+      if (avatarUrl) {
+        URL.revokeObjectURL(avatarUrl);
+      }
+    };
   }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (staffId) {
+      fetchStaffInfo(staffId);
+      getWorkingHours(staffId);
+    }
+    console.log(staffData);
+  }, [staffId]);
 
   if (!isAuthenticated) {
     return (
@@ -119,43 +377,225 @@ const Profile = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>{t.profile}</h1>
+      <div className={styles.dropdownContainer}>
+        <FaCaretDown className={styles.dropdownIcon} onClick={toggleDropdown} />
+        {showDropdown && (
+          <div className={styles.dropdownMenu}>
+            <div onClick={() => handleMenuClick("appointments")}>
+              {t.appointments}
+            </div>
+            <div onClick={() => showDetails()}>{t.opinions}</div>
+          </div>
+        )}
+      </div>
 
-      <div className={styles.profileCard}>
-        <button onClick={enableEditAllFields} className={styles.editButton}>
-          <FaRegEdit className={styles.editIcon} />{" "}
-          {isEditing ? t.saveChanges : t.editAllFields}
-        </button>
-        {Object.keys(user)
-          .filter((key) => key !== "Id")
-          .map((key) => (
-            <div className={styles.field} key={key}>
-              <span className={styles.label}>
-                {t[key] || key.replace(/([A-Z])/g, " $1").trim()}:
-              </span>
-              {editableFields[key] ? (
-                <input
-                  type="text"
-                  value={user[key]}
-                  onChange={(e) => handleInputChange(key, e.target.value)}
-                  onBlur={() => handleEditToggle(key)}
-                  className={styles.editableInput}
+      <div className={styles.profileContainer}>
+        <div className={styles.profileHeader}>
+          <div className={styles.avatarWrapper}>
+            {avatarLoading ? (
+              <div className={styles.avatarLoading}>{t.loadingAvatar}</div>
+            ) : avatarUrl ? (
+              <Image
+                src={avatarUrl}
+                alt="User Avatar"
+                width={150}
+                height={150}
+                className={styles.avatarImage}
+              />
+            ) : (
+              <div className={styles.noAvatar}>
+                <Image
+                  src="/default-avatar.png"
+                  alt="User Avatar"
+                  width={150}
+                  height={150}
+                  className={styles.avatarImage}
                 />
+              </div>
+            )}
+          </div>
+          {role === "Physiotherapist" && (
+            <>
+              <div className={styles.profileInfo}>
+                <div className={styles.profileField}>
+                  <span className={styles.fieldLabel}>{t.education}</span>
+                  <span className={styles.fieldValue}>
+                    {staffData.education || t.notAvailable}
+                  </span>
+                </div>
+
+                <div className={styles.profileField}>
+                  <span className={styles.fieldLabel}>
+                    {t.yearsOfExperience}:
+                  </span>
+                  <span className={styles.fieldValue}>
+                    {staffData.yearsOfExperience || t.notAvailable}
+                  </span>
+                </div>
+                {staffData.description && (
+                  <div className={styles.profileDescription}>
+                    <div className={styles.profileDescriptionTitle}>
+                      <span className={styles.fieldLabel}>
+                        {t.description}:
+                      </span>
+                    </div>
+                    <div className={styles.profileDescriptionValue}>
+                      <span className={styles.fieldValue}>
+                        {staffData.description}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+
+        <div className={styles.profileColumnPersonInfomration}>
+          <div className={styles.profilPersonInfomrationTitle}>
+            {t.personInformation}
+          </div>
+          {[
+            "firstName",
+            "lastName",
+            "gender",
+            "pesel",
+            "dateOfBirth",
+            "phoneNumber",
+            "email",
+          ].map((key) => {
+            if (!user[key]) return null;
+            return (
+              <div className={styles.fieldItem} key={key}>
+                <div className={styles.field}>
+                  <span className={styles.fieldLabel}>
+                    {t[key] || key.replace(/([A-Z])/g, " $1").trim()}:
+                  </span>
+                  {editableFields[key] ? (
+                    key === "dateOfBirth" ? (
+                      <input
+                        type="date"
+                        value={
+                          editedUser[key] ? editedUser[key].slice(0, 10) : ""
+                        }
+                        onChange={(e) => handleInputChange(key, e.target.value)}
+                        className={styles.editableInput}
+                      />
+                    ) : key === "gender" ? (
+                      <select
+                        value={editedUser[key]}
+                        onChange={(e) => handleInputChange(key, e.target.value)}
+                        className={styles.editableInput}
+                      >
+                        <option value="male">{t.male}</option>
+                        <option value="female">{t.female}</option>
+                        <option value="other">{t.other}</option>
+                      </select>
+                    ) : (
+                      <input
+                        type="text"
+                        value={editedUser[key]}
+                        onChange={(e) => handleInputChange(key, e.target.value)}
+                        className={styles.editableInput}
+                      />
+                    )
+                  ) : (
+                    <span
+                      className={`${styles.fieldValue} ${styles.nonEditable}`}
+                    >
+                      {key === "dateOfBirth"
+                        ? formatDateToReadable(user[key])
+                        : user[key]}
+                    </span>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div className={styles.profileRightColumn}>
+          <div className={styles.profileColumnAddress}>
+            <div className={styles.addressTitle}>{t.adress}</div>
+            {["country", "city", "streetWithHouseNumber", "postCode"].map(
+              (key) => {
+                if (!user[key]) return null;
+                return (
+                  <div className={styles.fieldItem} key={key}>
+                    <div className={styles.field}>
+                      <span className={styles.fieldLabel}>
+                        {t[key] || key.replace(/([A-Z])/g, " $1").trim()}:
+                      </span>
+                      {editableFields[key] ? (
+                        <input
+                          type="text"
+                          value={editedUser[key]}
+                          onChange={(e) =>
+                            handleInputChange(key, e.target.value)
+                          }
+                          className={styles.editableInput}
+                        />
+                      ) : (
+                        <span
+                          className={`${styles.fieldValue} ${styles.nonEditable}`}
+                        >
+                          {user[key]}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                );
+              }
+            )}
+          </div>
+          {role === "Physiotherapist" && workingHours && (
+            <div className={styles.profileColumnWorkingHours}>
+              <div className={styles.workingHoursTitle}>{t.workingHours}</div>
+              {workingHours.length > 0 ? (
+                workingHours
+                  .sort((a, b) => a.dayOfWeek - b.dayOfWeek) // Sortowanie wg dayOfWeek
+                  .map((hour) => (
+                    <div className={styles.fieldItem} key={hour.id}>
+                      <div className={styles.field}>
+                        <span className={styles.fieldLabel}>
+                          {t[`day${hour.dayOfWeek}`]}:
+                        </span>
+                        <span
+                          className={`${styles.fieldValue} ${styles.nonEditable}`}
+                        >
+                          {formatTime(hour.startHour)} -{" "}
+                          {formatTime(hour.endHour)}{" "}
+                        </span>
+                      </div>
+                    </div>
+                  ))
               ) : (
-                <span
-                  className={styles.value}
-                  onDoubleClick={() => handleEditToggle(key)}
-                >
-                  {user[key]}
-                </span>
+                <div className={styles.fieldItem}>
+                  <span className={styles.noWorkingHours}>
+                    {t.noWorkingHours}
+                  </span>
+                </div>
               )}
             </div>
-          ))}
+          )}
+        </div>
       </div>
-      {isDirty && (
-        <button onClick={saveChanges} className={styles.saveButton}>
-          {t.saveChanges}
+
+      <div className={styles.buttonWrapper}>
+        <button className={styles.actionButton} onClick={handleOpenModal}>
+          {t.editButton}
         </button>
-      )}
+      </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        staffData={staffData}
+        userData={user}
+        onSave={handleSave}
+        role={role}
+        title="Edit Profile"
+        workingHours={workingHours}
+      ></Modal>
     </div>
   );
 };

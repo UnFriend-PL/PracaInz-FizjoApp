@@ -1,9 +1,8 @@
-﻿using fizjobackend.Interfaces.EmailInterface;
-using MailKit.Net.Smtp;
+﻿using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
 
-namespace fizjobackend.Services.EmailService
+namespace Fizjobackend.Services.EmailService
 {
     public class EmailService : IEmailService
     {

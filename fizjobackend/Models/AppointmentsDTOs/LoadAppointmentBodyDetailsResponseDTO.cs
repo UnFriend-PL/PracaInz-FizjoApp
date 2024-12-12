@@ -1,6 +1,6 @@
-﻿using fizjobackend.Models.BodyVisualizerDTOs;
+﻿using Fizjobackend.Models.BodyVisualizerDTOs;
 
-namespace fizjobackend.Models.AppointmentsDTOs
+namespace Fizjobackend.Models.AppointmentsDTOs
 {
     public class LoadAppointmentBodyDetailsResponseDTO
     {

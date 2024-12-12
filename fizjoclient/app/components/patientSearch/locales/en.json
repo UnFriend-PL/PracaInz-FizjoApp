@@ -11,5 +11,5 @@
   "insurance": "Health insurance number",
   "search": "Search",
   "patient": "Patient",
-  "searchPatient": "Type patient name, email, phone or PESEL"
+  "searchPatient": "Type email, phone or PESEL"
 }

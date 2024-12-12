@@ -1,17 +1,17 @@
-﻿using fizjobackend.DbContexts;
-using fizjobackend.Entities.AppointmentEntities;
-using fizjobackend.Entities.PatientEntities;
-using fizjobackend.Entities.PhysiotherapistEntities;
-using fizjobackend.Enums.AppointmentEnums;
-using fizjobackend.Interfaces.AppointmentsInterfaces;
-using fizjobackend.Interfaces.BodyVisualizerInterfaces;
-using fizjobackend.Models.AppointmentsDTOs;
-using fizjobackend.Models.BodyVisualizerDTOs;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using Fizjobackend.DbContexts;
+using Fizjobackend.Entities.AppointmentEntities;
+using Fizjobackend.Entities.PatientEntities;
+using Fizjobackend.Entities.PhysiotherapistEntities;
+using Fizjobackend.Enums.AppointmentEnums;
+using Fizjobackend.Models.AppointmentsDTOs;
+using Fizjobackend.Models.BodyVisualizerDTOs;
+using Fizjobackend.Services.BodyVisualizerService;
+using Org.BouncyCastle.Asn1.X509;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace fizjobackend.Services.AppointmentsService
+namespace Fizjobackend.Services.AppointmentsService
 {
     public class AppointmentService : IAppointmentsService
     {
@@ -191,6 +191,8 @@ namespace fizjobackend.Services.AppointmentsService
                 await VerifyAppointmentStatusForSelectedUser(userId);
 
                 var appointmentsQuery = _context.Appointments
+                    .AsSplitQuery()
+                    .AsNoTracking()
                     .Where(a => (a.PatientId == userId || a.PhysiotherapistId == userId) && a.AppointmentStatus == appointmentsRequest.Status);
 
                 if (appointmentsRequest.Status == AppointmentStatus.Scheduled)
@@ -221,6 +223,8 @@ namespace fizjobackend.Services.AppointmentsService
         {
             var totalAppointmentsCount = await appointmentsQuery.CountAsync();
             var appointments = await appointmentsQuery
+                .AsSplitQuery()
+                .AsNoTracking()
                 .OrderBy(a => a.AppointmentDate)
                 .Skip(page * 10)
                 .Take(10)
@@ -454,5 +458,6 @@ namespace fizjobackend.Services.AppointmentsService
                 return new ServiceResponse<List<LoadAppointmentBodyDetailsResponseDTO>>($"Error during loading body part details.");
             }
         }
+        
     }
 }

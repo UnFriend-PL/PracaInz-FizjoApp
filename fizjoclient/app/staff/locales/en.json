@@ -1,0 +1,17 @@
+{
+    "searchByName": "Search by first or last name...",
+    "searchByCity": "Search by city...",
+    "noResults": "No results found.",
+    "experience": "years of experience",
+    "specialists": {
+      "fizjoterapeutka": "Physiotherapist",
+      "masażysta": "Masseur",
+      "miasto": "City",
+      "specjalizacja": "Specialization"
+    },
+  "previousPage": "Previous page",
+  "nextPage": "Next page",
+  "page": "Page",
+  "of": "of",
+    "averagePrice": "Maximum average price"
+}

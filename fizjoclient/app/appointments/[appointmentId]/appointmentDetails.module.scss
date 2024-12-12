@@ -9,27 +9,50 @@
   flex-wrap: wrap;
   flex-basis: 100%;
 }
+
 .spaceAtBottom {
   padding-bottom: 15em;
 }
+
 .bodyContainer {
   display: flex;
   flex-direction: row;
   flex-basis: 45%;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-around;
 }
-.musclesAndJointsWrapper {
+
+.switchSelector {
+  margin-bottom: 4rem;
+  display: flex;
+  flex-basis: 100%;
+}
+
+.treatmentsWrapper {
+  flex-basis: 80%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  background-color: $off-white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  margin: 1rem;
+  max-width: 100vw;
+}
+
+.sectionWrapper {
   flex-basis: 45%;
   align-self: stretch;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: flex-start;
-  background-color: $bg-section;
+  background-color: $off-white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 1em;
+
   .navigation {
     display: flex;
     flex-basis: 50%;
@@ -39,8 +62,9 @@
   }
 
   .navigation button {
-    background-color: $button-bg;
-    color: $text-white;
+    transition-duration: 1s;
+    background-color: $blue;
+    color: $white;
     border: none;
     padding: 0.3em 0.6em;
     border-radius: 4px;
@@ -48,8 +72,9 @@
   }
 
   .navigation button:hover {
-    background-color: $button-bg-hover;
+    background-color: $blue-highlight;
   }
+
   .bodyPartContainer {
     flex-basis: 100%;
     display: flex;
@@ -58,6 +83,7 @@
     align-items: center;
     align-content: center;
   }
+
   .bodyPart {
     flex-basis: 100%;
   }
@@ -67,15 +93,16 @@
     font-size: 1.2em;
     text-transform: capitalize;
     font-weight: bold;
-    color: $text-dark-green;
+    color: $dark-green;
   }
 
   .bodyPartSubHeader {
-    color: $text-black;
+    color: $black;
     font-size: 1em;
     font-weight: bold;
   }
 }
+
 .appointmentCard {
   display: flex;
   flex-basis: 80%;
@@ -86,7 +113,17 @@
   justify-content: space-between;
   align-items: center;
   align-content: center;
+  @media (max-width: 768px) {
+    flex-basis: 100%;
+    margin-top: 2rem;
+  }
 
+  .time {
+    color: $black;
+    font-weight: 800;
+    font-size: 1.2em;
+    margin-bottom: 0.3em;
+  }
   .details {
     flex-basis: 100%;
     display: flex;
@@ -95,18 +132,21 @@
     align-content: stretch;
     justify-content: space-between;
   }
+
   .appointmentDate {
     top: -1.2em;
     font-size: 1em;
     font-weight: 800;
     cursor: pointer;
   }
+
   .detailsGroup {
     flex-basis: 45%;
-    background-color: $bg-section;
+    background-color: $off-white;
     padding: 1em;
     margin: 4em 0 1em 0;
     position: relative;
+
     .detailGroupName {
       position: absolute;
       top: -2em;
@@ -114,23 +154,31 @@
       font-size: 1.3em;
       font-weight: 800;
     }
+
     .detailGroupButton:hover {
-      color: $text-dark-green;
+      color: $dark-green;
     }
   }
 }
+
 .header {
   display: flex;
   flex-basis: 100%;
   justify-content: space-between;
   font-weight: bold;
   font-size: 1.5em;
+
   .status {
-    background-color: $bg-dark-green;
-    color: $text-white;
+    transition-duration: 1s;
+    background-color: $dark-green;
+    color: $white;
     padding: 0.5em;
     border-radius: 5px;
     cursor: pointer;
+
+    &:hover {
+      background-color: $green;
+    }
   }
 }
 
@@ -182,8 +230,9 @@
   margin-top: 15px;
   font-size: 16px;
   font-weight: semi-bold;
-  color: #555;
+  color: $dark-green;
 }
+
 .selectedItemsList {
   display: flex;
   flex-wrap: wrap;
@@ -193,23 +242,26 @@
   align-self: stretch;
   flex-basis: 100%;
 }
+
 .selectedItemsHeader {
   font-size: 1.2em;
   font-weight: bold;
-  color: $text-dark-green;
+  color: $dark-green;
   text-transform: capitalize;
   align-self: stretch;
   flex-basis: 100%;
 }
+
 .selectedSectionHeader {
   font-size: 1.1em;
   font-weight: bold;
-  color: $text-black;
+  color: $black;
   text-transform: capitalize;
   position: absolute;
   top: -1.3em;
   left: 0.1em;
 }
+
 .selectedSection {
   display: flex;
   flex-wrap: wrap;
@@ -218,10 +270,11 @@
   align-content: center;
   flex-basis: 100%;
   margin: 1.5em 0 0.5em 0;
-  background-color: $bg-page;
+  background-color: $off-white;
   padding: 0.2em;
   position: relative;
 }
+
 .selectedItems {
   display: flex;
   flex-wrap: wrap;
@@ -235,23 +288,24 @@
   align-items: center;
   flex-basis: content;
   font-size: 0.9em;
-  background-color: $tag-bg;
-  color: $text-white;
+  color: $white;
   border-radius: 5px 0 0 5px;
   margin: 0.2em;
 }
+
 .selectedItemLabel {
   padding: 0.5em;
   border-radius: 0 5px 5px 0;
-  background-color: $tag-bg;
-  color: #fff;
+  background-color: $green;
+  color: $white;
 }
+
 .selectedItem .checkbox {
   margin-right: 10px;
 }
 
 .removeButton {
-  background-color: $button-cancel-bg;
+  background-color: $selected;
   color: white;
   border: none;
   padding: 0.3em 0.6em;
@@ -262,7 +316,7 @@
 }
 
 .removeButton:hover {
-  background-color: $button-cancel-bg-hover;
+  background-color: $red;
 }
 
 .editableDetails {
@@ -274,7 +328,7 @@
 
 .detailsGroup {
   flex-basis: 45%;
-  background-color: $bg-section;
+  background-color: $off-white;
   padding: 1em;
   margin: 1em 0;
   position: relative;
@@ -310,8 +364,8 @@
 }
 
 .saveButton {
-  background-color: $button-bg;
-  color: $text-white;
+  background-color: $blue;
+  color: $white;
   border: none;
   padding: 0.5em 1em;
   border-radius: 4px;
@@ -322,7 +376,7 @@
 }
 
 .saveButton:hover {
-  background-color: $button-bg-hover;
+  background-color: $green-highlight;
 }
 
 .statusChangeContainer {
@@ -334,9 +388,236 @@
   justify-content: space-around;
   flex-wrap: wrap;
 }
+
 .statusButtons {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
   padding: 0 0 1rem;
+}
+
+.buttonSaveAll {
+  position: fixed;
+  background-color: $green;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  color: $white;
+  padding: 0.45rem;
+  border-radius: 15px;
+  z-index: 99;
+  transition-duration: 1s;
+
+  &:hover {
+    background-color: $green-highlight;
+  }
+}
+///////////////////////////////////////////////////////////////////////////////////////
+///
+///
+///
+///
+
+.OpinionButton {
+  display: flex;
+  align-items: center;
+  margin-left: 16px;
+}
+.addOpinionButton,
+.viewOpinionButton {
+  background-color: $blue;
+  color: $white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.addOpinionButton:hover,
+.viewOpinionButton:hover {
+  background-color: $dark-blue;
+}
+.addOpinionForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+
+  .rating {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+
+    span {
+      font-size: 1rem;
+      font-weight: bold;
+      color: $grey;
+    }
+  }
+  .stars {
+    display: flex;
+    gap: 0.5rem;
+
+    span {
+      font-size: 1.5rem;
+      color: $yellow;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: scale(1.2);
+      }
+
+      &.filledStar {
+        color: $yellow;
+      }
+
+      &.emptyStar {
+        color: $white;
+      }
+    }
+  }
+  .commentInput {
+    width: 100%;
+    min-height: 100px;
+    font-size: 1rem;
+    border: 1px solid $grey;
+    border-radius: 8px;
+    padding: 0.5rem;
+    resize: vertical;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: $dark-blue;
+      box-shadow: 0 0 5px $dark-blue;
+    }
+  }
+
+  .buttonContainer {
+    display: flex;
+    justify-content: space-between;
+
+    .saveOpinionButton,
+    .cancelOpinionButton {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &.saveOpinionButton {
+        background-color: $green;
+        color: $white;
+
+        &:hover {
+          background-color: $dark-green;
+        }
+
+        &:active {
+          background-color: $dark-green;
+        }
+      }
+
+      &.cancelOpinionButton {
+        background-color: $red;
+        color: $white;
+
+        &:hover {
+          background-color: $red;
+        }
+
+        &:active {
+          background-color: $red;
+        }
+      }
+    }
+  }
+}
+.viewOpinion {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  margin-bottom: 16px;
+  border: 1px solid $grey-highlight;
+  border-radius: 8px;
+  background-color: $white;
+  box-shadow: 0 4px 6px $black;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.stars {
+  display: flex;
+  margin-left: 8px;
+}
+
+.filledStar {
+  color: $yellow;
+  font-size: 20px;
+  margin-right: 4px;
+}
+
+.emptyStar {
+  color: $yellow;
+  font-size: 20px;
+  margin-right: 4px;
+}
+
+.commentInput {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.comment {
+  color: $grey;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.deleteButtonContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.deleteButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.deleteButton:hover {
+  background-color: $error-highlight;
+}
+
+.deleteButton:active {
+  background-color: $error-highlight;
+}
+
+.deleteIcon {
+  color: $red;
+  font-size: 18px;
+  transition: transform 0.2s ease;
+}
+
+.deleteButton:hover .deleteIcon {
+  transform: scale(1.1);
+}
+
+.deleteButton:active .deleteIcon {
+  transform: scale(0.9);
 }

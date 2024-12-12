@@ -2,13 +2,17 @@
 
 .appointmentScheduler {
   .appointmentSchedulerButton {
-    background-color: $button-submit-bg;
-    color: $text-white;
+    background-color: $blue;
+    color: $white;
     padding: 0.2rem;
     font-size: 2.5rem;
     font-weight: 800;
     border-radius: 5px;
     cursor: pointer;
+    &:hover {
+      background-color: $blue-highlight;
+      transition-duration: 1s;
+    }
   }
   .searchPanel {
     display: flex;
@@ -20,17 +24,16 @@
     padding-top: 2rem;
 
     .searchLabel {
-      color: $label-color;
+      color: $grey;
       font-weight: bold;
       text-transform: capitalize;
-      font-size: 1.2rem;
     }
     .searchValue {
       display: flex;
       flex-basis: 100%;
       flex-wrap: wrap;
       .showDetails {
-        color: $text-dark-green;
+        color: $dark-green;
         cursor: pointer;
         flex-basis: 100%;
         font-size: 0.9rem;
@@ -41,7 +44,7 @@
     }
 
     .deletePatient {
-      color: $text-error;
+      color:$error;
       cursor: pointer;
     }
     .searchField {
@@ -58,8 +61,8 @@
         flex-basis: 80%;
       }
       .searchButton {
-        background-color: $button-submit-bg;
-        color: $text-white;
+        background-color: $celadon;
+        color: $white;
         padding: 0.5rem;
         font-weight: 800;
         border-radius: 5px;
@@ -69,13 +72,16 @@
     }
     .submitButton {
       margin-top: 2rem;
-      background-color: $button-submit-bg;
-      color: $text-white;
+      background-color: $blue;
+      color: $white;
       padding: 0.5rem;
       font-weight: 800;
       border-radius: 5px;
       cursor: pointer;
       flex-basis: 100%;
+      &:hover {
+        background-color: $blue-highlight;
+      }
     }
   }
 }

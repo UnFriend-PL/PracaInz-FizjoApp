@@ -1,0 +1,166 @@
+@import "@/app/utils/globalColors.scss";
+
+@mixin flex-center($direction: row, $justify: center, $align: center) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+.container {
+  @include flex-center(row, center, center);
+  flex-basis: 100%;
+  padding: 1rem;
+  background-color:$off-white;
+  z-index: 9;
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 100vw;
+}
+
+.treatmentSelect {
+  flex-basis: 80%;
+  padding: 1rem;
+}
+.treatmentList {
+  flex-basis: 80%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.treatmentItem {
+  @include flex-center(row, center, center);
+  background-color: $off-white;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px $off-white;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  flex-basis: 100%;
+  flex-wrap: wrap;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .treatmentHeader {
+    flex-basis: 100%;
+    border-bottom: 1px solid $off-white;
+    margin-bottom: 1rem;
+   @include flex-center(row, space-between, center);
+    flex-wrap: wrap;
+    .treatmentName {
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: $dark-green;
+      flex-basis: 80%;
+    }
+
+    .treatmentDuration {
+      font-size: 0.9rem;
+      color: $grey;
+      align-self: flex-end;
+      flex-basis: 20%;
+    }
+
+    .showMore{
+      font-size: 2rem;
+      color: $grey;
+      align-self: center;
+      justify-self: center;
+      flex-basis: 100%;
+      text-align: center;
+        cursor: pointer;
+      &:hover {
+        color: $dark-green;
+      }
+    }
+
+  }
+
+  .treatmentBodyDetails {
+    flex-basis: 100%;
+    @include flex-center(row, flex-start, flex-start);
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    color: $grey;
+  }
+  .treatmentDetails{
+    @include flex-center(row, flex-end, flex-start);
+    flex-wrap: wrap;
+    .treatmentDetailsElement{
+      flex-basis: 100%;
+      padding-top: 1rem;
+      border-bottom: $off-white 1px solid;
+    }
+
+    button {
+      background-color: $red;
+      color: $white;
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+      margin: 0.2rem;
+      &:hover {
+        background-color: $red;
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid $border-color;
+    border-radius: 0.3rem;
+    font-size: 1rem;
+    margin-right: 1rem;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+.treatmentSave{
+    flex-basis: 20%;
+    padding: 1rem;
+    @include flex-center(row, center, center);
+    flex-wrap: wrap;
+        background-color: $dark-green;
+        color: $white;
+        border: none;
+        border-radius: 0.5rem;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        transition: background 0.2s ease, transform 0.2s ease;
+        margin: 0.2rem;
+        &:hover {
+        background-color: $dark-green;
+        }
+
+}
+// Responsive Adjustments
+@media (max-width: 768px) {
+  .container {
+    padding: 0.5rem;
+  }
+
+  .treatmentItem {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .treatmentName,
+    span {
+      margin-bottom: 0.5rem;
+    }
+
+    button {
+      align-self: flex-end;
+    }
+  }
+}

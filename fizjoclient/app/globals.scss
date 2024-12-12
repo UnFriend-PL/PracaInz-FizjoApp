@@ -1,12 +1,19 @@
+@import "@/app/utils/globalColors.scss";
 @tailwind base;
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;1,200&family=Poppins:wght@300&display=swap");
 @import "utils/globalColors.scss";
+
 body {
   margin: 0;
   padding: 0;
   max-width: 100vw;
   overflow-x: hidden;
 }
+
+html{
+  max-width: 100vw;
+}
+
 .page {
   display: flex;
   flex-direction: column;
@@ -16,5 +23,7 @@ body {
   align-content: center;
   padding-top: 10%;
   min-height: 100vh;
-  background-color: $bg-page;
+  max-width: 100vw;
+  background-color:$off-white;
+  color: $black;
 }

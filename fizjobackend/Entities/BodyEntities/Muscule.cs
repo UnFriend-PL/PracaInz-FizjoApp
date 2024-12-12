@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Fizjobackend.Entities.TreatmentsEntities;
 
-namespace fizjobackend.Entities.BodyEntities
+namespace Fizjobackend.Entities.BodyEntities
 {
     public class Muscle
     {
@@ -11,5 +12,7 @@ namespace fizjobackend.Entities.BodyEntities
         public int BodySectionId { get; set; }
 
         public BodySection BodySection { get; set; }
+        public virtual ICollection<Treatment> Treatments { get; set; } = new List<Treatment>();
+
     }
 }

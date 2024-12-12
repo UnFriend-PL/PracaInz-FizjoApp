@@ -1,9 +1,3 @@
-using fizjobackend.DbContexts;
-using fizjobackend.Entities.UserEntities;
-using fizjobackend.Interfaces.AccountInterfaces;
-using fizjobackend.Interfaces.UsersInterfaces;
-using fizjobackend.Services.AccountService;
-using fizjobackend.Services.UserServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,19 +5,25 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using Serilog;
-using fizjobackend.Interfaces.EmailInterface;
-using fizjobackend.Services.EmailService;
 using DotNetEnv;
-using fizjobackend.Helpers;
-using fizjobackend.Interfaces.HelpersInterfaces;
-using fizjobackend.Seeders;
-using fizjobackend.Interfaces.AppointmentsInterfaces;
-using fizjobackend.Services.AppointmentsService;
-using fizjobackend.Seeders.BodySeeder;
-using fizjobackend.Interfaces.BodyVisualizerInterfaces;
-using fizjobackend.Services.BodyVisualizerService;
+using Fizjobackend.DbContexts;
+using Fizjobackend.Entities.UserEntities;
+using Fizjobackend.Helpers;
+using Fizjobackend.Seeders;
+using Fizjobackend.Seeders.BodySeeder;
+using Fizjobackend.Seeders.TreatmentSeeder;
+using Fizjobackend.Services.AccountService;
+using Fizjobackend.Services.AppointmentsService;
+using Fizjobackend.Services.BlogService;
+using Fizjobackend.Services.BodyVisualizerService;
+using Fizjobackend.Services.EmailService;
+using Fizjobackend.Services.StaffService;
+using Fizjobackend.Services.Treatments;
+using Fizjobackend.Services.UserServices;
+using Fizjobackend.Services.OpinionService;
+using fizjobackend.Services.OpinionService;
 
-namespace fizjobackend
+namespace Fizjobackend
 {
     public class Program
     {
@@ -35,6 +35,7 @@ namespace fizjobackend
                 .ReadFrom.Configuration(builder.Configuration)
                 .CreateLogger();
             builder.Host.UseSerilog();
+            builder.Services.AddMemoryCache();
             builder.Services.AddControllers();
             builder.Services.AddHttpClient();
             builder.Services.AddEndpointsApiExplorer();
@@ -79,13 +80,17 @@ namespace fizjobackend
                 options.UseSqlServer(Environment.GetEnvironmentVariable("CONNECTION_STRING"));
             });
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IBlogService, BlogService>();
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IJwtGenerator, JwtGenerator>();
             builder.Services.AddScoped<IEmailService, EmailService>();
+            builder.Services.AddScoped<IOpinionService, OpinionService>();
+            builder.Services.AddScoped<IStaffService, StaffService>();
             builder.Services.AddScoped<IAppointmentsService, AppointmentService>();
             builder.Services.AddScoped<IBodyVisualizerService, BodyVisualizerService>();
             var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY")!);
             builder.Services.AddScoped<IAccountValidationHelper, AccountValidationHelper>();
+            builder.Services.AddScoped<ITreatmentsService, TreatmentsService>();
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -116,11 +121,15 @@ namespace fizjobackend
                 var logger = services.GetRequiredService<ILogger<Program>>();
                 await RoleSeeder.SeedRolesAsync(services, logger);
                 await BodySeeder.SeedBodyAsync(services, logger);
+                await TreatmentSeeder.SeedTreatmentsAsync(services, logger);
             }
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                });
             }
             app.UsePathBase("/api/v1/");
             app.UseCors("CorsPolicy");

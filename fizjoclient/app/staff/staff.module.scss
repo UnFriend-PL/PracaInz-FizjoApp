@@ -1,0 +1,145 @@
+@import "@/app/utils/globalColors.scss";
+@import "../utils/globalColors.scss";
+
+.specialistsContainer {
+    padding: 1.25rem;
+    max-width: 75rem;
+    margin: 0 auto;
+}
+
+.searchContainer {
+    display: flex;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.searchInputContainer {
+    position: relative;
+    width: 100%;
+    max-width: 25rem;
+}
+
+.searchInput {
+    width: 100%;
+    padding: 0.625rem 2.5rem 0.625rem 0.9375rem;
+    border: 1px solid $off-white;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: box-shadow 0.3s ease;
+}
+
+.searchInput:focus {
+    box-shadow: 0 0 0.5rem rgba(0, 128, 255, 0.4);
+    outline: none;
+}
+
+.searchIcon {
+    position: absolute;
+    right: 0.9375rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $dark-green;
+}
+
+.specialistsList {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 0.45fr));
+    gap: 1.25rem;
+}
+
+.specialistCard {
+    background: $off-white;
+    padding: 0.9375rem;
+    border-radius: 0.625rem;
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.specialistCard:hover {
+    transform: translateY(-0.3125rem);
+    box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.15);
+}
+
+.specialistImage {
+    border-radius: 50%;
+    margin-bottom: 0.625rem;
+}
+
+.placeholderImage {
+    width: 6.25rem;
+    height: 6.25rem;
+    background-color: $off-white;
+    border-radius: 50%;
+    margin-bottom: 0.625rem;
+}
+
+.specialistName {
+    font-size: 1.125rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: $dark-green;
+}
+
+.specialistInfo {
+    font-size: 0.875rem;
+    color: $blue;
+}
+
+.specialistCity {
+    font-size: 0.875rem;
+    color: $dark-green;
+    font-weight: 600;
+}
+
+.noResults {
+    text-align: center;
+    font-size: 1.125rem;
+    color: $dark-green;
+}
+
+.paginationContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1.25rem;
+}
+
+.paginationButton {
+    color: $white;
+    border: none;
+    padding: 0.625rem 1.25rem;
+    margin: 0 0.625rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.paginationButton:disabled {
+    background-color: $dark-green;
+    cursor: not-allowed;
+}
+
+.paginationInfo {
+    font-size: 1rem;
+}
+
+.sliderContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 25rem;
+    margin-bottom: 1.25rem;
+}
+
+.sliderContainer label {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.slider {
+    width: 100%;
+}

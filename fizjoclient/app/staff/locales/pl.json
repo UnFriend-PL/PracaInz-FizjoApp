@@ -1,0 +1,18 @@
+{
+    "searchByName": "Szukaj po imieniu lub nazwisku...",
+    "searchByCity": "Szukaj po mieście...",
+    "noResults": "Brak wyników.",
+    "experience": "lat doświadczenia",
+    "specialists": {
+      "fizjoterapeutka": "Fizjoterapeutka",
+      "masażysta": "Masażysta",
+      "miasto": "Miasto",
+      "specjalizacja": "Specjalizacja"
+    },
+  "previousPage": "Poprzednia strona",
+  "nextPage": "Następna strona",
+  "page": "Strona",
+  "of": "z",
+  "averagePrice": "Maksymalna średnia cena"
+}
+  

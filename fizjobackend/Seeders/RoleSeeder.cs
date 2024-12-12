@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace fizjobackend.Seeders
+namespace Fizjobackend.Seeders
 {
     public static class RoleSeeder
     {

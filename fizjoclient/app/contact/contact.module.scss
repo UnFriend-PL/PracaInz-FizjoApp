@@ -1,0 +1,93 @@
+@import "@/app/utils/globalColors.scss";
+@import "../utils/globalColors.scss";
+
+.contactPageContainer {
+    font-family: 'Inter', sans-serif;
+    color: $grey;
+    padding: 20px;
+    line-height: 1.6;
+
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .aboutSection, .specialistsSection, .contactInfoSection, .contactFormSection, .faqSection {
+        margin: 40px 0;
+        padding: 20px;
+        background-color: $dark-green;
+        border-radius: 8px;
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    }
+
+    .specialistsList {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 20px;
+
+        .specialist {
+            background-color: $dark-green;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 250px;
+
+            img {
+                width: 100%;
+                border-radius: 50%;
+                margin-bottom: 10px;
+            }
+        }
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        input, textarea {
+            padding: 10px;
+            border: 1px solid $dark-green;
+            border-radius: 4px;
+            font-size: 1rem;
+
+            &:focus {
+                outline: none;
+                border-color: $dark-green;
+            }
+        }
+
+        .ctaButton {
+            background-color: $dark-green;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+
+            &:hover {
+                background-color: $dark-green;
+            }
+        }
+    }
+
+    .faqSection ul {
+        list-style-type: disc;
+        padding-left: 20px;
+
+        li {
+            font-size: 1rem;
+            margin: 10px 0;
+            color: $dark-green;
+        }
+    }
+}

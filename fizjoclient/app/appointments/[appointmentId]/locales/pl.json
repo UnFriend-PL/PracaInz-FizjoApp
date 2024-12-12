@@ -30,5 +30,10 @@
   "selectedItems": "Wybrane",
   "front": "Przód",
   "back": "Tył",
-  "selectNewStatus": "Wybierz nowy status i/lub date"
+  "selectNewStatus": "Wybierz nowy status i/lub date",
+  "saveAll": "Zapisz wszystko",
+  "saving": "Zapisywanie...",
+  "addOpinion": "Daj opinie",
+  "viewOpinion": "Twoja opinia",
+  "yourOpinion": "Twoja opinia"
 }

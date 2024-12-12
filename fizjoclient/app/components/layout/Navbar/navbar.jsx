@@ -1,5 +1,4 @@
-"use client";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import Link from "next/link";
 import styles from "./navbar.module.scss";
 import { AuthContext } from "@/app/contexts/auth/authContext";
@@ -27,35 +26,60 @@ export default function Navbar() {
 
   const t = locales[language];
 
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const MENU_LINKS = {
     Home: {
-      href: "/",
-      className: styles["nav-link"],
+      href: "/home",
+      className: styles.navLink,
       name: t.home,
       action: undefined,
     },
     Services: {
       href: "/appointments",
-      className: styles["nav-link"],
+      className: styles.navLink,
       name: t.appointments,
+      action: undefined,
+    },
+    Staff: {
+      href: "/staff",
+      className: styles.navLink,
+      name: t.staff,
+      action: undefined,
+    },
+    Blog: {
+      href: "/blog",
+      className: styles.navLink,
+      name: t.blog,
       action: undefined,
     },
     Contact: {
       href: "/contact",
-      className: styles["nav-link"],
+      className: styles.navLink,
       name: t.contact,
       action: undefined,
     },
     Profile: {
       href: "/profile",
-      className: styles["nav-link"],
+      className: styles.navLink,
       name: t.profile,
       action: undefined,
       icon: <CgProfile />,
     },
     SignIn: {
       href: "/auth",
-      className: `${styles["nav-link"]} ${styles["signin-link"]}`,
+      className: `${styles.navLink} ${styles.signinLink}`,
       name: isAuthenticated ? t.logOut : t.signIn,
       action: handleLogOut,
       icon: isAuthenticated ? <IoIosLogOut /> : <IoIosLogIn />,
@@ -64,82 +88,94 @@ export default function Navbar() {
   };
 
   return (
-    <nav className={styles.navbar}>
-      <div className={styles.container}>
-        <div className={styles["navbar-content"]}>
-          <div className={styles["menu-button"]}>
-            <button
-              type="button"
-              aria-controls="mobile-menu"
-              aria-expanded={isOpen}
-              onClick={toggleMenu}
-            >
-              <span className="sr-only">Open main menu</span>
-              <svg
-                className="block h-6 w-6"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16m-7 6h7"}
-                />
-              </svg>
-            </button>
-          </div>
-          <div className={styles.logo}>
-            <Link href="/">{t.logo}</Link>
-          </div>
-          <div className={styles["nav-links"]}>
-            <GenerateLinks links={MENU_LINKS} />
-          </div>
-          <div className={styles.languages}>
-            <button
-              className={styles.languageButton}
-              onClick={() => changeLanguage("en")}
-            >
-              EN
-            </button>
-            <button
-              className={styles.languageButton}
-              onClick={() => changeLanguage("pl")}
-            >
-              PL
-            </button>
-          </div>
-        </div>
-      </div>
+      <nav className={styles.navbar}>
+        <div className={styles.container}>
+          <div className={styles.navbarContent}>
+            <div className={styles.logo}>
+              <Link href="/">{t.logo}</Link>
+            </div>
+            <div className={styles.navLinks}>
+              <GenerateLinks links={MENU_LINKS} />
+            </div>
 
-      <div
-        className={`${styles["mobile-menu"]} ${isOpen ? "block" : "hidden"}`}
-        id="mobile-menu"
-      >
-        <div className={styles["mobile-menu-links"]}>
-          <GenerateLinks links={MENU_LINKS} />
+            <div className={styles.languages}>
+              <button
+                  className={styles.languageButton}
+                  onClick={() => changeLanguage("en")}
+              >
+                EN
+              </button>
+              <button
+                  className={styles.languageButton}
+                  onClick={() => changeLanguage("pl")}
+              >
+                PL
+              </button>
+            </div>
+
+            <div className={styles.menuButton}>
+              <button
+                  type="button"
+                  aria-controls="mobileMenu"
+                  aria-expanded={isOpen}
+                  onClick={toggleMenu}
+              >
+                <svg
+                    className="block h-6 w-6"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    aria-hidden="true"
+                >
+                  <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16m-7 6h7"}
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
-    </nav>
+
+        <div
+            className={`${styles.mobileMenu} ${isOpen ? styles.open : ""}`}
+            id="mobileMenu"
+        >
+          <div className={styles.mobileMenuLinks} ref={menuRef}>
+            <GenerateLinks links={MENU_LINKS} setIsOpen={setIsOpen} />
+          </div>
+        </div>
+      </nav>
   );
 }
 
-function GenerateLinks({ links }) {
+function GenerateLinks({ links, setIsOpen }) {
   return Object.keys(links).map((key) => {
     const { href, className, name, action, icon, title } = links[key];
+
+    const handleClick = (e) => {
+      if (action) {
+        e.stopPropagation();
+        action();
+      }
+      if (typeof setIsOpen === "function") {
+        setIsOpen(false);
+      }
+    };
+
     return (
-      <Link
-        key={key}
-        href={href}
-        className={className}
-        onClick={action}
-        title={title}
-      >
-        {icon != undefined ? icon : name}
-      </Link>
+        <Link
+            key={key}
+            href={href}
+            className={className}
+            onClick={handleClick}
+            title={title}
+        >
+          {icon != undefined ? icon : name}
+        </Link>
     );
   });
 }

@@ -30,5 +30,10 @@
   "selectedItems": "Selected",
   "front": "Front",
   "back": "Back",
-  "selectNewStatus": "Select new status and/or date"
+  "selectNewStatus": "Select new status and/or date",
+  "saveAll": "Save all",
+  "saving": "Saving...",
+  "addOpinion": "Add Opinion",
+  "viewOpinion": "Your opinion",
+  "yourOpinion": "Your opinion"
 }

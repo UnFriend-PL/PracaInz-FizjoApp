@@ -1,10 +1,10 @@
-﻿using fizjobackend.Entities.PatientEntities;
-using fizjobackend.Entities.PhysiotherapistEntities;
-using fizjobackend.Enums.AppointmentEnums;
-using System.ComponentModel.DataAnnotations.Schema;
-using fizjobackend.Models.AppointmentsDTOs;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Fizjobackend.Entities.PatientEntities;
+using Fizjobackend.Entities.PhysiotherapistEntities;
+using Fizjobackend.Enums.AppointmentEnums;
+using Fizjobackend.Models.AppointmentsDTOs;
 
-namespace fizjobackend.Entities.AppointmentEntities
+namespace Fizjobackend.Entities.AppointmentEntities
 {
     public class Appointment
     {
@@ -28,6 +28,7 @@ namespace fizjobackend.Entities.AppointmentEntities
         public int? PainLevelAfter { get; set; }
         public string InitialCondition { get; set; } = string.Empty;
         public ICollection<AppointmentBodyDetails> AppointmentBodyDetails { get; set; }
+        public ICollection<AppointmentTreatments> AppointmentTreatments { get; set; }
         public Appointment() { }
 
         public Appointment(CreateAppointmentRequestDTO appointment)

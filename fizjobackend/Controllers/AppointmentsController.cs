@@ -1,12 +1,12 @@
-﻿using fizjobackend.Entities.AppointmentEntities;
-using fizjobackend.Enums.AppointmentEnums;
-using fizjobackend.Interfaces.AppointmentsInterfaces;
-using fizjobackend.Models.AppointmentsDTOs;
+﻿using Fizjobackend.Entities.AppointmentEntities;
+using Fizjobackend.Enums.AppointmentEnums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Fizjobackend.Models.AppointmentsDTOs;
+using Fizjobackend.Services.AppointmentsService;
 
-namespace fizjobackend.Controllers
+namespace Fizjobackend.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -116,7 +116,6 @@ namespace fizjobackend.Controllers
         [HttpPost("/Appointments/{appointmentId}/LoadSelectedBodyDetails")]
         public async Task<IActionResult> LoadSelectedBodyDetails(Guid appointmentId)
         {
-            // Should we add an user access check here?
             var response = await _appointmentsService.LoadAppointmentBodyDetails(appointmentId);
             if (!response.Success)
             {
@@ -125,5 +124,6 @@ namespace fizjobackend.Controllers
             }
             return Ok(response);
         }
+        
     }
 }

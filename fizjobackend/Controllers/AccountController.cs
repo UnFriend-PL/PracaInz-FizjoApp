@@ -1,9 +1,9 @@
-﻿using fizjobackend.Interfaces.AccountInterfaces;
-using fizjobackend.Models.AccountDTOs;
+﻿using Fizjobackend.Models.AccountDTOs;
+using Fizjobackend.Services.AccountService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace fizjobackend.Controllers
+namespace Fizjobackend.Controllers
 {
     [ApiController]
     [Route("[controller]")]

@@ -1,0 +1,264 @@
+@import "../utils/globalColors.scss";
+
+.container {
+  max-width: 800px;
+  margin: 0 auto; /* Wyśrodkowanie kontenera */
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: $white;
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 20px;
+  color: $black;
+}
+
+.opinionCard {
+  position: relative;
+  background-color: $white;
+  border: 1px solid $border-color;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0px 4px 8px $off-white;
+}
+.opinionCardEdit {
+  background-color: $white;
+  border: 1px solid $border-color;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0px 4px 8px $off-white;
+}
+
+.opinionAuthor,
+.opinionRating {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: $black;
+}
+.opinionDate {
+  position: absolute;
+  top: 8px; /* Adjust as necessary for spacing */
+  right: 8px; /* Adjust as necessary for spacing */
+  font-size: 0.9em; /* Optional: make the font size slightly smaller */
+  color: #888; /* Optional: a lighter color for subtlety */
+}
+.buttonContainer {
+  display: flex; /* Flexbox dla przycisków */
+  gap: 10px; /* Odstęp między przyciskami */
+  justify-content: flex-end; /* Ustawienie przycisków po prawej stronie */
+  align-items: center; /* Wyrównanie przycisków w pionie do środka */
+}
+
+.buttonContainer button {
+  display: inline-flex; /* Flexbox dla przycisków */
+  align-items: center;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Styl na hover przycisków */
+.buttonContainer button:hover {
+  transform: scale(1.05); /* Powiększenie przycisku przy najechaniu */
+}
+
+/* Usunięcie obramowania po kliknięciu */
+.buttonContainer button:focus {
+  outline: none; /* Usunięcie obramowania po kliknięciu */
+}
+
+.opinionAbout {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: $black;
+}
+.opinionComment {
+  font-style: italic;
+  color: #667799;
+}
+
+.commentInput {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid $border-color;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.filled {
+  color: gold;
+}
+
+.empty {
+  color: #ddd;
+}
+
+.editButtons {
+  display: flex;
+  gap: 15px; /* Zwiększono przestrzeń między przyciskami */
+  align-items: center; /* Wyrównanie przycisków w poziomie */
+  justify-content: flex-start; /* Przyciski ustawione od lewej strony */
+}
+
+.editButton {
+  display: flex;
+  align-items: center;
+  background-color: $blue; /* Kolor tła, jeśli $blue jest zdefiniowane w Twoich zmiennych SCSS */
+  color: white; /* Kolor tekstu */
+  padding: 0.5em 1em; /* Wewnętrzne marginesy, aby przycisk był odpowiedniej wielkości */
+  margin-right: 1rem;
+  border: none; /* Usunięcie obramowania */
+  border-radius: 5px; /* Zaokrąglenie rogów */
+  cursor: pointer; /* Kursor wskazujący, że jest to element interaktywny */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Płynna zmiana koloru tła i efekt powiększenia */
+
+  /* Dostosowanie dla małych ekranów */
+  @media (max-width: 768px) {
+    padding: 6px 10px; /* Mniejsze marginesy na mniejszych ekranach */
+  }
+
+  &:hover {
+    background-color: darken(
+      $blue,
+      10%
+    ); /* Zmiana koloru tła przy hover (ciemniejszy odcień $blue) */
+    transform: scale(1.05); /* Delikatne powiększenie przy najechaniu */
+  }
+
+  &:focus {
+    outline: none; /* Usunięcie obramowania po kliknięciu */
+  }
+
+  .editIcon {
+    font-size: 1.2rem; /* Rozmiar ikony */
+    margin-right: 5px; /* Odstęp między ikoną a tekstem */
+  }
+}
+.deleteButton {
+  background-color: #d9534f; /* Czerwony kolor tła, dla przycisku usuwania */
+  color: white; /* Biały kolor tekstu */
+  border: none; /* Bez obramowania */
+  padding: 0.5em 1em; /* Wewnętrzne marginesy, aby przycisk był odpowiedniej wielkości */
+  font-size: 1rem; /* Rozmiar czcionki */
+  font-weight: bold; /* Pogrubiony tekst */
+  border-radius: 5px; /* Zaokrąglone rogi przycisku */
+  cursor: pointer; /* Zmieniamy kursor na "rękę" przy najechaniu */
+  transition: background-color 0.3s, transform 0.2s ease; /* Animacja dla zmiany tła i skalowania */
+  display: flex;
+  align-items: center; /* Wyrównanie ikonki i tekstu w pionie */
+  justify-content: center; /* Wyśrodkowanie elementów w poziomie */
+
+  /* Mały odstęp między ikoną i tekstem */
+  gap: 0.5rem;
+
+  &:hover {
+    background-color: #c9302c; /* Zmiana koloru na ciemniejszy czerwony podczas hover */
+    transform: scale(1.05); /* Lekka animacja powiększenia przy najechaniu */
+  }
+
+  &:focus {
+    outline: none; /* Usunięcie obramowania po kliknięciu */
+  }
+
+  /* Responsywność: Dostosowanie dla małych ekranów */
+  @media (max-width: 768px) {
+    font-size: 0.9rem; /* Mniejszy rozmiar czcionki na małych ekranach */
+    padding: 0.4em 0.8em; /* Mniejsze marginesy na małych ekranach */
+  }
+}
+
+.deleteIcon {
+  font-size: 1.2rem; /* Ustawiamy rozmiar ikony */
+  color: white; /* Biała ikona */
+}
+
+.saveButton {
+  display: flex;
+  align-items: center;
+  background-color: $green;
+  color: white;
+  padding: 7px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.cancelButton {
+  display: flex;
+  align-items: center;
+  background-color: $red;
+  color: white;
+  padding: 7px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.saveButton {
+  background-color: #28a745;
+}
+
+.cancelButton {
+  background-color: #dc3545;
+}
+
+.editButton:hover {
+  background-color: darken($blue, 10%);
+}
+.saveButton:hover {
+  background-color: darken($green, 10%);
+}
+.cancelButton:hover {
+  background-color: darken($red, 10%);
+}
+
+.editIcon,
+.saveIcon,
+.cancelIcon {
+  margin-right: 5px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.paginationButton {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.paginationButton:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  margin: 0 15px;
+}
+.star {
+  display: block;
+  color: $yellow;
+  margin-right: 2px;
+}
+
+.stars {
+  display: block;
+  color: $yellow;
+  display: inline-flex;
+}
