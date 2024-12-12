@@ -149,7 +149,7 @@ const Profile = () => {
         try {
           avatarUploadResponse = await apiService.post(
             "/User/Avatar/Upload",
-            tempAvatarFile,
+              formData,
             true,
             {
               headers: { "Content-Type": "multipart/form-data" },
