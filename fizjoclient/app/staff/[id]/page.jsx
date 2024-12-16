@@ -48,6 +48,7 @@ export default function SpecialistProfile({params}) {
                 <prev className={styles.specialistInfo}>{specialist.description}</prev>
                 <p className={styles.specialistInfo}><strong>Wykształcenie:</strong> {specialist.education}</p>
                 <p className={styles.specialistInfo}><strong>Doświadczenie:</strong> {specialist.yearsOfExperience}</p>
+                <p className={styles.specialistInfo}><strong>Doświadczenie:</strong> {specialist.yearsOfExperience}</p>
 
                 <div className={styles.reviewsSection}>
                     <h2>Opinie</h2>
