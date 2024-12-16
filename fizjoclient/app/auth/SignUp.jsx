@@ -481,10 +481,9 @@
 
 // export default RegistrationForm;
 
-
 "use client";
 import { useState, useContext } from "react";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import styles from "./auth.module.scss";
 import { LanguageContext } from "@/app/contexts/lang/langContext";
 import pl from "./locales/pl.json";
@@ -507,7 +506,6 @@ const RegistrationForm = ({
   const router = useRouter(); // Router dla przekierowania
   const { language } = useContext(LanguageContext); // Kontekst języka
   const t = locales[language];
- 
 
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
@@ -676,76 +674,79 @@ const RegistrationForm = ({
     try {
       await handleSubmit(e, true);
       setSuccess(true);
-      setTimeout(() => router.push("auth/LoginForm"), 3000); // Przekierowanie po 3 sekundach
+      setTimeout(() => router.push("auth/LoginForm"), 3000);
     } catch (err) {
       console.error("Registration error:", err);
     }
   };
 
   return (
-      <form className={styles.form} onSubmit={onFormSubmit}>
-        <h2 className={styles.heading}>{t.signUp}</h2>
-        {error && <p className={styles.error}>{error}</p>}
-        {success && (
-          <p className={styles.success}>
-            {t.registrationSuccess} {t.welcomeMessage}
-          </p>
-        )}
-  
-        {step === 1 && (
-          <>
-            <label className={styles.label} htmlFor="account-type">
-              {t.accountType}
-            </label>
-            <select
-              className={styles.input}
-              id="account-type"
-              name="accountType"
-              value={accountType}
-              onChange={(e) => setAccountType(e.target.value)}
-              required
-            >
-              <option className={styles.option} value="patient">
-                {t.patient}
-              </option>
-              <option className={styles.option} value="physiotherapist">
-                {t.physiotherapist}
-              </option>
-            </select>
-            {accountType === "patient" && (
-              <>
-                <label className={styles.label} htmlFor="insurance-number">
-                  {t.insuranceNumber}
-                </label>
-                <input
-                  className={styles.input}
-                  type="text"
-                  id="insurance-number"
-                  name="insuranceNumber"
-                  value={formData.insuranceNumber || ""}
-                  onChange={handleChangeWithValidation}
-                  required
-                />
-              </>
-            )}
-            {accountType === "physiotherapist" && (
-              <>
-                <label className={styles.label} htmlFor="license-number">
-                  {t.licenseNumber}
-                </label>
-                <input
-                  className={styles.input}
-                  type="text"
-                  id="license-number"
-                  name="licenseNumber"
-                  value={formData.licenseNumber || ""}
-                  onChange={handleChangeWithValidation}
-                  required
-                />
-              </>
-            )}
-          </>
-        )}
+    <form className={styles.form} onSubmit={onFormSubmit}>
+      <h2 className={styles.heading}>{t.signUp}</h2>
+      {error && <p className={styles.error}>{error}</p>}
+      {success && (
+        <p className={styles.success}>
+          {t.registrationSuccess} {t.welcomeMessage}
+        </p>
+      )}
+
+      {step === 1 && (
+        <>
+          <label className={styles.label} htmlFor="account-type">
+            {t.accountType}
+          </label>
+          <select
+            className={styles.input}
+            id="account-type"
+            name="accountType"
+            value={accountType}
+            onChange={(e) => setAccountType(e.target.value)}
+            required
+          >
+            <option className={styles.option} value="null">
+              {""}
+            </option>
+            <option className={styles.option} value="patient">
+              {t.patient}
+            </option>
+            <option className={styles.option} value="physiotherapist">
+              {t.physiotherapist}
+            </option>
+          </select>
+          {accountType === "patient" && (
+            <>
+              <label className={styles.label} htmlFor="insurance-number">
+                {t.insuranceNumber}
+              </label>
+              <input
+                className={styles.input}
+                type="text"
+                id="insurance-number"
+                name="insuranceNumber"
+                value={formData.insuranceNumber || ""}
+                onChange={handleChangeWithValidation}
+                required
+              />
+            </>
+          )}
+          {accountType === "physiotherapist" && (
+            <>
+              <label className={styles.label} htmlFor="license-number">
+                {t.licenseNumber}
+              </label>
+              <input
+                className={styles.input}
+                type="text"
+                id="license-number"
+                name="licenseNumber"
+                value={formData.licenseNumber || ""}
+                onChange={handleChangeWithValidation}
+                required
+              />
+            </>
+          )}
+        </>
+      )}
 
       {step === 2 && (
         <>
@@ -790,6 +791,9 @@ const RegistrationForm = ({
             onChange={handleChangeWithValidation}
             required
           >
+            <option className={styles.option} value="null">
+              {" "}
+            </option>
             <option className={styles.option} value="male">
               {t.male}
             </option>

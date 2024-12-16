@@ -18,7 +18,10 @@ const AuthPage = () => {
   const { language } = useContext(LanguageContext);
   const t = locales[language];
   const [isRegistering, setIsRegistering] = useState(false);
-  const [accountType, setAccountType] = useState("patient");
+  const [accountType, setAccountType] = useState([
+    "patient",
+    "physiotherapist",
+  ]);
   const [signUpData, setSignUpData] = useState({
     // Patient fields
     insuranceNumber: "",
@@ -79,7 +82,7 @@ const AuthPage = () => {
 
       if (response.success) {
         login(response.data);
-        router.push("/home"); 
+        router.push("/home");
       } else {
         const errorData = response;
         setError(errorData.message || "An error occurred");
@@ -100,7 +103,7 @@ const AuthPage = () => {
             handleChange={handleSignUpChange}
             handleSubmit={handleSubmit}
             accountType={accountType}
-            setAccountType={(e) => setAccountType(e.target.value)}
+            setAccountType={setAccountType}
             loading={loading}
             error={error}
           />
