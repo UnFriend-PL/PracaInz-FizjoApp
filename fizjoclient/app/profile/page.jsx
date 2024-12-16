@@ -181,7 +181,9 @@ const Profile = () => {
       alert(`Failed to save changes: ${error.message}`);
     }
   };
-
+  const goToAppointments = () => {
+    router.push("/appointments");
+  };
   const showDetails = () => {
     router.push("/opinion");
   };
@@ -313,9 +315,7 @@ const Profile = () => {
         <FaCaretDown className={styles.dropdownIcon} onClick={toggleDropdown} />
         {showDropdown && (
           <div className={styles.dropdownMenu}>
-            <div onClick={() => handleMenuClick("appointments")}>
-              {t.appointments}
-            </div>
+            <div onClick={() => goToAppointments()}>{t.appointments}</div>
             <div onClick={() => showDetails()}>{t.opinions}</div>
           </div>
         )}
