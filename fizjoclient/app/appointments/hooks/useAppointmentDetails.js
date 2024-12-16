@@ -45,6 +45,7 @@ const useAppointmentDetails = (appointmentId, isAuthenticated) => {
                 isPaid: appointment.isPaid || false,
                 appointmentDate: new Date(appointment.appointmentDate),
                 status: appointment.appointmentStatus,
+                price: appointment.price || 0,
             });
             setSelectedNewHour(format(new Date(appointment.appointmentDate), "HH:mm"));
             setSelectedNewStatus(appointment.appointmentStatus);

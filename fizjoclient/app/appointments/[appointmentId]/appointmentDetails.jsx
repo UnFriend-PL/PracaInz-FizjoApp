@@ -59,7 +59,7 @@ const doesOpinionExist = async (physiotherapistId) => {
     }
   } catch (error) {
     console.error("Błąd podczas sprawdzania istnienia opinii:", error);
-    return false; // W przypadku błędu zwróć `false`
+    return false;
   }
 };
 
@@ -156,8 +156,8 @@ const AppointmentDetails = () => {
       console.error("Błąd podczas zapisywania opinii:", error);
     }
   };
-  const handleDelete = (opinionId) => {
-    onDelete(opinionId);
+  const handleDelete = async (opinionId) => {
+    await onDelete(opinionId);
     setDoesExist(false);
 
     onClose();
@@ -423,6 +423,14 @@ const AppointmentDetails = () => {
             type="checkbox"
             t={t}
           />
+          <DetailField
+            label={t.price}
+            name="price"
+            value={appointmentsDetailsFormData.price}
+            onChange={handleInputChange}
+            type="text"
+            t={t}
+            />
         </div>
       </div>
     </div>

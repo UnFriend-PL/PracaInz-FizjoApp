@@ -277,14 +277,14 @@ public class StaffService : IStaffService
         var response = new ServiceResponse<bool>("Working hours saved successfully");
         try
         {
-            // Parsowanie danych wejœciowych
+            // Parsowanie danych wejï¿½ciowych
             var dayOfWeek = Enum.Parse<DayOfWeek>(request.DayOfWeek);
             var startHour = TimeSpan.Parse(request.StartHour);
             var endHour = TimeSpan.Parse(request.EndHour);
 
             if (startHour == TimeSpan.Zero && endHour == TimeSpan.Zero)
             {
-                // Usuwanie godzin pracy, jeœli startHour i endHour to "00:00"
+                // Usuwanie godzin pracy, jeï¿½li startHour i endHour to "00:00"
                 var existingDay = await _dbContext.WorkingHours
                     .Where(w => w.PhysiotherapistId == request.PhysiotherapistId && w.DayOfWeek == dayOfWeek)
                     .FirstOrDefaultAsync();
@@ -304,7 +304,6 @@ public class StaffService : IStaffService
             }
             else
             {
-                // Zapisanie lub aktualizacja godzin pracy
                 var existingDay = await _dbContext.WorkingHours
                     .Where(w => w.PhysiotherapistId == request.PhysiotherapistId && w.DayOfWeek == dayOfWeek)
                     .FirstOrDefaultAsync();
