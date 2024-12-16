@@ -16,8 +16,10 @@ export default function Navbar() {
   const { isAuthenticated, logout } = useContext(AuthContext);
   const { changeLanguage, language } = useContext(LanguageContext);
 
+  const [isAnimating, setIsAnimating] = useState(false);
+
   const toggleMenu = () => {
-    setIsOpen(!isOpen);
+    setIsOpen((prev) => !prev);
   };
 
   const handleLogOut = () => {
@@ -27,11 +29,12 @@ export default function Navbar() {
   const t = locales[language];
 
   const menuRef = useRef(null);
+  const buttonRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setIsOpen(false);
+        setIsOpen(false); // Zamknij menu, jeśli kliknięcie było poza obszarem menu
       }
     };
 
@@ -44,37 +47,31 @@ export default function Navbar() {
       href: "/home",
       className: styles.navLink,
       name: t.home,
-      action: undefined,
     },
     Services: {
       href: "/appointments",
       className: styles.navLink,
       name: t.appointments,
-      action: undefined,
     },
     Staff: {
       href: "/staff",
       className: styles.navLink,
       name: t.staff,
-      action: undefined,
     },
     Blog: {
       href: "/blog",
       className: styles.navLink,
       name: t.blog,
-      action: undefined,
     },
     Contact: {
       href: "/contact",
       className: styles.navLink,
       name: t.contact,
-      action: undefined,
     },
     Profile: {
       href: "/profile",
       className: styles.navLink,
       name: t.profile,
-      action: undefined,
       icon: <CgProfile />,
     },
     SignIn: {
@@ -87,95 +84,119 @@ export default function Navbar() {
     },
   };
 
+  const orderedLinksLoggedIn = [
+    "Home",
+    "Services",
+    "Staff",
+    "Blog",
+    "Contact",
+    "Profile",
+    "SignIn",
+  ];
+
+  const orderedLinksLoggedOut = [
+    "Home",
+    "Blog",
+    "Contact",
+    "Profile",
+    "SignIn",
+  ];
+
+  const orderedLinks = isAuthenticated
+    ? orderedLinksLoggedIn
+    : orderedLinksLoggedOut;
+
   return (
-      <nav className={styles.navbar}>
-        <div className={styles.container}>
-          <div className={styles.navbarContent}>
-            <div className={styles.logo}>
-              <Link href="/">{t.logo}</Link>
-            </div>
-            <div className={styles.navLinks}>
-              <GenerateLinks links={MENU_LINKS} />
-            </div>
+    <nav className={styles.navbar}>
+      <div className={styles.container}>
+        <div className={styles.navbarContent}>
+          <div className={styles.logo}>
+            <Link href="/">{t.logo}</Link>
+          </div>
 
-            <div className={styles.languages}>
-              <button
-                  className={styles.languageButton}
-                  onClick={() => changeLanguage("en")}
-              >
-                EN
-              </button>
-              <button
-                  className={styles.languageButton}
-                  onClick={() => changeLanguage("pl")}
-              >
-                PL
-              </button>
-            </div>
+          <div className={styles.navLinks}>
+            <GenerateLinks links={orderedLinks.map((key) => MENU_LINKS[key])} />
+          </div>
 
-            <div className={styles.menuButton}>
-              <button
-                  type="button"
-                  aria-controls="mobileMenu"
-                  aria-expanded={isOpen}
-                  onClick={toggleMenu}
+          <div className={styles.languages}>
+            <button
+              className={styles.languageButton}
+              onClick={() => changeLanguage("en")}
+            >
+              EN
+            </button>
+            <button
+              className={styles.languageButton}
+              onClick={() => changeLanguage("pl")}
+            >
+              PL
+            </button>
+          </div>
+
+          <div className={styles.menuButton}>
+            <button
+              type="button"
+              aria-controls="mobileMenu"
+              aria-expanded={isOpen}
+              onClick={toggleMenu}
+            >
+              <svg
+                className="block h-6 w-6"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
               >
-                <svg
-                    className="block h-6 w-6"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                >
-                  <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16m-7 6h7"}
-                  />
-                </svg>
-              </button>
-            </div>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16m-7 6h7"}
+                />
+              </svg>
+            </button>
           </div>
         </div>
+      </div>
 
-        <div
-            className={`${styles.mobileMenu} ${isOpen ? styles.open : ""}`}
-            id="mobileMenu"
-        >
-          <div className={styles.mobileMenuLinks} ref={menuRef}>
-            <GenerateLinks links={MENU_LINKS} setIsOpen={setIsOpen} />
-          </div>
+      <div
+        className={`${styles.mobileMenu} ${isOpen ? styles.open : ""}`}
+        id="mobileMenu"
+      >
+        <div className={styles.mobileMenuLinks} ref={menuRef}>
+          <GenerateLinks
+            links={orderedLinks.map((key) => MENU_LINKS[key])}
+            setIsOpen={setIsOpen}
+          />
         </div>
-      </nav>
+      </div>
+    </nav>
   );
 }
 
 function GenerateLinks({ links, setIsOpen }) {
-  return Object.keys(links).map((key) => {
-    const { href, className, name, action, icon, title } = links[key];
-
+  return links.map(({ href, className, name, action, icon, title }, index) => {
     const handleClick = (e) => {
       if (action) {
-        e.stopPropagation();
+        e.stopPropagation(); // Obsługa dodatkowych akcji (np. logout)
         action();
       }
       if (typeof setIsOpen === "function") {
-        setIsOpen(false);
+        setIsOpen(false); // Zamykanie menu mobilnego po kliknięciu linku
       }
     };
 
     return (
-        <Link
-            key={key}
-            href={href}
-            className={className}
-            onClick={handleClick}
-            title={title}
-        >
-          {icon != undefined ? icon : name}
-        </Link>
+      <Link
+        key={index}
+        href={href}
+        className={className}
+        onClick={handleClick}
+        title={title}
+      >
+        {icon ? icon : name}
+      </Link>
     );
   });
 }

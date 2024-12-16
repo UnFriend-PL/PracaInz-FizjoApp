@@ -15,7 +15,6 @@ import { pl as plDate } from "date-fns/locale/pl";
 const locales = { en, pl };
 
 const Blog = () => {
-  const userRole = useContext(AuthProvider.role);
   const router = useRouter();
   const { isAuthenticated } = useContext(AuthContext);
   const { user } = useContext(UserContext);

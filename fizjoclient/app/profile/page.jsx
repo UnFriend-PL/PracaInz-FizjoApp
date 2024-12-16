@@ -285,6 +285,10 @@ const Profile = () => {
   }, [staffId]);
 
   if (!isAuthenticated) {
+    const router = useRouter();
+    useEffect(() => {
+      router.push("/auth");
+    }, [router]);
     return (
       <div className={styles.container}>
         <h1 className={styles.title}>{t.profile}</h1>
