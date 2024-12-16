@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }) => {
   const login = (token) => {
     localStorage.setItem("token", token);
     setIsAuthenticated(true);
-    router.push("/");
+    router.push("/home");
   };
 
   const logout = () => {
