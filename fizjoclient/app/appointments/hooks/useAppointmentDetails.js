@@ -1,6 +1,7 @@
-import { useState, useEffect, useCallback } from "react";
+import {useState, useEffect, useCallback, useContext} from "react";
 import apiService from "@/app/services/apiService/apiService";
 import { format } from "date-fns";
+import {UserContext} from "@/app/contexts/user/userContext";
 
 const useAppointmentDetails = (appointmentId, isAuthenticated) => {
     const [appointment, setAppointment] = useState(null);
@@ -13,7 +14,8 @@ const useAppointmentDetails = (appointmentId, isAuthenticated) => {
     const [isAppointmentStatusEditing, setIsAppointmentStatusEditing] = useState(false);
     const [isPatientModalOpen, setPatientModalOpen] = useState(false);
     const [isPhysioModalOpen, setPhysioModalOpen] = useState(false);
-
+    const { user } = useContext(UserContext);
+    const [availableTimes, setAvailableTimes] = useState([]);
     const fetchAppointmentDetails = useCallback(async () => {
         try {
             const response = await apiService.get(`/Appointments/${appointmentId}`, {}, true);
@@ -59,6 +61,24 @@ const useAppointmentDetails = (appointmentId, isAuthenticated) => {
                 ...prev,
                 appointmentDate: newAppointmentDate,
             }));
+            try {
+                const formattedDate = format(date, "yyyy-MM-dd");
+
+                const payload = {
+                    date: formattedDate,
+                    physiotherapistId: user.id
+                };
+                apiService.post(`/Staff/AvailableSlots`, payload, true).then((response) => {
+                    if (response.success) {
+                        setAvailableTimes(response.data);
+                    } else {
+                        console.error(response.message);
+                    }
+                });
+            } catch (error) {
+                console.error(error);
+            }
+
         } else {
             const { name, value, type, checked } = e.target;
             setAppointmentsDetailsFormData((prev) => ({
@@ -120,6 +140,7 @@ const useAppointmentDetails = (appointmentId, isAuthenticated) => {
         handleFormSubmit,
         handleStatusEdit,
         fetchAppointmentDetails,
+        availableTimes
     };
 };
 

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styles from "./profile.module.scss";
 import apiService, { fetchAvatar } from "../services/apiService/apiService";
 import { useRouter } from "next/navigation";
@@ -29,6 +29,9 @@ const Profile = () => {
   const [uploading, setUploading] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [avatarLoading, setAvatarLoading] = useState(false);
+  const [workingHours, setWorkingHours] = useState([]);
+  const [tempWorkingHours, setTempWorkingHours] = useState(workingHours || []);
+
   const [staffData, setStaffData] = useState({
     education: "",
     description: "",
@@ -51,6 +54,7 @@ const Profile = () => {
     }
     setIsModalOpen(true);
   };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -70,6 +74,7 @@ const Profile = () => {
     };
     if (isAuthenticated) fetchData();
   }, [isAuthenticated]);
+
   const fetchProfilePicture = async (avatarPath) => {
     setAvatarLoading(true);
     if (avatarPath) {
@@ -94,10 +99,12 @@ const Profile = () => {
 
   const handleSave = async (updatedUser, updatedStaffData, tempAvatarFile) => {
     try {
-      let userUpdateResponse, staffUpdateResponse, avatarUploadResponse;
+      let userUpdateResponse,
+        staffUpdateResponse,
+        avatarUploadResponse,
+        updateWorkingHours;
 
-      // Aktualizacja danych użytkownika
-      if (updatedUser && updatedUser !== user) {
+      if (updatedUser) {
         try {
           userUpdateResponse = await apiService.post(
             "/User/UpdateInfo",
@@ -112,13 +119,7 @@ const Profile = () => {
           throw new Error("Failed to update user information");
         }
       }
-
-      // Aktualizacja danych pracownika (jeśli rola to 'Physiotherapist')
-      if (
-        role === "Physiotherapist" &&
-        updatedStaffData &&
-        updatedStaffData !== staffData
-      ) {
+      if (role === "Physiotherapist" && updatedStaffData) {
         try {
           staffUpdateResponse = await apiService.post(
             "/Staff/Update",
@@ -133,8 +134,6 @@ const Profile = () => {
           throw new Error("Failed to update staff data");
         }
       }
-
-      // Przesyłanie nowego awatara
       if (tempAvatarFile) {
         const formData = new FormData();
         formData.append("file", tempAvatarFile);
@@ -158,22 +157,25 @@ const Profile = () => {
           setUploading(false);
         }
       }
+      setUploading(true);
 
-      // Aktualizacja stanu po udanych operacjach
       if (userUpdateResponse?.success) {
         updateUser(updatedUser);
         await getUserInfo();
       }
-
       if (role === "Physiotherapist" && staffUpdateResponse?.success) {
-        fetchStaffInfo(staffId);
+        await fetchStaffInfo(staffId);
       }
-
+      if (role === "Physiotherapist") {
+        await getWorkingHours(staffId);
+      }
       if (avatarUploadResponse?.success) {
         const newAvatarPath = avatarUploadResponse.data;
         updateUser({ ...updatedUser, avatarPath: newAvatarPath });
         await fetchProfilePicture(newAvatarPath);
       }
+      setLoading(false);
+      setIsModalOpen(false);
     } catch (error) {
       console.error("Error saving changes:", error.message || error);
       alert(`Failed to save changes: ${error.message}`);
@@ -214,6 +216,24 @@ const Profile = () => {
       setLoading(false);
     }
   };
+
+  const getWorkingHours = async () => {
+    try {
+      const response = await apiService.get(`/Staff/WorkingHours/${staffId}`);
+      if (response.success) {
+        setWorkingHours(response.data);
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (error) {
+      console.error("Error fetching staff info:", error);
+      return [];
+    }
+  };
+  const formatTime = (timeString) => {
+    const [hours, minutes] = timeString.split(":");
+    return `${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}`;
+  };
   useEffect(() => {
     if (isAuthenticated) {
       getUserInfo();
@@ -229,7 +249,6 @@ const Profile = () => {
         enableEditAllFields();
         break;
       case "appointments":
-        console.log("Navigate to Appointments");
         break;
       case "opinion":
         break;
@@ -239,34 +258,29 @@ const Profile = () => {
     setShowDropdown(false);
   };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getUserInfo();
-        if (data) {
-          updateUser(data);
-          fetchStaffInfo(data.id);
-          if (data.avatarPath) {
-            fetchProfilePicture(data.avatarPath);
+    if (isAuthenticated) {
+      const fetchData = async () => {
+        try {
+          const data = await getUserInfo();
+          if (data) {
+            updateUser(data);
+            setStaffId(data.id);
+            if (data.avatarPath) {
+              fetchProfilePicture(data.avatarPath);
+            }
           }
+        } catch (error) {
+          console.error("Error fetching user info:", error);
         }
-      } catch (error) {
-        console.error("Error fetching user info:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    if (isAuthenticated) fetchData();
-
-    return () => {
-      if (avatarUrl) {
-        URL.revokeObjectURL(avatarUrl);
-      }
-    };
+      };
+      fetchData();
+    }
   }, [isAuthenticated]);
 
   useEffect(() => {
     if (staffId) {
       fetchStaffInfo(staffId);
+      getWorkingHours(staffId);
     }
   }, [staffId]);
 
@@ -290,23 +304,19 @@ const Profile = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <h1 className={styles.title}>{t.profile}</h1>
-        <div className={styles.dropdownContainer}>
-          <FaCaretDown
-            className={styles.dropdownIcon}
-            onClick={toggleDropdown}
-          />
-          {showDropdown && (
-            <div className={styles.dropdownMenu}>
-              <div onClick={() => handleMenuClick("appointments")}>
-                {t.appointments}
-              </div>
-              <div onClick={() => showDetails()}>{t.opinions}</div>
+      <h1 className={styles.title}>{t.profile}</h1>
+      <div className={styles.dropdownContainer}>
+        <FaCaretDown className={styles.dropdownIcon} onClick={toggleDropdown} />
+        {showDropdown && (
+          <div className={styles.dropdownMenu}>
+            <div onClick={() => handleMenuClick("appointments")}>
+              {t.appointments}
             </div>
-          )}
-        </div>
+            <div onClick={() => showDetails()}>{t.opinions}</div>
+          </div>
+        )}
       </div>
+
       <div className={styles.profileContainer}>
         <div className={styles.profileHeader}>
           <div className={styles.avatarWrapper}>
@@ -335,18 +345,13 @@ const Profile = () => {
           {role === "Physiotherapist" && (
             <>
               <div className={styles.profileInfo}>
-                <div className={styles.profileDescription}>
-                  <span className={styles.fieldLabel}>{t.description}:</span>
-                  <span className={styles.fieldValue}>
-                    {staffData.description || t.notAvailable}
-                  </span>
-                </div>
                 <div className={styles.profileField}>
                   <span className={styles.fieldLabel}>{t.education}</span>
                   <span className={styles.fieldValue}>
                     {staffData.education || t.notAvailable}
                   </span>
                 </div>
+
                 <div className={styles.profileField}>
                   <span className={styles.fieldLabel}>
                     {t.yearsOfExperience}:
@@ -355,80 +360,89 @@ const Profile = () => {
                     {staffData.yearsOfExperience || t.notAvailable}
                   </span>
                 </div>
+                {staffData.description && (
+                  <div className={styles.profileDescription}>
+                    <div className={styles.profileDescriptionTitle}>
+                      <span className={styles.fieldLabel}>
+                        {t.description}:
+                      </span>
+                    </div>
+                    <div className={styles.profileDescriptionValue}>
+                      <span className={styles.fieldValue}>
+                        {staffData.description}
+                      </span>
+                    </div>
+                  </div>
+                )}
               </div>
             </>
           )}
         </div>
-        <div className={styles.profileBody}>
-          <div className={styles.profileColumn}>
-            {[
-              "firstName",
-              "lastName",
-              "gender",
-              "pesel",
-              "dateOfBirth",
-              "phoneNumber",
-              "email",
-            ].map((key) => {
-              if (!user[key]) return null;
-              return (
-                <div className={styles.fieldItem} key={key}>
-                  <div className={styles.field}>
-                    <span className={styles.fieldLabel}>
-                      {t[key] || key.replace(/([A-Z])/g, " $1").trim()}:
-                    </span>
-                    {editableFields[key] ? (
-                      key === "dateOfBirth" ? (
-                        <input
-                          type="date"
-                          value={
-                            editedUser[key] ? editedUser[key].slice(0, 10) : ""
-                          }
-                          onChange={(e) =>
-                            handleInputChange(key, e.target.value)
-                          }
-                          className={styles.editableInput}
-                        />
-                      ) : key === "gender" ? (
-                        <select
-                          value={editedUser[key]}
-                          onChange={(e) =>
-                            handleInputChange(key, e.target.value)
-                          }
-                          className={styles.editableInput}
-                        >
-                          <option value="male">{t.male}</option>
-                          <option value="female">{t.female}</option>
-                          <option value="other">{t.other}</option>
-                        </select>
-                      ) : (
-                        <input
-                          type="text"
-                          value={editedUser[key]}
-                          onChange={(e) =>
-                            handleInputChange(key, e.target.value)
-                          }
-                          className={styles.editableInput}
-                        />
-                      )
-                    ) : (
-                      <span
-                        className={`${styles.fieldValue} ${styles.nonEditable}`}
-                      >
-                        {key === "dateOfBirth"
-                          ? formatDateToReadable(user[key])
-                          : user[key]}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
 
-          <div
-            className={`${styles.profileColumn} ${styles.profileColumnRight}`}
-          >
+        <div className={styles.profileColumnPersonInfomration}>
+          <div className={styles.profilPersonInfomrationTitle}>
+            {t.personInformation}
+          </div>
+          {[
+            "firstName",
+            "lastName",
+            "gender",
+            "pesel",
+            "dateOfBirth",
+            "phoneNumber",
+            "email",
+          ].map((key) => {
+            if (!user[key]) return null;
+            return (
+              <div className={styles.fieldItem} key={key}>
+                <div className={styles.field}>
+                  <span className={styles.fieldLabel}>
+                    {t[key] || key.replace(/([A-Z])/g, " $1").trim()}:
+                  </span>
+                  {editableFields[key] ? (
+                    key === "dateOfBirth" ? (
+                      <input
+                        type="date"
+                        value={
+                          editedUser[key] ? editedUser[key].slice(0, 10) : ""
+                        }
+                        onChange={(e) => handleInputChange(key, e.target.value)}
+                        className={styles.editableInput}
+                      />
+                    ) : key === "gender" ? (
+                      <select
+                        value={editedUser[key]}
+                        onChange={(e) => handleInputChange(key, e.target.value)}
+                        className={styles.editableInput}
+                      >
+                        <option value="male">{t.male}</option>
+                        <option value="female">{t.female}</option>
+                        <option value="other">{t.other}</option>
+                      </select>
+                    ) : (
+                      <input
+                        type="text"
+                        value={editedUser[key]}
+                        onChange={(e) => handleInputChange(key, e.target.value)}
+                        className={styles.editableInput}
+                      />
+                    )
+                  ) : (
+                    <span
+                      className={`${styles.fieldValue} ${styles.nonEditable}`}
+                    >
+                      {key === "dateOfBirth"
+                        ? formatDateToReadable(user[key])
+                        : user[key]}
+                    </span>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div className={styles.profileRightColumn}>
+          <div className={styles.profileColumnAddress}>
             <div className={styles.addressTitle}>{t.adress}</div>
             {["country", "city", "streetWithHouseNumber", "postCode"].map(
               (key) => {
@@ -461,22 +475,55 @@ const Profile = () => {
               }
             )}
           </div>
+          {role === "Physiotherapist" && workingHours && (
+            <div className={styles.profileColumnWorkingHours}>
+              <div className={styles.workingHoursTitle}>{t.workingHours}</div>
+              {workingHours.length > 0 ? (
+                workingHours
+                  .sort((a, b) => a.dayOfWeek - b.dayOfWeek)
+                  .map((hour) => (
+                    <div className={styles.fieldItem} key={hour.dayOfWeek}>
+                      <div className={styles.field}>
+                        <span className={styles.fieldLabel}>
+                          {t[`day${hour.dayOfWeek}`]}:
+                        </span>
+                        <span
+                          className={`${styles.fieldValue} ${styles.nonEditable}`}
+                        >
+                          {formatTime(hour.startHour)} -{" "}
+                          {formatTime(hour.endHour)}{" "}
+                        </span>
+                      </div>
+                    </div>
+                  ))
+              ) : (
+                <div className={styles.fieldItem}>
+                  <span className={styles.noWorkingHours}>
+                    {t.noWorkingHours}
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
         </div>
-        <div className="button-wrapper">
-          <button className={styles.actionButton} onClick={handleOpenModal}>
-            {t.editButton}
-          </button>
-        </div>
-        <Modal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          staffData={staffData}
-          userData={user}
-          onSave={handleSave}
-          role={role}
-          title="Edit Profile"
-        ></Modal>
       </div>
+
+      <div className={styles.buttonWrapper}>
+        <button className={styles.actionButton} onClick={handleOpenModal}>
+          {t.editButton}
+        </button>
+      </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        staffData={staffData}
+        userData={user}
+        onSave={handleSave}
+        role={role}
+        title="Edit Profile"
+        workingHours={workingHours}
+      ></Modal>
     </div>
   );
 };

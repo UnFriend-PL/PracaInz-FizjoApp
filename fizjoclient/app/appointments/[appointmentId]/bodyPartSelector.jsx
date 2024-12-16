@@ -6,6 +6,7 @@ import en from "./locales/en.json";
 import { AppointmentContext } from "../appointmentContext";
 import mapData from "../utils/mapData";
 import useSelectedItems from "../utils/useSelectedItems";
+import {AuthContext} from "@/app/contexts/auth/authContext";
 const locales = { en, pl };
 
 const BodyPartSelector = () => {
@@ -17,6 +18,7 @@ const BodyPartSelector = () => {
     selectedItems,
     language,
   } = useContext(AppointmentContext);
+  const { role } = useContext(AuthContext);
   const { handleChange } = useSelectedItems();
   const t = locales[language];
   const mappedData = mapData(musclesAndJoints, language);
@@ -30,6 +32,10 @@ const BodyPartSelector = () => {
   const selectedSection = selectedItems.find(
     (item) => item.sectionName === sectionName
   );
+
+  if(role === "Patient") {
+      return;
+  }
 
   return (
     <>

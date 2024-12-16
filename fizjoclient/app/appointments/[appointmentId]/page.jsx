@@ -28,13 +28,15 @@ const Appointments = () => {
         saveAll,
         isSaving
     } = useContext(AppointmentContext);
+    const {role} = useContext(AuthContext);
     const t = locales[language];
     if (!isAuthenticated || !appointment) return null;
 
     return (
         <div className={styles.container}>
+            {role === "Physiotherapist" && (
             <button className={styles.buttonSaveAll} onClick={saveAll}>{isSaving ? t.saving : t.saveAll}</button>
-
+            )}
             <AppointmentDetails/>
             <div className={`${styles.container} ${styles.spaceAtBottom}`}>
                 <div className={styles.treatmentsWrapper}>

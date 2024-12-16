@@ -29,7 +29,7 @@ const useTreatments = (appointmentId, language, gender, selectedItems) => {
             searchTerm: inputValue,
             limit: 50,
             page,
-            bodyParts: !includeSelectedBodyParts
+            bodyParts: includeSelectedBodyParts
                 ? selectedItems.map((item) => item.sectionName)
                 : [],
             gender,

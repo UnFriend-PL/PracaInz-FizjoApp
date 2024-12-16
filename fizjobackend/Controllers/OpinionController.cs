@@ -1,6 +1,6 @@
-﻿using Fizjobackend.Entities.OpinionEntities;
+﻿using fizjobackend.Services.OpinionService;
+using Fizjobackend.Entities.OpinionEntities;
 using Fizjobackend.Entities.UserEntities;
-using Fizjobackend.Interfaces.OpinionInterfaces;
 using Fizjobackend.Models.AccountDTOs;
 using Fizjobackend.Models.OpinionDTOs;
 using Microsoft.AspNetCore.Authorization;
@@ -70,6 +70,16 @@ namespace Fizjobackend.Controllers
                 return NotFound(response.Message);
             }
             return Ok(response.Data);
+        }
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpGet("exists")]
+        public async Task<IActionResult> CheckIfOpinionExists([FromQuery] string physiotherapistId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var exists = await _opinionService.DoesOpinionExist(userId, physiotherapistId);
+
+            return Ok(exists);
         }
     }
 }

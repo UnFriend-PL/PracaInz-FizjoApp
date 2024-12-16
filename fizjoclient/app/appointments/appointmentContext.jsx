@@ -35,6 +35,7 @@ export const AppointmentProvider = ({ children }) => {
         handleFormSubmit,
         handleStatusEdit,
         fetchAppointmentDetails,
+        availableTimes
     } = useAppointmentDetails(appointmentId, isAuthenticated);
 
 
@@ -129,6 +130,7 @@ export const AppointmentProvider = ({ children }) => {
                 t,
                 musclesAndJoints,
                 selectedItems,
+                availableTimes
             }}
         >
             {children}

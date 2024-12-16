@@ -42,9 +42,24 @@
   "description": "Opis",
   "yearsOfExperience": "Lata doświadczenia",
   "adress": "Adres",
-  "registrationSuccessMessage": "Rejestracja zakończona sukcesem! Przekierowuję na stronę główną..."
-  
-  
-  
-  
+  "registrationSuccessMessage": "Rejestracja zakończona sukcesem! Przekierowuję na stronę główną...",
+  "personInformation": "Dane osobowe",
+  "notAvailable": "Brak",
+  "sunday": "Niedziela",
+  "monday": "Poniedziałek",
+  "tuesday": "Wtorek",
+  "wednesday": "Środa",
+  "thursday": "Czwartek",
+  "friday": "Piątek",
+  "saturday": "Sobota",
+  "day1": "Poniedziałek",
+  "day2": "Wtorek",
+  "day3": "Środa",
+  "day4": "Czwartek",
+  "day5": "Piątek",
+  "day6": "Sobota",
+  "day7": "Niedziela",
+  "workingHours": "Godziny Pracy",
+  "addWorkingHours": "Dodaj pracujący dzień",
+  "noWorkingHours": "Nie ustawiono godzin pracy"
 }

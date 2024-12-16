@@ -9,12 +9,13 @@ import pl from "./locales/pl.json";
 import en from "./locales/en.json";
 import apiService from "../services/apiService/apiService";
 import { UserContext } from "../contexts/user/userContext";
-import {format} from "date-fns";
-import {pl as plDate} from "date-fns/locale/pl";
+import { format } from "date-fns";
+import { pl as plDate } from "date-fns/locale/pl";
 
 const locales = { en, pl };
 
 const Blog = () => {
+  const userRole = useContext(AuthProvider.role);
   const router = useRouter();
   const { isAuthenticated } = useContext(AuthContext);
   const { user } = useContext(UserContext);
@@ -68,21 +69,21 @@ const Blog = () => {
     };
 
     apiService
-        .post("/Post/Create", postData, true)
-        .then((data) => {
-          if (data.success) {
-            fetchPosts(currentPage);
-            setNewTitle("");
-            setNewBody("");
-            setError("");
-          } else {
-            setError(data.message || t.errorSubmittingPost);
-          }
-        })
-        .catch((err) => {
-          console.error("Error submitting post:", err);
-          setError(t.errorSubmittingPost);
-        });
+      .post("/Post/Create", postData, true)
+      .then((data) => {
+        if (data.success) {
+          fetchPosts(currentPage);
+          setNewTitle("");
+          setNewBody("");
+          setError("");
+        } else {
+          setError(data.message || t.errorSubmittingPost);
+        }
+      })
+      .catch((err) => {
+        console.error("Error submitting post:", err);
+        setError(t.errorSubmittingPost);
+      });
   };
 
   const handleAddComment = async (postId) => {
@@ -103,23 +104,23 @@ const Blog = () => {
 
     try {
       const data = await apiService.post(
-          `/Post/Comments/Add/${postId}`,
-          commentData,
-          true
+        `/Post/Comments/Add/${postId}`,
+        commentData,
+        true
       );
       if (data.success) {
         // Fetch the updated post
         const updatedPostData = await apiService.get(
-            `/Post/Get/${postId}`,
-            {},
-            false
+          `/Post/Get/${postId}`,
+          {},
+          false
         );
         if (updatedPostData.success) {
           // Update the posts array
           setPosts((prevPosts) =>
-              prevPosts.map((post) =>
-                  post.id === postId ? updatedPostData.data : post
-              )
+            prevPosts.map((post) =>
+              post.id === postId ? updatedPostData.data : post
+            )
           );
         } else {
           setError(updatedPostData.message || t.errorFetchingPost);
@@ -159,40 +160,40 @@ const Blog = () => {
   };
 
   return (
-      <div className={styles.blogContainer}>
-        <section className={styles.introSection}>
-          <h1>{t.questionAboutPhysiotherapy}</h1>
-          <p>{t.blogDescription1}</p>
-          <p>{t.blogDescription2}</p>
-        </section>
+    <div className={styles.blogContainer}>
+      <section className={styles.introSection}>
+        <h1>{t.questionAboutPhysiotherapy}</h1>
+        <p>{t.blogDescription1}</p>
+        <p>{t.blogDescription2}</p>
+      </section>
 
-        <section className={styles.guideSection}>
-          <h2>{t.howToAskQuestion}</h2>
-          <div className={styles.stepsContainer}>
-            <div className={styles.stepCard}>
-              <FaQuestionCircle className={styles.stepIcon} />
-              <h3>{t.stepThinkQuestion}</h3>
-              <p>{t.stepThinkDescription}</p>
-            </div>
-            <div className={styles.stepCard}>
-              <FaQuestionCircle className={styles.stepIcon} />
-              <h3>{t.stepLogin}</h3>
-              <p>{t.stepLoginDescription}</p>
-            </div>
-            <div className={styles.stepCard}>
-              <FaQuestionCircle className={styles.stepIcon} />
-              <h3>{t.stepFillForm}</h3>
-              <p>{t.stepFillDescription}</p>
-            </div>
-            <div className={styles.stepCard}>
-              <FaQuestionCircle className={styles.stepIcon} />
-              <h3>{t.stepSubmitQuestion}</h3>
-              <p>{t.stepSubmitDescription}</p>
-            </div>
+      <section className={styles.guideSection}>
+        <h2>{t.howToAskQuestion}</h2>
+        <div className={styles.stepsContainer}>
+          <div className={styles.stepCard}>
+            <FaQuestionCircle className={styles.stepIcon} />
+            <h3>{t.stepThinkQuestion}</h3>
+            <p>{t.stepThinkDescription}</p>
           </div>
-        </section>
+          <div className={styles.stepCard}>
+            <FaQuestionCircle className={styles.stepIcon} />
+            <h3>{t.stepLogin}</h3>
+            <p>{t.stepLoginDescription}</p>
+          </div>
+          <div className={styles.stepCard}>
+            <FaQuestionCircle className={styles.stepIcon} />
+            <h3>{t.stepFillForm}</h3>
+            <p>{t.stepFillDescription}</p>
+          </div>
+          <div className={styles.stepCard}>
+            <FaQuestionCircle className={styles.stepIcon} />
+            <h3>{t.stepSubmitQuestion}</h3>
+            <p>{t.stepSubmitDescription}</p>
+          </div>
+        </div>
+      </section>
 
-        <section className={styles.questionFormSection}>
+      <section className={styles.questionFormSection}>
         <h2>{t.askQuestion}</h2>
         <form onSubmit={handleQuestionSubmit} className={styles.questionForm}>
           <div className={styles.formGroup}>
@@ -200,13 +201,13 @@ const Blog = () => {
               {t.titleLabel}
             </label>
             <input
-                id="title"
-                type="text"
-                value={newTitle}
-                onChange={(e) => setNewTitle(e.target.value)}
-                placeholder={t.enterTitle}
-                required
-                className={styles.formInput}
+              id="title"
+              type="text"
+              value={newTitle}
+              onChange={(e) => setNewTitle(e.target.value)}
+              placeholder={t.enterTitle}
+              required
+              className={styles.formInput}
             />
           </div>
 
@@ -215,12 +216,12 @@ const Blog = () => {
               {t.bodyLabel}
             </label>
             <textarea
-                id="body"
-                value={newBody}
-                onChange={(e) => setNewBody(e.target.value)}
-                placeholder={t.enterBody}
-                required
-                className={styles.formTextarea}
+              id="body"
+              value={newBody}
+              onChange={(e) => setNewBody(e.target.value)}
+              placeholder={t.enterBody}
+              required
+              className={styles.formTextarea}
             />
           </div>
 
@@ -231,106 +232,114 @@ const Blog = () => {
         {error && <p className={styles.errorMessage}>{error}</p>}
       </section>
 
-
-
-        <section className={styles.questionsList}>
-          <h3>{t.recentQuestions}</h3>
-          {posts.length > 0 ? (
-              <>
-                <ul>
-                  {posts.map((post) => (
-                      <li key={`post-${post.id}`} className={styles.questionItem}>
-                        <div className={styles.questionText}>{post.title}</div>
-                        <div className={styles.starRating}>
-                          {[1, 2, 3, 4, 5].map((star) => (
-                              <FaStar
-                                  key={star}
-                                  className={
-                                    (post.usabilityRating || 1) >= star
-                                        ? styles.starSelected
-                                        : styles.star
-                                  }
-                              />
-                          ))}
-                        </div>
-                        <div className={styles.questionUsername}>{post.author}</div>
-                        <div className={styles.questionBody}>{post.body}</div>
-                        <div className={styles.commentsSection}>
-                          <h4>{t.comments}</h4>
-                          {post.comments.length > 0 ? (
-                              <div className={styles.commentsContainer}>
-                                {post.comments.map((comment) => (
-                                    <div key={`comment-${comment.id}`} className={styles.comment}>
-                                      <strong>{comment?.author ? comment.author : ""}:</strong>
-                                      <div className={styles.commentDate}>
-                                        {format(new Date(comment.createdAt), "dd.MM.yyyy HH:mm", {
-                                          locale: language === "pl" ? plDate : undefined,
-                                        })}
-                                      </div>
-                                      <p>{comment?.body}</p>
-                                    </div>
-                                ))}
-                              </div>
-                          ) : (
-                              <p>{t.noComments}</p>
-                          )}
-                          <textarea
-                              value={newComment[post.id] || ""}
-                              onChange={(e) =>
-                                  setNewComment({
-                                    ...newComment,
-                                    [post.id]: e.target.value,
-                                  })
-                              }
-                              placeholder={t.addComment}
-                          />
-                          <div className={styles.starRating}>
-                            {[1, 2, 3, 4, 5].map((star) => (
-                                <FaStar
-                                    key={`star-${post.id}-${star}`}
-                                    className={
-                                      (newCommentRating[post.id] || 4) >= star
-                                          ? styles.starSelected
-                                          : styles.star
-                                    }
-                                    onClick={() => handleStarClick(post.id, star)}
-                                />
-                            ))}
-                          </div>
-                          <button
-                              type="button"
-                              onClick={() => handleAddComment(post.id)}
-                              className={styles.addCommentButton}
+      <section className={styles.questionsList}>
+        <h3>{t.recentQuestions}</h3>
+        {posts.length > 0 ? (
+          <>
+            <ul>
+              {posts.map((post) => (
+                <li key={`post-${post.id}`} className={styles.questionItem}>
+                  <div className={styles.questionText}>{post.title}</div>
+                  <div className={styles.starRating}>
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <FaStar
+                        key={star}
+                        className={
+                          (post.usabilityRating || 1) >= star
+                            ? styles.starSelected
+                            : styles.star
+                        }
+                      />
+                    ))}
+                  </div>
+                  <div className={styles.questionUsername}>{post.author}</div>
+                  <div className={styles.questionBody}>{post.body}</div>
+                  <div className={styles.commentsSection}>
+                    <h4>{t.comments}</h4>
+                    {post.comments.length > 0 ? (
+                      <div className={styles.commentsContainer}>
+                        {post.comments.map((comment) => (
+                          <div
+                            key={`comment-${comment.id}`}
+                            className={styles.comment}
                           >
-                            <FaCommentAlt/> {t.add}
-                          </button>
-                        </div>
-                      </li>
-                  ))}
-                </ul>
-                <div className={styles.pagination}>
-                  <button
-                      onClick={() => handlePageChange(currentPage - 1)}
-                      disabled={currentPage === 1}
-                  >
-                    {t.previousPage}
-                  </button>
-                  <span>
+                            <strong>
+                              {comment?.author ? comment.author : ""}:
+                            </strong>
+                            <div className={styles.commentDate}>
+                              {format(
+                                new Date(comment.createdAt),
+                                "dd.MM.yyyy HH:mm",
+                                {
+                                  locale:
+                                    language === "pl" ? plDate : undefined,
+                                }
+                              )}
+                            </div>
+                            <p>{comment?.body}</p>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p>{t.noComments}</p>
+                    )}
+                    <textarea
+                      value={newComment[post.id] || ""}
+                      onChange={(e) =>
+                        setNewComment({
+                          ...newComment,
+                          [post.id]: e.target.value,
+                        })
+                      }
+                      placeholder={t.addComment}
+                    />
+                    <div className={styles.starRating}>
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <FaStar
+                          key={`star-${post.id}-${star}`}
+                          className={
+                            (newCommentRating[post.id] || 4) >= star
+                              ? styles.starSelected
+                              : styles.star
+                          }
+                          onClick={() => handleStarClick(post.id, star)}
+                        />
+                      ))}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleAddComment(post.id)}
+                      className={styles.addCommentButton}
+                    >
+                      <FaCommentAlt /> {t.add}
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <div className={styles.pagination}>
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                {t.previousPage}
+              </button>
+              <span>
                 {t.page} {currentPage} {t.of} {totalPages}
               </span>
-                  <button
-                      onClick={() => handlePageChange(currentPage + 1)}
-                      disabled={currentPage === totalPages}
-                  >
-                    {t.nextPage}
-                  </button>
-                </div>
-              </>
-          ) : (
-              <p>{t.noQuestions}</p>
-          )}
-        </section>
-      </div>
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              >
+                {t.nextPage}
+              </button>
+            </div>
+          </>
+        ) : (
+          <p>{t.noQuestions}</p>
+        )}
+      </section>
+    </div>
   );
 };
 

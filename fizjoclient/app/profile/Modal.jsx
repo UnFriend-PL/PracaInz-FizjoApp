@@ -1,8 +1,10 @@
-import { useState, useEffect, useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import styles from "./Modal.module.scss";
 import pl from "./locales/pl.json";
 import en from "./locales/en.json";
 import { LanguageContext } from "../contexts/lang/langContext";
+import apiService from "@/app/services/apiService/apiService";
+import { UserContext } from "@/app/contexts/user/userContext";
 
 const locales = { en, pl };
 
@@ -13,6 +15,7 @@ const ProfileModal = ({
   staffData,
   onSave,
   role,
+  workingHours,
 }) => {
   const [tempUserData, setTempUserData] = useState({ ...userData });
   const [tempStaffData, setTempStaffData] = useState({ ...staffData });
@@ -20,9 +23,70 @@ const ProfileModal = ({
   const [validationErrors, setValidationErrors] = useState({});
   const { language } = useContext(LanguageContext);
   const [avatarPreview, setAvatarPreview] = useState(null);
+  const { user } = useContext(UserContext);
+  const [tempWorkingHours, setTempWorkingHours] = useState([]);
 
   const t = locales[language];
 
+  const handleWorkingHoursChange = (index, field, value) => {
+    const updatedWorkingHours = [...tempWorkingHours];
+    updatedWorkingHours[index][field] = value;
+    setTempWorkingHours(updatedWorkingHours);
+  };
+
+  const getAvailableDays = () => {
+    const selectedDays = tempWorkingHours.map((wh) => wh.dayOfWeek);
+    const allDays = [
+      { value: 1, label: t.monday || "Monday" },
+      { value: 2, label: t.tuesday || "Tuesday" },
+      { value: 3, label: t.wednesday || "Wednesday" },
+      { value: 4, label: t.thursday || "Thursday" },
+      { value: 5, label: t.friday || "Friday" },
+      { value: 6, label: t.saturday || "Saturday" },
+      { value: 7, label: t.sunday || "Sunday" },
+    ];
+    return allDays.filter((day) => !selectedDays.includes(day.value));
+  };
+  const addWorkingHourRow = () => {
+    if (tempWorkingHours.length < 7) {
+      const availableDays = getAvailableDays();
+      if (availableDays.length > 0) {
+        const existingDayIndex = tempWorkingHours.findIndex(
+          (wh) => wh.dayOfWeek === availableDays[0].value
+        );
+
+        if (existingDayIndex !== -1) {
+          const updatedWorkingHours = [...tempWorkingHours];
+          updatedWorkingHours[existingDayIndex] = {
+            ...updatedWorkingHours[existingDayIndex],
+            startHour: "08:00",
+            endHour: "16:00",
+          };
+          setTempWorkingHours(updatedWorkingHours);
+        } else {
+          setTempWorkingHours([
+            ...tempWorkingHours,
+            {
+              dayOfWeek: availableDays[0].value,
+              startHour: "08:00",
+              endHour: "16:00",
+            },
+          ]);
+        }
+      }
+    }
+  };
+  const removeWorkingHourRow = (index) => {
+    const updatedWorkingHours = [...tempWorkingHours];
+    updatedWorkingHours.splice(index, 1);
+    setTempWorkingHours(updatedWorkingHours);
+  };
+
+  useEffect(() => {
+    if (workingHours) {
+      setTempWorkingHours(workingHours);
+    }
+  }, [workingHours]);
   useEffect(() => {
     setTempUserData({ ...userData });
   }, [userData]);
@@ -107,12 +171,13 @@ const ProfileModal = ({
 
     setValidationErrors(errors);
   };
+
   const formatDate = (date) => {
     const dateObj = new Date(date);
-    const day = String(dateObj.getDate()).padStart(2, "0");
-    const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+    const day = String(dateObj.getHours()).padStart(2, "0");
+    const month = String(dateObj.getMinutes()).padStart(2, "0");
     const year = dateObj.getFullYear();
-    return `${day}-${month}-${year}`;
+    return `${day}-${month}`;
   };
 
   const handleAvatarChange = (event) => {
@@ -127,19 +192,77 @@ const ProfileModal = ({
       reader.readAsDataURL(file);
     }
   };
-  const handleSave = () => {
+  const handleSaveWrapper = async () => {
+    await handleSave(tempUserData, tempStaffData, tempAvatar);
+  };
+  const handleSave = async () => {
     if (Object.keys(validationErrors).length === 0) {
-      onSave(tempUserData, tempStaffData, tempAvatar);
+      await onSave(tempUserData, tempStaffData, tempAvatar);
       onClose();
     } else {
       alert("Please fix the errors before saving.");
     }
+    const workingHoursPayload = tempWorkingHours.map((wh) => ({
+      physiotherapistId: user.id,
+      dayOfWeek: wh.dayOfWeek.toString(),
+      startHour: wh.startHour,
+      endHour: wh.endHour,
+    }));
+
+    const removedWorkingHours = workingHours
+      .filter(
+        (wh) =>
+          !tempWorkingHours.some((tempWh) => tempWh.dayOfWeek === wh.dayOfWeek)
+      )
+      .map((wh) => ({
+        physiotherapistId: user.id,
+        dayOfWeek: wh.dayOfWeek.toString(),
+        startHour: "00:00",
+        endHour: "00:00",
+      }));
+
+    try {
+      for (const removedHour of removedWorkingHours) {
+        const response = await apiService.post(
+          "/Staff/SaveWorkingHours",
+          removedHour,
+          true
+        );
+
+        if (!response.success) {
+          console.error("Błąd zapisu usuniętej godziny pracy:", response.data);
+          alert(t.saveError || "Error saving working hours. Try again.");
+          return;
+        }
+      }
+
+      for (const workingHour of workingHoursPayload) {
+        const response = await apiService.post(
+          "/Staff/SaveWorkingHours",
+          workingHour,
+          true
+        );
+
+        if (!response.success) {
+          console.error("Błąd zapisu godzin pracy:", response.data);
+          alert(t.saveError || "Error saving working hours. Try again.");
+          return;
+        }
+      }
+
+      onSave(tempUserData, tempStaffData, tempAvatar);
+      onClose();
+    } catch (error) {
+      console.error("Błąd podczas zapisywania danych:", error);
+      alert(t.saveError || "Error saving data. Try again.");
+    }
   };
 
   const handleCancel = () => {
-    setTempUserData({});
-    setTempStaffData({});
-    setTempAvatar({});
+    setTempUserData({ ...userData });
+    setTempStaffData({ ...staffData });
+    setTempWorkingHours([...workingHours]);
+
     onClose();
   };
 
@@ -328,44 +451,126 @@ const ProfileModal = ({
             </div>
           </div>
           {role === "Physiotherapist" && (
-            <div className={styles.sectionStaffDown}>
-              <h3 className={styles.titleStaffSection}>Staff Data</h3>
+            <div className={styles.x}>
+              <div className={styles.sectionStaffDown}>
+                <h3 className={styles.titleSection}>Staff Data</h3>
+                <label className={styles.label}>
+                  {t.education} {": "}
+                  <input
+                    type="text"
+                    name="education"
+                    value={tempStaffData.education || ""}
+                    onChange={handleStaffDataChange}
+                    className={styles.input}
+                  />
+                </label>
+                <label className={styles.label}>
+                  {t.yearsOfExperience} {": "}
+                  <input
+                    type="Number"
+                    name="yearsOfExperience"
+                    value={tempStaffData.yearsOfExperience || ""}
+                    onChange={handleStaffDataChange}
+                    className={styles.input}
+                  />
+                </label>
+                <label className={styles.label}>
+                  {t.description} {": "}
+                  <textarea
+                    name="description"
+                    value={tempStaffData.description || ""}
+                    onChange={handleStaffDataChange}
+                    className={styles.textarea}
+                  />
+                </label>
+              </div>
 
-              <label className={styles.label}>
-                {t.education} {": "}
-                <input
-                  type="text"
-                  name="education"
-                  value={tempStaffData.education || ""}
-                  onChange={handleStaffDataChange}
-                  className={styles.input}
-                />
-              </label>
-              <label className={styles.label}>
-                {t.yearsOfExperience} {": "}
-                <input
-                  type="Number"
-                  name="yearsOfExperience"
-                  value={tempStaffData.yearsOfExperience || ""}
-                  onChange={handleStaffDataChange}
-                  className={styles.input}
-                />
-              </label>
-              <label className={styles.label}>
-                {t.description} {": "}
-                <textarea
-                  name="description"
-                  value={tempStaffData.description || ""}
-                  onChange={handleStaffDataChange}
-                  className={styles.textarea}
-                />
-              </label>
+              <div className={styles.sectionStaffDown}>
+                <h3 className={styles.titleSection}>
+                  {t.workingHours || "Working Hours"}
+                </h3>
+
+                <div className={styles.workingHoursForm}>
+                  {tempWorkingHours.map((wh, index) => (
+                    <div key={wh.dayOfWeek} className={styles.workingHoursRow}>
+                      <label>
+                        {t.dayOfWeek || "Day of Week"}:
+                        <select
+                          value={wh.dayOfWeek}
+                          onChange={(e) =>
+                            handleWorkingHoursChange(
+                              index,
+                              "dayOfWeek",
+                              parseInt(e.target.value)
+                            )
+                          }
+                        >
+                          {getAvailableDays()
+                            .concat({
+                              value: wh.dayOfWeek,
+                              label: t[`day${wh.dayOfWeek}`] || "Current Day",
+                            })
+                            .map((day) => (
+                              <option key={day.value} value={day.value}>
+                                {day.label}
+                              </option>
+                            ))}
+                        </select>
+                      </label>
+                      <label>
+                        {t.startHour || "Start Hour"}:
+                        <input
+                          type="time"
+                          value={wh.startHour}
+                          onChange={(e) =>
+                            handleWorkingHoursChange(
+                              index,
+                              "startHour",
+                              e.target.value
+                            )
+                          }
+                        />
+                      </label>
+                      <label>
+                        {t.endHour || "End Hour"}:
+                        <input
+                          type="time"
+                          value={wh.endHour}
+                          onChange={(e) =>
+                            handleWorkingHoursChange(
+                              index,
+                              "endHour",
+                              e.target.value
+                            )
+                          }
+                        />
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => removeWorkingHourRow(index)}
+                        className={styles.removeRowButton}
+                      >
+                        {t.remove || "Remove"}
+                      </button>
+                    </div>
+                  ))}
+                  {tempWorkingHours.length < 7 && (
+                    <button
+                      type="button"
+                      onClick={addWorkingHourRow}
+                      className={styles.addRowButton}
+                    >
+                      {t.addWorkingHours || "Add Working Day"}
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
           )}
         </div>
 
         <div className={styles.buttonContainer}>
-          <button onClick={handleSave} className={styles.saveButton}>
+          <button onClick={handleSaveWrapper} className={styles.saveButton}>
             {t.saveChanges}
           </button>
           <button onClick={handleCancel} className={styles.cancelButton}>
