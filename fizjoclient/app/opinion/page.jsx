@@ -9,7 +9,7 @@ import {
   FaRegTrashAlt,
   FaStar,
   FaRegStar,
-} from "react-icons/fa"; // Gwiazdki
+} from "react-icons/fa";
 
 import styles from "./opinions.module.scss";
 import pl from "./locales/pl.json";
@@ -65,12 +65,6 @@ const Opinions = () => {
     }
   };
 
-  const handlePageChange = (newPage) => {
-    if (newPage >= 1 && newPage <= totalPages) {
-      setPage(newPage);
-    }
-  };
-
   const renderStars = (rating) => {
     const stars = [];
     for (let i = 0; i < 5; i++) {
@@ -85,7 +79,7 @@ const Opinions = () => {
 
   const handleEditOpinion = (opinion) => {
     if (role === "Patient" && opinion.PatientId === userId) {
-      setEditingOpinion(opinion); // Ustawienie opinii do edycji
+      setEditingOpinion(opinion);
     } else {
       console.error("Nie masz uprawnień do edytowania tej opinii.");
     }
@@ -119,9 +113,7 @@ const Opinions = () => {
     }
   };
   const handleDeleteOpinion = (opinionId) => {
-    onDelete(opinionId); // Wywołanie funkcji usuwania
-
-    // Aktualizacja lokalnego stanu po usunięciu opinii
+    onDelete(opinionId);
     setOpinions((prevOpinions) =>
       prevOpinions.filter((opinion) => opinion.opinionId !== opinionId)
     );

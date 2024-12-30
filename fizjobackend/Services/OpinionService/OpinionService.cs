@@ -10,6 +10,7 @@ using Sprache;
 using System.Linq;
 using fizjobackend.Services.OpinionService;
 using fizjobackend.Models.OpinionDTOs;
+using Fizjobackend.Entities.UserEntities;
 
 namespace Fizjobackend.Services.OpinionService
 {
@@ -242,6 +243,63 @@ namespace Fizjobackend.Services.OpinionService
                         response.Message = "No opinions found for this patient.";
                         return response;
                     }
+
+                opinionResponse.Opinions = opinions.Select(o => new OpinionListDTO
+                {
+                    OpinionId = o.OpinionId,
+                    NameAndFirstLetterOfTheLastName = o.NameAndFirstLetterOfTheLastName,
+                    Comment = o.Comment,
+                    Rating = o.Rating,
+                    UploadDate = o.UploadDate,
+                    About = GetFistNameAndLastNamePhysio(o.PhysiotherapistId)
+                }).ToList();
+                opinionResponse.Page = page;
+                opinionResponse.TotalPage = (int)Math.Ceiling((double)opinionsCount / pageSize); response.Data = opinionResponse;
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"An error occurred: {ex.Message}";
+            }
+
+            return response;
+        }
+        public async Task<ServiceResponse<ListOfOpinionResponseDTO>> GetAllOpinionsByPhysiotherapistId(Guid physiotherapistId, int page, int pageSize)
+        {
+            var response = new ServiceResponse<ListOfOpinionResponseDTO>("");
+            try
+            {
+                ListOfOpinionResponseDTO opinionResponse = new ListOfOpinionResponseDTO();
+                //if (!Guid.TryParse(physiotherapistId, out Guid physiotherapistGuidId))
+                //{
+                //    response.Success = false;
+                //    response.Message = "ERROR WITH GUID";
+                //    return response;
+                //}
+                var isPhysiotherapist = await _context.Users.FindAsync(physiotherapistId);
+                if (isPhysiotherapist == null)
+                {
+                    response.Success = false;
+                    response.Message = "User not found";
+                    return response;
+                }
+                
+                List<Opinion> opinions = await _context.Opinions
+                            .Where(o => o.PhysiotherapistId == physiotherapistId)
+                            .Skip((page - 1) * pageSize)
+                            .Take(pageSize)
+                            .ToListAsync();
+                double opinionsCount = await _context.Opinions
+                            .Where(o => o.PhysiotherapistId == physiotherapistId)
+                            .CountAsync();
+                    
+                if (opinions == null || opinions.Count == 0)
+                {
+                    response.Success = false;
+                    response.Message = "No opinions found for this patient.";
+                    return response;
+                }
 
                 opinionResponse.Opinions = opinions.Select(o => new OpinionListDTO
                 {

@@ -2,7 +2,7 @@
 
 .container {
   max-width: 800px;
-  margin: 0 auto; /* Wyśrodkowanie kontenera */
+  margin: 0 auto;
   padding: 20px;
   font-family: Arial, sans-serif;
   background-color: $white;
@@ -41,20 +41,20 @@
 }
 .opinionDate {
   position: absolute;
-  top: 8px; /* Adjust as necessary for spacing */
-  right: 8px; /* Adjust as necessary for spacing */
-  font-size: 0.9em; /* Optional: make the font size slightly smaller */
-  color: #888; /* Optional: a lighter color for subtlety */
+  top: 8px;
+  right: 8px;
+  font-size: 0.9em;
+  color: #888;
 }
 .buttonContainer {
-  display: flex; /* Flexbox dla przycisków */
-  gap: 10px; /* Odstęp między przyciskami */
-  justify-content: flex-end; /* Ustawienie przycisków po prawej stronie */
-  align-items: center; /* Wyrównanie przycisków w pionie do środka */
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .buttonContainer button {
-  display: inline-flex; /* Flexbox dla przycisków */
+  display: inline-flex;
   align-items: center;
   padding: 8px 12px;
   border: none;
@@ -64,14 +64,12 @@
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-/* Styl na hover przycisków */
 .buttonContainer button:hover {
-  transform: scale(1.05); /* Powiększenie przycisku przy najechaniu */
+  transform: scale(1.05);
 }
 
-/* Usunięcie obramowania po kliknięciu */
 .buttonContainer button:focus {
-  outline: none; /* Usunięcie obramowania po kliknięciu */
+  outline: none;
 }
 
 .opinionAbout {
@@ -103,81 +101,75 @@
 
 .editButtons {
   display: flex;
-  gap: 15px; /* Zwiększono przestrzeń między przyciskami */
-  align-items: center; /* Wyrównanie przycisków w poziomie */
-  justify-content: flex-start; /* Przyciski ustawione od lewej strony */
+  gap: 15px;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .editButton {
   display: flex;
   align-items: center;
-  background-color: $blue; /* Kolor tła, jeśli $blue jest zdefiniowane w Twoich zmiennych SCSS */
-  color: white; /* Kolor tekstu */
-  padding: 0.5em 1em; /* Wewnętrzne marginesy, aby przycisk był odpowiedniej wielkości */
+  background-color: $blue;
+  color: white;
+  padding: 0.5em 1em;
   margin-right: 1rem;
-  border: none; /* Usunięcie obramowania */
-  border-radius: 5px; /* Zaokrąglenie rogów */
-  cursor: pointer; /* Kursor wskazujący, że jest to element interaktywny */
-  transition: background-color 0.3s ease, transform 0.2s ease; /* Płynna zmiana koloru tła i efekt powiększenia */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 
-  /* Dostosowanie dla małych ekranów */
   @media (max-width: 768px) {
-    padding: 6px 10px; /* Mniejsze marginesy na mniejszych ekranach */
+    padding: 6px 10px;
   }
 
   &:hover {
-    background-color: darken(
-      $blue,
-      10%
-    ); /* Zmiana koloru tła przy hover (ciemniejszy odcień $blue) */
-    transform: scale(1.05); /* Delikatne powiększenie przy najechaniu */
+    background-color: darken($blue, 10%);
+    transform: scale(1.05);
   }
 
   &:focus {
-    outline: none; /* Usunięcie obramowania po kliknięciu */
+    outline: none;
   }
 
   .editIcon {
-    font-size: 1.2rem; /* Rozmiar ikony */
-    margin-right: 5px; /* Odstęp między ikoną a tekstem */
+    font-size: 1.2rem;
+    margin-right: 5px;
   }
 }
 .deleteButton {
-  background-color: #d9534f; /* Czerwony kolor tła, dla przycisku usuwania */
-  color: white; /* Biały kolor tekstu */
-  border: none; /* Bez obramowania */
-  padding: 0.5em 1em; /* Wewnętrzne marginesy, aby przycisk był odpowiedniej wielkości */
-  font-size: 1rem; /* Rozmiar czcionki */
-  font-weight: bold; /* Pogrubiony tekst */
-  border-radius: 5px; /* Zaokrąglone rogi przycisku */
-  cursor: pointer; /* Zmieniamy kursor na "rękę" przy najechaniu */
-  transition: background-color 0.3s, transform 0.2s ease; /* Animacja dla zmiany tła i skalowania */
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  padding: 0.5em 1em;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s ease;
   display: flex;
-  align-items: center; /* Wyrównanie ikonki i tekstu w pionie */
-  justify-content: center; /* Wyśrodkowanie elementów w poziomie */
+  align-items: center;
+  justify-content: center;
 
-  /* Mały odstęp między ikoną i tekstem */
   gap: 0.5rem;
 
   &:hover {
-    background-color: #c9302c; /* Zmiana koloru na ciemniejszy czerwony podczas hover */
-    transform: scale(1.05); /* Lekka animacja powiększenia przy najechaniu */
+    background-color: #c9302c;
+    transform: scale(1.05);
   }
 
   &:focus {
-    outline: none; /* Usunięcie obramowania po kliknięciu */
+    outline: none;
   }
 
-  /* Responsywność: Dostosowanie dla małych ekranów */
   @media (max-width: 768px) {
-    font-size: 0.9rem; /* Mniejszy rozmiar czcionki na małych ekranach */
-    padding: 0.4em 0.8em; /* Mniejsze marginesy na małych ekranach */
+    font-size: 0.9rem;
+    padding: 0.4em 0.8em;
   }
 }
 
 .deleteIcon {
-  font-size: 1.2rem; /* Ustawiamy rozmiar ikony */
-  color: white; /* Biała ikona */
+  font-size: 1.2rem;
+  color: white;
 }
 
 .saveButton {

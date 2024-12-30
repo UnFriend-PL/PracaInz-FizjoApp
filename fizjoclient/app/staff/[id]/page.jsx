@@ -1,73 +1,183 @@
-'use client';
-import Image from 'next/image';
-import StarRating from './StarRating';
-import styles from '../staff.module.scss';
-import {useEffect, useState} from "react";
-import apiService, {fetchAvatar} from "@/app/services/apiService/apiService";
+"use client";
+import Image from "next/image";
+import { FaStar, FaRegStar } from "react-icons/fa";
+import styles from "../staff.module.scss";
+
+import { useEffect, useState, useContext } from "react";
+import { LanguageContext } from "@/app/contexts/lang/langContext";
+
+import apiService, { fetchAvatar } from "@/app/services/apiService/apiService";
 import AppointmentScheduler from "@/app/appointments/appointmentScheduler";
-export default function SpecialistProfile({params}) {
-    const {id} = params;
-    const [specialist, setSpecialist] = useState(null);
-    const [reviews, setReviews] = useState([]);
-    const [avatar, setAvatar] = useState(null);
+import pl from "./locales/pl.json";
+import en from "./locales/en.json";
+const locales = { en, pl };
 
-    useEffect(() => {
-        const fetchSpecialist = async () => {
-            const response = await apiService.get(`/Staff/${id}`, null);
-            setSpecialist(response.data);
-            const avatarUrl = await fetchAvatar(response.data.avatarPath || '');
-            setAvatar(avatarUrl);
-            console.log(response)
+export default function SpecialistProfile({ params }) {
+  const { id } = params;
+  const { language } = useContext(LanguageContext);
 
-        };
-        fetchSpecialist();
-    }, [id]);
+  const [specialist, setSpecialist] = useState(null);
+  const [opinions, setOpinions] = useState([]);
+  const [avatar, setAvatar] = useState(null);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [loading, setLoading] = useState(true);
 
-    if (!specialist) {
-        return <p>Nie znaleziono specjalisty.</p>;
+  const t = locales[language];
+
+  useEffect(() => {
+    const fetchSpecialist = async () => {
+      const response = await apiService.get(`/Staff/${id}`, null);
+      setSpecialist(response.data);
+      console.log("Response");
+      console.log(response.data.avatarPath);
+      const avatarPath = response.data.avatarPath;
+      if (avatarPath) {
+        const avatarUrl = await fetchAvatar(avatarPath || "");
+        if (avatarUrl) {
+          setAvatar(avatarUrl);
+        }
+      }
+
+      console.log(response);
+    };
+    fetchSpecialist();
+  }, [id]);
+  useEffect(() => {
+    getOpinions(page);
+  }, [page]);
+  const handleNextPage = () => {
+    if (page < totalPages) {
+      setPage(page + 1);
     }
+  };
 
-    return (
-        <>
-            <div className={styles.specialistProfile}>
-                {avatar ? (
-                    <Image
-                        src={avatar}
-                        alt={specialist.name}
-                        className={styles.specialistImage}
-                        width={150}
-                        height={150}
-                    />
-                ) : (
-                    <div className={styles.specialistImageAlt}>{specialist.name}</div>
-                )}
-                <AppointmentScheduler physiotherapistId={specialist.physiotherapistId}
-                                      averagePrice={specialist.averagePrice == 0 ? 99 : specialist.averagePrice}/>
-                <h1>{specialist.name}</h1>
-                <p className={styles.specialistInfo}>{specialist.specialization}</p>
-                <prev className={styles.specialistInfo}>{specialist.description}</prev>
-                <p className={styles.specialistInfo}><strong>Wykształcenie:</strong> {specialist.education}</p>
-                <p className={styles.specialistInfo}><strong>Doświadczenie:</strong> {specialist.yearsOfExperience}</p>
-                <p className={styles.specialistInfo}><strong>Doświadczenie:</strong> {specialist.yearsOfExperience}</p>
+  const handlePrevPage = () => {
+    if (page > 1) {
+      setPage(page - 1);
+    }
+  };
+  const getOpinions = async (currentPage = 1) => {
+    try {
+      setLoading(true);
+      const response = await apiService.get(
+        `/Opinion/all/${id}`,
+        { page: currentPage, pageSize: 5 },
+        true
+      );
+      if (response.page && response.opinions) {
+        setOpinions(response.opinions);
+        setTotalPages(response.totalPage || 1);
+        setPage(response.page);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error("Błąd podczas pobierania opinii:", error);
+      setLoading(false);
+    }
+  };
+  if (!specialist) {
+    return <p>Nie znaleziono specjalisty.</p>;
+  }
+  const renderStars = (rating) => {
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+      if (i < rating) {
+        stars.push(<FaStar key={i} className={styles.star} />);
+      } else {
+        stars.push(<FaRegStar key={i} className={styles.star} />);
+      }
+    }
+    return stars;
+  };
+  return (
+    <>
+      <div className={styles.specialistProfile}>
+        <div className={styles.specialistHeader}>
+          <div className={styles.avatarWrapper}>
+            {avatar ? (
+              <Image
+                src={avatar}
+                alt={specialist.name}
+                className={styles.specialistImage}
+                width={150}
+                height={150}
+              />
+            ) : (
+              <div className={styles.noAvatar}>
+                <Image
+                  src="/default-avatar.png"
+                  alt="User Avatar"
+                  width={150}
+                  height={150}
+                  className={styles.avatarImage}
+                />
+              </div>
+            )}
+          </div>
+          <div className={styles.specalistInfo}></div>
+        </div>
+        <AppointmentScheduler
+          physiotherapistId={specialist.physiotherapistId}
+          averagePrice={
+            specialist.averagePrice == 0 ? 99 : specialist.averagePrice
+          }
+        />
+        <h1>{specialist.name}</h1>
+        <p className={styles.specialistInfo}>{specialist.specialization}</p>
+        <prev className={styles.specialistInfo}>{specialist.description}</prev>
+        <p className={styles.specialistInfo}>
+          <strong>{t.education}</strong> {specialist.education}
+        </p>
+        <p className={styles.specialistInfo}>
+          <strong>{t.yearsOfExperience}:</strong> {specialist.yearsOfExperience}
+        </p>
 
-                <div className={styles.reviewsSection}>
-                    <h2>Opinie</h2>
-                    {specialist.reviews?.length === 0 ? (
-                        <p>Brak opinii.</p>
-                    ) : (
-                        specialist.reviews?.map((review, index) => (
-                            <div key={index} className={styles.review}>
-                                <h3>{review.author}</h3>
-                                <StarRating rating={review.rating}/>
-                                <p>{review.comment}</p>
-                            </div>
-                        ))
-                    )}
+        <div className={styles.opinionCard}>
+          <h2>{t.opinion}</h2>
+          {opinions.length === 0 ? (
+            <p>{t.noHaveOpinion}</p>
+          ) : (
+            opinions?.map((opinions, index) => (
+              <div key={index} className={styles.opinions}>
+                <h3>{opinions.nameAndFirstLetterOfTheLastName}</h3>
+                <div className={styles.stars}>
+                  {renderStars(opinions.rating)}
                 </div>
+                <p className={styles.opinionComment}>
+                  <strong>{t.opinionComment}:</strong> {opinions.comment}
+                </p>
+              </div>
+            ))
+          )}
+          <div className={styles.pagination}>
+            <button
+              onClick={handlePrevPage}
+              disabled={page <= 1}
+              className={styles.paginationButton}
+            >
+              {t.prevPage}
+            </button>
+            <span className={styles.pageInfo}>
+              {t.page} {page} {t.of} {totalPages}
+            </span>
+            <button
+              onClick={handleNextPage}
+              disabled={page >= totalPages}
+              className={styles.paginationButton}
+            >
+              {t.nextPage}
+            </button>
+          </div>
+        </div>
 
-                <button onClick={() => window.history.back()} className={styles.backLink}>Wróć</button>
-            </div>
-
-        </>
-    );
+        <button
+          onClick={() => window.history.back()}
+          className={styles.backLink}
+        >
+          Wróć
+        </button>
+      </div>
+    </>
+  );
 }
