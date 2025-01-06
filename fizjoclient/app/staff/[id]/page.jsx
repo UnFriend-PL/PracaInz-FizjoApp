@@ -92,14 +92,14 @@ export default function SpecialistProfile({ params }) {
   };
   return (
     <>
-      <div className={styles.specialistProfile}>
-        <div className={styles.specialistHeader}>
+      <div className={styles.profileContainer}>
+        <div className={styles.profileHeader}>
           <div className={styles.avatarWrapper}>
             {avatar ? (
               <Image
                 src={avatar}
                 alt={specialist.name}
-                className={styles.specialistImage}
+                className={styles.avatarImage}
                 width={150}
                 height={150}
               />
@@ -115,7 +115,31 @@ export default function SpecialistProfile({ params }) {
               </div>
             )}
           </div>
-          <div className={styles.specalistInfo}></div>
+          <div className={styles.profileInfo}>
+            <div className={styles.profileField}>
+              <span className={styles.fieldLabel}>{t.education}: </span>
+              <span className={styles.fieldValue}>
+                {specialist.education || t.notAvailable}
+              </span>
+            </div>
+
+            <div className={styles.profileField}>
+              <span className={styles.fieldLabel}>{t.yearsOfExperience}: </span>
+              <span className={styles.fieldValue}>
+                {specialist.yearsOfExperience || t.notAvailable}
+              </span>
+            </div>
+            {specialist.description && (
+              <div className={styles.profileDescription}>
+                <span className={styles.fieldLabel}>{t.description}</span>
+                <div className={styles.profileDescriptionValue}>
+                  <span className={styles.fieldValue}>
+                    {specialist.description}
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
         <AppointmentScheduler
           physiotherapistId={specialist.physiotherapistId}
@@ -123,61 +147,55 @@ export default function SpecialistProfile({ params }) {
             specialist.averagePrice == 0 ? 99 : specialist.averagePrice
           }
         />
-        <h1>{specialist.name}</h1>
-        <p className={styles.specialistInfo}>{specialist.specialization}</p>
-        <prev className={styles.specialistInfo}>{specialist.description}</prev>
-        <p className={styles.specialistInfo}>
-          <strong>{t.education}</strong> {specialist.education}
-        </p>
-        <p className={styles.specialistInfo}>
-          <strong>{t.yearsOfExperience}:</strong> {specialist.yearsOfExperience}
-        </p>
-
-        <div className={styles.opinionCard}>
+        <div className={styles.opinion}>
           <h2>{t.opinion}</h2>
           {opinions.length === 0 ? (
             <p>{t.noHaveOpinion}</p>
           ) : (
             opinions?.map((opinions, index) => (
-              <div key={index} className={styles.opinions}>
-                <h3>{opinions.nameAndFirstLetterOfTheLastName}</h3>
-                <div className={styles.stars}>
-                  {renderStars(opinions.rating)}
+              <div className={styles.opinionCard}>
+                <div key={index} className={styles.opinions}>
+                  <div className={styles.opinionAuthor}>
+                    {opinions.nameAndFirstLetterOfTheLastName}
+                  </div>
+                  <div className={styles.opinionRating}>
+                    <div className={styles.stars}>
+                      {renderStars(opinions.rating)}
+                    </div>
+                  </div>
+                  <p className={styles.opinionComment}>
+                    <strong>{t.opinionComment}:</strong> {opinions.comment}
+                  </p>
                 </div>
-                <p className={styles.opinionComment}>
-                  <strong>{t.opinionComment}:</strong> {opinions.comment}
-                </p>
               </div>
             ))
           )}
-          <div className={styles.pagination}>
-            <button
-              onClick={handlePrevPage}
-              disabled={page <= 1}
-              className={styles.paginationButton}
-            >
-              {t.prevPage}
-            </button>
-            <span className={styles.pageInfo}>
-              {t.page} {page} {t.of} {totalPages}
-            </span>
-            <button
-              onClick={handleNextPage}
-              disabled={page >= totalPages}
-              className={styles.paginationButton}
-            >
-              {t.nextPage}
-            </button>
-          </div>
         </div>
 
-        <button
-          onClick={() => window.history.back()}
-          className={styles.backLink}
-        >
-          Wróć
-        </button>
+        <div className={styles.pagination}>
+          <button
+            onClick={handlePrevPage}
+            disabled={page <= 1}
+            className={styles.paginationButton}
+          >
+            {t.prevPage}
+          </button>
+          <span className={styles.pageInfo}>
+            {t.page} {page} {t.of} {totalPages}
+          </span>
+          <button
+            onClick={handleNextPage}
+            disabled={page >= totalPages}
+            className={styles.paginationButton}
+          >
+            {t.nextPage}
+          </button>
+        </div>
       </div>
+
+      <button onClick={() => window.history.back()} className={styles.backLink}>
+        {t.back}
+      </button>
     </>
   );
 }
