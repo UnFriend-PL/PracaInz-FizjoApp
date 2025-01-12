@@ -58,8 +58,21 @@ namespace Fizjobackend.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpGet("all/{physiotherapistId}")]
+        public async Task<IActionResult> GetAllOpinionsByPhysiotherapistId(Guid physiotherapistId, int page = 1, int pageSize = 10)
+        {
+
+            var response = await _opinionService.GetAllOpinionsByPhysiotherapistId(physiotherapistId, page, pageSize);
+            if (!response.Success)
+            {
+                return NotFound(response.Message);
+            }
+            return Ok(response.Data);
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("all")]
-        public async Task<IActionResult> GetAllOpinions( int page = 1, int pageSize = 10)
+        public async Task<IActionResult> GetAllOpinions(int page = 1, int pageSize = 10)
         {
             var userRoles = User.FindAll(ClaimTypes.Role).Select(c => c.Value);
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

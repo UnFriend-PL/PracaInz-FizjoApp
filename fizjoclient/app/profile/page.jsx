@@ -99,10 +99,7 @@ const Profile = () => {
 
   const handleSave = async (updatedUser, updatedStaffData, tempAvatarFile) => {
     try {
-      let userUpdateResponse,
-        staffUpdateResponse,
-        avatarUploadResponse,
-        updateWorkingHours;
+      let userUpdateResponse, staffUpdateResponse, avatarUploadResponse;
 
       if (updatedUser) {
         try {
@@ -178,7 +175,6 @@ const Profile = () => {
       setIsModalOpen(false);
     } catch (error) {
       console.error("Error saving changes:", error.message || error);
-      alert(`Failed to save changes: ${error.message}`);
     }
   };
   const goToAppointments = () => {
@@ -245,20 +241,7 @@ const Profile = () => {
   const toggleDropdown = () => {
     setShowDropdown((prev) => !prev);
   };
-  const handleMenuClick = (option) => {
-    switch (option) {
-      case "edit":
-        enableEditAllFields();
-        break;
-      case "appointments":
-        break;
-      case "opinion":
-        break;
-      default:
-        break;
-    }
-    setShowDropdown(false);
-  };
+
   useEffect(() => {
     if (isAuthenticated) {
       const fetchData = async () => {
@@ -276,38 +259,22 @@ const Profile = () => {
         }
       };
       fetchData();
+      if (staffId) {
+        fetchStaffInfo(staffId);
+        getWorkingHours(staffId);
+      }
     }
   }, [isAuthenticated]);
-
-  useEffect(() => {
-    if (staffId) {
-      fetchStaffInfo(staffId);
-      getWorkingHours(staffId);
-    }
-  }, [staffId]);
-
-  if (!isAuthenticated) {
-    const router = useRouter();
-    useEffect(() => {
-      router.push("/auth");
-    }, [router]);
-    return (
-      <div className={styles.container}>
-        <h1 className={styles.title}>{t.profile}</h1>
-        <div className={styles.profileCard}>
-          <div className={styles.field}>
-            <span className={styles.label}>{t.error}</span>
-            <span className={styles.value}>{t.notAuthenticated}</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   if (loading) {
     return <div className={styles.loading}>{t.loading}</div>;
   }
-
+  if (!isAuthenticated) {
+    setTimeout(() => {
+      router.push("/auth");
+    }, 2000);
+    return;
+  }
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>{t.profile}</h1>
