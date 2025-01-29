@@ -202,48 +202,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
-  margin-top: 2rem;
-
-  @media (max-width: 768px) {
-    gap: 0.75rem;
-    margin-top: 1.5rem;
-  }
-
-  @media (max-width: 480px) {
-    gap: 0.5rem;
-    margin-top: 1rem;
-  }
+  margin-top: 20px;
 }
 
 .paginationButton {
   background-color: $blue;
   color: $white;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  border-radius: 0.5rem;
+  padding: 10px;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: darken($blue, 10%);
-  }
-
-  &:disabled {
-    background-color: lighten($blue, 20%);
-    cursor: not-allowed;
-  }
-
-  @media (max-width: 768px) {
-    padding: 0.6rem 1.2rem;
-    font-size: 0.9rem;
-  }
-
-  @media (max-width: 480px) {
-    padding: 0.5rem 1rem;
-    font-size: 0.8rem;
-  }
 }
 
 .pageInfo {
@@ -260,7 +228,7 @@
 }
 
 .paginationButton:disabled {
-  background-color: $dark-green;
+  background-color: $grey-highlight2;
   cursor: not-allowed;
 }
 
@@ -380,7 +348,7 @@
 .fieldLabel {
   font-size: 1rem;
   font-weight: bold;
-  color: $dark-green;
+  color: $grey;
 
   @media (max-width: 768px) {
     font-size: 0.9rem;
@@ -414,14 +382,14 @@
     width: 100%;
     text-align: left;
     font-weight: bold;
-    color: darken($azure, 30%);
+    color: darken($grey, 30%);
     margin-bottom: 1rem;
   }
 
   .profileDescriptionValue {
     word-wrap: break-word;
-    color: darken($azure, 40%);
-    border: 0.1rem solid $blue;
+    color: darken($grey, 40%);
+    border: 0.1rem solid $grey;
     border-radius: 0.6rem;
     padding: 0.5rem;
     height: 100%;
@@ -564,5 +532,50 @@
 
   .fieldGroup {
     grid-template-columns: 1fr;
+  }
+}
+.element {
+  flex-basis: 30%;
+  float: right;
+  justify-content: flex-start;
+  @media (max-width: 768px) {
+    flex-basis: 100%;
+    justify-content: space-between;
+  }
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0.3rem;
+  align-items: center;
+  input[type="date"] {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border: 1px solid $border-color;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+
+  .patientSearch,
+  .appointmentScheduler {
+    width: 100%;
+
+    input,
+    button {
+      width: 100%;
+      padding: 0.5rem 1rem;
+      border: 1px solid $border-color;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: $blue;
+      color: $white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: darken($blue, 10%);
+      }
+    }
   }
 }

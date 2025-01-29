@@ -29,6 +29,8 @@ export default function SpecialistProfile({ params }) {
     const fetchSpecialist = async () => {
       const response = await apiService.get(`/Staff/${id}`, null);
       setSpecialist(response.data);
+      console.log("specialist");
+      console.log(response.data);
       console.log("Response");
       console.log(response.data.avatarPath);
       const avatarPath = response.data.avatarPath;
@@ -139,22 +141,29 @@ export default function SpecialistProfile({ params }) {
                 </div>
               </div>
             )}
+            {specialist && (
+              <div className={styles.element}>
+                <AppointmentScheduler
+                  physiotherapistId={specialist.physiotherapistId}
+                  averagePrice={
+                    specialist?.averagePrice === 0
+                      ? 99
+                      : specialist?.averagePrice || 99
+                  }
+                />
+              </div>
+            )}
           </div>
         </div>
-        <AppointmentScheduler
-          physiotherapistId={specialist.physiotherapistId}
-          averagePrice={
-            specialist.averagePrice == 0 ? 99 : specialist.averagePrice
-          }
-        />
+
         <div className={styles.opinion}>
           <h2>{t.opinion}</h2>
           {opinions.length === 0 ? (
             <p>{t.noHaveOpinion}</p>
           ) : (
-            opinions?.map((opinions, index) => (
-              <div className={styles.opinionCard}>
-                <div key={index} className={styles.opinions}>
+            opinions?.map((opinions) => (
+              <div key={opinions.opinionId} className={styles.opinionCard}>
+                <div className={styles.opinions}>
                   <div className={styles.opinionAuthor}>
                     {opinions.nameAndFirstLetterOfTheLastName}
                   </div>
@@ -171,28 +180,26 @@ export default function SpecialistProfile({ params }) {
             ))
           )}
         </div>
-
-        <div className={styles.pagination}>
-          <button
-            onClick={handlePrevPage}
-            disabled={page <= 1}
-            className={styles.paginationButton}
-          >
-            {t.prevPage}
-          </button>
-          <span className={styles.pageInfo}>
-            {t.page} {page} {t.of} {totalPages}
-          </span>
-          <button
-            onClick={handleNextPage}
-            disabled={page >= totalPages}
-            className={styles.paginationButton}
-          >
-            {t.nextPage}
-          </button>
-        </div>
       </div>
-
+      <div className={styles.pagination}>
+        <button
+          onClick={handlePrevPage}
+          disabled={page <= 1}
+          className={styles.paginationButton}
+        >
+          {t.prevPage}
+        </button>
+        <span className={styles.pageInfo}>
+          {t.page} {page} {t.of} {totalPages}
+        </span>
+        <button
+          onClick={handleNextPage}
+          disabled={page >= totalPages}
+          className={styles.paginationButton}
+        >
+          {t.nextPage}
+        </button>
+      </div>
       <button onClick={() => window.history.back()} className={styles.backLink}>
         {t.back}
       </button>

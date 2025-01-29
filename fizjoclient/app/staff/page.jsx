@@ -23,6 +23,7 @@ const Staff = ({ recommendStaff = false }) => {
   const [pageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+
   const [maxPrice, setMaxPrice] = useState(500);
   const router = useRouter();
   const [specialists, setSpecialists] = useState([]);
@@ -201,20 +202,20 @@ const Staff = ({ recommendStaff = false }) => {
         )}
       </div>
       {!recommendStaff && (
-        <div className={styles.paginationContainer}>
+        <div className={styles.pagination}>
           <button
             onClick={handlePreviousPage}
-            disabled={pageNumber === 1}
+            disabled={pageNumber <= 1}
             className={styles.paginationButton}
           >
-            {t.previousPage}
+            {t.prevPage}
           </button>
-          <span className={styles.paginationInfo}>
+          <span className={styles.pageInfo}>
             {t.page} {pageNumber} {t.of} {totalPages}
           </span>
           <button
             onClick={handleNextPage}
-            disabled={pageNumber === totalPages}
+            disabled={pageNumber >= totalPages}
             className={styles.paginationButton}
           >
             {t.nextPage}
